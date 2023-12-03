@@ -1,0 +1,1936 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains how to combine data from multiple proximity probes together.">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>Working with multiple probes - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-6B961HRVZP",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+  
+    <script>var consent;"undefined"==typeof __md_analytics||(consent=__md_get("__consent"))&&consent.analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Intro to BTT Ch5 - Working with multiple probes" />
+<meta property="og:description" content="This chapter explains how to combine data from multiple proximity probes together." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttch5/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Intro to BTT Ch5 - Working with multiple probes"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttch5/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains how to combine data from multiple proximity probes together."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#working-with-multiple-probes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Working with multiple probes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_3" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_3">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-nav__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Welcome
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <!--div class="indicates-required"><span class="asterisk">*</span> indicates required</div-->
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+              <!--p style="margin: 0px auto;"><a href="http://eepurl.com/iy5E0g" title="Mailchimp - email marketing made easy and fun"><span style="display: inline-block; background-color: transparent; border-radius: 4px;"><img class="refferal_badge" src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-dark.svg" alt="Intuit Mailchimp" style="width: 220px; height: 40px; display: flex; padding: 2px 0px; justify-content: center; align-items: center;"></span></a></p-->
+          </div>
+      </div>
+  </div>
+</form>
+</div>
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembling-probe-level-merged-dataframes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Assembling probe level merged DataFrames
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determining-the-stack-plot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Determining the stack plot
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Determining the stack plot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#offsetting-the-stack-plot-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Offsetting the stack plot values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculating-the-shift-based-on-probe-spacing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Calculating the shift based on probe spacing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembling-global-rotor-level-merged-dataframes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Assembling global rotor level merged DataFrames
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coding-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coding exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coding exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-one-function-to-rule-them-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. One function to rule them all
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-predicting-the-probe-spacing" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Predicting the probe spacing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+<nav class="md-tags" hidden>
+  
+    
+    
+    
+      <span class="md-tag">Blade Tip Timing</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">BTT</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Non Intrusive Stress Measurement</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">NSMS</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Time of Arrival</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Turbine blade</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Mechanical Vibration</span>
+    
+  
+</nav>
+
+
+
+<h1 id="working-with-multiple-probes">Working with multiple probes</h1>
+<p>In the previous chapter, we focused on the identification and grouping of individual blades arriving at a <em>single</em> proximity probe. Building upon this foundational knowledge, we are now going to delve into the process of combining data from several proximity probes together. </p>
+<p>This chapter will culminate in the ability to create a consolidated DataFrame for each blade.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand that we can combine the AoAs and ToAs from the blades in a single proximity probe in a column-wise manner, thereby yielding a DataFrame with one row for every shaft revolution, and several columns for the respective blades arriving at the proximity probe.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand what the stack plot is, and how it can be used to confirm that our blades are properly aligned.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand that the order in which the blades arrive at each proximity probe is important, and that we need to align the blades from each proximity probe to the blades from the first proximity probe.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Write functions to convert the AoAs associated with individual proximity probes into consolidated rotor blade DataFrames which contain all the ToAs and AoAs for each blade over all the probes.</p>
+</div>
+<h2 id="following-along">Following along</h2>
+<p>The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_05_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.</p>
+<p>You can open a Google Colab session of the worksheet by clicking here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_05_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.</p>
+<p>You need to use one of the following Python versions to run the worksheet:
+<img src="https://img.shields.io/badge/python-3.6-blue.svg">
+<img src="https://img.shields.io/badge/python-3.7-blue.svg">
+<img src="https://img.shields.io/badge/python-3.8-blue.svg">
+<img src="https://img.shields.io/badge/python-3.9-blue.svg">
+<img src="https://img.shields.io/badge/python-3.10-blue.svg">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg"></p>
+<h2 id="assembling-probe-level-merged-dataframes">Assembling probe level merged DataFrames</h2>
+<p>At the end of the previous chapter, we built an algorithm that receives the AoAs from a single proximity probe, and grouped the AoAs into individual blades. We therefore ended up with a list of DataFrames, each containing the AoAs for a single blade. </p>
+<p>In other words, we performed the transformation illustrated in <a href="#figure_01">Figure 1</a> below:</p>
+<figure>
+<p><img alt="Probe AoAs vector to list of Blade AoAs" src="ch3_df_transformation_summary.png" />
+  </p>
+<figcaption><a id='figure_01'><strong>Figure 1:</strong></a> Illustration of the algorithm developed in Chapter 3. We took the AoAs from a single proximity probe, and cut it up into 5 DataFrames. Each DataFrame corresponds to the AoAs for a single blade.</figcaption>
+</figure>
+<p>Now, we recombine those DataFrames in a column-wise manner. In other words, each row of our resulting DataFrame is going to contain all the AoAs for each blade. We are performing the transformation as illustrated below:</p>
+<figure>
+<p><img alt="List of Blade AoAs to column-wise Probe AoA DataFrame" src="ch3_df_column_wise_consolidation_summary.png" />
+  </p>
+<figcaption><a id='figure_02'><strong>Figure 2:</strong></a> Illustration of the column-wise consolidation of the DataFrames. Each row of the resulting DataFrame contains the AoAs for each blade in a different column. </figcaption>
+</figcaption>
+</figure>
+<p>In <a href="#figure_02">Figure 2</a> above 👆, we see that a function called <code>align_blade_AoAs_along_revolutions</code> transforms the list of DataFrames into one DataFrame. Each row contains the AoAs for each blade. We have not changed the information inside the DataFrame, merely rearranged it. </p>
+<p>Why do we do this? Simply because its easier to work with a single DataFrame than with a list of DataFrames. There are other ways of performing the work discussed in this chapter, but we believe this is the most intuitive method.</p>
+<p>The function to perform this transformation this is given below.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">def</span> <span class="nf">align_blade_AoAs_along_revolutions</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="n">prox_AoA_dfs</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="c1">#(1)!</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a>    <span class="n">df_blades_aligned</span> <span class="o">=</span> <span class="n">prox_AoA_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="c1">#(2)!</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a>    <span class="n">df_blades_aligned</span> <span class="o">=</span> <span class="n">df_blades_aligned</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="c1">#(3)!</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a>            <span class="s2">&quot;ToA&quot;</span><span class="p">:</span><span class="s2">&quot;ToA_1&quot;</span><span class="p">,</span> 
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a>            <span class="s2">&quot;AoA&quot;</span><span class="p">:</span><span class="s2">&quot;AoA_1&quot;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>        <span class="p">}</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>    <span class="p">)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">df_blade</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prox_AoA_dfs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span><span class="c1">#(4)!</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>        <span class="n">df_blades_aligned</span> <span class="o">=</span> <span class="n">df_blades_aligned</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="c1">#(5)!</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>            <span class="n">df_blade</span><span class="p">[[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;ToA&quot;</span><span class="p">,</span> <span class="s2">&quot;AoA&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>                <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>                    <span class="s2">&quot;ToA&quot;</span><span class="p">:</span><span class="s2">&quot;ToA_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">),</span> 
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>                    <span class="s2">&quot;AoA&quot;</span><span class="p">:</span><span class="s2">&quot;AoA_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)}</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>            <span class="p">),</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">,</span><span class="c1">#(6)!</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>            <span class="n">on</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="c1">#(7)!</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>        <span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="k">return</span> <span class="n">df_blades_aligned</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The <code>prox_AoA_dfs</code> is a list of DataFrames from a single proximity probe where each element in the list represents the AoA values from a single blade. This list is the output of the <code>transform_prox_AoAs_to_blade_AoAs</code> from the previous chapter.</li>
+<li>We take the first blade as our reference. We will align the other blades to the first blade's DataFrame.</li>
+<li>We rename the <code>ToA</code> and <code>AoA</code> columns to <code>ToA_1</code> and <code>AoA_1</code> respectively. The <code>1</code> indicates that these values belong to the first blade.</li>
+<li>We loop over the remaining blades. We are going to merge each successive blade's DataFrame into the reference DataFrame.</li>
+<li>The Pandas <code>.merge</code> method joins two DataFrames on a common key. Here, we merge the reference DataFrame with the current blade's DataFrame. 
+    We rename the <code>ToA</code> and <code>AoA</code> columns to <code>ToA_{i+2}</code> and <code>AoA_{i+2}</code> respectively. The <code>i+2</code> is used because the <code>i</code> counter starts at zero. The first DataFrame we merge into the reference must, however, be 2. Therefore, we add 2 to the <code>i</code> counter.</li>
+<li>We perform an <code>outer</code> join. This means that we retain all rows from both DataFrames, even if there is no matching value for the <code>n</code> key in one of them. If, for instance, the <code>n</code> for revolution 50 is missing from the current blade's DataFrame, the <code>ToA_2</code> and <code>AoA_2</code> columns will be filled with <code>NaN</code> values.</li>
+<li>We join the DataFrames on the <code>n</code> key, which is the revolution number.</li>
+</ol>
+<p>From the above code block, we see that the first blade's DataFrame is used as the reference DataFrame. Each subsequent blade's DataFrame is merged into this reference. Merging is a common operation in most tabular-data based applications. Each time we merge we are expanding the DataFrame by adding two columns to it.</p>
+<p>The head of the resulting DataFrame is shown in <a href="#table_01">Table 1</a> below.</p>
+<figure>
+<figcaption><a id='table_01'><strong>Table 1:</strong></a> Each proximity probe's AoAs after being recombined in a column-wise manner </figcaption>
+</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">n_start_time</th>
+<th style="text-align: right;">n_end_time</th>
+<th style="text-align: right;">Omega</th>
+<th style="text-align: right;">ToA_1</th>
+<th style="text-align: right;">AoA_1</th>
+<th style="text-align: right;">ToA_2</th>
+<th style="text-align: right;">AoA_2</th>
+<th style="text-align: right;">ToA_3</th>
+<th style="text-align: right;">AoA_3</th>
+<th style="text-align: right;">ToA_4</th>
+<th style="text-align: right;">AoA_4</th>
+<th style="text-align: right;">ToA_5</th>
+<th style="text-align: right;">AoA_5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0934028</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">23.2255</td>
+<td style="text-align: right;">0.136547</td>
+<td style="text-align: right;">1.00205</td>
+<td style="text-align: right;">0.190927</td>
+<td style="text-align: right;">2.26504</td>
+<td style="text-align: right;">0.245069</td>
+<td style="text-align: right;">3.5225</td>
+<td style="text-align: right;">0.298838</td>
+<td style="text-align: right;">4.77132</td>
+<td style="text-align: right;">0.352618</td>
+<td style="text-align: right;">6.0204</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">23.5429</td>
+<td style="text-align: right;">0.40623</td>
+<td style="text-align: right;">0.995802</td>
+<td style="text-align: right;">0.459719</td>
+<td style="text-align: right;">2.25507</td>
+<td style="text-align: right;">0.513109</td>
+<td style="text-align: right;">3.51203</td>
+<td style="text-align: right;">0.566314</td>
+<td style="text-align: right;">4.76465</td>
+<td style="text-align: right;">0.619614</td>
+<td style="text-align: right;">6.01947</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">0.894334</td>
+<td style="text-align: right;">23.8435</td>
+<td style="text-align: right;">0.672717</td>
+<td style="text-align: right;">0.999073</td>
+<td style="text-align: right;">0.725672</td>
+<td style="text-align: right;">2.26171</td>
+<td style="text-align: right;">0.778447</td>
+<td style="text-align: right;">3.52004</td>
+<td style="text-align: right;">0.830988</td>
+<td style="text-align: right;">4.7728</td>
+<td style="text-align: right;">0.883363</td>
+<td style="text-align: right;">6.0216</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.894334</td>
+<td style="text-align: right;">1.15268</td>
+<td style="text-align: right;">24.3212</td>
+<td style="text-align: right;">0.935346</td>
+<td style="text-align: right;">0.99748</td>
+<td style="text-align: right;">0.987122</td>
+<td style="text-align: right;">2.25673</td>
+<td style="text-align: right;">1.03872</td>
+<td style="text-align: right;">3.51172</td>
+<td style="text-align: right;">1.09019</td>
+<td style="text-align: right;">4.76346</td>
+<td style="text-align: right;">1.1418</td>
+<td style="text-align: right;">6.01879</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.15268</td>
+<td style="text-align: right;">1.40862</td>
+<td style="text-align: right;">24.5488</td>
+<td style="text-align: right;">1.19335</td>
+<td style="text-align: right;">0.998545</td>
+<td style="text-align: right;">1.24479</td>
+<td style="text-align: right;">2.26135</td>
+<td style="text-align: right;">1.29604</td>
+<td style="text-align: right;">3.51946</td>
+<td style="text-align: right;">1.34702</td>
+<td style="text-align: right;">4.77088</td>
+<td style="text-align: right;">1.39792</td>
+<td style="text-align: right;">6.02033</td>
+</tr>
+</tbody>
+</table>
+<p>We see that there are ToA and AoA columns for each blade, and only one row per revolution. This DataFrame is now ready for further analysis.</p>
+<h2 id="determining-the-stack-plot">Determining the stack plot</h2>
+<p>We now introduce the stack plot, a widely recognized tool in BTT. The stack plot visually represents the relative distance between consecutive blades as they pass a proximity probe. Ideally, the circumferential spacing between each set of adjacent blades would be the same for each pair. In reality, each rotor exhibits a unique pattern of blade spacing. We can use this unique pattern to assess whether our alignment has been done properly.</p>
+<p>In the example above, the consecutive distances between adjacent blades for the first shaft revolution is:</p>
+<p><div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">blade_dfs_recombined</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">blade_2_min_1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_1&quot;</span><span class="p">]</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">blade_3_min_2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_3&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_2&quot;</span><span class="p">]</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">blade_4_min_3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_4&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_3&quot;</span><span class="p">]</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">blade_5_min_4</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_5&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_4&quot;</span><span class="p">]</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">blade_1_min_5</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;AoA_1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_5&quot;</span><span class="p">]</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;blade_2_min_1:&quot;</span><span class="p">,</span> <span class="n">blade_2_min_1</span><span class="p">,</span> <span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;blade_3_min_2:&quot;</span><span class="p">,</span> <span class="n">blade_3_min_2</span><span class="p">,</span> <span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;blade_4_min_3:&quot;</span><span class="p">,</span> <span class="n">blade_4_min_3</span><span class="p">,</span> <span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;blade_5_min_4:&quot;</span><span class="p">,</span> <span class="n">blade_5_min_4</span><span class="p">,</span> <span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;blade_1_min_5:&quot;</span><span class="p">,</span> <span class="n">blade_1_min_5</span><span class="p">,</span> <span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="go">blade_2_min_1: 1.2629980304819501 rad</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="go">blade_3_min_2: 1.2574606040202596 rad</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="go">blade_4_min_3: 1.2488114790250116 rad</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="go">blade_5_min_4: 1.2490816162460137 rad</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="go">blade_1_min_5: 1.2585900251951907 rad</span>
+</span></code></pre></div>
+The calculation of the stack plot values is intuitive, except for the calculation of the last value, <code>blade_1_min_5</code>. Here, we subtract the AoA of the last blade from the <code>first</code> revolution (<code>n=0</code>) from the AoA from the first blade of the <code>second</code> revolution (<code>n=1</code>). This means the stack plot values for the last blade will be <code>None</code> for the last revolution.</p>
+<p>We can write a function that calculates the stack plot DataFrame for each probe. We call this function <code>create_stack_plot_df</code>:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span> <span class="nf">create_stack_plot_df</span><span class="p">(</span><span class="n">df_blades_aligned</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">all_aoa_columns</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="c1">#(1)!</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a>        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df_blades_aligned</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AoA_&quot;</span><span class="p">)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="p">])</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a>    <span class="n">B</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_aoa_columns</span><span class="p">)</span><span class="c1">#(2)!</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a>    <span class="n">stack_plot_diffs</span> <span class="o">=</span> <span class="p">{}</span><span class="c1">#(3)!</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a>    <span class="n">stack_plot_diffs</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_blades_aligned</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_NumPy</span><span class="p">()</span><span class="c1">#(4)!</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a>    <span class="k">for</span> <span class="n">blade_no</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span><span class="c1">#(5)!</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a>        <span class="n">further_blade_name</span> <span class="o">=</span> <span class="n">all_aoa_columns</span><span class="p">[</span><span class="n">blade_no</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="c1">#(6)!</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a>        <span class="n">closer_blade_name</span> <span class="o">=</span> <span class="n">all_aoa_columns</span><span class="p">[</span><span class="n">blade_no</span><span class="p">]</span><span class="c1">#(7)!</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a>        <span class="n">arr_blade_diffs</span> <span class="o">=</span> <span class="p">(</span><span class="c1">#(8)!</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a>            <span class="n">df_blades_aligned</span><span class="p">[</span><span class="n">further_blade_name</span><span class="p">]</span> 
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a>            <span class="o">-</span> <span class="n">df_blades_aligned</span><span class="p">[</span><span class="n">closer_blade_name</span><span class="p">]</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a>        <span class="p">)</span><span class="o">.</span><span class="n">to_NumPy</span><span class="p">()</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17"></a>        <span class="n">stack_plot_diffs</span><span class="p">[</span><span class="n">closer_blade_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_blade_diffs</span><span class="c1">#(9)!</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18"></a>    <span class="n">further_blade_name</span> <span class="o">=</span> <span class="n">all_aoa_columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="c1">#(10)!</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19"></a>    <span class="n">closer_blade_name</span> <span class="o">=</span> <span class="n">all_aoa_columns</span><span class="p">[</span><span class="n">B</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20"></a>    <span class="n">arr_blade_diffs</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21"></a>        <span class="n">df_blades_aligned</span><span class="p">[</span><span class="n">further_blade_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_NumPy</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="c1">#(11)! </span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22"></a>        <span class="o">-</span> <span class="n">df_blades_aligned</span><span class="p">[</span><span class="n">closer_blade_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_NumPy</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23"></a>    <span class="p">)</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24"></a>    <span class="n">arr_blade_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr_blade_diffs</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">])</span><span class="c1">#(12)!</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25"></a>    <span class="n">stack_plot_diffs</span><span class="p">[</span><span class="n">closer_blade_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr_blade_diffs</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26"></a>    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stack_plot_diffs</span><span class="p">)</span><span class="c1">#(13)!</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>We start off by getting all the columns with the prefix <code>AoA_</code>. This will return as many columns as there are blades.</li>
+<li>The number of blades, <code>B</code>, is calculated from the AoA column headings.</li>
+<li>We initialize a dictionary that will contain the stack plot values. We use a dictionary because it is easy to convert it to a Pandas DataFrame later on using <code>pd.DataFrame</code></li>
+<li>We add the revolution number to the dictionary. This is the only column that is not a stack plot value. We don't use <code>n</code> in the stack plot, but it feels wrong to throw away the revolution number column <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f604.svg" title=":smile:" />.</li>
+<li>We iterate over all the blades except the last blade, hence using the <code>range(B - 1)</code> instead of <code>range(B)</code>. Within this loop, we calculate the difference between adjacent blade pairs. We'll calculate the difference between the last and the first blade after the loop has executed.</li>
+<li>We get the name of the column representing the blade that arrives second, or after, the first one.</li>
+<li>The name of the column representing the blade that arrives first.</li>
+<li>We calculate the difference between the two blades. We use the <code>.to_NumPy()</code> method to convert the Pandas Series to a NumPy array. We do this to get rid of our <code>Pandas</code> index.</li>
+<li>We add the blade difference array to the dictionary.</li>
+<li>We now calculate the stack plot values between the last blade and the first blade. The <em>furthest</em> blade is the first blade and the closer blade is the last blade.</li>
+<li>Here we subtract the two from one another. Note that there's a difference between the revolution numbers of the two arguments. The furthest blade starts at the second revolution, and the closer blade starts at the first revolution. Also note the <code>+ 2* np.pi</code> that we use to wrap the AoAs from the first blade back to the previous revolution.</li>
+<li>We need to add one <code>None</code> value to the last blade's stack plot values such that its dimension matches the other stack plot columns.</li>
+<li>We convert the dictionary storing our values to a Pandas DataFrame and return it.</li>
+</ol>
+<p>Having calculated the stack plot DataFrame, we can calculate the median of each column using the <code>.median</code> method:</p>
+<p><div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="n">stack_plot_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">blade_dfs_recombined</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a>    <span class="n">stack_plot_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_stack_plot_df</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">stack_plot_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">n          1435.0</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="go">AoA_1    1.257285</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="go">AoA_2    1.257135</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="go">AoA_3    1.254071</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="go">AoA_4    1.257441</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="go">AoA_5    1.257264</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="go">dtype: object</span>
+</span></code></pre></div>
+In the code above, we show the median stack plot values for each column in the stack plot DataFrame. The median value for <code>n</code> is useless here, and will not be plotted.</p>
+<p><a href="#figure03">Figure 3</a> below shows the median stack plot values for each blade.</p>
+<script src="stack_plot_probe_1.js" > </script>
+<div>
+    <div>
+        <canvas id="ch05_stack_plot_probe_1"'></canvas>
+    </div>
+    <script>
+        async function render_chart_stack_plot_probe_1() {
+            const ctx = document.getElementById('ch05_stack_plot_probe_1');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_stack_plot_probe_1 = new Chart(ctx, window.stack_plot_probe_1);
+            window.fig_stack_plot_probe_1_reset = function resetZoomFig1() {
+                    window.fig_stack_plot_probe_1.resetZoom();
+                }
+            }
+        render_chart_stack_plot_probe_1();
+    </script>
+    <a onclick="window.fig_stack_plot_probe_1_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_03'>Figure 3</a></strong>: 
+    The stack plot of the rotor for the first proximity probe. The stack plot shows the circumferential distance between adjacent blades. We see here that the stack plot value for each blade is close to, but not exactly, the *ideal* distance between the blades: 2 np.pi/5 = 1.2566370614359172. 
+  </figcaption>
+</figure>
+<p>In <a href="#figure_03">Figure 3</a> above, we see that the median difference between consecutive blades are all approximately equal to the <em>ideal</em> distance of <span class="arithmatex">\(\frac{2 \pi}{5}=1.2566370614359172\)</span>. The differences that do exist, however, are valuable, and can be considered a "fingerprint" for this rotor.</p>
+<p>Now that we've figured out how to determine the stack plot for a single probe, we plot the stack plot values for all the probes on top of one another in <a href="#figure04">Figure 4</a> below. This is simply a formality. We expect the stack plot for each probe to be identical because, well, its the same blades arriving at each probe. We expect all the lines to lie neatly on top of one another.</p>
+<script src="stack_plot_probe_whole_rotor.js" > </script>
+<div>
+    <div>
+        <canvas id="ch05_stack_plot_probe_whole_rotor"'></canvas>
+    </div>
+    <script>
+        async function render_chart_stack_plot_probe_whole_rotor() {
+            const ctx = document.getElementById('ch05_stack_plot_probe_whole_rotor');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_stack_plot_probe_whole_rotor = new Chart(ctx, window.stack_plot_probe_whole_rotor);
+            window.fig_stack_plot_probe_whole_rotor_reset = function resetZoomFig2() {
+                    window.fig_stack_plot_probe_whole_rotor.resetZoom();
+                }
+            }
+        render_chart_stack_plot_probe_whole_rotor();
+    </script>
+    <a onclick="window.fig_stack_plot_probe_whole_rotor_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_04'>Figure 4</a></strong>: 
+  The stack plot for the rotor at all the proximity probes. We see that the stack plots for probes 2, 3 and 4 are different from the stack plot for probe number 1. This is because the first blade to arrive at probes 2, 3 and 4 is not the same blade as the first blade to arrive at probe 1. 
+  </figcaption>
+</figure>
+<p>Oh no! <img alt="😱" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f631.svg" title=":scream:" /></p>
+<p>The stack plots are clearly different. How can this be? How can the rotor suddenly change shape based on what probe we're looking at? The answer is that the rotor hasn't changed shape. The stack plot, as we presented it here, is a function of which blade arrives first at each probe.</p>
+<p>The first blade to arrive at probe number 1 and the first blade to arrive at probes 2, 3 and 4 is <em>not</em> the same blade. The effect this has is that the stack plot for probe's 2, 3 and 4 seems <em>shifted</em>. With only 5 blades in this rotor, we can simply inspect the stack plot to determine by how many blades the stack plot is shifted. </p>
+<p>By looking at the first probe's stack plot, we see the large dip at <code>AoA_3</code> occurs at <code>AoA_4</code> in the stack plot for probes 2, 3 and 4. This means that the <em>first blade</em> to arrive at probe 1 arrives <em>second</em> at probes 2, 3 and 4. </p>
+<p>In other words, there is a order transformation between the first stack plot and the others that look like this:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">                 Probe 1 order                               Probe 2, 3 and 4 order</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="go">_____________________________________________    _____________________________________________</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="go">[&quot;AoA_1&quot;, &quot;AoA_2&quot;, &quot;AoA_3&quot;, &quot;AoA_4&quot;, &quot;AoA_5&quot;] -&gt; [&quot;AoA_5&quot;, &quot;AoA_1&quot;, &quot;AoA_2&quot;, &quot;AoA_3&quot;, &quot;AoA_4&quot;]</span>
+</span></code></pre></div>
+<h3 id="offsetting-the-stack-plot-values">Offsetting the stack plot values</h3>
+<p>The simplest way to solve our apparent conundrum is to rename the column headings from the probe 2, 3 and 4 stack plot DataFrames. We write a helper function that receives a list of column headings and an offset to shift them by, and returns the reordered column headings.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span> <span class="nf">shift_AoA_column_headings</span><span class="p">(</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="n">aoa_column_headings</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> 
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a>    <span class="n">shift_by</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a>    <span class="k">if</span> <span class="n">shift_by</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">aoa_column_headings</span><span class="p">):</span><span class="c1">#(1)!</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;shift_by must be less than the number blades in aoa_column_headings&quot;</span><span class="p">)</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a>    <span class="k">return</span> <span class="p">(</span><span class="c1">#(2)!</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a>        <span class="nb">list</span><span class="p">(</span><span class="n">aoa_column_headings</span><span class="p">)[</span><span class="n">shift_by</span><span class="p">:]</span> 
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a>        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">aoa_column_headings</span><span class="p">)[:</span><span class="n">shift_by</span><span class="p">]</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>Before we perform the shift, we confirm that the user is not trying to shift the column headings by more than the number of blades. This would not make sense!</li>
+<li>The shift operator is achieved by separating our column DataFrame at the <code>shift_by</code> value and concatenating the two parts in reverse order. We wrap the <code>aoa_column_headings</code> with the <code>list</code> function. This is strictly speaking not necessary if the user uses a Python list as the type for <code>aoa_column_headings</code>, but some people may want to pass <code>aoa_column_headings</code> as a Pandas series or a NumPy array, which would not work as-is.</li>
+</ol>
+<p>We demonstrate the shift function below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">probe_1_col_headings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AoA_1&quot;</span><span class="p">,</span> <span class="s2">&quot;AoA_2&quot;</span><span class="p">,</span> <span class="s2">&quot;AoA_3&quot;</span><span class="p">,</span> <span class="s2">&quot;AoA_4&quot;</span><span class="p">,</span> <span class="s2">&quot;AoA_5&quot;</span><span class="p">]</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shift by 0:&quot;</span><span class="p">,</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="n">probe_1_col_headings</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shift by 1:&quot;</span><span class="p">,</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="n">probe_1_col_headings</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shift by 2:&quot;</span><span class="p">,</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="n">probe_1_col_headings</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shift by 3:&quot;</span><span class="p">,</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="n">probe_1_col_headings</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shift by 4:&quot;</span><span class="p">,</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="n">probe_1_col_headings</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">Shift by 0: [&#39;AoA_1&#39;, &#39;AoA_2&#39;, &#39;AoA_3&#39;, &#39;AoA_4&#39;, &#39;AoA_5&#39;]</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">Shift by 1: [&#39;AoA_2&#39;, &#39;AoA_3&#39;, &#39;AoA_4&#39;, &#39;AoA_5&#39;, &#39;AoA_1&#39;]</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="go">Shift by 2: [&#39;AoA_3&#39;, &#39;AoA_4&#39;, &#39;AoA_5&#39;, &#39;AoA_1&#39;, &#39;AoA_2&#39;]</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="go">Shift by 3: [&#39;AoA_4&#39;, &#39;AoA_5&#39;, &#39;AoA_1&#39;, &#39;AoA_2&#39;, &#39;AoA_3&#39;]</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="go">Shift by 4: [&#39;AoA_5&#39;, &#39;AoA_1&#39;, &#39;AoA_2&#39;, &#39;AoA_3&#39;, &#39;AoA_4&#39;]</span>
+</span></code></pre></div>
+<p>Wonderful. We can now determine the column name mapping that would align the blades from different probes to the first probe. The order of blade arrival at the first probe is therefore taken to be the global rotor alignment. </p>
+<p>We can write a function that performs this renaming:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span> <span class="nf">rename_df_columns_for_alignment</span><span class="p">(</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">df_to_align</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="c1">#(1)!</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="n">global_column_headings</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span><span class="c1">#(2)!</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="n">shift_by</span> <span class="p">:</span> <span class="nb">int</span><span class="c1">#(3)!</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span><span class="nb">int</span><span class="c1">#(4)!</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a>    <span class="n">shifted_dataframe_columns</span> <span class="o">=</span> <span class="n">shift_AoA_column_headings</span><span class="p">(</span><span class="c1">#(5)!</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a>        <span class="n">global_column_headings</span><span class="p">,</span> 
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a>        <span class="n">shift_by</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a>    <span class="p">)</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a>    <span class="n">column_headings_to_rename</span> <span class="o">=</span> <span class="p">{</span><span class="c1">#(6)!</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a>        <span class="n">local_col</span> <span class="p">:</span> <span class="n">global_col</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12"></a>        <span class="k">for</span> <span class="n">local_col</span><span class="p">,</span> <span class="n">global_col</span> 
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13"></a>        <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14"></a>            <span class="n">shifted_dataframe_columns</span><span class="p">,</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15"></a>            <span class="n">global_column_headings</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16"></a>        <span class="p">)</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17"></a>    <span class="p">}</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18"></a>    <span class="n">original_column_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_to_align</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="c1">#(7)!</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19"></a>    <span class="n">df_to_align</span> <span class="o">=</span> <span class="n">df_to_align</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="c1">#(8)!</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20"></a>        <span class="n">columns</span><span class="o">=</span><span class="n">column_headings_to_rename</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21"></a>    <span class="p">)</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22"></a>    <span class="k">return</span> <span class="n">df_to_align</span><span class="p">[</span><span class="n">original_column_order</span><span class="p">]</span><span class="c1">#(9)!</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The DataFrame whose columns are to be renamed and re-ordered. This DataFrame may contain many columns that do not need to be renamed. We only rename the columns that are in <code>global_column_headings</code>.</li>
+<li>The column headings to which the columns in <code>df_to_align</code> should be mapped. This will normally be AoA or ToA column headings.</li>
+<li>The number of positions to shift the values in the array by.</li>
+<li>We return a DataFrame with the exact same shape and column headings as <code>df_to_align</code>, but with the column headings renamed and re-ordered. There will probably be columns in <code>df_to_align</code> that is not part of the sorting and renaming, such as the revolution number <code>n</code>. We need to return these columns as is.</li>
+<li>We shift the column headings of the <code>global_column_headings</code> by <code>shift_by</code> positions.</li>
+<li>We create a dictionary that maps the column headings in <code>df_to_align</code> to the <code>global_column_headings</code>. We do this by zipping the <code>shifted_dataframe_columns</code> and the <code>global_column_headings</code> together. We use dictionary comprehension to create the dictionary.</li>
+<li>We store the original column order of <code>df_to_align</code> in a variable. We will use this to re-order the columns in <code>df_to_align</code> later on.</li>
+<li>We rename the columns in <code>df_to_align</code> using the <code>column_headings_to_rename</code> dictionary.</li>
+<li>We return the columns in <code>df_to_align</code> in the original order.</li>
+</ol>
+<p>If we perform a renaming of the columns of the stack plot DataFrames for probes 2, 3 and 4, the stack plots can be redrawn and is shown in <a href="#figure_05">Figure 5</a> below.</p>
+<script src="stack_plot_probe_whole_rotor_aligned.js" > </script>
+<div>
+    <div>
+        <canvas id="ch05_stack_plot_probe_whole_rotor_aligned"'></canvas>
+    </div>
+    <script>
+        async function render_chart_stack_plot_probe_whole_rotor_aligned() {
+            const ctx = document.getElementById('ch05_stack_plot_probe_whole_rotor_aligned');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_stack_plot_probe_whole_rotor_aligned = new Chart(ctx, window.stack_plot_probe_whole_rotor_aligned);
+            window.fig_stack_plot_probe_whole_rotor_aligned_reset = function resetZoomFig3() {
+                    window.fig_stack_plot_probe_whole_rotor_aligned.resetZoom();
+                }
+            }
+        render_chart_stack_plot_probe_whole_rotor_aligned();
+    </script>
+    <a onclick="window.fig_stack_plot_probe_whole_rotor_aligned_reset()" class='md-button'>Reset Zoom</a>
+</div>
+
+<figure>
+<figcaption><strong><a name='figure_05'>Figure 5</a></strong>: 
+  The stack plot for the rotor at all the proximity probes after shifting and renaming the columns. We can see that the stack plots align with one another. 
+  </figcaption>
+</figure>
+<p>Perfect <img alt="👏" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f44f.svg" title=":clap:" /> !</p>
+<p>Our stack plots for all probes lie on top of one another. We can therefore conclude that our alignment is correct. There are small differences between the median stack plots for the different probes. The differences can be attributed to random noise, and the fact that each probe is located at a different axial position, and radial distance from the blades. Each probe will therefore react slightly differently to the blades passing by.</p>
+<div class="admonition tip">
+<p class="admonition-title">Probe order</p>
+<p>We <em>always</em> consider the proximity probes in the same order in which they are installed. In other words, the probes must be considered in the order in which each blade passes underneath the probes. If you do not do this, your stack plots may not align!</p>
+</div>
+<h3 id="calculating-the-shift-based-on-probe-spacing">Calculating the shift based on probe spacing</h3>
+<p>We've shown that we can shift the stack plot DataFrames such that they all align with the first probe. It was simple, since our rotor only has 5 blades, to determine that probes 2, 3 and 4 required a shift of 1 blade. </p>
+<p>Normally, however, you cannot eyeball this shift for a rotor with more blades. We therefore need to estimate the shift based on the installed spacing between the probes. </p>
+<p>The engineering drawing for the probe holder used in the current dataset reveals the spacing between the probes in <a href="#figure_06">Figure 6</a> below.</p>
+<figure>
+<p><img alt="Probe holder drawing" src="engineering_drawing_installation.png" />
+  </p>
+<figcaption><strong><a name='figure_06'>Figure 6</a></strong>: 
+  The figure shows the engineering drawing for the component holding the probes for this chapter's dataset. We can see that the circumferential distance between adjacent probes is 9.67 * 2 = 19.34 degrees.
+</figcaption>
+</figure>
+<p>From <a href="#figure_06">Figure 6</a> above, we see that the holes for the probes were manufactured to be 19.34 degrees from one another. </p>
+<p>In reality, because of manufacturing tolerances, the manufactured spacing will be slightly different. Even if you could manufacture it perfectly, the probes themselves may not "respond" perfectly similar, leading to AoA values that do not correspond to the centerline of the intended probe locations. </p>
+<p>We therefore need to assume that the probes are not perfectly spaced. We therefore need an algorithm to determine when each blade arrives at each probe.</p>
+<p>We follow a two step process to achieve this:</p>
+<ol>
+<li>Predict the likely AoA of a blade at a later probe based on the AoA of the blade at the current probe and the spacing between the two probes.</li>
+<li>Determine which AoA value in the later probe's DataFrame is closest to the predicted AoA value.</li>
+</ol>
+<p>We can write a function that achieve this:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span>
+<span class="normal"><a href="#__codelineno-11-14">14</a></span>
+<span class="normal"><a href="#__codelineno-11-15">15</a></span>
+<span class="normal"><a href="#__codelineno-11-16">16</a></span>
+<span class="normal"><a href="#__codelineno-11-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span> <span class="nf">predict_probe_offset</span><span class="p">(</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a>        <span class="n">df_probe_AoAs</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span><span class="c1">#(1)!</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a>        <span class="n">starting_aoa</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span><span class="c1">#(2)!</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>        <span class="n">prox_probe_relative_distance</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span><span class="c1">#(3)!</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span><span class="c1">#(4)!</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6"></a>    <span class="n">predicted_blade_position</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7"></a>        <span class="n">starting_aoa</span> 
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8"></a>        <span class="o">+</span> <span class="n">prox_probe_relative_distance</span><span class="c1">#(5)!</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9"></a>    <span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="c1">#(6)!</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10"></a>    <span class="n">all_aoa_columns</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11"></a>        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df_probe_AoAs</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AoA_&quot;</span><span class="p">)</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13"></a>    <span class="p">])</span><span class="c1">#(7)!</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14"></a>    <span class="n">current_probe_median_AoAs</span> <span class="o">=</span> <span class="n">df_probe_AoAs</span><span class="p">[</span><span class="n">all_aoa_columns</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="c1">#(8)!</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15"></a>    <span class="n">err_aoa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">current_probe_median_AoAs</span> <span class="o">-</span> <span class="n">predicted_blade_position</span><span class="p">)</span><span class="c1">#(9)!</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16"></a>    <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">err_aoa</span><span class="p">)</span><span class="c1">#(10)!</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17"></a>    <span class="k">return</span> <span class="n">offset</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The DataFrame containing the AoA values for the probe for which you want to determine the offset. This DataFrame is the result of the <code>align_blade_AoAs_along_revolutions</code> function.</li>
+<li>This is the starting AoA for the blade you are looking for. This will almost always be the median AoA of the first blade arriving at probe 1.</li>
+<li>The relative distance between the probe responsible for measuring the values in <code>df_probe_AoAs</code> and the probe from which <code>starting_aoa</code> was obtained. The distance must be provided in radians.</li>
+<li>The function returns the offset that needs to be applied to the AoA columns in <code>df_probe_AoAs</code> to align it to the blade from <code>starting_aoa</code>.</li>
+<li>We add the relative distance between the probes to the starting AoA. This gives us the predicted AoA of the blade at the later probe.</li>
+<li>We wrap the predicted AoA value to the range <span class="arithmatex">\([0, 2 \pi)\)</span>. This is to cater for cases where a blade arriving at <code>starting_aoa</code> will only arrive in the next revolution at the probe you are seeking now.</li>
+<li>We get all the AoA column headings from <code>df_probe_AoAs</code>.</li>
+<li>We calculate the median AoA for each blade at the current probe.</li>
+<li>We calculate the absolute error between the predicted AoA and the median AoA for each blade.</li>
+<li>The <code>np.argmin</code> returns the index of the smallest entry in an array. In this case, the smallest value in <code>err_aoa</code> will correspond to the blade that arrives closest to <code>predicted_blade_position</code>.</li>
+</ol>
+<p>We can use the function above to check our previous assumption, that the offset for probes 2, 3, and 4 must be 1.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">probe_1_blade_1_AoA</span> <span class="o">=</span> <span class="n">blade_dfs_recombined</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">probe_spacings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">19.34</span><span class="p">,</span> <span class="mf">19.34</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mf">19.34</span><span class="o">*</span><span class="mi">3</span><span class="p">]))</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">df_probe_AoAs</span><span class="p">,</span> <span class="n">probe_spacing</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a>            <span class="nb">zip</span><span class="p">(</span><span class="n">blade_dfs_recombined</span><span class="p">,</span> <span class="n">probe_spacings</span><span class="p">)</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a>        <span class="p">):</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a>        <span class="n">probe_offset</span> <span class="o">=</span> <span class="n">predict_probe_offset</span><span class="p">(</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7"></a>            <span class="n">df_probe_AoAs</span><span class="p">,</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8"></a>            <span class="n">probe_1_blade_1_AoA</span><span class="p">,</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9"></a>            <span class="n">probe_spacing</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10"></a>        <span class="p">)</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probe </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">,</span> <span class="n">probe_offset</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="go">Probe 1: 0</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="go">Probe 2: 1</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="go">Probe 3: 1</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="go">Probe 4: 1</span>
+</span></code></pre></div>
+<p>We see here that, indeed, the optimal offset for probes 2, 3 and 4 is 1. We have also calculated the optimal offset for probe 1. This is simply a sanity check, and should always return 0.</p>
+<h2 id="assembling-global-rotor-level-merged-dataframes">Assembling global rotor level merged DataFrames</h2>
+<p>We now have all the ingredients needed to assemble AoA DataFrames that represent the dynamic behavior of every single blade over all the probes. This is what we have been searching for all along: being able to measure the vibration of each blade individually.</p>
+<p>We write a function that constructs <code>B</code> DataFrames from each of the merged proximity probe level frames.  We will refer to these DataFrames as rotor blade DataFrames, meaning its values represent all the information we have about a single blade.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="#__codelineno-14-13">13</a></span>
+<span class="normal"><a href="#__codelineno-14-14">14</a></span>
+<span class="normal"><a href="#__codelineno-14-15">15</a></span>
+<span class="normal"><a href="#__codelineno-14-16">16</a></span>
+<span class="normal"><a href="#__codelineno-14-17">17</a></span>
+<span class="normal"><a href="#__codelineno-14-18">18</a></span>
+<span class="normal"><a href="#__codelineno-14-19">19</a></span>
+<span class="normal"><a href="#__codelineno-14-20">20</a></span>
+<span class="normal"><a href="#__codelineno-14-21">21</a></span>
+<span class="normal"><a href="#__codelineno-14-22">22</a></span>
+<span class="normal"><a href="#__codelineno-14-23">23</a></span>
+<span class="normal"><a href="#__codelineno-14-24">24</a></span>
+<span class="normal"><a href="#__codelineno-14-25">25</a></span>
+<span class="normal"><a href="#__codelineno-14-26">26</a></span>
+<span class="normal"><a href="#__codelineno-14-27">27</a></span>
+<span class="normal"><a href="#__codelineno-14-28">28</a></span>
+<span class="normal"><a href="#__codelineno-14-29">29</a></span>
+<span class="normal"><a href="#__codelineno-14-30">30</a></span>
+<span class="normal"><a href="#__codelineno-14-31">31</a></span>
+<span class="normal"><a href="#__codelineno-14-32">32</a></span>
+<span class="normal"><a href="#__codelineno-14-33">33</a></span>
+<span class="normal"><a href="#__codelineno-14-34">34</a></span>
+<span class="normal"><a href="#__codelineno-14-35">35</a></span>
+<span class="normal"><a href="#__codelineno-14-36">36</a></span>
+<span class="normal"><a href="#__codelineno-14-37">37</a></span>
+<span class="normal"><a href="#__codelineno-14-38">38</a></span>
+<span class="normal"><a href="#__codelineno-14-39">39</a></span>
+<span class="normal"><a href="#__codelineno-14-40">40</a></span>
+<span class="normal"><a href="#__codelineno-14-41">41</a></span>
+<span class="normal"><a href="#__codelineno-14-42">42</a></span>
+<span class="normal"><a href="#__codelineno-14-43">43</a></span>
+<span class="normal"><a href="#__codelineno-14-44">44</a></span>
+<span class="normal"><a href="#__codelineno-14-45">45</a></span>
+<span class="normal"><a href="#__codelineno-14-46">46</a></span>
+<span class="normal"><a href="#__codelineno-14-47">47</a></span>
+<span class="normal"><a href="#__codelineno-14-48">48</a></span>
+<span class="normal"><a href="#__codelineno-14-49">49</a></span>
+<span class="normal"><a href="#__codelineno-14-50">50</a></span>
+<span class="normal"><a href="#__codelineno-14-51">51</a></span>
+<span class="normal"><a href="#__codelineno-14-52">52</a></span>
+<span class="normal"><a href="#__codelineno-14-53">53</a></span>
+<span class="normal"><a href="#__codelineno-14-54">54</a></span>
+<span class="normal"><a href="#__codelineno-14-55">55</a></span>
+<span class="normal"><a href="#__codelineno-14-56">56</a></span>
+<span class="normal"><a href="#__codelineno-14-57">57</a></span>
+<span class="normal"><a href="#__codelineno-14-58">58</a></span>
+<span class="normal"><a href="#__codelineno-14-59">59</a></span>
+<span class="normal"><a href="#__codelineno-14-60">60</a></span>
+<span class="normal"><a href="#__codelineno-14-61">61</a></span>
+<span class="normal"><a href="#__codelineno-14-62">62</a></span>
+<span class="normal"><a href="#__codelineno-14-63">63</a></span>
+<span class="normal"><a href="#__codelineno-14-64">64</a></span>
+<span class="normal"><a href="#__codelineno-14-65">65</a></span>
+<span class="normal"><a href="#__codelineno-14-66">66</a></span>
+<span class="normal"><a href="#__codelineno-14-67">67</a></span>
+<span class="normal"><a href="#__codelineno-14-68">68</a></span>
+<span class="normal"><a href="#__codelineno-14-69">69</a></span>
+<span class="normal"><a href="#__codelineno-14-70">70</a></span>
+<span class="normal"><a href="#__codelineno-14-71">71</a></span>
+<span class="normal"><a href="#__codelineno-14-72">72</a></span>
+<span class="normal"><a href="#__codelineno-14-73">73</a></span>
+<span class="normal"><a href="#__codelineno-14-74">74</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">def</span> <span class="nf">assemble_rotor_AoA_dfs</span><span class="p">(</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="n">prox_aligned_dfs</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> 
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="n">probe_spacing</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5"></a>    <span class="n">all_aoa_columns</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="c1">#(1)!</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6"></a>        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">prox_aligned_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AoA_&quot;</span><span class="p">)</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8"></a>    <span class="p">])</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9"></a>    <span class="n">all_toa_columns</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="c1">#(2)!</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10"></a>        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">prox_aligned_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11"></a>        <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ToA_&quot;</span><span class="p">)</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12"></a>    <span class="p">])</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13"></a>    <span class="n">remaining_columns</span> <span class="o">=</span> <span class="p">[</span><span class="c1">#(3)!</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14"></a>        <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">prox_aligned_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ToA_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AoA_&quot;</span><span class="p">)</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16"></a>    <span class="p">]</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17"></a>    <span class="n">B</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_aoa_columns</span><span class="p">)</span><span class="c1">#(4)!</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18"></a>    <span class="n">P</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prox_aligned_dfs</span><span class="p">)</span><span class="c1">#(5)!</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19"></a>    <span class="k">if</span> <span class="n">P</span>  <span class="o">-</span> <span class="mi">1</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probe_spacing</span><span class="p">):</span><span class="c1">#(6)!</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21"></a>            <span class="s2">&quot;The number of proximity probes must be &quot;</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22"></a>            <span class="s2">&quot;one less than the number of probe spacings&quot;</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23"></a>        <span class="p">)</span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24"></a>    <span class="n">rotor_blade_dfs</span> <span class="o">=</span> <span class="p">[]</span><span class="c1">#(7)!</span>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">B</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span><span class="c1">#(8)!</span>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26"></a>        <span class="n">columns_to_copy</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27"></a>            <span class="n">remaining_columns</span> 
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28"></a>            <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;ToA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AoA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29"></a>        <span class="p">)</span><span class="c1">#(9)!</span>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30"></a>        <span class="n">rename_dict</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31"></a>            <span class="sa">f</span><span class="s2">&quot;ToA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="s2">&quot;ToA_p1&quot;</span><span class="p">,</span>
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32"></a>            <span class="sa">f</span><span class="s2">&quot;AoA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="s2">&quot;AoA_p1&quot;</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33"></a>        <span class="p">}</span><span class="c1">#(10)!</span>
+</span><span id="__span-14-34"><a id="__codelineno-14-34" name="__codelineno-14-34"></a>        <span class="n">rotor_blade_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="c1">#(11)!</span>
+</span><span id="__span-14-35"><a id="__codelineno-14-35" name="__codelineno-14-35"></a>            <span class="n">prox_aligned_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">columns_to_copy</span><span class="p">]</span>
+</span><span id="__span-14-36"><a id="__codelineno-14-36" name="__codelineno-14-36"></a>            <span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-14-37"><a id="__codelineno-14-37" name="__codelineno-14-37"></a>            <span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+</span><span id="__span-14-38"><a id="__codelineno-14-38" name="__codelineno-14-38"></a>                <span class="n">columns</span><span class="o">=</span><span class="n">rename_dict</span>
+</span><span id="__span-14-39"><a id="__codelineno-14-39" name="__codelineno-14-39"></a>            <span class="p">)</span>
+</span><span id="__span-14-40"><a id="__codelineno-14-40" name="__codelineno-14-40"></a>        <span class="p">)</span>
+</span><span id="__span-14-41"><a id="__codelineno-14-41" name="__codelineno-14-41"></a>    <span class="n">blade_1_probe_1_median</span> <span class="o">=</span> <span class="n">rotor_blade_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="c1">#(12)!</span>
+</span><span id="__span-14-42"><a id="__codelineno-14-42" name="__codelineno-14-42"></a>    <span class="k">for</span> <span class="n">iter_count</span><span class="p">,</span> <span class="p">(</span><span class="n">df_probe_AoA</span><span class="p">,</span> <span class="n">probe_offset</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+</span><span id="__span-14-43"><a id="__codelineno-14-43" name="__codelineno-14-43"></a>            <span class="nb">zip</span><span class="p">(</span><span class="n">prox_aligned_dfs</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">probe_spacing</span><span class="p">)</span><span class="c1">#(13)!</span>
+</span><span id="__span-14-44"><a id="__codelineno-14-44" name="__codelineno-14-44"></a>        <span class="p">):</span>
+</span><span id="__span-14-45"><a id="__codelineno-14-45" name="__codelineno-14-45"></a>        <span class="n">probe_no</span> <span class="o">=</span> <span class="n">iter_count</span> <span class="o">+</span> <span class="mi">2</span><span class="c1">#(14)!</span>
+</span><span id="__span-14-46"><a id="__codelineno-14-46" name="__codelineno-14-46"></a>        <span class="n">probe_offset</span> <span class="o">=</span> <span class="n">predict_probe_offset</span><span class="p">(</span><span class="c1">#(15)!</span>
+</span><span id="__span-14-47"><a id="__codelineno-14-47" name="__codelineno-14-47"></a>            <span class="n">df_probe_AoA</span><span class="p">,</span>
+</span><span id="__span-14-48"><a id="__codelineno-14-48" name="__codelineno-14-48"></a>            <span class="n">blade_1_probe_1_median</span><span class="p">,</span>
+</span><span id="__span-14-49"><a id="__codelineno-14-49" name="__codelineno-14-49"></a>            <span class="n">probe_offset</span>
+</span><span id="__span-14-50"><a id="__codelineno-14-50" name="__codelineno-14-50"></a>        <span class="p">)</span>
+</span><span id="__span-14-51"><a id="__codelineno-14-51" name="__codelineno-14-51"></a>        <span class="n">df_probe_AoAs_aligned</span> <span class="o">=</span> <span class="n">rename_df_columns_for_alignment</span><span class="p">(</span><span class="c1">#(16)!</span>
+</span><span id="__span-14-52"><a id="__codelineno-14-52" name="__codelineno-14-52"></a>            <span class="n">df_probe_AoA</span><span class="p">,</span>
+</span><span id="__span-14-53"><a id="__codelineno-14-53" name="__codelineno-14-53"></a>            <span class="n">all_aoa_columns</span><span class="p">,</span>
+</span><span id="__span-14-54"><a id="__codelineno-14-54" name="__codelineno-14-54"></a>            <span class="n">probe_offset</span>
+</span><span id="__span-14-55"><a id="__codelineno-14-55" name="__codelineno-14-55"></a>        <span class="p">)</span>
+</span><span id="__span-14-56"><a id="__codelineno-14-56" name="__codelineno-14-56"></a>        <span class="n">df_probe_AoAs_aligned</span> <span class="o">=</span> <span class="n">rename_df_columns_for_alignment</span><span class="p">(</span><span class="c1">#(17)!</span>
+</span><span id="__span-14-57"><a id="__codelineno-14-57" name="__codelineno-14-57"></a>            <span class="n">df_probe_AoAs_aligned</span><span class="p">,</span>
+</span><span id="__span-14-58"><a id="__codelineno-14-58" name="__codelineno-14-58"></a>            <span class="n">all_toa_columns</span><span class="p">,</span>
+</span><span id="__span-14-59"><a id="__codelineno-14-59" name="__codelineno-14-59"></a>            <span class="n">probe_offset</span>
+</span><span id="__span-14-60"><a id="__codelineno-14-60" name="__codelineno-14-60"></a>        <span class="p">)</span>
+</span><span id="__span-14-61"><a id="__codelineno-14-61" name="__codelineno-14-61"></a>        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">B</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-14-62"><a id="__codelineno-14-62" name="__codelineno-14-62"></a>            <span class="n">columns_to_merge</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;ToA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AoA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+</span><span id="__span-14-63"><a id="__codelineno-14-63" name="__codelineno-14-63"></a>            <span class="n">rename_dict</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-14-64"><a id="__codelineno-14-64" name="__codelineno-14-64"></a>                <span class="sa">f</span><span class="s2">&quot;ToA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;ToA_p</span><span class="si">{</span><span class="n">probe_no</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="__span-14-65"><a id="__codelineno-14-65" name="__codelineno-14-65"></a>                <span class="sa">f</span><span class="s2">&quot;AoA_</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;AoA_p</span><span class="si">{</span><span class="n">probe_no</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-14-66"><a id="__codelineno-14-66" name="__codelineno-14-66"></a>            <span class="p">}</span>
+</span><span id="__span-14-67"><a id="__codelineno-14-67" name="__codelineno-14-67"></a>            <span class="n">rotor_blade_dfs</span><span class="p">[</span><span class="n">b</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotor_blade_dfs</span><span class="p">[</span><span class="n">b</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="c1">#(18)!</span>
+</span><span id="__span-14-68"><a id="__codelineno-14-68" name="__codelineno-14-68"></a>                <span class="n">df_probe_AoAs_aligned</span><span class="p">[</span><span class="n">columns_to_merge</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+</span><span id="__span-14-69"><a id="__codelineno-14-69" name="__codelineno-14-69"></a>                    <span class="n">columns</span><span class="o">=</span><span class="n">rename_dict</span>
+</span><span id="__span-14-70"><a id="__codelineno-14-70" name="__codelineno-14-70"></a>                <span class="p">),</span>
+</span><span id="__span-14-71"><a id="__codelineno-14-71" name="__codelineno-14-71"></a>                <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">,</span>
+</span><span id="__span-14-72"><a id="__codelineno-14-72" name="__codelineno-14-72"></a>                <span class="n">on</span><span class="o">=</span><span class="s2">&quot;n&quot;</span>
+</span><span id="__span-14-73"><a id="__codelineno-14-73" name="__codelineno-14-73"></a>            <span class="p">)</span>
+</span><span id="__span-14-74"><a id="__codelineno-14-74" name="__codelineno-14-74"></a>    <span class="k">return</span> <span class="n">rotor_blade_dfs</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>We get all the AoA column headings from the first DataFrame in <code>prox_aligned_dfs</code>. We use the first DataFrame because we know that all the DataFrames in <code>prox_aligned_dfs</code> will have the same column headings.</li>
+<li>Similar to the above line, we get the ToA column names.</li>
+<li>We get all the column headings that are not AoA or ToA headings, such as <code>n</code>, <code>n_start_time</code>, <code>n_end_time</code>, and <code>Omega</code>.</li>
+<li>We determine the number of blades in the rotor.</li>
+<li>We determine the number of proximity probes.</li>
+<li>This is a sanity check to ensure we've provided the correct number of probe spacings.</li>
+<li>We initialize an empty list that will contain the rotor blade DataFrames.</li>
+<li>The purpose of this loop is to get the AoA and ToA values from the first probe. This is the start of each rotor blade's AoA DataFrame and will be grown to include the other proximity probe values in the next loop.</li>
+<li>We determine the column headings that we need to copy from the first probe's DataFrame. We need to copy all the columns that are not AoA or ToA columns, as well as the AoA and ToA columns for the current blade.</li>
+<li>We construct the dictionary to be used with Pandas' <code>.rename</code> function to rename the AoA and ToA column headings.</li>
+<li>We copy the columns from the first probe's DataFrame and rename the AoA and ToA columns for the current blade to <code>AoA_p1</code> and <code>ToA_p1</code> respectively. We append the DataFrame to the <code>rotor_blade_dfs</code> list.</li>
+<li>We determine the median AoA of the first blade arriving at the first probe. We will use this value to predict the AoA of the first blade arriving at the other probes.</li>
+<li>We loop over all the remaining probes and their corresponding probe spacings. Note the probe spacings are all relative to the first probe.</li>
+<li>We determine the probe number. This is simply the iterator value plus 2, since the first probe is probe 1. We create this variable for renaming purposes.</li>
+<li>We calculate the offset for the current probe. We use the <code>predict_probe_offset</code> function we wrote earlier.</li>
+<li>We rename the AoA columns in <code>df_probe_AoAs</code> to align them with the first probe. We use the <code>rename_df_columns_for_alignment</code> function we wrote earlier.</li>
+<li>Now we rename ToA columns in <code>df_probe_AoAs</code>.</li>
+<li>We merge our aligned probe's AoA DataFrame, <code>df_probe_AoAs_aligned</code>, with the current blade's DataFrame. We use the <code>merge</code> function to do this. We use the <code>outer</code> merge type to ensure that we do not lose any data. We merge on the revolution number <code>n</code>.</li>
+</ol>
+<p>We can use this function to get a list of rotor blade DataFrames:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span>
+<span class="normal"><a href="#__codelineno-15-6">6</a></span>
+<span class="normal"><a href="#__codelineno-15-7">7</a></span>
+<span class="normal"><a href="#__codelineno-15-8">8</a></span>
+<span class="normal"><a href="#__codelineno-15-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">prox_relative_distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="c1">#(1)!</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a>    <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="c1">#(2)!</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3"></a>            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">9.67</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mf">9.67</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="mf">9.67</span><span class="o">*</span><span class="mi">2</span><span class="p">])</span><span class="c1">#(3)!</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4"></a>        <span class="p">)</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5"></a>    <span class="p">)</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">rotor_AoA_dfs</span> <span class="o">=</span> <span class="n">assemble_rotor_AoA_dfs</span><span class="p">(</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7"></a>    <span class="n">prox_aligned_dfs</span><span class="o">=</span><span class="n">blade_dfs_recombined</span><span class="p">,</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8"></a>    <span class="n">probe_spacing</span><span class="o">=</span><span class="n">prox_relative_distances</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>We use the <code>np.cumsum</code> function to calculate the cumulative spacing between each probe and the first probe. This is because we specify our probe spacings in its increments between subsequent probes, not in absolute terms. </li>
+<li>We convert the probe spacings to radians. Using this function instead of multiplying with <code>np.pi</code>/180 makes it exceedingly unlikely we'll make a with this conversion.</li>
+<li>We specify the probe spacings between adjacent probes as seen in <a href="#figure_06">Figure 6</a>.</li>
+</ol>
+<p>The first three rows in the rotor blade AoA DataFrame is shown in <a href="#table_02">Table 2</a> below.</p>
+<figure>
+<figcaption><a id='table_02'>Table 2:</a> The rotor blade AoA DataFrame's head.  </figcaption>
+</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">n_start_time</th>
+<th style="text-align: right;">n_end_time</th>
+<th style="text-align: right;">Omega</th>
+<th style="text-align: right;">ToA_p1</th>
+<th style="text-align: right;">AoA_p1</th>
+<th style="text-align: right;">ToA_p2</th>
+<th style="text-align: right;">AoA_p2</th>
+<th style="text-align: right;">ToA_p3</th>
+<th style="text-align: right;">AoA_p3</th>
+<th style="text-align: right;">ToA_p4</th>
+<th style="text-align: right;">AoA_p4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0934028</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">23.2255</td>
+<td style="text-align: right;">0.136547</td>
+<td style="text-align: right;">1.00205</td>
+<td style="text-align: right;">0.180378</td>
+<td style="text-align: right;">2.02003</td>
+<td style="text-align: right;">0.180378</td>
+<td style="text-align: right;">2.02003</td>
+<td style="text-align: right;">0.180378</td>
+<td style="text-align: right;">2.02003</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">23.5429</td>
+<td style="text-align: right;">0.40623</td>
+<td style="text-align: right;">0.995802</td>
+<td style="text-align: right;">0.449329</td>
+<td style="text-align: right;">2.01047</td>
+<td style="text-align: right;">0.449329</td>
+<td style="text-align: right;">2.01047</td>
+<td style="text-align: right;">0.449329</td>
+<td style="text-align: right;">2.01047</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">0.894334</td>
+<td style="text-align: right;">23.8435</td>
+<td style="text-align: right;">0.672717</td>
+<td style="text-align: right;">0.999073</td>
+<td style="text-align: right;">0.715402</td>
+<td style="text-align: right;">2.01683</td>
+<td style="text-align: right;">0.715402</td>
+<td style="text-align: right;">2.01683</td>
+<td style="text-align: right;">0.715402</td>
+<td style="text-align: right;">2.01683</td>
+</tr>
+</tbody>
+</table>
+<p>From <a href="#table_02">Table 2</a> above we see there are four AoA columns and four ToA columns, one for each probe. We can also identify which probe it is. This DataFrame looks confusingly similar to the DataFrame shown in <a href="#table_01">Table 1</a>. </p>
+<p>We present, in <a href="#table_03">Table 3</a> below, the last rotor blade's AoA DataFrame to get a better perspective on what we have done.</p>
+<figure>
+<figcaption><a id='table_03'>Table 3:</a> The rotor blade AoA DataFrame's head.  </figcaption>
+</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">n_start_time</th>
+<th style="text-align: right;">n_end_time</th>
+<th style="text-align: right;">Omega</th>
+<th style="text-align: right;">ToA_p1</th>
+<th style="text-align: right;">AoA_p1</th>
+<th style="text-align: right;">ToA_p2</th>
+<th style="text-align: right;">AoA_p2</th>
+<th style="text-align: right;">ToA_p3</th>
+<th style="text-align: right;">AoA_p3</th>
+<th style="text-align: right;">ToA_p4</th>
+<th style="text-align: right;">AoA_p4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0934028</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">23.2255</td>
+<td style="text-align: right;">0.352618</td>
+<td style="text-align: right;">6.0204</td>
+<td style="text-align: right;">0.125942</td>
+<td style="text-align: right;">0.75574</td>
+<td style="text-align: right;">0.125942</td>
+<td style="text-align: right;">0.75574</td>
+<td style="text-align: right;">0.125942</td>
+<td style="text-align: right;">0.75574</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.363933</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">23.5429</td>
+<td style="text-align: right;">0.619614</td>
+<td style="text-align: right;">6.01947</td>
+<td style="text-align: right;">0.395832</td>
+<td style="text-align: right;">0.750988</td>
+<td style="text-align: right;">0.395832</td>
+<td style="text-align: right;">0.750988</td>
+<td style="text-align: right;">0.395832</td>
+<td style="text-align: right;">0.750988</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.630815</td>
+<td style="text-align: right;">0.894334</td>
+<td style="text-align: right;">23.8435</td>
+<td style="text-align: right;">0.883363</td>
+<td style="text-align: right;">6.0216</td>
+<td style="text-align: right;">0.662427</td>
+<td style="text-align: right;">0.753728</td>
+<td style="text-align: right;">0.662427</td>
+<td style="text-align: right;">0.753728</td>
+<td style="text-align: right;">0.662427</td>
+<td style="text-align: right;">0.753728</td>
+</tr>
+</tbody>
+</table>
+<p>If we look at <code>AoA_p1</code> and <code>ToA_p1</code> for the first row, we see that they occur <em>after</em> the other ToA and AoA values in that row. This means that the first probe that "sees" blade 5 in every revolution is probe number 2, and the last probe to "see" it is probe number 1.</p>
+<p>Depending on the vibration analysis we're interested in, we might decide to collapse all AoA and ToA values into two large arrays. But mostly, we'll use them exactly in the form they are here.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>We've done a lot of work in this chapter and ended up with one DataFrame per blade. If you feel confused by all the steps involved in achieving this, rest assured that it gets easier with practice. The first coding exercise 👇 below will challenge you to combine everything we've done up to this point in a single function to get the rotor blade DataFrames.</p>
+<p>It's my opinion that we've now reached the peak of the difficulty mountain of BTT. From here, we can start doing the "cool" stuff. The stuff that most published work is about. </p>
+<p>We can start doing vibration analysis.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand that we can combine the AoAs and ToAs from the blades in a single proximity probe in a column-wise manner, thereby yielding a DataFrame with one row for every shaft revolution, and several columns for the respective blades arriving at the proximity probe.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand what the stack plot is, and how it can be used to confirm that our blades are properly aligned.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand that the order in which the blades arrive at each proximity probe is important, and that we need to align the blades from each proximity probe to the blades from the first proximity probe.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Write functions to convert the AoAs associated with individual proximity probes into consolidated rotor blade DataFrames which contain all the ToAs and AoAs for each blade over all the probes.</p>
+</div>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>I thank XXX for reviewing this chapter.</p>
+<div style='display:flex'>
+    <div>
+        <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+            <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Dawie Diamond</strong>
+        </p>
+        <p>
+            2023-10-15
+        </p>
+    </div>
+</div>
+
+<h2 id="coding-exercises">Coding exercises</h2>
+<h3 id="1-one-function-to-rule-them-all">1. One function to rule them all</h3>
+<p>We've done a lot of work in chapters 3, 4 and 5. Its now time to combine them into a single function that recieves our raw time stamps, and returns our rotor blade AoA DataFrames.</p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9L14.1 9m3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1-3.7-3.7M7 2v3h3v2H7v3H5V7H2V5h3V2h2Z"/></svg></span> Write a function that's called <code>get_rotor_blade_AoAs</code> that receives the following three things as inputs:</p>
+<ol>
+<li>A DataFrame containing the opr zero-crossing times.</li>
+<li>A list of ToAs from each proximity probe.</li>
+<li>A list of probe spacings between each proximity probe and the first proximity probe.</li>
+</ol>
+<p>and returns a list of rotor blade DataFrames. It is highly recommended that you leverage the existing functions that we've written in this chapter.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before peeking)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span>
+<span class="normal"><a href="#__codelineno-16-13">13</a></span>
+<span class="normal"><a href="#__codelineno-16-14">14</a></span>
+<span class="normal"><a href="#__codelineno-16-15">15</a></span>
+<span class="normal"><a href="#__codelineno-16-16">16</a></span>
+<span class="normal"><a href="#__codelineno-16-17">17</a></span>
+<span class="normal"><a href="#__codelineno-16-18">18</a></span>
+<span class="normal"><a href="#__codelineno-16-19">19</a></span>
+<span class="normal"><a href="#__codelineno-16-20">20</a></span>
+<span class="normal"><a href="#__codelineno-16-21">21</a></span>
+<span class="normal"><a href="#__codelineno-16-22">22</a></span>
+<span class="normal"><a href="#__codelineno-16-23">23</a></span>
+<span class="normal"><a href="#__codelineno-16-24">24</a></span>
+<span class="normal"><a href="#__codelineno-16-25">25</a></span>
+<span class="normal"><a href="#__codelineno-16-26">26</a></span>
+<span class="normal"><a href="#__codelineno-16-27">27</a></span>
+<span class="normal"><a href="#__codelineno-16-28">28</a></span>
+<span class="normal"><a href="#__codelineno-16-29">29</a></span>
+<span class="normal"><a href="#__codelineno-16-30">30</a></span>
+<span class="normal"><a href="#__codelineno-16-31">31</a></span>
+<span class="normal"><a href="#__codelineno-16-32">32</a></span>
+<span class="normal"><a href="#__codelineno-16-33">33</a></span>
+<span class="normal"><a href="#__codelineno-16-34">34</a></span>
+<span class="normal"><a href="#__codelineno-16-35">35</a></span>
+<span class="normal"><a href="#__codelineno-16-36">36</a></span>
+<span class="normal"><a href="#__codelineno-16-37">37</a></span>
+<span class="normal"><a href="#__codelineno-16-38">38</a></span>
+<span class="normal"><a href="#__codelineno-16-39">39</a></span>
+<span class="normal"><a href="#__codelineno-16-40">40</a></span>
+<span class="normal"><a href="#__codelineno-16-41">41</a></span>
+<span class="normal"><a href="#__codelineno-16-42">42</a></span>
+<span class="normal"><a href="#__codelineno-16-43">43</a></span>
+<span class="normal"><a href="#__codelineno-16-44">44</a></span>
+<span class="normal"><a href="#__codelineno-16-45">45</a></span>
+<span class="normal"><a href="#__codelineno-16-46">46</a></span>
+<span class="normal"><a href="#__codelineno-16-47">47</a></span>
+<span class="normal"><a href="#__codelineno-16-48">48</a></span>
+<span class="normal"><a href="#__codelineno-16-49">49</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="k">def</span> <span class="nf">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2"></a>    <span class="n">df_opr_zero_crossings</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3"></a>    <span class="n">prox_probe_toas</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4"></a>    <span class="n">probe_spacings</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5"></a>    <span class="n">B</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This function converts the raw time stamps, both the OPR zero-crossing</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="sd">    times and he proximity probe ToAs, and returns a DataFrame for each </span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="sd">    blade containing the ToA and AoA values for each blade over all the</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="sd">    proximity probes.</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11"></a>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="sd">    Args:</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13"></a><span class="sd">        df_opr_zero_crossings (pd.DataFrame): A DataFrame containing the</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14"></a><span class="sd">            OPR zero-crossing times in its first column.</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15"></a><span class="sd">        prox_probe_toas (List[pd.DataFrame]): A list of DataFrames</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16"></a><span class="sd">            where each DataFrame contains the ToAs of a single</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17"></a><span class="sd">            blade from a proximity probe.</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18"></a><span class="sd">        probe_spacings (List[float]): The relative spacing between</span>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19"></a><span class="sd">            the first probe and every other probe. There are one</span>
+</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20"></a><span class="sd">            less value in this list than in prox_probe_toas.</span>
+</span><span id="__span-16-21"><a id="__codelineno-16-21" name="__codelineno-16-21"></a><span class="sd">        B (int): The number of blades.</span>
+</span><span id="__span-16-22"><a id="__codelineno-16-22" name="__codelineno-16-22"></a>
+</span><span id="__span-16-23"><a id="__codelineno-16-23" name="__codelineno-16-23"></a><span class="sd">    Returns:</span>
+</span><span id="__span-16-24"><a id="__codelineno-16-24" name="__codelineno-16-24"></a><span class="sd">        List[pd.DataFrame]: A list of DataFrames where each DataFrame</span>
+</span><span id="__span-16-25"><a id="__codelineno-16-25" name="__codelineno-16-25"></a><span class="sd">            contains the ToAs and AoAs of a single blade over all</span>
+</span><span id="__span-16-26"><a id="__codelineno-16-26" name="__codelineno-16-26"></a><span class="sd">            the proximity probes.</span>
+</span><span id="__span-16-27"><a id="__codelineno-16-27" name="__codelineno-16-27"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-16-28"><a id="__codelineno-16-28" name="__codelineno-16-28"></a>    <span class="n">blade_dfs_recombined</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-16-29"><a id="__codelineno-16-29" name="__codelineno-16-29"></a>
+</span><span id="__span-16-30"><a id="__codelineno-16-30" name="__codelineno-16-30"></a>    <span class="k">for</span> <span class="n">df_prox_toas</span> <span class="ow">in</span> <span class="n">prox_probe_toas</span><span class="p">:</span>
+</span><span id="__span-16-31"><a id="__codelineno-16-31" name="__codelineno-16-31"></a>        <span class="n">df_prox</span> <span class="o">=</span> <span class="n">transform_ToAs_to_AoAs</span><span class="p">(</span>
+</span><span id="__span-16-32"><a id="__codelineno-16-32" name="__codelineno-16-32"></a>            <span class="n">df_opr_zero_crossings</span><span class="p">,</span> 
+</span><span id="__span-16-33"><a id="__codelineno-16-33" name="__codelineno-16-33"></a>            <span class="n">df_prox_toas</span><span class="p">,</span> 
+</span><span id="__span-16-34"><a id="__codelineno-16-34" name="__codelineno-16-34"></a>        <span class="p">)</span>
+</span><span id="__span-16-35"><a id="__codelineno-16-35" name="__codelineno-16-35"></a>
+</span><span id="__span-16-36"><a id="__codelineno-16-36" name="__codelineno-16-36"></a>        <span class="n">blade_dfs_recombined</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="__span-16-37"><a id="__codelineno-16-37" name="__codelineno-16-37"></a>            <span class="n">align_blade_AoAs_along_revolutions</span><span class="p">(</span>
+</span><span id="__span-16-38"><a id="__codelineno-16-38" name="__codelineno-16-38"></a>                <span class="n">transform_prox_AoAs_to_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-16-39"><a id="__codelineno-16-39" name="__codelineno-16-39"></a>                    <span class="n">df_prox</span><span class="p">,</span> 
+</span><span id="__span-16-40"><a id="__codelineno-16-40" name="__codelineno-16-40"></a>                    <span class="n">B</span>
+</span><span id="__span-16-41"><a id="__codelineno-16-41" name="__codelineno-16-41"></a>                <span class="p">)</span>
+</span><span id="__span-16-42"><a id="__codelineno-16-42" name="__codelineno-16-42"></a>            <span class="p">)</span>
+</span><span id="__span-16-43"><a id="__codelineno-16-43" name="__codelineno-16-43"></a>        <span class="p">)</span>
+</span><span id="__span-16-44"><a id="__codelineno-16-44" name="__codelineno-16-44"></a>
+</span><span id="__span-16-45"><a id="__codelineno-16-45" name="__codelineno-16-45"></a>    <span class="n">rotor_AoA_dfs</span> <span class="o">=</span> <span class="n">assemble_rotor_AoA_dfs</span><span class="p">(</span>
+</span><span id="__span-16-46"><a id="__codelineno-16-46" name="__codelineno-16-46"></a>        <span class="n">prox_aligned_dfs</span><span class="o">=</span><span class="n">blade_dfs_recombined</span><span class="p">,</span>
+</span><span id="__span-16-47"><a id="__codelineno-16-47" name="__codelineno-16-47"></a>        <span class="n">probe_spacing</span><span class="o">=</span><span class="n">probe_spacings</span>
+</span><span id="__span-16-48"><a id="__codelineno-16-48" name="__codelineno-16-48"></a>    <span class="p">)</span>
+</span><span id="__span-16-49"><a id="__codelineno-16-49" name="__codelineno-16-49"></a>    <span class="k">return</span> <span class="n">rotor_AoA_dfs</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Usage example:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-17-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-17-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-17-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-17-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-17-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-17-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-17-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-17-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-17-10">10</a></span>
+<span class="normal"><a href="#__codelineno-17-11">11</a></span>
+<span class="normal"><a href="#__codelineno-17-12">12</a></span>
+<span class="normal"><a href="#__codelineno-17-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/intro_to_btt/intro_to_btt_ch05&quot;</span><span class="p">]</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_opr_zero_crossings</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/opr_zero_crossings&#39;</span><span class="p">]</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_prox_1</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_1_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_prox_2</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_2_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_prox_3</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_3_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_prox_4</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_4_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7"></a>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">rotor_blade_AoA_dfs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9"></a>        <span class="n">df_opr_zero_crossings</span><span class="p">,</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10"></a>        <span class="p">[</span><span class="n">df_prox_1</span><span class="p">,</span> <span class="n">df_prox_2</span><span class="p">,</span> <span class="n">df_prox_3</span><span class="p">,</span> <span class="n">df_prox_4</span><span class="p">],</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11"></a>        <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">19.34</span><span class="p">,</span> <span class="mf">19.34</span><span class="p">,</span> <span class="mf">19.34</span><span class="p">]))),</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12"></a>        <span class="mi">5</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<h3 id="2-predicting-the-probe-spacing">2. Predicting the probe spacing</h3>
+<p>It can happen that you receive a set of BTT timestamps, but you do not know exactly what the probe spacing was. This can happen when you are handed an old dataset. It can also happen because you're not 100% sure that the manufactured probe spacing is correct.</p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9L14.1 9m3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1-3.7-3.7M7 2v3h3v2H7v3H5V7H2V5h3V2h2Z"/></svg></span> Write a function that suggests a probe spacing by comparing the stack plot between two probes. </p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before peeking)</summary>
+<p><img alt="👻" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f47b.svg" title=":ghost:" /> BOO. </p>
+<p>I'll leave you to it. If you're stuck, please reach out to me on <a mailto="dawie.diamond@bladesight.com">dawie.diamond@bladesight.com</a> and I'll help you out.</p>
+</details>
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M0 32v448h448V32H0zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7v7.3zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9zm-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+  
+    
+  
+
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="analytics" checked>
+          <span class="task-list-indicator"></span>
+          Google Analytics
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>

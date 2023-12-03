@@ -1,0 +1,1743 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains how to allocate the AoA values to specific blades.">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>Identifying the blades - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-6B961HRVZP",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+  
+    <script>var consent;"undefined"==typeof __md_analytics||(consent=__md_get("__consent"))&&consent.analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Intro to BTT Ch4 - Identifying the blades" />
+<meta property="og:description" content="This chapter explains how to allocate the AoA values to specific blades." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttch4/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Intro to BTT Ch4 - Identifying the blades"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttch4/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains how to allocate the AoA values to specific blades."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#identifying-the-blades" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Identifying the blades
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_3" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_3">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-nav__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Welcome
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <!--div class="indicates-required"><span class="asterisk">*</span> indicates required</div-->
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+              <!--p style="margin: 0px auto;"><a href="http://eepurl.com/iy5E0g" title="Mailchimp - email marketing made easy and fun"><span style="display: inline-block; background-color: transparent; border-radius: 4px;"><img class="refferal_badge" src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-dark.svg" alt="Intuit Mailchimp" style="width: 220px; height: 40px; display: flex; padding: 2px 0px; justify-content: center; align-items: center;"></span></a></p-->
+          </div>
+      </div>
+  </div>
+</form>
+</div>
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#aoa-histogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      AoA histogram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determine-blade-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Determine blade bins
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#algorithm-to-determine-alignment-bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm to determine alignment bins
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algorithm to determine alignment bins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identify-the-aoas-falling-inside-each-bin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identify the AoAs falling inside each bin
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determine-each-bins-q-factor-contribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Determine each bin's Q factor contribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sanity-checks-and-return" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sanity checks and return
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grouping-the-blades" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grouping the blades
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-blades" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrapping blades
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+<nav class="md-tags" hidden>
+  
+    
+    
+    
+      <span class="md-tag">Blade Tip Timing</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">BTT</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Non Intrusive Stress Measurement</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">NSMS</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Time of Arrival</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Turbine blade</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">Mechanical Vibration</span>
+    
+  
+</nav>
+
+
+
+<h1 id="identifying-the-blades">Identifying the blades</h1>
+<p>In the previous section, we have converted the ToAs into AoAs. We also displayed the AoAs of the first blade. How did we know this was the first blade?</p>
+<p>Our example was simple enough that selecting the AoAs of the first blade was obvious. Our blades arrive on time, every time, like a bus schedule that's never wrong. We could therefore select every 5th value from our AoA DataFrame. Easy-peasy.</p>
+<p>In the real world this is rarely the case. Noise may cause some ToAs to be triggered twice, or never. Also, if a blade arrives at or near the same time as your OPR zero-crossing times, it may lead to the blade arriving either at the start of the current revolution, or at the end of the previous revolution, depending on the vibrational state of the blade.</p>
+<p>A better policy for blade identification is to use an algorithm. </p>
+<h2 id="aoa-histogram">AoA histogram</h2>
+<p>We'll start by constructing a histogram of the AoAs from a single proximity probe. You can use the <code>np.histogram</code> method in numpy to do this. Below, we show how to import the data, calculate the AoAs, and calculate the histogram.</p>
+<div class="admonition tip">
+<p class="admonition-title">Bladesight functions</p>
+<p>In the previous chapter, we created algorithms for transforming the ToAs into AoAs. These functions have been added to the <code>bladesight</code> package, such that it can be imported. </p>
+<p>All the algorithms built up during this tutorial will be added to the <code>bladesight</code> package.</p>
+</div>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">bladesight</span> <span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">bladesight.btt.aoa</span> <span class="kn">import</span> <span class="n">transform_ToAs_to_AoAs</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s1">&#39;data/intro_to_btt/intro_to_btt_ch03&#39;</span><span class="p">]</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">df_opr_zero_crossings</span> <span class="o">=</span> \
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>    <span class="n">dataset</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;table/du_toit_2017_test_1_opr_zero_crossings&quot;</span><span class="p">]</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="n">df_prox_1_toas</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;table/du_toit_2017_test_1_prox_1_toas&quot;</span><span class="p">]</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">df_prox_1</span> <span class="o">=</span> <span class="n">transform_ToAs_to_AoAs</span><span class="p">(</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>    <span class="n">df_opr_zero_crossings</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>    <span class="n">df_prox_1_toas</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="n">blade_arrival_count</span><span class="p">,</span> <span class="n">histogram_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>    <span class="n">df_prox_1</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">],</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The <code>np.linspace</code> function creates 50 equidistant values between 0 and <span class="arithmatex">\(2 \pi\)</span>. These values are used as the bin edges for the histogram. The <code>np.histogram</code> function returns the number of values that fall within each bin, as well as the bin edges. There are 49 bins, but 50 bin edges. The number of bins is one less than the number of bin edges.</li>
+</ol>
+<p>The histogram is shown in <a href="#figure_01">Figure 1</a> below. For convenience, we have changed the x-axis units to degrees.</p>
+<script src="all_aoas_histogram.js" > </script>
+<div>
+    <div>
+        <canvas id="ch03_all_aoas_histogram"'></canvas>
+    </div>
+    <script>
+        async function render_chart_all_aoas_histogram() {
+            const ctx = document.getElementById('ch03_all_aoas_histogram');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_all_aoas_histogram = new Chart(ctx, window.all_aoas_histogram);
+            window.fig_all_aoas_histogram_reset = function resetZoomFig1() {
+                    window.fig_all_aoas_histogram.resetZoom();
+                }
+            }
+        render_chart_all_aoas_histogram();
+    </script>
+    <a onclick="window.fig_all_aoas_histogram_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_01'>Figure 1</a></strong>: 
+    The AoAs of all the blades from a single proximity probe. The AoAs are grouped into 49 bins. The number of AoAs that fall within each bin is shown on the y-axis. The bin edges are shown on the x-axis. Five distinct blade groups can be identified.
+  </figcaption>
+</figure>
+<p>In <a href="#figure_01">Figure 1</a> above, we can identify the 5 blades with the naked eye. Each blade appears as a single vertical bar at a circumferential position. Blade 2's group seems anomalous. It appears to be spread over two short adjacent bars, instead of one narrow bar. The reason for this is because the AoAs of blade 2 <em>happens to fall</em> on both sides of the 88.16° histogram bin edge.</p>
+<p>Suppose we decided, for whatever reason, that all blades arriving earlier than 88.16° belong to blade 1. The results would be disastrous. We would be assigning AoAs from blade 2 to blade 1. This would cause the AoAs for blade's 1 and 2 to be incorrect, thereby turning our exquisitely measured BTT data into garbage.</p>
+<p>To the human eye, its tempting to scoff at such a mistake. It is, after all, trivial to tell them apart. Unfortunately, it is impractical to parse each set of AoA values by eye. We need to develop an algorithm to do this for us.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand that we need to calculate the optimal bin edges to group the AoAs into blade bins.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand that we can calculate the optimal bin edges by minimizing a quality factor, <span class="arithmatex">\(Q\)</span>.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Understand that the first blade may arrive close to the OPR zero-crossing time, which means it could either appear at the start or end of the revolution. We need to cater for this scenario.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5h14Z"/></svg></span> Write a function that determines the optimal blade bins for a set of AoA values, and split the proximity probe AoA DataFrames into several individual blade DataFrames.</p>
+</div>
+<h2 id="determine-blade-bins">Determine blade bins</h2>
+<p>Let's take an initial stab at the optimal way to bin the blades. We'll proceed from the example, where we have 5 blades. A reasonable guess for our bin edges would be to split the distance from 0 to 360 degrees into 5 equidistant sections, thereby resulting in the following 6 bin edges:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>bin_edges = [0, 72, 144, 216, 288, 360]
+</span></code></pre></div>
+<p>Though this might work for the example were busy with, it would fail for other examples. If, for example, the tachometer had been located 16.16° earlier - thereby causing the second blade's grouping to be around 72° - we would have exactly the problem described above.</p>
+<p>A much better guess would be to offset the bin edges such that the second edge (currently 72°), falls right between the first two AoA values. The first two AoA values are 16° and 88.2°. The optimal edge between them would therefore be 52.1°. We can achieve this by shifting the bin edges 72 - 52.1 = 19.9° earlier. </p>
+<p>The new bin edges would be:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>bin_edges = [-19.9,  52.1, 124.1, 196.1, 268.1, 340.1]
+</span></code></pre></div>
+<p>This bin edge choice would maximize the distance between each blade's AoAs and its respective bin edges. Put conversely, it would minimize the distance between each blade's AoAs and the centre of the bin. </p>
+<p>We can therefore phrase the problem as such: determine a constant bin edge offset, <code>d_theta</code>, that minimizes the mean distance between the AoA values inside each bin and the center of said bin.</p>
+<h2 id="following-along">Following along</h2>
+<p>The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.</p>
+<p>You can open a Google Colab session of the worksheet by clicking here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.</p>
+<p>You need to use one of the following Python versions to run the worksheet:
+<img src="https://img.shields.io/badge/python-3.6-blue.svg">
+<img src="https://img.shields.io/badge/python-3.7-blue.svg">
+<img src="https://img.shields.io/badge/python-3.8-blue.svg">
+<img src="https://img.shields.io/badge/python-3.9-blue.svg">
+<img src="https://img.shields.io/badge/python-3.10-blue.svg">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg"></p>
+<h2 id="algorithm-to-determine-alignment-bins">Algorithm to determine alignment bins</h2>
+<p>Let's define a quality factor, <span class="arithmatex">\(Q\)</span>, that represents the quality of our alignment. This factor is determined by calculating the sum of squared errors between each bin center and the AoA values falling inside said bin.</p>
+<div class="arithmatex">\[
+Q = \sum_{b=1}^{B} \sum_{n=1}^{N_b} \left (\hat{AoA}_{b} - AoA_{b, n}\right)^2
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_01'>Equation 1</a></strong></figcaption>
+</figure>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(Q\)</span></td>
+<td style="text-align: left;">The blade binning quality factor</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(b\)</span></td>
+<td style="text-align: left;">The blade index</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(B\)</span></td>
+<td style="text-align: left;">The total number of blades</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(n\)</span></td>
+<td style="text-align: left;">The index of the AoA inside bin <span class="arithmatex">\(b\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(N\)</span></td>
+<td style="text-align: left;">The total number of AoAs inside bin <span class="arithmatex">\(b\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\hat{AoA}_{b}\)</span></td>
+<td style="text-align: left;">The center AoA of bin <span class="arithmatex">\(b\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(AoA_{b, n}\)</span></td>
+<td style="text-align: left;">The <span class="arithmatex">\(n\)</span>th AoA inside bin <span class="arithmatex">\(b\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Below, we show the domains of the variables for this example:</p>
+<div class="arithmatex">\[
+\begin{align}
+    Q &amp;\in [0, \infty] \\
+    b &amp;\in [0,1,2,3,4] \\
+    B &amp;= 5 \\
+    n &amp;\in [0, ..., N] \\
+    N &amp;\rightarrow \textrm{computed for each bin} \\
+    \hat{AoA}_{b} &amp;\in [0, 2 \pi] \\
+    AoA_{b, n} &amp;\in [0, 2 \pi] \\
+\end{align}
+\]</div>
+</details>
+<p>Below we present a function that calculates Q for a given blade number and offset.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a>        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a>        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a>        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a>        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a>        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a>            <span class="p">(</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16"></a>                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17"></a>                <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19"></a>        <span class="p">)</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24"></a>    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Let's go through the main parts of this function.</p>
+<h3 id="initialization">Initialization</h3>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span>
+<span class="normal"><a href="#__codelineno-4-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="c1"># Some code omitted below 👇</span>
+</span></code></pre></div></td></tr></table></div>
+<details class="note">
+<summary>Full code</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span>
+<span class="normal"><a href="#__codelineno-5-20">20</a></span>
+<span class="normal"><a href="#__codelineno-5-21">21</a></span>
+<span class="normal"><a href="#__codelineno-5-22">22</a></span>
+<span class="normal"><a href="#__codelineno-5-23">23</a></span>
+<span class="normal"><a href="#__codelineno-5-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="hll"><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span></span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="hll">    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span></span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="hll">    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span></span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="hll">    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span></span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="hll"><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span></span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="hll">    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="hll">    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a>        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a>        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a>        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13"></a>        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14"></a>        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15"></a>            <span class="p">(</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16"></a>                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17"></a>                <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19"></a>        <span class="p">)</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24"></a>    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>In lines 1 - 4, the function name and input arguments are defined. <code>arr_aoas</code> is a numpy array of AoA values, in <em>radians</em>, <code>d_theta</code> is our guess for the shift to apply to the "standard" bin edges, and <code>N</code> is the number of blades. </p>
+<p>In Line 5, we specify that the function returns a tuple - a fancy word for an immutable list - with two values: <code>Q</code> and <code>bin_edges</code>. <code>Q</code> is the quality factor, and <code>bin_edges</code> are the bin edges resulting from this choice of <code>d_theta</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need to import the <code>Tuple</code> type from the <code>typing</code> library.</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+</span></code></pre></div>
+</div>
+<p>In Line 6, we calculate the <code>bin_edges</code> using <code>d_theta</code>.</p>
+<p>In Line 7, we initialize the quality factor to zero.</p>
+<h3 id="identify-the-aoas-falling-inside-each-bin">Identify the AoAs falling inside each bin</h3>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="c1"># Some code omitted above 👆</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a>    <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a>    <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a>    <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="c1"># Some code omitted below 👇</span>
+</span></code></pre></div></td></tr></table></div>
+<details class="note">
+<summary>Full code</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="hll">    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span></span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="hll">        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span></span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="hll">        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="hll">        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span></span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12"></a>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13"></a>        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14"></a>        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15"></a>            <span class="p">(</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16"></a>                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17"></a>                <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19"></a>        <span class="p">)</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24"></a>    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>In Line 8, we enter our main loop, whereby we will consider each bin in turn.</p>
+<p>In lines 9 and 10, we select the left and right edges of the bin we are currently considering.</p>
+<p>In Line 11, we determine which AoA values fall within the bin we are currently considering. <code>bin_mask</code> is a boolean array, with the same length as <code>arr_aoas</code>. If the mask has a value of <code>True</code> at a given index, then the AoA value at that index falls within the bin we are currently considering.</p>
+<h3 id="determine-each-bins-q-factor-contribution">Determine each bin's Q factor contribution</h3>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="c1"># Some code omitted above 👆</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15"></a>    <span class="p">(</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16"></a>        <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17"></a>        <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18"></a>    <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="p">)</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="c1"># Some code omitted below 👇</span>
+</span></code></pre></div></td></tr></table></div>
+<details class="note">
+<summary>Full code</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span>
+<span class="normal"><a href="#__codelineno-10-23">23</a></span>
+<span class="normal"><a href="#__codelineno-10-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a>        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a>        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a>        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12"></a>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="hll">        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span></span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="hll">        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span></span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="hll">            <span class="p">(</span>
+</span></span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="hll">                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span></span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="hll">                <span class="o">-</span> <span class="n">bin_centre</span>
+</span></span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="hll">            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span></span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="hll">        <span class="p">)</span>
+</span></span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23"></a>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24"></a>    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>In Line 13, we calculate the centre of this bin, by taking the average of the left and right edges. This is <span class="arithmatex">\(\hat{AoA}_{b}\)</span> in <a href="#equation_01">Equation 1</a>.</p>
+<p>In lines 14 - 19, we calculate the squared difference between each AoA value and the bin centre. We then sum these squared differences and add it to <span class="arithmatex">\(Q\)</span>. If the bin centre is close to the AoA values in this bin, <span class="arithmatex">\(Q\)</span> will increase minimally. If the bin centre is far from the AoA values in this bin, <span class="arithmatex">\(Q\)</span> will increase significantly. </p>
+<h3 id="sanity-checks-and-return">Sanity checks and return</h3>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-19">19</a></span>
+<span class="normal"><a href="#__codelineno-11-20">20</a></span>
+<span class="normal"><a href="#__codelineno-11-21">21</a></span>
+<span class="normal"><a href="#__codelineno-11-22">22</a></span>
+<span class="normal"><a href="#__codelineno-11-23">23</a></span>
+<span class="normal"><a href="#__codelineno-11-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19"></a><span class="c1"># Some code omitted above 👆</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20"></a><span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22"></a><span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23"></a>    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24"></a><span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+<details class="note">
+<summary>Full code</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span>
+<span class="normal"><a href="#__codelineno-12-12">12</a></span>
+<span class="normal"><a href="#__codelineno-12-13">13</a></span>
+<span class="normal"><a href="#__codelineno-12-14">14</a></span>
+<span class="normal"><a href="#__codelineno-12-15">15</a></span>
+<span class="normal"><a href="#__codelineno-12-16">16</a></span>
+<span class="normal"><a href="#__codelineno-12-17">17</a></span>
+<span class="normal"><a href="#__codelineno-12-18">18</a></span>
+<span class="normal"><a href="#__codelineno-12-19">19</a></span>
+<span class="normal"><a href="#__codelineno-12-20">20</a></span>
+<span class="normal"><a href="#__codelineno-12-21">21</a></span>
+<span class="normal"><a href="#__codelineno-12-22">22</a></span>
+<span class="normal"><a href="#__codelineno-12-23">23</a></span>
+<span class="normal"><a href="#__codelineno-12-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9"></a>        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10"></a>        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11"></a>        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12"></a>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13"></a>        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14"></a>        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15"></a>            <span class="p">(</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16"></a>                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17"></a>                <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19"></a>        <span class="p">)</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20"></a><span class="hll">    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21"></a><span class="hll">        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22"></a><span class="hll">    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23"></a><span class="hll">        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24"></a><span class="hll">    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></span></code></pre></div></td></tr></table></div>
+</details>
+<p>The sanity checks added here are imperative. Our logic in lines 8 to 19 only considers AoA values that fall within one of the bins. It is possible for the offset guess <code>d_theta</code> to shift the bins so much that some AoA values do not fall within any bin. These AoA values will therefore not contribute to <span class="arithmatex">\(Q\)</span>, and our optimal <code>d_theta</code> will be a fraud!</p>
+<p>We therefore check, in lines 20 and 22, whether any AoA values occur before the left most bin edge, or after the right most edge. If this is the case, we return <code>np.nan</code> for <code>Q</code>, meaning this <code>d_theta</code> is invalid.</p>
+<p>Finally, in Line 24, we return <code>Q</code> and <code>bin_edges</code>.</p>
+<h2 id="implementation-example">Implementation example</h2>
+<p>We can see the algorithm in action by iterating over a range of <code>d_theta</code> values. We'll start by attempting offsets that are between <span class="arithmatex">\(-\frac{\pi}{5}\)</span> and <span class="arithmatex">\(\frac{\pi}{5}\)</span>, essentially shifting the "standard" bins left and right by 72°. We'll then plot the resulting <span class="arithmatex">\(Q\)</span> values.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span>
+<span class="normal"><a href="#__codelineno-13-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="n">B</span> <span class="o">=</span> <span class="mi">5</span><span class="c1">#(1)!</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="n">d_thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">B</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">B</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span> <span class="c1">#(2)!</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="n">arr_aoas</span> <span class="o">=</span> <span class="n">df_prox_1</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="c1">#(3)!</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="n">Qs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#(4)!</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="n">optimal_Q</span><span class="p">,</span> <span class="n">optimal_bin_edges</span><span class="p">,</span> <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="c1">#(5)!</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="k">for</span> <span class="n">d_theta</span> <span class="ow">in</span> <span class="n">d_thetas</span><span class="p">:</span><span class="c1">#(6)!</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7"></a>    <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">calculate_Q</span><span class="p">(</span><span class="n">arr_aoas</span><span class="p">,</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8"></a>    <span class="k">if</span> <span class="n">Q</span> <span class="o">&lt;</span> <span class="n">optimal_Q</span><span class="p">:</span><span class="c1">#(7)!</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9"></a>        <span class="n">optimal_Q</span> <span class="o">=</span> <span class="n">Q</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10"></a>        <span class="n">optimal_bin_edges</span> <span class="o">=</span> <span class="n">bin_edges</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11"></a>        <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">d_theta</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12"></a>    <span class="n">Qs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span><span class="c1">#(8)!</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>We specify the number of blades. This is used to calculate the bin edges.</li>
+<li>We specify the range of offsets to consider. We'll consider 200 offsets between <span class="arithmatex">\(-\frac{\pi}{5}\)</span> and <span class="arithmatex">\(\frac{\pi}{5}\)</span>. </li>
+<li>We convert the AoA DataFrame into a numpy array. Our function requires a Numpy array.</li>
+<li>We initialize an empty list to store the quality factors.</li>
+<li>We initialize the optimal Q value to infinity. This is a trick to ensure that the first value we calculate is always the optimal value. It can be unseated by a better value later.</li>
+<li>We iterate over the range of offsets to consider.</li>
+<li>If the quality factor we just calculated is less than the optimal quality value, we update the optimal values.</li>
+<li>We append the quality factor to a list. This will be used to plot the quality factor as a function of the offset.</li>
+</ol>
+<p>The <code>Q</code> factor for each <code>d_theta</code> is shown in <a href="#figure_02">Figure 2</a> below.</p>
+<script src="q_factor_plot.js" > </script>
+<div>
+    <div>
+        <canvas id="ch03_q_factor_plot"'></canvas>
+    </div>
+    <script>
+        async function render_chart_q_factor_plot() {
+            const ctx = document.getElementById('ch03_q_factor_plot');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_q_factor_plot = new Chart(ctx, window.q_factor_plot);
+            window.fig_q_factor_plot_reset = function resetZoomFig2() {
+                    window.fig_q_factor_plot.resetZoom();
+                }
+            }
+        render_chart_q_factor_plot();
+    </script>
+    <a onclick="window.fig_q_factor_plot_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_02'>Figure 2</a></strong>: 
+    The quality factor, Q, as a function of the offset, d_theta. The optimal offset is -20.08°.
+  </figcaption>
+</figure>
+<p>And voila! We see that the optimal offset is -20.08 degrees. We also see that there are many offsets that result in an invalid quality factor.</p>
+<h2 id="grouping-the-blades">Grouping the blades</h2>
+<p>It is trivial, after having determined the optimal bin edges, to process the proximity probe AoA DataFrame such that we have a separate DataFrame for each blade. </p>
+<p>We present code that does this below.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span>
+<span class="normal"><a href="#__codelineno-14-5">5</a></span>
+<span class="normal"><a href="#__codelineno-14-6">6</a></span>
+<span class="normal"><a href="#__codelineno-14-7">7</a></span>
+<span class="normal"><a href="#__codelineno-14-8">8</a></span>
+<span class="normal"><a href="#__codelineno-14-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="n">blade_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a>    <span class="n">ix_bin</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4"></a>        <span class="p">(</span><span class="n">df_prox_1</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">])</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5"></a>        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_prox_1</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6"></a>    <span class="p">)</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7"></a>    <span class="n">blade_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8"></a>        <span class="n">df_prox_1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ix_bin</span><span class="p">]</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9"></a>    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="o">&gt;&gt;&gt;</span>     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Blade </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2"> mean: </span><span class="si">{</span><span class="n">blade_dfs</span><span class="p">[</span><span class="n">b</span><span class="p">][</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">, std: </span><span class="si">{</span><span class="n">blade_dfs</span><span class="p">[</span><span class="n">b</span><span class="p">][</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="go">Blade 0 mean: 0.280844143512115, std: 0.0014568064245125216</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="go">Blade 1 mean: 1.5390655934492143, std: 0.001784799129959647</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="go">Blade 2 mean: 2.788312464321002, std: 0.0015687549238434136</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="go">Blade 3 mean: 4.045575640802255, std: 0.0017088093157144036</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="go">Blade 4 mean: 5.305095908129366, std: 0.0014525709531342695</span>
+</span></code></pre></div>
+<p>Finally, we now have 5 dataframes, each one containing only the information from a single blade. </p>
+<h2 id="wrapping-blades">Wrapping blades</h2>
+<p>Let's implement a static shift to the AoA values from the original, non-binned, DataFrame. Note that a static shift in AoA values does not change any objective information. We should be able to find the exact same <span class="arithmatex">\(Q\)</span> value as we did in the previous section.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-17-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-17-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-17-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-17-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-17-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-17-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-17-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-17-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-17-10">10</a></span>
+<span class="normal"><a href="#__codelineno-17-11">11</a></span>
+<span class="normal"><a href="#__codelineno-17-12">12</a></span>
+<span class="normal"><a href="#__codelineno-17-13">13</a></span>
+<span class="normal"><a href="#__codelineno-17-14">14</a></span>
+<span class="normal"><a href="#__codelineno-17-15">15</a></span>
+<span class="normal"><a href="#__codelineno-17-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="n">df_prox_1_shifted</span> <span class="o">=</span> <span class="n">df_prox_1</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="n">df_prox_1_shifted</span><span class="p">[</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_prox_1_shifted</span><span class="p">[</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.280844143512115</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="hll"><span class="n">df_prox_1_shifted</span><span class="p">[</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_prox_1_shifted</span><span class="p">[</span><span class="s1">&#39;AoA&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</span></span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4"></a>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="n">B</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="n">d_thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">B</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">B</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="n">arr_aoas</span> <span class="o">=</span> <span class="n">df_prox_1_shifted</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="n">Qs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9"></a><span class="n">optimal_Q</span><span class="p">,</span> <span class="n">optimal_bin_edges</span><span class="p">,</span> <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10"></a><span class="k">for</span> <span class="n">d_theta</span> <span class="ow">in</span> <span class="n">d_thetas</span><span class="p">:</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11"></a>    <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">calculate_Q</span><span class="p">(</span><span class="n">arr_aoas</span><span class="p">,</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12"></a>    <span class="k">if</span> <span class="n">Q</span> <span class="o">&lt;</span> <span class="n">optimal_Q</span><span class="p">:</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13"></a>        <span class="n">optimal_Q</span> <span class="o">=</span> <span class="n">Q</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14"></a>        <span class="n">optimal_bin_edges</span> <span class="o">=</span> <span class="n">bin_edges</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15"></a>        <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">d_theta</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16"></a>    <span class="n">Qs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>In Line 1 above, we create a copy of our original DataFrame. In Line 2, we shift the AoA values by blade 0's mean AoA value as calculated in the previous section. </p>
+<p>We've highlighted Line 3 because it is so important. Our artificially constructed <code>df_prox_1_shifted</code> DataFrame from Line 2 will contain some <code>AoA</code> values that are negative.</p>
+<p>In practice, our function that converts ToAs to AoAs, <code>transform_ToAs_to_AoAs</code>, will always produce AoA values that are positive. These values will therefore appear <em>at the end of the next revolution</em>. To simulate this effect, we wrap the AoA values to the range <span class="arithmatex">\([0, 2 \pi]\)</span> in Line 3.</p>
+<p>We then, from Line 5 onwards, repeat the same process as before, attempting to find the optimal bin edges. The only difference is that we use the <code>df_prox_1_shifted</code> DataFrame instead of the <code>df_prox_1</code> DataFrame.</p>
+<p>We print the optimal <span class="arithmatex">\(Q\)</span> value below.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
+<span class="normal"><a href="#__codelineno-18-2">2</a></span>
+<span class="normal"><a href="#__codelineno-18-3">3</a></span>
+<span class="normal"><a href="#__codelineno-18-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">optimal_Q</span><span class="p">)</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">optimal_bin_edges</span><span class="p">)</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="n">inf</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="kc">None</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The optimal <span class="arithmatex">\(Q\)</span> is infinity and the optimal bin edges equals <code>None</code> <img alt="😱" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/1f631.svg" title=":scream:" /> !</p>
+<p>This is what happens when you've got one blade that arrives at a proximity probe at approximately the same time as the tacho's zero-crossing time. Some of the AoA values will appear at the end of the previous revolution, and some will appear at the beginning of the current revolution.</p>
+<p>The algorithm we've developed will fail for such cases, because there will be some values that do not fall within the binning.</p>
+<p>We can cater for this scenario by adapting our <code>calculate_Q</code> algorithm to handle AoAs that fall outside the bin edges.</p>
+<p>I'm going to leave it to you to make this change. </p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9L14.1 9m3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1-3.7-3.7M7 2v3h3v2H7v3H5V7H2V5h3V2h2Z"/></svg></span> Write an updated <code>calculate_Q</code> function that incorporates the AoA values that fall outside the bin edges, instead of simply returning <code>nan</code> for Q.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before peeking)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-19-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-19-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-19-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-19-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-19-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-19-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-19-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-19-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-19-10">10</a></span>
+<span class="normal"><a href="#__codelineno-19-11">11</a></span>
+<span class="normal"><a href="#__codelineno-19-12">12</a></span>
+<span class="normal"><a href="#__codelineno-19-13">13</a></span>
+<span class="normal"><a href="#__codelineno-19-14">14</a></span>
+<span class="normal"><a href="#__codelineno-19-15">15</a></span>
+<span class="normal"><a href="#__codelineno-19-16">16</a></span>
+<span class="normal"><a href="#__codelineno-19-17">17</a></span>
+<span class="normal"><a href="#__codelineno-19-18">18</a></span>
+<span class="normal"><a href="#__codelineno-19-19">19</a></span>
+<span class="normal"><a href="#__codelineno-19-20">20</a></span>
+<span class="normal"><a href="#__codelineno-19-21">21</a></span>
+<span class="normal"><a href="#__codelineno-19-22">22</a></span>
+<span class="normal"><a href="#__codelineno-19-23">23</a></span>
+<span class="normal"><a href="#__codelineno-19-24">24</a></span>
+<span class="normal"><a href="#__codelineno-19-25">25</a></span>
+<span class="normal"><a href="#__codelineno-19-26">26</a></span>
+<span class="normal"><a href="#__codelineno-19-27">27</a></span>
+<span class="normal"><a href="#__codelineno-19-28">28</a></span>
+<span class="normal"><a href="#__codelineno-19-29">29</a></span>
+<span class="normal"><a href="#__codelineno-19-30">30</a></span>
+<span class="normal"><a href="#__codelineno-19-31">31</a></span>
+<span class="normal"><a href="#__codelineno-19-32">32</a></span>
+<span class="normal"><a href="#__codelineno-19-33">33</a></span>
+<span class="normal"><a href="#__codelineno-19-34">34</a></span>
+<span class="normal"><a href="#__codelineno-19-35">35</a></span>
+<span class="normal"><a href="#__codelineno-19-36">36</a></span>
+<span class="normal"><a href="#__codelineno-19-37">37</a></span>
+<span class="normal"><a href="#__codelineno-19-38">38</a></span>
+<span class="normal"><a href="#__codelineno-19-39">39</a></span>
+<span class="normal"><a href="#__codelineno-19-40">40</a></span>
+<span class="normal"><a href="#__codelineno-19-41">41</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="k">def</span> <span class="nf">calculate_Q</span><span class="p">(</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2"></a>    <span class="n">arr_aoas</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3"></a>    <span class="n">d_theta</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4"></a>    <span class="n">N</span> <span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6"></a>    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7"></a>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9"></a>        <span class="n">left_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10"></a>        <span class="n">right_edge</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11"></a>        <span class="n">bin_centre</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge</span> <span class="o">+</span> <span class="n">right_edge</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12"></a>        <span class="n">bin_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">left_edge</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">right_edge</span><span class="p">)</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13"></a>        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14"></a>            <span class="p">(</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15"></a>                <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> 
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16"></a>                <span class="o">-</span> <span class="n">bin_centre</span>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18"></a>        <span class="p">)</span>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&lt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20"></a><span class="hll">        <span class="n">left_edge_last</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span id="__span-19-21"><a id="__codelineno-19-21" name="__codelineno-19-21"></a><span class="hll">        <span class="n">right_edge_last</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="n">N</span><span class="p">]</span>
+</span></span><span id="__span-19-22"><a id="__codelineno-19-22" name="__codelineno-19-22"></a><span class="hll">        <span class="n">bin_centre_last</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge_last</span> <span class="o">+</span> <span class="n">right_edge_last</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span></span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23"></a><span class="hll">        <span class="n">bin_mask</span> <span class="o">=</span> <span class="n">arr_aoas</span> <span class="o">&lt;=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span id="__span-19-24"><a id="__codelineno-19-24" name="__codelineno-19-24"></a><span class="hll">        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span></span><span id="__span-19-25"><a id="__codelineno-19-25" name="__codelineno-19-25"></a><span class="hll">            <span class="p">(</span>
+</span></span><span id="__span-19-26"><a id="__codelineno-19-26" name="__codelineno-19-26"></a><span class="hll">                <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">])</span> 
+</span></span><span id="__span-19-27"><a id="__codelineno-19-27" name="__codelineno-19-27"></a><span class="hll">                <span class="o">-</span> <span class="n">bin_centre_last</span>
+</span></span><span id="__span-19-28"><a id="__codelineno-19-28" name="__codelineno-19-28"></a><span class="hll">            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span></span><span id="__span-19-29"><a id="__codelineno-19-29" name="__codelineno-19-29"></a><span class="hll">        <span class="p">)</span>
+</span></span><span id="__span-19-30"><a id="__codelineno-19-30" name="__codelineno-19-30"></a>    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-19-31"><a id="__codelineno-19-31" name="__codelineno-19-31"></a><span class="hll">        <span class="n">left_edge_first</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span id="__span-19-32"><a id="__codelineno-19-32" name="__codelineno-19-32"></a><span class="hll">        <span class="n">right_edge_first</span> <span class="o">=</span> <span class="n">bin_edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span id="__span-19-33"><a id="__codelineno-19-33" name="__codelineno-19-33"></a><span class="hll">        <span class="n">bin_centre_first</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_edge_first</span> <span class="o">+</span> <span class="n">right_edge_first</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</span></span><span id="__span-19-34"><a id="__codelineno-19-34" name="__codelineno-19-34"></a><span class="hll">        <span class="n">bin_mask</span> <span class="o">=</span> <span class="n">arr_aoas</span> <span class="o">&gt;</span> <span class="n">bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span id="__span-19-35"><a id="__codelineno-19-35" name="__codelineno-19-35"></a><span class="hll">        <span class="n">Q</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span></span><span id="__span-19-36"><a id="__codelineno-19-36" name="__codelineno-19-36"></a><span class="hll">            <span class="p">(</span>
+</span></span><span id="__span-19-37"><a id="__codelineno-19-37" name="__codelineno-19-37"></a><span class="hll">                <span class="p">(</span><span class="n">arr_aoas</span><span class="p">[</span><span class="n">bin_mask</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> 
+</span></span><span id="__span-19-38"><a id="__codelineno-19-38" name="__codelineno-19-38"></a><span class="hll">                <span class="o">-</span> <span class="n">bin_centre_first</span>
+</span></span><span id="__span-19-39"><a id="__codelineno-19-39" name="__codelineno-19-39"></a><span class="hll">            <span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+</span></span><span id="__span-19-40"><a id="__codelineno-19-40" name="__codelineno-19-40"></a><span class="hll">        <span class="p">)</span>
+</span></span><span id="__span-19-41"><a id="__codelineno-19-41" name="__codelineno-19-41"></a>    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span>
+</span></code></pre></div></td></tr></table></div>
+<p>In the <code>calculate_Q</code> above, we've added lines of code in the 'sanity check' sections to handle AoA values that fall outside the bin edges.</p>
+<p>In lines 20 - 29, we check for AoA values that occur before the left most bin edge. These values are therefore being treated as if they occur in the last bin.</p>
+<p>In lines 31 - 40, we check for AoA values that occur after the right most bin edge. These values are therefore being treated as if they occur in the first bin.</p>
+</details>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9L14.1 9m3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1-3.7-3.7M7 2v3h3v2H7v3H5V7H2V5h3V2h2Z"/></svg></span> After you've finished the above, create a function called <code>transform_prox_AoAs_to_blade_AoAs</code> that receives the proximity probe AoA DataFrame and the number of blades on the rotor, and returns a list of DataFrames, each one containing the AoA values for a single blade. This function should therefore perform both the determination of the optimal bin edges, as well as the splitting of the AoA values into separate DataFrames.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before peeking)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-20-10">10</a></span>
+<span class="normal"><a href="#__codelineno-20-11">11</a></span>
+<span class="normal"><a href="#__codelineno-20-12">12</a></span>
+<span class="normal"><a href="#__codelineno-20-13">13</a></span>
+<span class="normal"><a href="#__codelineno-20-14">14</a></span>
+<span class="normal"><a href="#__codelineno-20-15">15</a></span>
+<span class="normal"><a href="#__codelineno-20-16">16</a></span>
+<span class="normal"><a href="#__codelineno-20-17">17</a></span>
+<span class="normal"><a href="#__codelineno-20-18">18</a></span>
+<span class="normal"><a href="#__codelineno-20-19">19</a></span>
+<span class="normal"><a href="#__codelineno-20-20">20</a></span>
+<span class="normal"><a href="#__codelineno-20-21">21</a></span>
+<span class="normal"><a href="#__codelineno-20-22">22</a></span>
+<span class="normal"><a href="#__codelineno-20-23">23</a></span>
+<span class="normal"><a href="#__codelineno-20-24">24</a></span>
+<span class="normal"><a href="#__codelineno-20-25">25</a></span>
+<span class="normal"><a href="#__codelineno-20-26">26</a></span>
+<span class="normal"><a href="#__codelineno-20-27">27</a></span>
+<span class="normal"><a href="#__codelineno-20-28">28</a></span>
+<span class="normal"><a href="#__codelineno-20-29">29</a></span>
+<span class="normal"><a href="#__codelineno-20-30">30</a></span>
+<span class="normal"><a href="#__codelineno-20-31">31</a></span>
+<span class="normal"><a href="#__codelineno-20-32">32</a></span>
+<span class="normal"><a href="#__codelineno-20-33">33</a></span>
+<span class="normal"><a href="#__codelineno-20-34">34</a></span>
+<span class="normal"><a href="#__codelineno-20-35">35</a></span>
+<span class="normal"><a href="#__codelineno-20-36">36</a></span>
+<span class="normal"><a href="#__codelineno-20-37">37</a></span>
+<span class="normal"><a href="#__codelineno-20-38">38</a></span>
+<span class="normal"><a href="#__codelineno-20-39">39</a></span>
+<span class="normal"><a href="#__codelineno-20-40">40</a></span>
+<span class="normal"><a href="#__codelineno-20-41">41</a></span>
+<span class="normal"><a href="#__codelineno-20-42">42</a></span>
+<span class="normal"><a href="#__codelineno-20-43">43</a></span>
+<span class="normal"><a href="#__codelineno-20-44">44</a></span>
+<span class="normal"><a href="#__codelineno-20-45">45</a></span>
+<span class="normal"><a href="#__codelineno-20-46">46</a></span>
+<span class="normal"><a href="#__codelineno-20-47">47</a></span>
+<span class="normal"><a href="#__codelineno-20-48">48</a></span>
+<span class="normal"><a href="#__codelineno-20-49">49</a></span>
+<span class="normal"><a href="#__codelineno-20-50">50</a></span>
+<span class="normal"><a href="#__codelineno-20-51">51</a></span>
+<span class="normal"><a href="#__codelineno-20-52">52</a></span>
+<span class="normal"><a href="#__codelineno-20-53">53</a></span>
+<span class="normal"><a href="#__codelineno-20-54">54</a></span>
+<span class="normal"><a href="#__codelineno-20-55">55</a></span>
+<span class="normal"><a href="#__codelineno-20-56">56</a></span>
+<span class="normal"><a href="#__codelineno-20-57">57</a></span>
+<span class="normal"><a href="#__codelineno-20-58">58</a></span>
+<span class="normal"><a href="#__codelineno-20-59">59</a></span>
+<span class="normal"><a href="#__codelineno-20-60">60</a></span>
+<span class="normal"><a href="#__codelineno-20-61">61</a></span>
+<span class="normal"><a href="#__codelineno-20-62">62</a></span>
+<span class="normal"><a href="#__codelineno-20-63">63</a></span>
+<span class="normal"><a href="#__codelineno-20-64">64</a></span>
+<span class="normal"><a href="#__codelineno-20-65">65</a></span>
+<span class="normal"><a href="#__codelineno-20-66">66</a></span>
+<span class="normal"><a href="#__codelineno-20-67">67</a></span>
+<span class="normal"><a href="#__codelineno-20-68">68</a></span>
+<span class="normal"><a href="#__codelineno-20-69">69</a></span>
+<span class="normal"><a href="#__codelineno-20-70">70</a></span>
+<span class="normal"><a href="#__codelineno-20-71">71</a></span>
+<span class="normal"><a href="#__codelineno-20-72">72</a></span>
+<span class="normal"><a href="#__codelineno-20-73">73</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="k">def</span> <span class="nf">transform_prox_AoAs_to_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2"></a>    <span class="n">df_prox</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3"></a>    <span class="n">B</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; This function takes a dataframe containing the AoA values of a proximity probe, </span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="sd">    and returns a list of dataframes, each containing the AoA values of a single blade.</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7"></a>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="sd">    Args:</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="sd">        df_prox (pd.DataFrame): The dataframe containing the AoA values </span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="sd">            of the proximity probe.</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11"></a><span class="sd">        B (int): The number of blades.</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12"></a>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="sd">    Returns:</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="sd">        List[pd.DataFrame]: A list of dataframes, each containing the </span>
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="sd">            AoA values of a single blade.</span>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17"></a>    <span class="n">d_thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">B</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18"></a>    <span class="n">arr_aoas</span> <span class="o">=</span> <span class="n">df_prox</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19"></a>    <span class="n">Qs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-20-20"><a id="__codelineno-20-20" name="__codelineno-20-20"></a>    <span class="n">optimal_Q</span><span class="p">,</span> <span class="n">optimal_bin_edges</span><span class="p">,</span> <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+</span><span id="__span-20-21"><a id="__codelineno-20-21" name="__codelineno-20-21"></a>    <span class="k">for</span> <span class="n">d_theta</span> <span class="ow">in</span> <span class="n">d_thetas</span><span class="p">:</span>
+</span><span id="__span-20-22"><a id="__codelineno-20-22" name="__codelineno-20-22"></a>        <span class="n">Q</span><span class="p">,</span> <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">calculate_Q</span><span class="p">(</span><span class="n">arr_aoas</span><span class="p">,</span> <span class="n">d_theta</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+</span><span id="__span-20-23"><a id="__codelineno-20-23" name="__codelineno-20-23"></a>        <span class="k">if</span> <span class="n">Q</span> <span class="o">&lt;</span> <span class="n">optimal_Q</span><span class="p">:</span>
+</span><span id="__span-20-24"><a id="__codelineno-20-24" name="__codelineno-20-24"></a>            <span class="n">optimal_Q</span> <span class="o">=</span> <span class="n">Q</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-20-25"><a id="__codelineno-20-25" name="__codelineno-20-25"></a>            <span class="n">optimal_bin_edges</span> <span class="o">=</span> <span class="n">bin_edges</span>
+</span><span id="__span-20-26"><a id="__codelineno-20-26" name="__codelineno-20-26"></a>            <span class="n">optimal_d_theta</span> <span class="o">=</span> <span class="n">d_theta</span><span class="o">*</span><span class="mi">1</span>
+</span><span id="__span-20-27"><a id="__codelineno-20-27" name="__codelineno-20-27"></a>        <span class="n">Qs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</span><span id="__span-20-28"><a id="__codelineno-20-28" name="__codelineno-20-28"></a>
+</span><span id="__span-20-29"><a id="__codelineno-20-29" name="__codelineno-20-29"></a>    <span class="n">blade_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-20-30"><a id="__codelineno-20-30" name="__codelineno-20-30"></a>    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+</span><span id="__span-20-31"><a id="__codelineno-20-31" name="__codelineno-20-31"></a>        <span class="n">ix_bin</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-20-32"><a id="__codelineno-20-32" name="__codelineno-20-32"></a>            <span class="p">(</span><span class="n">df_prox</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="n">b</span><span class="p">])</span>
+</span><span id="__span-20-33"><a id="__codelineno-20-33" name="__codelineno-20-33"></a>            <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_prox</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="n">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-20-34"><a id="__codelineno-20-34" name="__codelineno-20-34"></a>        <span class="p">)</span>
+</span><span id="__span-20-35"><a id="__codelineno-20-35" name="__codelineno-20-35"></a>        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-20-36"><a id="__codelineno-20-36" name="__codelineno-20-36"></a>            <span class="n">ix_bin</span> <span class="o">=</span> <span class="n">ix_bin</span> <span class="o">|</span> <span class="p">(</span><span class="n">df_prox</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-20-37"><a id="__codelineno-20-37" name="__codelineno-20-37"></a>            <span class="n">df_bin</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-20-38"><a id="__codelineno-20-38" name="__codelineno-20-38"></a>                <span class="n">df_prox</span>
+</span><span id="__span-20-39"><a id="__codelineno-20-39" name="__codelineno-20-39"></a>                <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ix_bin</span><span class="p">]</span>
+</span><span id="__span-20-40"><a id="__codelineno-20-40" name="__codelineno-20-40"></a>                <span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-20-41"><a id="__codelineno-20-41" name="__codelineno-20-41"></a>                <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-20-42"><a id="__codelineno-20-42" name="__codelineno-20-42"></a>                <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;ToA&quot;</span><span class="p">)</span>
+</span><span id="__span-20-43"><a id="__codelineno-20-43" name="__codelineno-20-43"></a>            <span class="p">)</span>
+</span><span id="__span-20-44"><a id="__codelineno-20-44" name="__codelineno-20-44"></a>
+</span><span id="__span-20-45"><a id="__codelineno-20-45" name="__codelineno-20-45"></a>            <span class="n">ix_wrap</span> <span class="o">=</span> <span class="n">df_bin</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-20-46"><a id="__codelineno-20-46" name="__codelineno-20-46"></a>            <span class="n">df_bin</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">ix_wrap</span><span class="p">,</span> <span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_bin</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">ix_wrap</span><span class="p">,</span> <span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> 
+</span><span id="__span-20-47"><a id="__codelineno-20-47" name="__codelineno-20-47"></a>        <span class="k">elif</span> <span class="n">b</span> <span class="o">==</span> <span class="n">B</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-20-48"><a id="__codelineno-20-48" name="__codelineno-20-48"></a>            <span class="n">ix_bin</span> <span class="o">=</span> <span class="n">ix_bin</span> <span class="o">|</span> <span class="p">(</span><span class="n">df_prox</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span id="__span-20-49"><a id="__codelineno-20-49" name="__codelineno-20-49"></a>            <span class="n">df_bin</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-20-50"><a id="__codelineno-20-50" name="__codelineno-20-50"></a>                <span class="n">df_prox</span>
+</span><span id="__span-20-51"><a id="__codelineno-20-51" name="__codelineno-20-51"></a>                <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ix_bin</span><span class="p">]</span>
+</span><span id="__span-20-52"><a id="__codelineno-20-52" name="__codelineno-20-52"></a>                <span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-20-53"><a id="__codelineno-20-53" name="__codelineno-20-53"></a>                <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-20-54"><a id="__codelineno-20-54" name="__codelineno-20-54"></a>                <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;ToA&quot;</span><span class="p">)</span>
+</span><span id="__span-20-55"><a id="__codelineno-20-55" name="__codelineno-20-55"></a>            <span class="p">)</span>
+</span><span id="__span-20-56"><a id="__codelineno-20-56" name="__codelineno-20-56"></a>
+</span><span id="__span-20-57"><a id="__codelineno-20-57" name="__codelineno-20-57"></a>            <span class="n">ix_wrap</span> <span class="o">=</span> <span class="n">df_bin</span><span class="p">[</span><span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">optimal_bin_edges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-20-58"><a id="__codelineno-20-58" name="__codelineno-20-58"></a>            <span class="n">df_bin</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">ix_wrap</span><span class="p">,</span> <span class="s2">&quot;AoA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">df_bin</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span> <span class="n">ix_wrap</span><span class="p">,</span> <span class="s2">&quot;AoA&quot;</span><span class="p">]</span> 
+</span><span id="__span-20-59"><a id="__codelineno-20-59" name="__codelineno-20-59"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-20-60"><a id="__codelineno-20-60" name="__codelineno-20-60"></a>            <span class="n">df_bin</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-20-61"><a id="__codelineno-20-61" name="__codelineno-20-61"></a>                <span class="n">df_prox</span>
+</span><span id="__span-20-62"><a id="__codelineno-20-62" name="__codelineno-20-62"></a>                <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ix_bin</span><span class="p">]</span>
+</span><span id="__span-20-63"><a id="__codelineno-20-63" name="__codelineno-20-63"></a>                <span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-20-64"><a id="__codelineno-20-64" name="__codelineno-20-64"></a>                <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-20-65"><a id="__codelineno-20-65" name="__codelineno-20-65"></a>                <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;ToA&quot;</span><span class="p">)</span>
+</span><span id="__span-20-66"><a id="__codelineno-20-66" name="__codelineno-20-66"></a>            <span class="p">)</span>
+</span><span id="__span-20-67"><a id="__codelineno-20-67" name="__codelineno-20-67"></a>        <span class="n">blade_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="__span-20-68"><a id="__codelineno-20-68" name="__codelineno-20-68"></a>            <span class="n">df_bin</span>
+</span><span id="__span-20-69"><a id="__codelineno-20-69" name="__codelineno-20-69"></a>        <span class="p">)</span>
+</span><span id="__span-20-70"><a id="__codelineno-20-70" name="__codelineno-20-70"></a>    <span class="err">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+</span><span id="__span-20-71"><a id="__codelineno-20-71" name="__codelineno-20-71"></a>    <span class="err">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+</span><span id="__span-20-72"><a id="__codelineno-20-72" name="__codelineno-20-72"></a>    <span class="n">ADD</span> <span class="n">CODE</span> <span class="n">HERE</span> <span class="n">TO</span> <span class="n">SHIFT</span> <span class="n">THE</span> <span class="n">BLADES</span> <span class="n">TO</span> <span class="n">THE</span> <span class="n">CORRECT</span> <span class="n">POSITIONS</span>
+</span><span id="__span-20-73"><a id="__codelineno-20-73" name="__codelineno-20-73"></a>    <span class="k">return</span> <span class="n">blade_dfs</span>
+</span></code></pre></div></td></tr></table></div>
+<p>We've decided to only shift the <code>d_theta</code> value between <span class="arithmatex">\(-\frac{2\pi}{B}\)</span> and 0. This is simply a matter of preference, because we'd like the first blade to occur as close as possible to 0 degrees.</p>
+</details>
+<h2 id="conclusion">Conclusion</h2>
+<p>Blade alignment is a bit like parallel parking - it seems so simple we often approach it without the respect it deserves, but it can make you look like a fool.</p>
+<p>We started this tutorial with raw time stamps, we now have an AoA DataFrame for every blade arriving at a proximity probe. Everything we've done up to this point involves only a single proximity probe. BTT systems typically have multiple proximity probes. </p>
+<p>In the next chapter, we'll combine information from multiple probes together. We'll also investigate a nice visual way to check if we've done our alignment and grouping properly: <em>the stack plot</em>.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand that we need to calculate the optimal bin edges to group the AoAs into blade bins.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand that we can calculate the optimal bin edges by minimizing a quality factor, <span class="arithmatex">\(Q\)</span>.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Understand that the first blade may arrive close to the OPR zero-crossing time, which means it could either appear at the start or end of the revolution. We need to cater for this scenario.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></span> Write a function that determines the optimal blade bins for a set of AoA values, and split the proximity probe AoA DataFrame into several individual blade DataFrames.</p>
+</div>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>I thank XXX for reviewing this chapter.</p>
+<div style='display:flex'>
+    <div>
+        <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+            <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Dawie Diamond</strong>
+        </p>
+        <p>
+            2023-10-10
+        </p>
+    </div>
+</div>
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M0 32v448h448V32H0zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7v7.3zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9zm-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+  
+    
+  
+
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="analytics" checked>
+          <span class="task-list-indicator"></span>
+          Google Analytics
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>
