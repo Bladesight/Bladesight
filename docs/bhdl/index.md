@@ -1,0 +1,3 @@
+# Bladesight HDL
+
+Bladesight HDL (BHL) is a hardware description language (HDL) that we use to create our own hardware designs. It depends heavily on <a href="http://www.myhdl.org/" target='_blank'>MyHDL</a> for converting the HDL code to VHDL. It uses type annotations to infer the types of the signals and ports. It also allows you to specify your RTL blocks in a declarative way. All of this makes BHDL a concise and beautifully expressive language to write HDL code in. 

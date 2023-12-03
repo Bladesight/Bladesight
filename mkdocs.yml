@@ -1,0 +1,136 @@
+site_name: Bladesight Learning Centre
+theme:
+  name: material
+  custom_dir: overrides
+  icon:
+    logo: assets/horizontal_white.png
+  logo: assets/horizontal_white.png
+  font:
+    text: Literata
+  favicon: images/fab.png
+  features:
+    - navigation.tabs
+    - navigation.tracking
+    - navigation.instant
+    - navigation.path 
+    - navigation.footer
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+
+  palette: 
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: bladesight 
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        scheme: bladesight
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+extra_css:
+  - stylesheets/extra.css
+extra:
+  consent:
+    title: Cookie consent
+    description: >- 
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+  analytics:
+    provider: google
+    property: G-6B961HRVZP
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/DawieDiamond
+      name: Twitter
+    - icon: fontawesome/brands/github
+      link: https://github.com/Bladesight
+      name: GitHub
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/dawie-diamond-51089676/
+      name: LinkedIn
+    - icon: fontawesome/brands/researchgate
+      link: https://www.researchgate.net/profile/Dawie-Diamond-2
+      name: ResearchGate
+      
+
+plugins:
+  - search
+  - tags
+  - table-reader
+  - bibtex:
+      bib_file: "refs.bib"
+      csl_file : "elsevier_harvard.csl"
+      bib_by_default : false
+
+copyright: Copyright &copy; 2023 Bladesight
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.tabbed:
+      alternate_style: true
+
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/chart.js
+  - https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation
+  - https://cdn.jsdelivr.net/npm/hammerjs@2.0.8
+  - https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js
+
+
+nav:
+  - Bladesight Learning Centre: index.md
+  - Introduction to Blade Tip Timing:
+    - Welcome: tutorials/intro_to_btt/index.md
+    #- 1. The Fundamental principle: tutorials/intro_to_btt/ch1/index.md
+    #- 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
+    #- 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
+    #- 4. Aligning the blades: tutorials/intro_to_btt/ch4/index.md
+    #- 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md
+    #- 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
+    #- 7. Synchronous Vibration and Sampling: tutorials/intro_to_btt/ch7/index.md
+    #- 8. Single Degree of Freedom (SDoF) Method: tutorials/intro_to_btt/ch8/index.md
+    #- 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
+    #- Afterword: tutorials/intro_to_btt/afterword.md
+
+

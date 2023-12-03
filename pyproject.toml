@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "bladesight"
+version = "0.12.0"
+description = ""
+authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+install = "^1.3.5"
+duckdb = ">=0.8.1"
+s3fs = "^2023.9.0"
+yaspin = "^3.0.1"
+polars = "^0.19.2"
+pandas = ">=1.5.1"
+numba = ">=0.57.0"
+scipy = "^1.11.3"
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.2"
+mkdocs-material = "^9.1.8"
+install = "^1.3.5"
+mkdocs-glightbox = "^0.3.4"
+pandas = "^2.0.1"
+plotly = "^5.14.1"
+mkdocs-table-reader-plugin = "^2.0"
+mkdocs-bibtex = "^2.11.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.13.2"
+tqdm = "^4.65.0"
+ipykernel = "^6.23.1"
+black = "^23.9.1"
+isort = "^5.12.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
