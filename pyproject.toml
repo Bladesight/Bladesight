@@ -1,9 +1,36 @@
 [tool.poetry]
 name = "bladesight"
 version = "0.12.1"
-description = ""
+description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+classifiers = [
+    "Intended Audience :: Mechanical Engineering Graduate Students",
+    "Intended Audience :: Test and Measurement Engineers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Mechanical Engineering",
+    "Topic :: Mechanical Engineering :: Test and Measurement",
+    "Topic :: Mechanical Engineering :: Noise and Vibration",
+    "Topic :: Mechanical Engineering :: Libraries",
+    "Development Status :: 1 - Beta",
+    "Environment :: Local",
+    "Framework :: Bladesight",
+    "Framework :: Bladesight :: 1",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://www.bladesight.com/"
+Documentation = "https://docs.bladesight.com/"
+Repository = "https://github.com/Bladesight/Bladesight"
 
 [tool.poetry.dependencies]
 python = "^3.11"
