@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bladesight"
-version = "0.12.0"
+version = "0.12.1"
 description = ""
 authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
