@@ -6,9 +6,9 @@ authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = "^3.11"
 install = "^1.3.5"
-duckdb = ">=0.8.1"
+duckdb = "==0.9.1"
 s3fs = "^2023.9.0"
 yaspin = "^3.0.1"
 polars = "^0.19.2"
