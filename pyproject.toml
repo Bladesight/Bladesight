@@ -1,11 +1,10 @@
 [tool.poetry]
 name = "bladesight"
-version = "0.12.1"
+version = "0.12.2"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.11"
 classifiers = [
     "Intended Audience :: Mechanical Engineering Graduate Students",
     "Intended Audience :: Test and Measurement Engineers",
