@@ -12,7 +12,7 @@ from yaspin import yaspin
 BLADESIGHT_DATASETS_S3_BUCKET = "bladesight-datasets"
 
 
-def get_path_to_local_bladesight():
+def get_path_to_local_bladesight() -> pathlib.Path:
     """This function returns the path to the local datasets folder.
     If there is no environmental variable called BLADESIGHT_DATASETS_PATH, it
     will return ~/.bladesight.

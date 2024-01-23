@@ -19,26 +19,9 @@ theme:
     - content.code.annotate
 
   palette: 
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: bladesight 
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
 
-    # Palette toggle for automatic mode
-    - media: "(prefers-color-scheme)"
-      toggle:
-        scheme: bladesight
-        icon: material/brightness-auto
-        name: Switch to light mode
-
-    # Palette toggle for dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      toggle:
-        icon: material/brightness-4
-        name: Switch to system preference
 extra_css:
   - stylesheets/extra.css
 extra:
@@ -121,16 +104,15 @@ extra_javascript:
 nav:
   - Bladesight Learning Centre: index.md
   - Introduction to Blade Tip Timing:
-    - Welcome: tutorials/intro_to_btt/index.md
-    #- 1. The Fundamental principle: tutorials/intro_to_btt/ch1/index.md
-    #- 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
-    #- 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
-    #- 4. Aligning the blades: tutorials/intro_to_btt/ch4/index.md
-    #- 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md
-    #- 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
-    #- 7. Synchronous Vibration and Sampling: tutorials/intro_to_btt/ch7/index.md
-    #- 8. Single Degree of Freedom (SDoF) Method: tutorials/intro_to_btt/ch8/index.md
-    #- 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
-    #- Afterword: tutorials/intro_to_btt/afterword.md
+    - 1. Blade Tip Timing's fundamental principle: tutorials/intro_to_btt/ch1/index.md
+    - 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
+    - 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
+    - 4. Aligning the blades: tutorials/intro_to_btt/ch4/index.md
+    - 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md
+    - 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
+    - 7. Synchronous Vibration and Sampling: tutorials/intro_to_btt/ch7/index.md
+    - 8. Single Degree of Freedom (SDoF) Method: tutorials/intro_to_btt/ch8/index.md
+    - 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
+    - Afterword: tutorials/intro_to_btt/afterword.md
 
 
