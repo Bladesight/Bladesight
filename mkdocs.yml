@@ -59,7 +59,7 @@ plugins:
       csl_file : "elsevier_harvard.csl"
       bib_by_default : false
 
-copyright: Copyright &copy; 2023 Bladesight
+copyright: Copyright &copy; 2024 Bladesight
 
 markdown_extensions:
   - attr_list
