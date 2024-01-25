@@ -2,6 +2,9 @@
 name = "bladesight"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 license = "MIT"
+authors = [
+    { name = "Dawie Diamond", email = "dawie.diamond@bladesight.com" },
+]
 requires-python = ">=3.9,<3.12"
 classifiers = [
     "Intended Audience :: Mechanical Engineering Graduate Students",
@@ -26,7 +29,7 @@ classifiers = [
 
 [tool.poetry]
 name = "bladesight"
-version = "0.13.0"
+version = "0.13.1a0"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
