@@ -26,7 +26,7 @@ classifiers = [
 
 [tool.poetry]
 name = "bladesight"
-version = "0.12.3a0"
+version = "0.13.0"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
 readme = "README.md"
