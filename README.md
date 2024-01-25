@@ -4,7 +4,7 @@
 
 [![PyPI version](https://badge.fury.io/py/bladesight.svg)](https://badge.fury.io/py/bladesight)
 [![Downloads](https://static.pepy.tech/badge/bladesight)](https://static.pepy.tech/badge/bladesight)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://img.shields.io/badge/python-3.9+-blue.svg)
+[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://img.shields.io/badge/python-3.9+-blue.svg)
 _________________
 
 This package contains utilities to help you follow along with the Bladesight tutorials.
