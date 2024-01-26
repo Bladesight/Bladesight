@@ -22,7 +22,7 @@ def get_path_to_local_bladesight() -> pathlib.Path:
     else:
         return pathlib.Path.home() / ".bladesight"
 
-
+#Untested
 def get_local_datasets() -> List[str]:
     """This function returns a list of the names of the datasets in the local
     datasets folder.
@@ -49,7 +49,7 @@ def get_local_datasets() -> List[str]:
                     local_datasets.append(f"{path_prefix}/{file}"[:-3])
         return local_datasets
 
-
+#Untested
 def get_bladesight_datasets() -> List[str]:
     """This function returns a list of all the datasets in
         the bladesight-datasets bucket.

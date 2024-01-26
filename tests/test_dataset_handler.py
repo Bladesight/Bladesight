@@ -1,6 +1,10 @@
-from bladesight.dataset_handler import get_path_to_local_bladesight
+from bladesight.dataset_handler import (
+    get_path_to_local_bladesight,
+    get_local_datasets
+)
 from pathlib import Path
 import os
+
 
 def testget_path_to_local_bladesight():
     bladesight_data_root_path = str(get_path_to_local_bladesight())
@@ -8,3 +12,22 @@ def testget_path_to_local_bladesight():
     os.environ["BLADESIGHT_DATASETS_PATH"] = "/user/defined/path/"
     bladesight_data_root_path = get_path_to_local_bladesight()
     assert bladesight_data_root_path == Path("/user/defined/path/.bladesight")
+
+def test_get_local_datasets(tmp_path):
+    os.environ["BLADESIGHT_DATASETS_PATH"] = str(tmp_path)
+    assert get_local_datasets() == []
+    path_to_bladesight = get_path_to_local_bladesight()
+    path_to_bladesight.mkdir(parents=True, exist_ok=True)
+    assert get_local_datasets() == []
+    path_to_folder1 = path_to_bladesight / "folder1"
+    assert get_local_datasets() == []
+    path_to_folder1.mkdir(parents=True, exist_ok=True)
+    assert get_local_datasets() == []
+    # Create a .txt file in get_path_to_local_bladesight()
+    with open(path_to_folder1 / "test.txt", 'w') as f:
+        f.write("test")
+    assert get_local_datasets() == []
+    # Now write a file with a .db extention
+    with open(path_to_folder1 / "test.db", "w") as f:
+        f.write("test")
+    assert get_local_datasets() == ["folder1/test"]
