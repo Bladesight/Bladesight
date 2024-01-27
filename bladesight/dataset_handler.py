@@ -16,16 +16,23 @@ def get_path_to_local_bladesight() -> pathlib.Path:
     """This function returns the path to the local datasets folder.
     If there is no environmental variable called BLADESIGHT_DATASETS_PATH, it
     will return ~/.bladesight.
+
+    Returns:
+        pathlib.Path: The path to the local datasets folder. It does
+            not necessarily exist.
     """
     if "BLADESIGHT_DATASETS_PATH" in os.environ:
         return pathlib.Path(os.environ["BLADESIGHT_DATASETS_PATH"]) / ".bladesight"
     else:
         return pathlib.Path.home() / ".bladesight"
 
-#Untested
 def get_local_datasets() -> List[str]:
     """This function returns a list of the names of the datasets in the local
     datasets folder.
+
+    Returns:
+        List[str]: A list of the dataset names in the in the 
+            local datasets folder.
     """
     BLADESIGHT_DATASETS_PATH = get_path_to_local_bladesight()
     if not BLADESIGHT_DATASETS_PATH.exists():

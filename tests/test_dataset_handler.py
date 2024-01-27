@@ -1,10 +1,10 @@
 from bladesight.dataset_handler import (
     get_path_to_local_bladesight,
-    get_local_datasets
+    get_local_datasets,
+    get_bladesight_datasets
 )
 from pathlib import Path
 import os
-
 
 def testget_path_to_local_bladesight():
     bladesight_data_root_path = str(get_path_to_local_bladesight())
@@ -31,3 +31,15 @@ def test_get_local_datasets(tmp_path):
     with open(path_to_folder1 / "test.db", "w") as f:
         f.write("test")
     assert get_local_datasets() == ["folder1/test"]
+
+def test_get_bladesight_datasets():
+    """ This is terrible, I know
+    """
+    minimum_sets_present = [
+        'bladesight-datasets/intro_to_btt/intro_to_btt_ch02', 
+        'bladesight-datasets/intro_to_btt/intro_to_btt_ch03', 
+        'bladesight-datasets/intro_to_btt/intro_to_btt_ch05', 
+        'bladesight-datasets/intro_to_btt/intro_to_btt_ch06'
+    ]
+    bladesight_online_sets = get_bladesight_datasets()
+    assert all([dataset in bladesight_online_sets for dataset in minimum_sets_present])
