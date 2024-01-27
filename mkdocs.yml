@@ -66,7 +66,6 @@ markdown_extensions:
   - md_in_html
   - tables
   - footnotes
-  
   - pymdownx.critic
   - pymdownx.caret
   - pymdownx.keys
@@ -74,8 +73,8 @@ markdown_extensions:
   - pymdownx.tilde
 
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -105,7 +104,7 @@ nav:
   - Bladesight Learning Centre: index.md
   - Introduction to Blade Tip Timing:
     - 1. Blade Tip Timing's fundamental principle: tutorials/intro_to_btt/ch1/index.md
-    #- 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
+    - 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
     #- 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
     #- 4. Aligning the blades: tutorials/intro_to_btt/ch4/index.md
     #- 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md

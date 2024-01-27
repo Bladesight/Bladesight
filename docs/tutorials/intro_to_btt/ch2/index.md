@@ -16,9 +16,12 @@ template: main_intro_to_btt.html
 card_title: Intro to BTT Ch2 - Time of Arrival triggering criteria
 card_url: "ch2/"
 ---
+??? tip "You are here :octicons-location-16:"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch2.svg){ width="500" }
+	</figure>
 
 # Time of Arrival (ToA)
-
 In the previous section, we stated that BTT is based on the measurement of time. Specifically, we want to measure the *exact instant* a blade passed a probe. This instant is called the __Time of Arrival__ (ToA). The ToA is determined by applying a *triggering criterion* to the pulse. Several different triggering criteria have been proposed [@diamond2021constant]. The most common ones are:
 
 1. The threshold triggering method
@@ -27,6 +30,16 @@ In the previous section, we stated that BTT is based on the measurement of time.
 4. The maximum slope method
 
 We'll focus on the *threshold triggering method* because of its simplicity and widespread adoption.
+
+!!! question "Chapter outcomes"
+
+	:material-checkbox-blank-outline: Understand that we need to implement a triggering criterion to determine the ToA of each pulse.
+
+    :material-checkbox-blank-outline: Understand the constant-threshold triggering method's principle.
+
+	:material-checkbox-blank-outline: Understand the detrimental effects of noise on the triggering criterion.
+
+	:material-checkbox-blank-outline: Understand how to implement hysteresis to limit the number of ToA's per pulse to one.
 
 ## Threshold Triggering Method
 This triggering method works by comparing a probe's signal to a predefined voltage threshold. The instant the threshold has been crossed, the blade is said to have "arrived". Each arrival event is stored for subsequent processing. 
@@ -727,8 +740,18 @@ When your rotor blades spin faster, you need to determine the ToAs in real-time.
 * <a target='_blank' href="https://hoodtech.com/bvm/"> :material-open-in-new: Hood Technologies</a>
 * <a target='_blank' href="https://agilis.com/"> :material-open-in-new: Agilis</a>
 
+!!! question "Chapter outcomes"
+
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we need to implement a triggering criterion to determine the ToA of each pulse.
+
+    :material-checkbox-marked:{ .checkbox-success .heart } Understand the constant-threshold triggering method's principle.
+
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand the detrimental effects of noise on the triggering criterion.
+
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand how to implement hysteresis to limit the number of ToA's per pulse to one.
+
 ## Acknowledgements
-I thank XXX for reviewing this chapter.
+Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
 \bibliography
 
@@ -746,7 +769,7 @@ I thank XXX for reviewing this chapter.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-09-20
+            2023-02-06
         </p>
     </div>
 </div>
