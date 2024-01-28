@@ -4,6 +4,8 @@ theme:
   custom_dir: overrides
   icon:
     logo: assets/horizontal_white.png
+    admonition:
+      abstract: fontawesome/solid/map-location 
   logo: assets/horizontal_white.png
   font:
     text: Literata
