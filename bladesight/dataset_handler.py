@@ -56,7 +56,6 @@ def get_local_datasets() -> List[str]:
                     local_datasets.append(f"{path_prefix}/{file}"[:-3])
         return local_datasets
 
-#Untested
 def get_bladesight_datasets() -> List[str]:
     """This function returns a list of all the datasets in
         the bladesight-datasets bucket.
@@ -73,9 +72,16 @@ def get_bladesight_datasets() -> List[str]:
                     datasets.append(f"{bucket_root}/{file}"[:-3])
     return datasets
 
-
+# Untested
 def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
-    """This function downloads a dataset from S3 and saves it locally."""
+    """This function downloads a dataset from S3 and saves it locally.
+    
+    Args:
+        dataset_path_on_s3 (str): The path to the dataset on S3.
+
+    Example usage:
+        >>> download_dataset_from_bladesight_data("bladesight-datasets/intro_to_btt/intro_to_btt_ch02")
+    """
     s3 = s3fs.S3FileSystem(anon=True)
     PATH_TO_LOCAL_DB = get_path_to_local_bladesight() / "data"
     for s3_subfolder in dataset_path_on_s3.split("/")[1:]:
@@ -91,10 +97,11 @@ def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     spinner.text = f"Done downloading {dataset_path_on_s3} from Bladesight Data... "
     spinner.ok("✅ ")
 
-
+# Untested
 class Dataset:
     """This object is used to access data from a dataset."""
-
+    
+    # Untested
     def __init__(self, path: pathlib.Path):
         self.path = path
         if self._confirm_dataset_valid() is False:
@@ -103,7 +110,8 @@ class Dataset:
         self.metadata: Dict[str, Dict] = self._get_all_metadata()
         self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
-
+    
+    # Untested
     def set_dataframe_library(self, library: Literal["pd", "pl"]):
         """This function sets the dataframe library to use when returning data.
 
@@ -114,13 +122,15 @@ class Dataset:
             self.dataframe_library = library
         else:
             raise ValueError("library must be 'pd' or 'pl'")
-
+    
+    # Untested
     def _confirm_dataset_valid(self) -> bool:
         """This function checks if a dataset exists and has a .db extension in s"""
         if self.path.exists() and self.path.suffix == ".db":
             return True
         return False
-
+    
+    # Untested
     def _get_tables(self) -> List[str]:
         """This method gets the tables in the dataset. It
         excludes the metadata table.
@@ -131,7 +141,8 @@ class Dataset:
         all_tables = self._read_sql("SHOW TABLES;")["name"].to_list()
         data_tables = list(set(all_tables) - set(["metadata"]))
         return data_tables
-
+    
+    # Untested
     def __getitem__(self, key: str):
         table_name = key.replace("table/", "")
         if table_name in self.tables:
@@ -142,7 +153,8 @@ class Dataset:
             raise KeyError(
                 f"Table {table_name} not found. These are the tables in the dataset: {self.tables}"
             )
-
+    
+    # Untested
     def print_citation(self):
         """Print the citation provided in the metadata table."""
         citation = self.metadata["CITATION"]
@@ -158,10 +170,12 @@ class Dataset:
 
         if "doi" in citation.keys():
             print(f"""\nDOI: {citation['doi']}""")
-
+    
+    # Untested
     def _ipython_key_completions_(self):
         return ["table/" + i for i in self.tables]
 
+    # Untested
     def _read_sql(
         self, sql: str, return_mode: Literal["pd", "pl"] = "pd"
     ) -> Union[pd.DataFrame, pl.DataFrame]:
@@ -182,7 +196,8 @@ class Dataset:
             elif return_mode == "pl":
                 df = con.sql(sql).pl()
         return df
-
+    
+    # Untested
     def _get_all_metadata(self) -> Dict[str, Dict]:
         """This function returns the value of a metadata field.
 
@@ -194,7 +209,7 @@ class Dataset:
         for _, row in df_metadata.iterrows():
             metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
         return metadata
-
+    # Untested
     def __repr__(self):
         table_string = "[\n"
         for table in self.tables:
@@ -202,8 +217,9 @@ class Dataset:
         table_string += "]"
         return f"Dataset({self.path}),\n\n Tables: \n {table_string}"
 
-
+# Untested
 class BladesightDatasetDirectory:
+    # Untested
     def __init__(self):
         self.path = get_path_to_local_bladesight()
         self.local_datasets = [
@@ -215,7 +231,8 @@ class BladesightDatasetDirectory:
         except Exception as e:
             print("Could not read remote datasets. Only listing local datasets")
             self.online_datasets = self.local_datasets
-
+    
+    # Untested
     def _getitem_key_correct_format(self, key: str) -> bool:
         """This function checks if the key is in the correct format. The key
         should be in the format "data/intro_to_btt/intro_to_btt_ch02".
@@ -229,7 +246,8 @@ class BladesightDatasetDirectory:
         if key.startswith("data/"):
             return True
         return False
-
+    
+    # Untested
     def __getitem__(self, key: str) -> Dataset:
         """Get the dataset specified by a key. If the dataset is not found, it
         will be downloaded from the Bladesight Data bucket.
@@ -265,7 +283,8 @@ class BladesightDatasetDirectory:
 
             else:
                 raise KeyError(f"Dataset {key} not found.")
-
+    
+    # Untested
     def replace_path_prefix(
         self, dataset_full_path: str, replace_prefix: str = "data"
     ) -> str:
@@ -285,12 +304,14 @@ class BladesightDatasetDirectory:
 
         new_path = [replace_prefix] + dataset_full_path.split("/")[1:]
         return "/".join(new_path)
-
+    
+    # Untested
     def _ipython_key_completions_(self):
         if self.online_datasets is ...:
             self.online_datasets = get_bladesight_datasets()
         return [self.replace_path_prefix(i) for i in self.online_datasets]
     
+    # Untested
     def refresh_available_datasets(self):
         """This function refreshes the local and online datasets.
         """
