@@ -48,17 +48,25 @@ We implement a *triggering criterion* to determine the ToA of each pulse. Let's 
 Several different ToA triggering criteria have been proposed [@Zimmer_2008] [@diamond2021constant]. Five of the most common ones are shown in [Figure 1](#figure_01) below.
 
 <figure markdown>
-  ![Different Triggering criteria](different_triggering_criteria.png)
-    <figcaption><strong><a name='figure_01'>Figure 2</a></strong>: Four of the most common triggering criteria. They are a) the constant threshold triggering method, b) the constant-fraction crossing method, c) the maximum voltage method, and d) the maximum slope method  </figcaption>
+  ![Different Triggering criteria](Ch2_triggering_criteria_illustration.svg){ width="750"}
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: Four common triggering criteria. They are A) the constant threshold triggering method, B) the maximum-slope method, c) the constant-fraction crossing method, and d) the maximum amplitude method  </figcaption>
 </figure>
 
 The four triggering criteria that is most well-known in literature are demonstrated above. They are:
 
-<ol type="a">
-  <li>The constant threshold triggering method</li>
-  <li>The constant-fraction crossing method</li>
-  <li>The maximum voltage method</li>
-  <li>The maximum slope method</li>
+<ol type="A">
+  <li>The constant threshold triggering method: This method triggers a ToA when the voltage level crosses a predefined threshold level.</li>
+  <li>
+  	The maximum slope method: This method triggers a ToA when the pulse's rate of change, or slope, is a maximum.
+	</li>
+  
+  <li>
+  	The constant-fraction crossing method: This method triggers a ToA when the voltage level has dropped a predefined percentage from the pulses maximum height.
+	</li>
+  <li>
+  	The maximum voltage method: This method triggers a ToA when the pulses maximum voltage occurs. 
+  </li>
+
 </ol>
 
 We'll use on the *constant threshold triggering method* because of its simplicity and widespread adoption.  
@@ -475,10 +483,17 @@ In Line 25, we select the `time` values corresponding to the time instants a ToA
     You are probably wondering how one would determine the ideal threshold level. This is a good question. There is no one-size-fits-all answer. Here are general guidelines to follow:
     
     1. The threshold level must be to a value where slopes of the pulses are steep. Setting the threshold near a turning point is a bad idea. You can read about it in my paper [@diamond2021constant].
-    2. The level must be set such that the maximum number of blades can be "seen". Blades are not perfectly identical. Some are shorter than others, causing shorter pulses. Setting the threshold too high will cause these blades to be missed.
-    3. If you're signal is non-simple, such as fist going up or down, then you'll need to be careful. Check this out...
 
-    XXXXXXXXXXXXXXXXXXXXXXXX   
+	![Threshold Select Slope Large ](ch_2_threshold_select_large_slope.jpeg){ width="700" }
+
+    2. The level must be set such that the maximum number of blades can be "seen". Blades are not perfectly identical. Some are shorter than others, causing shorter pulses. Setting the threshold too high will cause these blades to be missed.
+
+	![Threshold Select All Blades ](ch_2_threshold_select_all_blades.jpeg){ width="700" }
+
+    3. If your signal is non-simple, such as fist going up or down, then you'll need to be careful. Check this out...
+
+	![Threshold Select All Blades ](ch_2_threshold_select_careful_zero_crossing.jpeg){ width="700" }
+
 
 ## Sequential Implementation of the constant threshold triggering method
 The vectorized implementation shown above is great... but we can do better. We are implement a sequential version of the constant threshold triggering method. This approach processes each sample in separately.
@@ -713,6 +728,11 @@ We can build in *hysteresis* to solve the issue. Hysteresis introduces a *second
 2.	If the state is *high* and the current sample falls *below* the lower threshold, the state becomes low.
 3.	Otherwise, maintain the state.
 
+<figure markdown>
+  ![Different Triggering criteria](ch2_hysteresis_illustrate.svg){ width="750"}
+    <figcaption><strong><a name='figure_07'>Figure 7</a></strong>: Four common triggering criteria. They are A) the constant threshold triggering method, B) the maximum-slope method, c) the constant-fraction crossing method, and d) the maximum amplitude method  </figcaption>
+</figure>
+
 Here is an example of a ToA extraction algorithm that uses hysteresis to trigger on the rising edge.
 
 ``` py linenums="1"
@@ -799,7 +819,7 @@ Building in hysteresis stops multiple triggering, but it doesn't guarantee accur
 ## Performance of Sequential vs Vectorized Implementations
 We've now seen that you can use *vectorized* or *sequential* implementations to determine the ToA of a signal. The question is, which one is faster? Let's use both approaches on a real signal.
 
-The dataset we've been using contains a signal acquired from a proximity probe, `table/aluminium_blisk_1200_rpm`. The signal was acquired for a five blade rotor running at 1200 RPM. The acquisition was performed at a sampling rate of 2 MHz. The signal is shown in [Figure 7](#figure_07) below:
+The dataset we've been using contains a signal acquired from a proximity probe, `table/aluminium_blisk_1200_rpm`. The signal was acquired for a five blade rotor running at 1200 RPM. The acquisition was performed at a sampling rate of 2 MHz. The signal is shown in [Figure 8](#figure_08) below:
 
 <script src="eddy_current_probe_raw.js" > </script>
 <div>
@@ -828,7 +848,7 @@ The dataset we've been using contains a signal acquired from a proximity probe, 
 	<a onclick="window.fig_eddy_current_raw_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_07'>Figure 7</a></strong>: An eddy current probe signal acquired for a five blade aluminium rotor rotating at a rate of 1200 RPM. The sampling rate of the DAQ was 2 MHz. For this figure, the data points are heavily decimated.</figcaption>
+  <figcaption><strong><a name='figure_08'>Figure 7</a></strong>: An eddy current probe signal acquired for a five blade aluminium rotor rotating at a rate of 1200 RPM. The sampling rate of the DAQ was 2 MHz. For this figure, the data points are heavily decimated.</figcaption>
 </figure>
 
 We can use the Jupyter `%%timeit` to repeat a piece of code several times and determine how fast the code runs. If we do this for both approaches, we get the following results:
@@ -893,3 +913,148 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
         </p>
     </div>
 </div>
+
+
+## :material-weight-lifter:{ .checkbox-success } Coding Exercises
+
+Here are two coding exercises to solidify your understanding of the material covered in this chapter. Please attempt them before expanding the solution bar.
+
+### Problem 1: Automatic range detection :yawning_face:
+So far, we've been setting the threshold level manually. The threshold level was chosen by first plotting the waveform, then eyeballing the threshold level. This is fine, but we can do better...
+
+{==
+
+:material-pencil-plus-outline: Write a new function, called `determine_threshold_level`, that receives the signal and the % of the maximum value to use as the threshold level. The function should return the threshold level. 
+
+==}
+
+??? example "Reveal answer (Please try it yourself before peeking)"
+	``` py linenums="1"
+	def determine_threshold_level(
+		arr_s : np.ndarray,
+		threshold_percent : float = 50
+	) -> float:
+		""" This function determines the threshold level to use for the
+		constant threshold triggering method. The threshold level is
+		determined as a percentage between the maximum and minimum
+		value of the signal.
+
+		Args:
+			arr_s (np.ndarray): The signal to determine the threshold
+				level for.
+			threshold_percent (float): The percentage of the maximum
+				value to use as the threshold level. Must be a number
+				between 0 and 100.
+
+		"""
+		if threshold_percent < 0 or threshold_percent > 100:
+			raise ValueError("threshold_percent must be between 0 and 100")
+		min_value = np.min(arr_s)
+		max_value = np.max(arr_s)
+		signal_range = max_value - min_value
+		threshold_level = min_value + signal_range * threshold_percent/100
+		return threshold_level
+	```
+	Example usage:
+	``` py
+	>>> threshold_level = determine_threshold_level(
+		df_proximity_probe['data'].values, 
+		threshold_percent=30
+	)
+	>>> print(threshold_level)
+	0.3
+	```
+
+
+### Problem 2: Hysteresis on the falling edge :neutral_face:
+
+We've showcased how a triggering criterion with hysteresis works on the rising edge. Implement a triggering criterion with hysteresis on the falling edge.
+
+{==
+
+:material-pencil-plus-outline: Write a new function, called `seq_threshold_crossing_hysteresis_neg`, that receives the signal and the % of the maximum value to use as the threshold level. The function should return the threshold level.
+
+==}
+
+??? example "Reveal answer (Please try it yourself before peeking)"
+	``` py linenums="1"
+	@njit
+	def seq_threshold_crossing_hysteresis_neg(
+		arr_t : np.ndarray,
+		arr_s : np.ndarray,
+		threshold : float,
+		hysteresis_height : float,
+		n_est : Optional[float] = None,
+	) -> np.ndarray:
+		""" This function implements the constant threshold triggering
+		method with hysteresis on the falling edge. The hysteresis
+		height is specified in voltage.
+
+		Args:
+			arr_t (np.ndarray): The time values of the signal.
+			arr_s (np.ndarray): The signal to determine the threshold
+				level for.
+			threshold (float): The threshold level to use for the
+				constant threshold triggering method.
+			hysteresis_height (float): The height of the hysteresis.
+				It has the same units as the signal.
+			n_est (Optional[float]): The estimated number of ToAs in
+				this signal. Defaults to None. This number is used to
+				pre-allocate the array containing the ToAs. If this
+				number is not provided, the array will be pre-allocated
+				as the same dimension as arr_t and arr_s. You should
+				specify this value for large signals.
+		"""
+		threshold_upper = threshold + hysteresis_height
+		trigger_state = True if arr_s[0] < threshold_upper else False
+
+		# Pre-allocate the array containing the ToAs
+		if n_est is None:
+			arr_toa = -1 * np.ones(arr_t.shape)
+		else:
+			arr_toa = -1 * np.ones(n_est)
+
+		# Initialise the index of the ToA array
+		i_toa = 0
+
+		# Initialise the previous sample value
+		prev_sample = arr_s[0]
+
+		# Loop through all the samples
+		for i_sample in range(1, arr_s.shape[0]):
+			# Get the current sample value
+			curr_sample = arr_s[i_sample]
+
+			# Check if the threshold is crossed
+			if trigger_state is True:
+				if curr_sample >= threshold_upper:
+					trigger_state = False
+			else:
+				if curr_sample <= threshold:
+					trigger_state = True
+					# Interpolate the ToA
+					arr_toa[i_toa] = (
+						arr_t[i_sample - 1] 
+						+ (arr_t[i_sample] - arr_t[i_sample - 1]) 
+						* (threshold - prev_sample) 
+						/ (curr_sample - prev_sample)
+					)
+					i_toa += 1
+
+			# Update the previous sample value
+			prev_sample = curr_sample
+
+		# Return the array containing the ToAs
+		return arr_toa[:i_toa]
+	```
+	Example usage:
+	``` py
+	>>> toas = seq_threshold_crossing_hysteresis_neg(
+		df_proximity_probe_noisy['time'].values, 
+		df_proximity_probe_noisy['data'].values, 
+		threshold=0.4, 
+		hysteresis_height=0.1
+	)
+	>>> print(taos)
+	[27.20280579 52.10882236 77.46723661]
+	```
