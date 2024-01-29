@@ -1,10 +1,12 @@
 from bladesight.dataset_handler import (
     get_path_to_local_bladesight,
     get_local_datasets,
-    get_bladesight_datasets
+    get_bladesight_datasets,
+    _confirm_dataset_is_valid,
 )
 from pathlib import Path
 import os
+import pytest
 
 def testget_path_to_local_bladesight():
     bladesight_data_root_path = str(get_path_to_local_bladesight())
@@ -45,4 +47,19 @@ def test_get_bladesight_datasets():
     assert all([dataset in bladesight_online_sets for dataset in minimum_sets_present])
 
 
-
+def test_confirm_dataset_is_valid(tmp_path):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    path_to_file = tmp_path / "test.txt"
+    # Check that we get a FileNotFoundError if the file doesn't exist
+    with pytest.raises(FileNotFoundError):
+        _confirm_dataset_is_valid(path_to_file)
+    # Create a file, now we should get a ValueError because 
+    # the extention
+    # is not .db
+    path_to_file.touch()
+    with pytest.raises(ValueError):
+        _confirm_dataset_is_valid(path_to_file)
+    # Now write a file with a .db extention
+    path_to_file = tmp_path / "test.db"
+    path_to_file.touch()
+    assert _confirm_dataset_is_valid(path_to_file) is None

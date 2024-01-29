@@ -72,7 +72,6 @@ def get_bladesight_datasets() -> List[str]:
                     datasets.append(f"{bucket_root}/{file}"[:-3])
     return datasets
 
-# Untested
 def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     """This function downloads a dataset from S3 and saves it locally.
     
@@ -97,15 +96,36 @@ def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     spinner.text = f"Done downloading {dataset_path_on_s3} from Bladesight Data... "
     spinner.ok("✅ ")
 
+def _confirm_dataset_is_valid(path : pathlib.Path) -> None:
+    """This function checks if a dataset exists 
+    and has a .db extension in its name.
+
+    Args:
+        path (pathlib.Path): The path to the dataset.
+
+    Raises:
+        FileNotFoundError: If the dataset does not exist.
+        ValueError: If the dataset does not have a .db extension.
+    """
+    if not path.exists():
+        raise FileNotFoundError(
+            f"You are trying to open the dataset {path},"
+            " but it does not exist!"
+        )
+    if path.suffix != ".db":
+        raise ValueError(
+            f"You are trying to open the dataset {path}, "
+            "but it does not have a .db extension!"
+        )
+
 # Untested
 class Dataset:
     """This object is used to access data from a dataset."""
     
     # Untested
     def __init__(self, path: pathlib.Path):
+        _confirm_dataset_is_valid(path)
         self.path = path
-        if self._confirm_dataset_valid() is False:
-            raise ValueError(f"{self.path} is not a valid dataset.")
         self.tables: List[str] = self._get_tables()
         self.metadata: Dict[str, Dict] = self._get_all_metadata()
         self.dataframe_library: Literal["pd", "pl"] = "pd"
@@ -122,14 +142,7 @@ class Dataset:
             self.dataframe_library = library
         else:
             raise ValueError("library must be 'pd' or 'pl'")
-    
-    # Untested
-    def _confirm_dataset_valid(self) -> bool:
-        """This function checks if a dataset exists and has a .db extension in s"""
-        if self.path.exists() and self.path.suffix == ".db":
-            return True
-        return False
-    
+        
     # Untested
     def _get_tables(self) -> List[str]:
         """This method gets the tables in the dataset. It
@@ -209,6 +222,7 @@ class Dataset:
         for _, row in df_metadata.iterrows():
             metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
         return metadata
+    
     # Untested
     def __repr__(self):
         table_string = "[\n"
