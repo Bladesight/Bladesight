@@ -1,8 +1,10 @@
 from bladesight.dataset_handler import (
     get_local_datasets,
-    download_dataset_from_bladesight_data
+    download_dataset_from_bladesight_data,
+    Dataset
 )
 import os
+import pytest
 
 def test_download_dataset_from_bladesight_data(tmp_path):
     os.environ["BLADESIGHT_DATASETS_PATH"] = str(tmp_path)
