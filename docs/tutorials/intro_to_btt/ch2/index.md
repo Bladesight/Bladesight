@@ -12,7 +12,7 @@ hide:
   - tags
 description: This chapter explains how to extract a Time of Arrival (ToA) from proximity probe signals.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: intro_to_btt_ch2.html
 card_title: Intro to BTT Ch2 - Time of Arrival trigger criteria
 card_url: "ch2/"
 ---
