@@ -118,6 +118,43 @@ def _confirm_dataset_is_valid(path : pathlib.Path) -> None:
             "but it does not have a .db extension!"
         )
 
+def _read_sql(
+    path_to_db : pathlib.Path, 
+    sql_query: str, 
+    return_mode: Literal["pd", "pl"] = "pd"
+) -> Union[pd.DataFrame, pl.DataFrame]:
+    """This function executes a DuckDB SQL query on the dataset
+    and returns its result as a pandas or polars DataFrame.
+
+    Args:
+        path_to_db (pathlib.Path): The path to the dataset.
+        sql_query (str): The SQL query to execute.
+        return_mode (Literal["pd", 'pl'], optional): The return 
+            mode. Defaults to 'pd'.
+
+    Returns:
+        Union[pd.DataFrame, pl.DataFrame]: The results of the query.
+
+    Raises:
+        ValueError: If the return_mode is not 'pd' or 'pl'.
+    
+    Usage example:
+        >>> _read_sql(
+            "bladesight-data/intro_to_btt/intro_to_btt_ch02.db", 
+            "SELECT * FROM metadata;",
+            "pl"
+        )
+    """
+    if return_mode not in ["pd", "pl"]:
+        raise ValueError("return_mode must be 'pd' or 'pl'")
+    
+    with duckdb.connect(str(path_to_db)) as con:
+        if return_mode == "pd":
+            df = con.sql(sql_query).df()
+        elif return_mode == "pl":
+            df = con.sql(sql_query).pl()
+    return df
+
 # Untested
 class Dataset:
     """This object is used to access data from a dataset."""
@@ -151,7 +188,11 @@ class Dataset:
         Returns:
             List[str]: The tables in the dataset.
         """
-        all_tables = self._read_sql("SHOW TABLES;")["name"].to_list()
+        all_tables = _read_sql(
+            self.path,
+            "SHOW TABLES;"
+        )["name"].to_list()
+        
         data_tables = list(set(all_tables) - set(["metadata"]))
         return data_tables
     
@@ -159,8 +200,10 @@ class Dataset:
     def __getitem__(self, key: str):
         table_name = key.replace("table/", "")
         if table_name in self.tables:
-            return self._read_sql(
-                f"SELECT * FROM {table_name};", return_mode=self.dataframe_library
+            return _read_sql(
+                self.path,
+                f"SELECT * FROM {table_name};", 
+                return_mode=self.dataframe_library
             )
         else:
             raise KeyError(
@@ -187,28 +230,6 @@ class Dataset:
     # Untested
     def _ipython_key_completions_(self):
         return ["table/" + i for i in self.tables]
-
-    # Untested
-    def _read_sql(
-        self, sql: str, return_mode: Literal["pd", "pl"] = "pd"
-    ) -> Union[pd.DataFrame, pl.DataFrame]:
-        """This function executes a SQL query on the dataset
-        and returns its results as a pandas or polars DataFrame.
-
-        Args:
-            sql (str): The SQL query to execute.
-            return_mode (Literal["pd", 'pl'], optional): The return 
-                mode. Defaults to 'pd'.
-
-        Returns:
-            Union[pd.DataFrame, pl.DataFrame]: The results of the query.
-        """
-        with duckdb.connect(str(self.path)) as con:
-            if return_mode == "pd":
-                df = con.sql(sql).df()
-            elif return_mode == "pl":
-                df = con.sql(sql).pl()
-        return df
     
     # Untested
     def _get_all_metadata(self) -> Dict[str, Dict]:
@@ -217,7 +238,7 @@ class Dataset:
         Returns:
             Dict[str, Dict]: The metadata.
         """
-        df_metadata = self._read_sql("SELECT * FROM metadata;")
+        df_metadata = _read_sql(self.path, "SELECT * FROM metadata;")
         metadata = {}
         for _, row in df_metadata.iterrows():
             metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
