@@ -23,15 +23,11 @@ card_url: "ch2/"
 
 # Time of Arrival (ToA)
 
-At this stage, you understand that blade vibration causes the blade's tip to move relative to the shaft. When the blade moves past the proximity probe in a deflected position, the resulting pulse will either lead or lag the pulse we expect from a non-vibrating blade. The extent of the pulse shift is proportional to the size and direction of tip deflection.
+In the previous chapter, we've established that blade vibration causes the tips to move relative to the shaft's position. A deflected tip causes a shift in the proximity probe's resulting waveform. The size of the shift is proportional to the tip deflection.
 
-How do we determine the pulse shift?
+So, how do we determine the size of the shift?
 
-To determine the shift, we need to know the *exact instant* the blade passed the probe. This instant is referred to as the __Time of Arrival__ (ToA). 
-
-I've promised that, by the end of the tutorial, you'll be able to take raw BTT signals and process them to extract the blade's vibration frequency, amplitude, and phase. The first step in this process is to extract the Time of Arrival (ToA) of each pulse.
-
-We implement a *triggering criterion* to determine the ToA of each pulse. Let's look at different triggering criteria.
+To determine this, we need to know the *exact instant* a blade moved past a probe. This instant is referred to as the __Time of Arrival__ (ToA). Each ToA is the result of applying a *triggering criterion* to each pulse. We'll start by discussing four triggering criteria.
 
 !!! question "Chapter outcomes"
 
@@ -41,40 +37,39 @@ We implement a *triggering criterion* to determine the ToA of each pulse. Let's 
 
 	:material-checkbox-blank-outline: Understand the detrimental effects of noise on the triggering criterion.
 
-	:material-checkbox-blank-outline: Understand how to implement hysteresis to limit the number of ToA's per pulse to one.
+	:material-checkbox-blank-outline: Understand how to implement hysteresis to prevent multiple triggering events.
 
 ## Triggering criteria
 
-Several different ToA triggering criteria have been proposed [@Zimmer_2008] [@diamond2021constant]. Five of the most common ones are shown in [Figure 1](#figure_01) below.
+Several ToA triggering criteria have been discussed in literature [@Zimmer_2008] [@diamond2021constant]. Four of the most common ones are shown in [Figure 1](#figure_01) below.
 
 <figure markdown>
   ![Different Triggering criteria](Ch2_triggering_criteria_illustration.svg){ width="750"}
-    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: Four common triggering criteria. They are A) the constant threshold triggering method, B) the maximum-slope method, c) the constant-fraction crossing method, and d) the maximum amplitude method  </figcaption>
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: Four common triggering criteria. They are A) the constant threshold triggering method, B) the maximum-slope method, C) the constant-fraction crossing method, and D) the maximum amplitude method.</figcaption>
 </figure>
 
-The four triggering criteria that is most well-known in literature are demonstrated above. They are:
-
+Here's the principle behind each criterion:
 <ol type="A">
-  <li>The constant threshold triggering method: This method triggers a ToA when the voltage level crosses a predefined threshold level.</li>
-  <li>
-  	The maximum slope method: This method triggers a ToA when the pulse's rate of change, or slope, is a maximum.
-	</li>
-  
-  <li>
-  	The constant-fraction crossing method: This method triggers a ToA when the voltage level has dropped a predefined percentage from the pulses maximum height.
-	</li>
-  <li>
-  	The maximum voltage method: This method triggers a ToA when the pulses maximum voltage occurs. 
-  </li>
-
+    <li>
+  	    <strong>The constant threshold triggering method:</strong> A ToA is triggered when the signal crosses a predefined threshold.
+    </li>
+    <li>
+  	    <strong>The maximum slope method:</strong> A ToA is registered when the pulse's rate of change, or slope, is at its maximum.
+    </li>
+    <li>
+  	    <strong>The constant-fraction crossing method:</strong> Similar to method A), but the threshold level is calculated as a percentage drop from the pulse's maximum voltage level.
+    </li>
+    <li>
+  	    <strong>The maximum voltage method:</strong> The ToA occurs when the pulse is at its maximum. 
+    </li>
 </ol>
 
-We'll use on the *constant threshold triggering method* because of its simplicity and widespread adoption.  
+Our journey toward converting raw BTT data into blade frequency, amplitude and phase starts by selecting one of these methods. Based on its simplicity, accuracy [@diamond2021constant] and widespread adoption, we choose the constant threshold triggering method.
 
 ## Constant Threshold Triggering Method
-This triggering method works by comparing a probe's signal to a predefined voltage threshold. The instant the threshold has been crossed, the blade is said to have "arrived". Each arrival event is stored for subsequent processing. 
+This method continuously compares a probe's signal to a voltage threshold. Each time the threshold is crossed, a ToA is recorded.
 
-An example of a pulse generated by a blade traveling past a probe is shown in [Figure 2](#figure_02). A triggering threshold of 0.4 V has been set. The moment the voltage signal crosses this level, at approximately 40 $\mu s$, the ToA is registered. 
+An idealized pulse generated by a blade as it passes a probe is shown in [Figure 2](#figure_02). A triggering threshold of 0.4 V has been set. The moment the voltage signal crosses this level, at approximately 40 $\mu s$, the ToA is registered. 
 <script src="proximity_probe_data.js" > </script>
 <div>
 	<div>
@@ -101,7 +96,7 @@ An example of a pulse generated by a blade traveling past a probe is shown in [F
 </div>
 
 <figure markdown>
-  <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: A pulse generated by a blade traveling past a proximity probe. When the pulse rises above the constant threshold, a ToA is stored.</figcaption>
+  <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: An illustration of the constant threshold method operating on an idealized pulse. A ToA is registered when the signal crosses the 0.4 V threshold level. </figcaption>
 </figure>
 
 Before we get into the code, let's get you up and running with Python and this tutorial's supplementary material.
@@ -114,42 +109,40 @@ The Pypi package can be found here: <a href="https://pypi.org/project/bladesight
 ## :simple-jupyter: Following along using the worksheet
 This BTT tutorial is code-centric. 
 
-I try to explain everything using reproducible code examples. These examples are made available in several worksheets, which can be found at this Github repo:
+The concepts are explained using reproducible code. I've collected the code examples for each chapter into its own Jupyter worksheet.The worksheets can be accessed at this Github repo:
 
 <a href=https://github.com/Bladesight/bladesight-worksheets target="_blank">
 	https://github.com/Bladesight/bladesight-worksheets
 </a>
 
-Resist the urge to skip working through the worksheets. There's a large difference between reading and doing. Rest assured, every second invested in *doing* will pay off in the long run.
+Please resist the urge to skip working through these sheets. The biggest stumbling block in doing BTT (and many subjects for that matter) is not the theory. It's understanding how the theory is implemented. Getting stuck into the code will pay off in the long run.
 
-There are two ways in which you can follow along with these worksheets:
+The worksheets can be executed in two environments:
 
 1.  Usinge Google Colab, and 
 2.  Using a local installation
 
 ### :simple-googlecolab: Google Colab
-Google Colab is an excellent platform that you can use to follow along with these tutorials in the cloud. You can open the Google Colab notebook for this chapter by clicking on the button below: 
+Google Colab allows you to run Jupyter notebooks in the cloud. You can open the Google Colab notebook for this chapter by clicking on the link below:
 
 <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_02_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 You need a Google account to use Colab. If you don't have one, you can create one for free <a href="https://accounts.google.com/signup/v2/createaccount?theme=glif&flowName=GlifWebSignIn&flowEntry=SignUp" target="_blank">here</a>.
 
 ### :material-laptop: Local Python Installation
-At some stage you'll want to set up your local environment to run the notebooks and do your own development. Here is an excellent (and entertaining) <a href="https://youtu.be/YKSpANU8jPE?feature=shared" target="_blank">:material-open-in-new: video</a> on how to install Python for Windows. 
+At some stage you'll want to set up your local environment to do your own development. I'll guide you through the process. If you already know how to set up local Python environments, you can skip this section.
 
 #### Python version
-The bladesight package only works on Python 3.9, 3.10 and 3.11. Not on version 3.12 and 3.13. If you do not have a compatible version of Python installed, you can download it from <a href="https://www.python.org/downloads/release/python-3117/" target="_blank">here</a>.
+Here is an excellent (and entertaining) <a href="https://youtu.be/YKSpANU8jPE?feature=shared" target="_blank">:material-open-in-new: video</a> on how to install Python for Windows. *Please note:* the `bladesight` package only works on Python 3.9, 3.10 and 3.11. It does not yet work on versions 3.12 and 3.13. If you do not have a compatible version of Python installed, you can download it from <a href="https://www.python.org/downloads/release/python-3117/" target="_blank">here</a>.
 
 #### Virtual environments
 Virtual environments are an excellent way to isolate different Python projects from one another. I highly recommend setting one up. 
 
-If you're on Windows, you can use the following console commands to set up a virtual environment:
+If you're on Windows, you can use the following steps to set up a virtual environment:
 
-1.  Go to the directory where you want to create the virtual environment. This my case it is `"C:\Users\Dawie Diamond\intro_to_btt\"`. 
+1.  Go to the directory where you want to create the virtual environment. In my case it is `"C:\Users\Dawie Diamond\intro_to_btt\"`. 
 
-2.  Open a command prompt in the directory. 
-    
-    In Windows 11, this can be achieved in one of two ways: 
+2.  Open a command prompt in the directory. In Windows 11, this can be achieved in one of two ways: 
     
     1.  Type `cmd` in the address bar of the directory:
         
@@ -157,7 +150,7 @@ If you're on Windows, you can use the following console commands to set up a vir
         
         :material-keyboard-outline: Press enter after typing `cmd`. 
         
-        You should see a command prompt open in the directory.
+        A command prompt should open.
 
     2.  You can also right click in the directory and select "Open in Terminal":
         
@@ -168,42 +161,44 @@ If you're on Windows, you can use the following console commands to set up a vir
 	python -m venv venv
 	```
 
-4. Activate the virtual environment by typing the following command into the command prompt:
+4. Activate the virtual environment by running the following command:
 	``` console
 	venv\Scripts\activate
 	```
 
-5. Install the bladesight package by typing the following command into the command prompt:
+5. Install the bladesight package by executing the following instruction:
 	``` console
 	pip install bladesight
 	```
 
-6. Install Jupyter by typing the following command into the command prompt:
+6. Install Jupyter:
 	``` console
 	pip install jupyter
 	```
 
-7. We make extensive use of `plotly` for plotting. Install it by typing the following command into the command prompt:
+7. We make extensive use of `plotly` for plotting. Let's install it as well:
     ``` console
     pip install plotly
     ```
 
-8. Now you can launch Jupyter by typing the following command into the command prompt:
+8. Now you can launch Jupyter by executing the following command:
     ``` console
     jupyter notebook
     ```
 
 !!! tip
-	If you are having difficulty with installing a virtual environment or the bladesight package, I'd be more than willing to meet with you to help you get set up. You can email me at <a href="mailto:dawie.diamond@bladesight.com">dawie.diamond@bladesight.com</a> to set up a meeting.
+    One of the first people to test drive this tutorial told me he almost punched a hole through his screen trying to get the virtual environment set up.
 
-If you're on a different platform, here's an excellent <a href="https://youtu.be/kz4gbWNO1cw?si=uFBotRmhP1oTp8K8" target="_blank">:material-open-in-new: video</a> on how to set up virtual environments. The video covers different kinds of operating systems, I've created links for each operating system below:
+	I don't want to be the source of unwarranted anxiety. Please reach out to me at <a href="mailto:dawie.diamond@bladesight.com">dawie.diamond@bladesight.com</a> and I'd be happy to help you get set up.
+
+If you're on a different platform, here's an excellent <a href="https://youtu.be/kz4gbWNO1cw?si=uFBotRmhP1oTp8K8" target="_blank">:material-open-in-new: video</a> on how to set up virtual environments. The video covers different kinds of operating systems. I've created links for each operating system below:
 
 * <a href="https://youtu.be/kz4gbWNO1cw?feature=shared&t=371" target="_blank">:material-microsoft-windows: Windows</a>
 * <a href="https://youtu.be/kz4gbWNO1cw?feature=shared&t=45" target="_blank"> :material-apple: Mac</a>
 * <a href="https://youtu.be/kz4gbWNO1cw?feature=shared&t=243" target="_blank">:fontawesome-brands-linux: Linux</a>
 
 ## Vectorized implementation of the constant threshold triggering method
-We consider a generated signal containing three pulses to develop our first implementation. The signal is shown in [Figure 3](#figure_03) below.
+An artificial signal containing three pulses, generated by three consecutive blades passing the same probe, is shown in [Figure 3](#figure_03) below. 
 
 <script src="three_pulses.js" > </script>
 <div>
@@ -232,8 +227,10 @@ We consider a generated signal containing three pulses to develop our first impl
   <figcaption><strong><a name='figure_03'>Figure 3</a></strong>: A signal containing three pulses. </figcaption>
 </figure>
 
+Let's extract the ToAs.
+
 !!! note "How to go through the code"
-	These are the first code examples. In it, we __*repeatedly display*__ a complete implementation of the example. Each time we display the code, we highlight different lines and explain them in detail.
+	These are the tutorial's first code example. I therefore __*repeatedly display*__ the complete code. I highlight different lines and explain them in detail.
 
 
 ### Step 1: Load the probe signal
@@ -265,7 +262,7 @@ sr_threshold_change = diff_sr_threshold > 0
 sr_toas = df_proximity_probe['time'][sr_threshold_change]
 ```
 
-1.	This line loads the table into memory. It returns a `Pandas DataFrame`. We will be making extensive use of Pandas DataFrames throughout this tutorial. The documentation for using it can be found here: <a target="_blank" href="https://pandas.pydata.org/docs/" >https://pandas.pydata.org/docs/</a>
+1.	This line loads the table into memory. It returns a `Pandas DataFrame`. We will be making extensive use of Pandas DataFrames throughout this tutorial. The documentation can be found here: <a target="_blank" href="https://pandas.pydata.org/docs/" >https://pandas.pydata.org/docs/</a>
 
 
 First, on Line 1, we import the `bladesight` package. This package allows you to download the data used for this tutorial. It also contains some functions that we develop in this tutorial.
@@ -495,7 +492,7 @@ In Line 25, we select the `time` values corresponding to the time instants a ToA
 	![Threshold Select All Blades ](ch_2_threshold_select_careful_zero_crossing.jpeg){ width="700" }
 
 
-## Sequential Implementation of the constant threshold triggering method
+## Sequential implementation of the constant threshold triggering method
 The vectorized implementation shown above is great... but we can do better. We are implement a sequential version of the constant threshold triggering method. This approach processes each sample in separately.
 
 There are two reasons why for preferring a sequential implementation:
@@ -888,7 +885,7 @@ You've learned how to extract the ToAs from a signal using both vectorized and s
 
 	:material-checkbox-marked:{ .checkbox-success .heart } Understand the detrimental effects of noise on the triggering criterion.
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand how to implement hysteresis to limit the number of ToA's per pulse to one.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand how to implement hysteresis to prevent multiple triggering events.
 
 ## Acknowledgements
 Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
@@ -1055,6 +1052,4 @@ We've showcased how a triggering criterion with hysteresis works on the rising e
 		threshold=0.4, 
 		hysteresis_height=0.1
 	)
-	>>> print(taos)
-	[27.20280579 52.10882236 77.46723661]
 	```
