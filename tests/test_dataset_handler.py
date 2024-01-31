@@ -3,7 +3,8 @@ from bladesight.dataset_handler import (
     get_local_datasets,
     get_bladesight_datasets,
     _confirm_dataset_is_valid,
-    _read_sql
+    _read_sql,
+    _get_db_tables
 )
 from pathlib import Path
 import os
@@ -107,3 +108,29 @@ def test___read_sql(tmp_path):
         _read_sql(path_to_file, "SELECT * FROM table_2;","pl"), 
         df_table_2
     )
+
+def test__get_db_tables(tmp_path):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    path_to_file = tmp_path / "test.db"
+    with duckdb.connect(str(path_to_file)) as _:
+        pass
+    assert _get_db_tables(path_to_file) == []
+    df_table_1 = pl.DataFrame({
+        "A" : [1,2,3,4],
+        "B" : [5,6,7,8]
+    })
+    df_table_2 = pl.DataFrame({
+        "A" : [9,10,11,12],
+        "B" : [13,14,15,16]
+    })
+    with duckdb.connect(str(path_to_file)) as con:
+        con.execute("CREATE TABLE table_1 AS SELECT * FROM df_table_1")
+        con.execute("CREATE TABLE table_2 AS SELECT * FROM df_table_2")
+    assert _get_db_tables(path_to_file) == ["table_1", "table_2"]
+    df_metadata = pl.DataFrame({
+        "A" : [1,2,3,4],
+        "B" : [5,6,7,8]
+    })
+    with duckdb.connect(str(path_to_file)) as con:
+        con.execute("CREATE TABLE metadata AS SELECT * FROM df_metadata")
+    assert _get_db_tables(path_to_file) == ["table_1", "table_2"]

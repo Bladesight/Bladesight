@@ -156,6 +156,29 @@ def _read_sql(
     return df
 
 # Untested
+def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
+    """This method gets the tables in the dataset. It
+    excludes the metadata table.
+
+    Args:
+        path_to_db (pathlib.Path): The path to the dataset.
+
+    Returns:
+        List[str]: The tables in the dataset.
+
+    Usage example:
+        >>> _get_db_tables("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+        ['dataset_1', 'dataset_2']
+    """
+    all_tables = _read_sql(
+        path_to_db,
+        "SHOW TABLES;"
+    )["name"].to_list()
+    
+    data_tables = list(set(all_tables) - set(["metadata"]))
+    return sorted(data_tables)
+
+# Untested
 class Dataset:
     """This object is used to access data from a dataset."""
     
@@ -163,7 +186,7 @@ class Dataset:
     def __init__(self, path: pathlib.Path):
         _confirm_dataset_is_valid(path)
         self.path = path
-        self.tables: List[str] = self._get_tables()
+        self.tables: List[str] = _get_db_tables(self.path)
         self.metadata: Dict[str, Dict] = self._get_all_metadata()
         self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
@@ -178,23 +201,7 @@ class Dataset:
         if library in ["pd", "pl"]:
             self.dataframe_library = library
         else:
-            raise ValueError("library must be 'pd' or 'pl'")
-        
-    # Untested
-    def _get_tables(self) -> List[str]:
-        """This method gets the tables in the dataset. It
-        excludes the metadata table.
-
-        Returns:
-            List[str]: The tables in the dataset.
-        """
-        all_tables = _read_sql(
-            self.path,
-            "SHOW TABLES;"
-        )["name"].to_list()
-        
-        data_tables = list(set(all_tables) - set(["metadata"]))
-        return data_tables
+            raise ValueError("library must be 'pd' or 'pl'")    
     
     # Untested
     def __getitem__(self, key: str):
