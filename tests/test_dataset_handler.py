@@ -4,16 +4,18 @@ from bladesight.dataset_handler import (
     get_bladesight_datasets,
     _confirm_dataset_is_valid,
     _read_sql,
-    _get_db_tables
+    _get_db_tables,
+    _get_all_metadata
 )
 from pathlib import Path
 import os
 import pytest
 import duckdb
+from duckdb import CatalogException
 import pandas as pd
 import polars as pl
 from polars.testing import assert_frame_equal
-
+import json
 
 def testget_path_to_local_bladesight():
     bladesight_data_root_path = str(get_path_to_local_bladesight())
@@ -134,3 +136,37 @@ def test__get_db_tables(tmp_path):
     with duckdb.connect(str(path_to_file)) as con:
         con.execute("CREATE TABLE metadata AS SELECT * FROM df_metadata")
     assert _get_db_tables(path_to_file) == ["table_1", "table_2"]
+
+def test__get_all_metadata(tmp_path):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    path_to_file = tmp_path / "test.db"
+    with duckdb.connect(str(path_to_file)) as _:
+        pass
+    with pytest.raises(CatalogException):
+        _get_all_metadata(path_to_file)
+    json_object_1 = {
+        "A" : [1,2,3,4],
+        "B" : [5,6,7,8]
+    }
+    json_object_2 = {
+        "CITATION" : """@article{diamond2021constant,
+            title={Constant speed tip deflection determination using the instantaneous phase of blade tip timing data},
+            author={Diamond, DH and Heyns, Philippus Stephanus and Oberholster, AJ},
+            journal={Mechanical Systems and Signal Processing},
+            volume={150},
+            pages={107151},
+            year={2021},
+            publisher={Elsevier}
+            }""",
+        "URL" : """https://repository.up.ac.za/bitstream/handle/2263/86905/Diamond_Constant_2021.pdf?sequence=1""" 
+    }
+    
+    df_metadata = pl.DataFrame({
+        "metadata_key" : ["A", "B"],
+        "metadata_value" : [json.dumps(json_object_1), json.dumps(json_object_2)]
+    })
+    with duckdb.connect(str(path_to_file)) as con:
+        con.execute("CREATE TABLE metadata AS SELECT * FROM df_metadata")
+    metadata = _get_all_metadata(path_to_file)
+    assert metadata["A"] == json_object_1
+    assert metadata["B"] == json_object_2

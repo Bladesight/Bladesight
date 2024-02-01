@@ -96,25 +96,25 @@ def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     spinner.text = f"Done downloading {dataset_path_on_s3} from Bladesight Data... "
     spinner.ok("✅ ")
 
-def _confirm_dataset_is_valid(path : pathlib.Path) -> None:
+def _confirm_dataset_is_valid(path_to_db : pathlib.Path) -> None:
     """This function checks if a dataset exists 
     and has a .db extension in its name.
 
     Args:
-        path (pathlib.Path): The path to the dataset.
+        path_to_db (pathlib.Path): The path to the dataset.
 
     Raises:
         FileNotFoundError: If the dataset does not exist.
         ValueError: If the dataset does not have a .db extension.
     """
-    if not path.exists():
+    if not path_to_db.exists():
         raise FileNotFoundError(
-            f"You are trying to open the dataset {path},"
+            f"You are trying to open the dataset {path_to_db},"
             " but it does not exist!"
         )
-    if path.suffix != ".db":
+    if path_to_db.suffix != ".db":
         raise ValueError(
-            f"You are trying to open the dataset {path}, "
+            f"You are trying to open the dataset {path_to_db}, "
             "but it does not have a .db extension!"
         )
 
@@ -155,6 +155,25 @@ def _read_sql(
             df = con.sql(sql_query).pl()
     return df
 
+def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Dict]:
+    """This function returns a metadata dictionary
+    from the metadata table in the dataset.
+
+    Args:
+        path_to_db (pathlib.Path): The path to the dataset.
+
+    Returns:
+        Dict[str, Dict]: The metadata.
+
+    Usage example:
+        >>> _get_all_metadata("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+    """
+    df_metadata = _read_sql(path_to_db, "SELECT * FROM metadata;")
+    metadata = {}
+    for _, row in df_metadata.iterrows():
+        metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
+    return metadata
+
 # Untested
 def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
     """This method gets the tables in the dataset. It
@@ -187,7 +206,7 @@ class Dataset:
         _confirm_dataset_is_valid(path)
         self.path = path
         self.tables: List[str] = _get_db_tables(self.path)
-        self.metadata: Dict[str, Dict] = self._get_all_metadata()
+        self.metadata: Dict[str, Dict] = _get_all_metadata(self.path)
         self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
     
@@ -237,20 +256,7 @@ class Dataset:
     # Untested
     def _ipython_key_completions_(self):
         return ["table/" + i for i in self.tables]
-    
-    # Untested
-    def _get_all_metadata(self) -> Dict[str, Dict]:
-        """This function returns the value of a metadata field.
-
-        Returns:
-            Dict[str, Dict]: The metadata.
-        """
-        df_metadata = _read_sql(self.path, "SELECT * FROM metadata;")
-        metadata = {}
-        for _, row in df_metadata.iterrows():
-            metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
-        return metadata
-    
+        
     # Untested
     def __repr__(self):
         table_string = "[\n"
