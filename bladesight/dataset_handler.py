@@ -174,7 +174,6 @@ def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Dict]:
         metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
     return metadata
 
-# Untested
 def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
     """This method gets the tables in the dataset. It
     excludes the metadata table.
@@ -196,6 +195,45 @@ def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
     
     data_tables = list(set(all_tables) - set(["metadata"]))
     return sorted(data_tables)
+
+def _get_printable_citation(metadata: Dict[str, Dict]) -> str:
+    """This function returns a printable citation 
+    from the metadata.
+
+    Args:
+        metadata (Dict[str, Dict]): The metadata.
+
+    Returns:
+        str: The printable citation.
+
+    Usage example:
+        >>> _get_printable_citation({
+            "CITATION": {
+                "repr": "This is a citation",
+                "url": "https://example.com",
+                "doi": "10.1234/5678"
+            }
+        })
+    """
+    if "CITATION" not in metadata.keys():
+        return "No citation provided in metadata table."
+    
+    citation = metadata["CITATION"]
+    if not isinstance(citation, dict):
+        return "Citation format error. Here is the raw citation:\n\n" + str(citation)
+    
+    if "repr" not in citation.keys():
+        return "Citation format error. Here is the raw citation:\n\n" + str(citation)
+
+    cite_main = f"""If you use this dataset in published work, please use the below citation:\n\n{citation['repr']}"""
+
+    if "url" in citation.keys():
+        cite_main += f"""\nLink to paper: {citation['url']}"""
+
+    if "doi" in citation.keys():
+        cite_main += f"""\nDOI: {citation['doi']}"""
+    
+    return cite_main
 
 # Untested
 class Dataset:
@@ -236,22 +274,9 @@ class Dataset:
                 f"Table {table_name} not found. These are the tables in the dataset: {self.tables}"
             )
     
-    # Untested
     def print_citation(self):
         """Print the citation provided in the metadata table."""
-        citation = self.metadata["CITATION"]
-        if "repr" not in citation.keys():
-            print("No citation provided in metadata table.")
-            return
-
-        cite_main = f"""If you use this dataset in published work, please use the below citation:\n\n{citation['repr']}"""
-        print(cite_main)
-
-        if "url" in citation.keys():
-            print(f"""\nLink to paper: {citation['url']}""")
-
-        if "doi" in citation.keys():
-            print(f"""\nDOI: {citation['doi']}""")
+        print(_get_printable_citation(self.metadata))
     
     # Untested
     def _ipython_key_completions_(self):

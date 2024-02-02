@@ -5,7 +5,8 @@ from bladesight.dataset_handler import (
     _confirm_dataset_is_valid,
     _read_sql,
     _get_db_tables,
-    _get_all_metadata
+    _get_all_metadata,
+    _get_printable_citation
 )
 from pathlib import Path
 import os
@@ -170,3 +171,44 @@ def test__get_all_metadata(tmp_path):
     metadata = _get_all_metadata(path_to_file)
     assert metadata["A"] == json_object_1
     assert metadata["B"] == json_object_2
+
+def test__get_printable_citation():
+    metadata_dict = {}
+    assert _get_printable_citation(metadata_dict) == "No citation provided in metadata table."
+    metadata_dict = {
+        "CITATIONs" : {}
+    }
+    assert _get_printable_citation(metadata_dict) == "No citation provided in metadata table."
+    metadata_dict = {
+        "CITATION" : "test"
+    }
+    assert _get_printable_citation(metadata_dict) == "Citation format error. Here is the raw citation:\n\n" + str(metadata_dict["CITATION"])
+    metadata_dict = {
+        "CITATION" : {
+            "title" : "test"
+        }
+    }
+    assert _get_printable_citation(metadata_dict) == "Citation format error. Here is the raw citation:\n\n" + str(metadata_dict["CITATION"])
+    metadata_dict = {
+        "CITATION" : {
+            "repr" : "uber test"
+        }
+    }
+    assert _get_printable_citation(metadata_dict) == f"""If you use this dataset in published work, please use the below citation:\n\n{metadata_dict['CITATION']['repr']}"""
+    metadata_dict = {
+        "CITATION" : {
+            "repr" : "uber test",
+            "url" : "https://test.com",            
+        }
+    }
+    assert_test = f"""If you use this dataset in published work, please use the below citation:\n\n{metadata_dict['CITATION']['repr']}""" + f"""\nLink to paper: {metadata_dict['CITATION']['url']}"""
+    assert _get_printable_citation(metadata_dict) == assert_test
+    metadata_dict = {
+        "CITATION" : {
+            "repr" : "uber test",
+            "url" : "https://test.com",
+            "doi" : "10.1234/5678"
+        }
+    }
+    assert_test += f"""\nDOI: {metadata_dict['CITATION']['doi']}"""
+    assert _get_printable_citation(metadata_dict) == assert_test
