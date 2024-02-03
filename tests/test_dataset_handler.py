@@ -6,7 +6,8 @@ from bladesight.dataset_handler import (
     _read_sql,
     _get_db_tables,
     _get_all_metadata,
-    _get_printable_citation
+    _get_printable_citation,
+    Dataset
 )
 from pathlib import Path
 import os
@@ -212,3 +213,55 @@ def test__get_printable_citation():
     }
     assert_test += f"""\nDOI: {metadata_dict['CITATION']['doi']}"""
     assert _get_printable_citation(metadata_dict) == assert_test
+
+def test_Dataset(tmp_path):
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    path_to_file = tmp_path / "test.db"
+    with duckdb.connect(str(path_to_file)) as _:
+        pass
+    df_metadata = pl.DataFrame({
+        "metadata_key" : ["CITATION"],
+        "metadata_value" : [
+            json.dumps({
+                "repr" : "uber test",
+                "url" : "https://test.com",
+                "doi" : "10.1234/5678"
+            })
+        ]
+    })
+    df_test_1 = pl.DataFrame({
+        "A" : [1,2,3,4],
+        "B" : [5,6,7,8]
+    })
+    df_test_2 = pl.DataFrame({
+        "A" : [9,10,11,12],
+        "B" : [13,14,15,16]
+    })
+    with duckdb.connect(str(path_to_file)) as con:
+        con.execute("CREATE TABLE metadata AS SELECT * FROM df_metadata")
+        con.execute("CREATE TABLE test_1 AS SELECT * FROM df_test_1")
+        con.execute("CREATE TABLE test_2 AS SELECT * FROM df_test_2")
+
+    ds = Dataset(path_to_file)
+    assert ds.dataframe_library == 'pd'
+    ds.set_dataframe_library('pl')
+    assert ds.dataframe_library == 'pl'
+    ds.set_dataframe_library('pd')
+    assert ds.dataframe_library == 'pd'
+    with pytest.raises(ValueError):
+        ds.set_dataframe_library('invalid')
+    assert sorted(ds._ipython_key_completions_()) == ["table/test_1", "table/test_2"]
+    repr = ds.__repr__()
+    assert "table/test_1" in repr
+    assert "table/test_2" in repr
+    assert sorted(ds.tables) == ["test_1", "test_2"]
+    ds.set_dataframe_library('pl')
+    df_test_1_read = ds["table/test_1"]
+    assert_frame_equal(df_test_1, df_test_1_read)
+    df_test_2_read = ds["table/test_2"]
+    assert_frame_equal(df_test_2, df_test_2_read)
+    assert ds.metadata["CITATION"]["repr"] == "uber test"
+    assert ds.metadata["CITATION"]["url"] == "https://test.com"
+    assert ds.metadata["CITATION"]["doi"] == "10.1234/5678"
+
+

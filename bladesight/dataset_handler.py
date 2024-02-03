@@ -235,11 +235,28 @@ def _get_printable_citation(metadata: Dict[str, Dict]) -> str:
     
     return cite_main
 
-# Untested
 class Dataset:
-    """This object is used to access data from a dataset."""
+    """This object is used to access data from a dataset.
     
-    # Untested
+    Args:
+        path (pathlib.Path): The path to the dataset.
+
+    Usage example:
+        >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+        >>> dataset.tables
+        ['dataset_1', 'dataset_2']
+        >>> dataset.metadata
+        {
+            "CITATION": {
+                "repr": "This is a citation",
+                "url": "https://example.com",
+                "doi": "10.1234/5678"
+            }
+        }
+        >>> dataset.set_dataframe_library("pl")
+        >>> df_table = dataset["table/dataset_1"]
+        >>> dataset.print_citation()
+    """
     def __init__(self, path: pathlib.Path):
         _confirm_dataset_is_valid(path)
         self.path = path
@@ -248,7 +265,6 @@ class Dataset:
         self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
     
-    # Untested
     def set_dataframe_library(self, library: Literal["pd", "pl"]):
         """This function sets the dataframe library to use when returning data.
 
@@ -260,8 +276,18 @@ class Dataset:
         else:
             raise ValueError("library must be 'pd' or 'pl'")    
     
-    # Untested
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> Union[pd.DataFrame, pl.DataFrame]:
+        """ This function returns a table from the dataset.
+        
+        Args:
+            key (str): The name of the table, prefixed with "table/".
+
+        Raises:
+            KeyError: If the table is not found.
+
+        Returns:
+            Union[pd.DataFrame, pl.DataFrame]: The table.
+        """
         table_name = key.replace("table/", "")
         if table_name in self.tables:
             return _read_sql(
@@ -278,11 +304,9 @@ class Dataset:
         """Print the citation provided in the metadata table."""
         print(_get_printable_citation(self.metadata))
     
-    # Untested
     def _ipython_key_completions_(self):
         return ["table/" + i for i in self.tables]
-        
-    # Untested
+    
     def __repr__(self):
         table_string = "[\n"
         for table in self.tables:
