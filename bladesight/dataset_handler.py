@@ -381,9 +381,9 @@ class BladesightDatasetDirectory:
             else:
                 raise KeyError(f"Dataset {key} not found.")
     
-    # Untested
+    @staticmethod
     def replace_path_prefix(
-        self, dataset_full_path: str, replace_prefix: str = "data"
+        dataset_full_path: str, replace_prefix: str = "data"
     ) -> str:
         """This function is used to replace the first path prefix with the
             replace_prefix argument. For example, if the dataset path
@@ -397,8 +397,11 @@ class BladesightDatasetDirectory:
 
         Returns:
             str: The new path.
-        """
 
+        Example usage:
+            >>> replace_path_prefix("bladesight-data/intro_to_btt/intro_to_btt_ch02", "data")
+            "data/intro_to_btt/intro_to_btt_ch02"
+        """
         new_path = [replace_prefix] + dataset_full_path.split("/")[1:]
         return "/".join(new_path)
     

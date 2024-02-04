@@ -7,7 +7,8 @@ from bladesight.dataset_handler import (
     _get_db_tables,
     _get_all_metadata,
     _get_printable_citation,
-    Dataset
+    Dataset,
+    BladesightDatasetDirectory
 )
 from pathlib import Path
 import os
@@ -264,4 +265,12 @@ def test_Dataset(tmp_path):
     assert ds.metadata["CITATION"]["url"] == "https://test.com"
     assert ds.metadata["CITATION"]["doi"] == "10.1234/5678"
 
+def test_replace_path_prefix_static_method():
+    old_path = "bladesight-datasets/intro_to_btt/intro_to_btt_ch02"
+
+    new_path = BladesightDatasetDirectory.replace_path_prefix(
+        "bladesight-datasets/intro_to_btt/intro_to_btt_ch02",
+        "data"
+    )
+    assert new_path == "data/intro_to_btt/intro_to_btt_ch02"
 
