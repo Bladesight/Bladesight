@@ -269,7 +269,7 @@ def test_replace_path_prefix_static_method():
     old_path = "bladesight-datasets/intro_to_btt/intro_to_btt_ch02"
 
     new_path = BladesightDatasetDirectory.replace_path_prefix(
-        "bladesight-datasets/intro_to_btt/intro_to_btt_ch02",
+        old_path,
         "data"
     )
     assert new_path == "data/intro_to_btt/intro_to_btt_ch02"
