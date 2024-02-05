@@ -92,7 +92,6 @@ If you grasp [Figure 1](#figure_01), you grasp the fundamental concept at the he
 
 !!! success "Chapter Outcomes"
 
-
 	:material-checkbox-marked:{ .checkbox-success .heart } Understand that this tutorial is for graduate students who seek a code-first treatment of the fundamentals of BTT :simple-python:.
 
     :material-checkbox-marked:{ .checkbox-success .heart } Understand that the entire discipline of BTT is built from time stamps.
@@ -118,7 +117,7 @@ A big thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2024-01-23
+            2024-01-30
         </p>
     </div>
 </div>

@@ -6,7 +6,7 @@ Welcome to the Bladesight Learning center :wave:.
 
 Bladesight is a company offering Blade Tip Timing hardware, open-source software and tutorials.
 
-You're probably looking for the *Introduction to Blade Tip Timing Using Python* tutorial. You can find it [:material-open-in-app: here](./tutorials/intro_to_btt/ch1/).
+You're probably looking for the *Introduction to Blade Tip Timing Using Python* tutorial. You can find it [:material-open-in-app: here](./tutorials/intro_to_btt/ch1/index.md).
 
 ## About Bladesight
 
