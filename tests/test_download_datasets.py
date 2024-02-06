@@ -1,8 +1,7 @@
 from bladesight.dataset_handler import (
     get_local_datasets,
     download_dataset_from_bladesight_data,
-    Dataset,
-    Datasets
+    BladesightDatasetDirectory
 )
 import os
 import pytest
@@ -20,6 +19,7 @@ def test_Datasets(tmp_path):
     datasets that have been downloaded. 
     """
     os.environ["BLADESIGHT_DATASETS_PATH"] = str(tmp_path)
+    Datasets = BladesightDatasetDirectory()
     ds = Datasets["data/intro_to_btt/intro_to_btt_ch03"]
     df = ds["table/du_toit_2017_test_1_opr_zero_crossings"]
     assert df.shape == (791, 1)

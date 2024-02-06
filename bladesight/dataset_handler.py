@@ -325,12 +325,12 @@ class BladesightDatasetDirectory:
         self.online_datasets: List[str] = ...
         try:
             self._ipython_key_completions_()
-        except Exception as e:
+        except Exception as _:
             print("Could not read remote datasets. Only listing local datasets")
             self.online_datasets = self.local_datasets
     
-    # Untested
-    def _getitem_key_correct_format(self, key: str) -> bool:
+    @staticmethod
+    def _getitem_key_correct_format(key: str) -> bool:
         """This function checks if the key is in the correct format. The key
         should be in the format "data/intro_to_btt/intro_to_btt_ch02".
 
@@ -405,7 +405,6 @@ class BladesightDatasetDirectory:
         new_path = [replace_prefix] + dataset_full_path.split("/")[1:]
         return "/".join(new_path)
     
-    # Untested
     def _ipython_key_completions_(self):
         if self.online_datasets is ...:
             self.online_datasets = get_bladesight_datasets()
