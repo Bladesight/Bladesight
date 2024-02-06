@@ -274,3 +274,6 @@ def test_replace_path_prefix_static_method():
     )
     assert new_path == "data/intro_to_btt/intro_to_btt_ch02"
 
+def test__getitem_key_correct_format():
+    assert BladesightDatasetDirectory._getitem_key_correct_format("data/test_1")
+    assert BladesightDatasetDirectory._getitem_key_correct_format("table/test_1/") is False
