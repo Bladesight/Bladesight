@@ -45,6 +45,13 @@ def test_default_to_local_datasets(tmp_path, monkeypatch):
     path_to_db.touch()
     path_to_csv.touch()
     Datasets = bladesight.dataset_handler.BladesightDatasetDirectory()
-    assert Datasets.local_datasets == ["data/file1"]
-    assert Datasets.online_datasets == ["data/file1"]
+    assert Datasets.local_datasets == ["folder1/file1"]
+    assert Datasets.online_datasets == ["folder1/file1"]
     assert Datasets._ipython_key_completions_() == ["data/file1"]
+
+    path_to_db = path_to_folder1 / "file2.db"
+    path_to_db.touch()
+    Datasets._refresh_available_datasets()
+    assert Datasets.local_datasets == ["folder1/file1", "folder1/file2"]
+    assert Datasets.online_datasets == ["folder1/file1", "folder1/file2"]
+    assert Datasets._ipython_key_completions_() == ["data/file1", "data/file2"]

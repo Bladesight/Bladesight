@@ -322,12 +322,7 @@ class BladesightDatasetDirectory:
         self.local_datasets = [
             self.replace_path_prefix(i) for i in get_local_datasets()
         ]
-        self.online_datasets: List[str] = ...
-        try:
-            self._ipython_key_completions_()
-        except Exception as _:
-            print("Could not read remote datasets. Only listing local datasets")
-            self.online_datasets = self.local_datasets
+        self._refresh_available_datasets()
     
     @staticmethod
     def _getitem_key_correct_format(key: str) -> bool:
@@ -406,15 +401,19 @@ class BladesightDatasetDirectory:
         return "/".join(new_path)
     
     def _ipython_key_completions_(self):
-        if self.online_datasets is ...:
-            self.online_datasets = get_bladesight_datasets()
+        """ We replace whatever prefix is in the dataset with "data" """
         return [self.replace_path_prefix(i) for i in self.online_datasets]
     
-    # Untested
-    def refresh_available_datasets(self):
+    def _refresh_available_datasets(self):
         """This function refreshes the local and online datasets.
+        If the online datasets cannot be read, it will only 
+        list the local datasets.
         """
         self.local_datasets = get_local_datasets()
-        self.online_datasets = get_bladesight_datasets()
+        try:
+            self.online_datasets = get_bladesight_datasets()
+        except Exception as _:
+            print("Could not read remote datasets. Only listing local datasets")
+            self.online_datasets = self.local_datasets
 
 Datasets = BladesightDatasetDirectory()
