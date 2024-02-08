@@ -1,7 +1,7 @@
 import json
 import os
 import pathlib
-from typing import Dict, List, Literal, Union
+from typing import Dict, List, Literal, Union, Any
 
 import duckdb
 import pandas as pd
@@ -78,7 +78,7 @@ def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     Args:
         dataset_path_on_s3 (str): The path to the dataset on S3.
 
-    Example usage:
+    Usage example:
         >>> download_dataset_from_bladesight_data("bladesight-datasets/intro_to_btt/intro_to_btt_ch02")
     """
     s3 = s3fs.S3FileSystem(anon=True)
@@ -106,6 +106,9 @@ def _confirm_dataset_is_valid(path_to_db : pathlib.Path) -> None:
     Raises:
         FileNotFoundError: If the dataset does not exist.
         ValueError: If the dataset does not have a .db extension.
+
+    Usage example:
+        >>> _confirm_dataset_is_valid("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
     """
     if not path_to_db.exists():
         raise FileNotFoundError(
@@ -155,7 +158,7 @@ def _read_sql(
             df = con.sql(sql_query).pl()
     return df
 
-def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Dict]:
+def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Union[Dict, Any]]:
     """This function returns a metadata dictionary
     from the metadata table in the dataset.
 
@@ -163,10 +166,17 @@ def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Dict]:
         path_to_db (pathlib.Path): The path to the dataset.
 
     Returns:
-        Dict[str, Dict]: The metadata.
+        Dict[str, Union[Dict, Any]]: The metadata.
 
     Usage example:
         >>> _get_all_metadata("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+        {
+            "CITATION": {
+                "repr": "This is a citation",
+                "url": "https://example.com",
+                "doi": "10.1234/5678"
+            }
+        }
     """
     df_metadata = _read_sql(path_to_db, "SELECT * FROM metadata;")
     metadata = {}
@@ -214,6 +224,9 @@ def _get_printable_citation(metadata: Dict[str, Dict]) -> str:
                 "doi": "10.1234/5678"
             }
         })
+        "If you use this dataset in published work, please \
+         use the below citation:\n\nThis is a citation\nLink\
+         to paper: https://example.com\nDOI: 10.1234/5678"
     """
     if "CITATION" not in metadata.keys():
         return "No citation provided in metadata table."
@@ -266,10 +279,18 @@ class Dataset:
         self.print_citation()
     
     def set_dataframe_library(self, library: Literal["pd", "pl"]):
-        """This function sets the dataframe library to use when returning data.
+        """This function sets the dataframe library to 
+        use when returning data.
 
         Args:
             library (Literal['pd', 'pl']): The dataframe library to use.
+        
+        Raises:
+            ValueError: If the library is not 'pd' or 'pl'.
+
+        Usage example:
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.set_dataframe_library("pl")
         """
         if library in ["pd", "pl"]:
             self.dataframe_library = library
@@ -287,6 +308,10 @@ class Dataset:
 
         Returns:
             Union[pd.DataFrame, pl.DataFrame]: The table.
+
+        Usage example:
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> df_table = dataset["table/dataset_1"]
         """
         table_name = key.replace("table/", "")
         if table_name in self.tables:
@@ -307,16 +332,27 @@ class Dataset:
     def _ipython_key_completions_(self):
         return ["table/" + i for i in self.tables]
     
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Show the dataset and its tables.
+
+        Returns:
+            str: The dataset and its tables in a string.
+        """
         table_string = "[\n"
         for table in self.tables:
             table_string += f"\t'table/{table}',\n "
         table_string += "]"
         return f"Dataset({self.path}),\n\n Tables: \n {table_string}"
 
-# Untested
 class BladesightDatasetDirectory:
-    # Untested
+    """This object is used to access datasets from the 
+    Bladesight Data bucket. It also lists the local datasets.
+
+    Usage example:
+        >>> Datasets = BladesightDatasetDirectory()
+        >>> dataset = Datasets["data/intro_to_btt/intro_to_btt_ch02"]
+        >>> df_table = dataset["table/dataset_1"]
+    """
     def __init__(self):
         self.path = get_path_to_local_bladesight()
         self.local_datasets = [
@@ -334,12 +370,21 @@ class BladesightDatasetDirectory:
 
         Returns:
             bool: True if the key is in the correct format, False otherwise.
+
+        Usage example:
+            >>> BladesightDatasetDirectory._getitem_key_correct_format(
+            ... "data/intro_to_btt/intro_to_btt_ch02"
+            ... )
+            True
+            >>> BladesightDatasetDirectory._getitem_key_correct_format(
+            ... "intro_to_btt/intro_to_btt_ch02"
+            ... )
+            False
         """
         if key.startswith("data/"):
             return True
         return False
     
-    # Untested
     def __getitem__(self, key: str) -> Dataset:
         """Get the dataset specified by a key. If the dataset is not found, it
         will be downloaded from the Bladesight Data bucket.
@@ -352,6 +397,10 @@ class BladesightDatasetDirectory:
 
         Returns:
             Dataset: The dataset.
+
+        Usage example:
+            >>> Datasets = BladesightDatasetDirectory()
+            >>> dataset = Datasets["data/intro_to_btt/intro_to_btt_ch02"]
         """
         if self._getitem_key_correct_format(key) is False:
             raise KeyError(
@@ -393,19 +442,26 @@ class BladesightDatasetDirectory:
         Returns:
             str: The new path.
 
-        Example usage:
-            >>> replace_path_prefix("bladesight-data/intro_to_btt/intro_to_btt_ch02", "data")
+        Usage example:
+            >>> replace_path_prefix(
+            ... "bladesight-data/intro_to_btt/intro_to_btt_ch02", 
+            ... "data"
+            ... )
             "data/intro_to_btt/intro_to_btt_ch02"
         """
         new_path = [replace_prefix] + dataset_full_path.split("/")[1:]
         return "/".join(new_path)
     
     def _ipython_key_completions_(self):
-        """ We replace whatever prefix is in the dataset with "data" """
+        """ 
+        We replace whatever prefix is in the 
+        dataset with "data" 
+        """
         return [self.replace_path_prefix(i) for i in self.online_datasets]
     
     def _refresh_available_datasets(self):
-        """This function refreshes the local and online datasets.
+        """
+        This function refreshes the local and online datasets.
         If the online datasets cannot be read, it will only 
         list the local datasets.
         """
