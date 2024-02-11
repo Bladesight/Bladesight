@@ -69,6 +69,26 @@ def test_threshold_crossing_interp_falling(arr_simple_ramp_down):
     assert len(arr_toa) == 1
     assert np.allclose(arr_toa[0], 3.9)
 
+def test_threshold_crossing_interp_simple_first_sample_falling(arr_simple_ramp_down):
+    arr_t, arr_s = arr_simple_ramp_down
+    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 0, trigger_on_rising_edge=False)
+    assert len(arr_toa) == 1
+    assert np.allclose(arr_toa[0], 9.0)
+    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 0.1, trigger_on_rising_edge=False)
+    assert len(arr_toa) == 1
+    assert np.allclose(arr_toa[0], 8.9)
+    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 9, trigger_on_rising_edge=False)
+    assert len(arr_toa) == 0
+    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 9.1, trigger_on_rising_edge=False)
+    assert len(arr_toa) == 0
+    # Test that triggering on the rising edge does not work
+    arr_toa = triggering_criteria.threshold_crossing_interp(
+        arr_t, 
+        arr_s, 
+        5, 
+        trigger_on_rising_edge=True
+    )
+    assert len(arr_toa) == 0
 
 
 # Test threshold_crossing_interp todo:
