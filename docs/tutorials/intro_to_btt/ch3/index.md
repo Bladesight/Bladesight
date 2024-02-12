@@ -12,47 +12,97 @@ hide:
   - tags
 description: This chapter explains how to convert the Time of Arrival (ToA) values into Angle of Arrival (AoA) values.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: main_intro_to_btt_ch3.html
 card_title: Intro to BTT Ch3 - Angle of Arrival
 card_url: "ch3/"
 ---
-# Angle of Arrival (AoA)
-We have said that tip displacements must be *inferred* from *time*. We have already learned how to measure *time* in the previous chapter. We achieved this by extracting the ToAs from the proximity probe signals. Next, we need to convert these ToA values into *angular positions*. Each ToA has a corresponding Angle of Arrival (AoA). The AoA is the exact circumferential position of the shaft at the ToA.
+??? abstract "You are here"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch3.svg){ width="500" }
+	</figure>
 
-If the blades are not vibrating, we expect the AoAs to be constant for each blade at each probe. It is when the AoAs are not constant that we infer the presence of some unknown physical phenomena, waiting to be discovered.
+<style>
+:root {
+  --md-tooltip-width: 600px;
+}
+</style>
+
+# Angle of Arrival (AoA)
+We are 30% through the tutorial. At this stage, we've learned how to process the raw analogue waveforms into a vector of *Time of Arrivals* (ToAs). We've said that, at the end of this tutorial, we will be able to infer vibration characteristics of each blade's *tip deflections*. This presents an interesting challenge.
+
+Tip deflections are entities of *distance*.
+
+ToAs represent *time*.
+
+The two quantities are in different domains.
+
+We therefore need to convert from *time* to *distance*. How on earth will we do this? You may as well open a file full of accelerometer measurements and attempt to infer the temperature of the instrumented structure.
+
+<figure markdown>
+  ![Different domains](time_to_distance.jpg){ width="700"}
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: We need to convert our ToAs from seconds into some unit of distance. </figcaption>
+</figure>
+
+Fortunately, a fundamental mathematical property of bodies that rotate about an axis is known to us. A body that rotates an entire circle has traveled 360 degrees, or $2\pi$ radians. 
+
+Radians may not yet be in units of mm or meters. It does, however, transport us into the distance domain.
+
+To perform this conversion, we use a *shaft encoder*.
 
 !!! question "Outcomes"
 
-	:material-checkbox-blank-outline: Understand that we use a shaft encoder to calculate the shaft speed, $\Omega$, and the start and end of each revolution. 
+	:material-checkbox-blank-outline: Understand we use a shaft encoder to calculate the shaft speed, $\Omega$, and the start and end of each revolution. 
 
-    :material-checkbox-blank-outline: Understand that we need to find the shaft revolution in which each ToA occurs.
+    :material-checkbox-blank-outline: Understand we need to find the shaft revolution in which each ToA occurs.
 
-	:material-checkbox-blank-outline: Understand that each ToA is used to calculate the precise shaft circumferential displacement in said revolution, leading to the AoA.
+	:material-checkbox-blank-outline: Understand each ToA is used to calculate the precise shaft circumferential displacement in said revolution. This is the AoA of each ToA.
 	
-	:material-checkbox-blank-outline: Write a function that calculates a matrix of AoA values from the shaft encoder zero-crossing times and the ToA values.
+	:material-checkbox-blank-outline: Write a function that calculates a matrix of AoAs from the shaft encoder zero-crossing times and the ToAs.
 
 ## Shaft encoder
-Most BTT systems use a shaft encoder installed somewhere on the shaft. The shaft encoder produces a pulse train, similar to the proximity probes. Most shaft encoders produce one pulse per revolution, but some produce multiple pulses per revolution. These shaft encoders are referred to as OPR and MPR encoders respectively. This tutorial covers the OPR case.
+Most BTT systems rely on a shaft encoder installed on the rotor. A shaft encoder produces a pulse train, similar to the proximity probes discussed in the last chapter.
 
-We extract the ToAs from the OPR signal just like we extract the ToAs from the proximity probe signals. The OPR ToAs are normally referred to as *zero-crossing* times, creating the impression that they are registered when the signal crosses 0 V. Though this is often the case, the zero-crossing times can be extracted using any triggering criteria. Each zero-crossing time therefore corresponds to the start of a new shaft revolution.
+A typical shaft encoder is shown in [Figure 2](#figure_02) below. It consists of a rotating shaft with a key and a stationary sensor mounted next to the key.
 
-Once we have a vector of zero-crossing times. The shaft speed in between zero-crossing times can be calculated using [Equation 1](#equation_01) below.
+<figure markdown>
+  ![Shaft encoder illustration](ch3_shaft_encoder_illustration.svg){ width="750"}
+    <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: A shaft encoder consists of a rotating shaft with a key and a stationary sensor mounted next to the key. The sensor "picks up" the presence of the key as it rotates by. A voltage pulse train is produced that is processed to find the zero-crossing times. </figcaption>
+</figure>
 
-$$
-\Omega_n = \frac{2 \pi}{t_{n} - t_{n-1}}
-$$
+The sensor in this case produces One Pulse per Revolution (OPR). Some shaft encoders produce Multiple Pulses per Revolution (MPR). This tutorial considers the OPR case. OPR encoders are more prevalent than their MPR counterparts.
+
+We extract the ToAs from the OPR signal with a trigger criteria, just like we used for the blade ToAs in the previous chapter. The OPR timestamps are often referred to as *zero-crossing* times. This terminology creates the impression they are registered only when the signal crosses 0 V. Though this is often the case, these timestamps can be extracted using any trigger criteria. Each timestamp therefore corresponds to the start of a new shaft revolution.
+
+!!! note "Zero-crossing times"
+	
+	A zero-crossing time is the exact timestamp a revolution starts. The next timestamp is, by definition, the exact time the revolution ends and the next one starts.
+
+	Do not confuse zero-crossing times and ToAs:
+
+	1.	__Zero-crossing times__ refer to timestamps captured by the shaft encoder. They are the start of each revolution.
+
+	2.	__ToAs__ refer to the timestamps captured by the proximity probes in the casing. They are the times the blades passed the probes.
+
+After processing the shaft encoder's analogue waveform, we have a vector of zero-crossing times. The shaft speed between them can be calculated from [Equation 1](#equation_01) below.
+
+\begin{equation}
+\Omega_n = \frac{2 \pi}{zc_{n+1} - zc_{n}}
+\end{equation}
+
+<span id="equation_01"></span>
+
 ??? info "Symbols"
 	| Symbol | Description |
 	| :---: | :--- |
-	| $\Omega_n$ | Shaft speed during the $n$th revolution |
+	| $\Omega_n$ | Shaft speed in the $n$th revolution |
 	| $n$ | The revolution number |
-	| $t_{n}$ | The $n$th zero-crossing time |
+	| $zc_{n}$ | The $n$th zero-crossing time |
 
 <figure markdown>
   <figcaption><strong><a name='equation_01'>Equation 1</a></strong></figcaption>
 </figure>
 
-An example of the shaft speed derived from zero-crossing times is shown in [Figure 1](#figure_01) below.
+An example of the shaft speed calculated from [Equation 1](#equation_01) is presented in [Figure 3](#figure_03) below.
 <script src="shaft_run_up_and_down.js" > </script>
 <div>
 	<div>
@@ -80,57 +130,282 @@ An example of the shaft speed derived from zero-crossing times is shown in [Figu
 	<a onclick="window.fig_shaft_run_up_and_down_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: A shaft running up from 950 RPM to 1325 RPM and back again over a time of 41 seconds. </figcaption>
+  <figcaption><strong><a name='figure_03'>Figure 3</a></strong>: A shaft accelerating from 950 RPM to 1325 RPM and back again over a time of 41 seconds. </figcaption>
 </figure>
 
-The figure above shows the run-up and down of a shaft between 950 RPM and 1325 RPM over approximately 41 seconds.
+The figure above presents the run-up and run-down of a shaft between 950 RPM and 1325 RPM over approximately 41 seconds.
+
+??? info "Encoder-less techniques"
+
+	Some publications refer to *encoder-less* BTT systems. These are advanced techniques normally used when there's no encoder. The techniques are beyond the scope of this tutorial. 
+
+??? info "Which probes can you use for the shaft encoder?"
+	
+	You can use any probe capable of responding to the presence of a discontinuity on the shaft. I often use eddy current probes or optical pickups. 
+
+??? info "At which circumferential position should the probe be installed?"
+	
+	It makes no difference where the probe is installed. The only requirement is the probe must be able to detect the presence of the shaft's discontinuity.
 
 ## Angle of Arrival (AoA)
-The AoA of each proximity probe ToA is the shaft's circumferential position at the time of the ToA. It is calculated relative to the revolution in which it occurs. In other words, it is always a quantity between 0 and $2 \pi$ within each revolution. We can use [Equation 2](#equation_02) below to calculate the AoA.
+The shaft's circumferential position when the ToA is registered is referred to as the Angle of Arrival (AoA). It is calculated with respect to the revolution in which it occurs. In other words, it is always a quantity between 0 and $2 \pi$ within each revolution. 
 
-$$
-\theta_{n} (\textrm{ToA}) =  \Omega_n \times (\textrm{ToA} - t_{n})
-$$
+We use [Equation 2](#equation_02) below to calculate the AoA.
+
+\begin{equation}
+\textrm{AoA} (\textrm{ToA}) = \Omega_n \times (\textrm{ToA} - zc_{n})
+\end{equation}
+
+<span id="equation_02"></span>
+
 ??? info "Symbols"
 	| Symbol | Description |
 	| :---: | :--- |
-	| $\theta_{n} (\textrm{ToA})$ | The AoA of the ToA within the $n$th revolution |
-	| $n$ | The revolution number |
-	| $\textrm{ToA}$ | The ToA of a blade passing underneath a probe |
-	| $\Omega_n$ | The shaft speed during the $n$th revolution |
-<figure markdown>
-  <figcaption><strong><a name='equation_02'>Equation 2</a></strong></figcaption>
-</figure>
+	| $\textrm{AoA} (\textrm{ToA})$ | The AoA corresponding to the ToA |
+	| $n$ | The revolution number in which the ToA occurs |
+	| $\textrm{ToA}$ | The ToA. It must occur within revolution $n$  |
+	| $\Omega_n$ | The shaft speed in the $n$th revolution |
+	| $zc_{n}$ | The zero-crossing time at the start of the $n$th revolution |
 
-The task of converting the ToAs into AoAs boils down to:
+Our algorithm must perform two cardinal tasks to calculate AoAs from ToAs:
 
-1. Associating a revolution number to each ToA
-2. Calculating the AoA of each ToA within its corresponding revolution
+1. Determine the revolution number in which each ToA occurs.
 
-This two-step process can be performed using a single function. We're going to write a function that takes in a vector of ToAs and a vector of zero-crossing times and returns a matrix of values relevant to the AoAs. We will, once again, be using Numba to speed things up.
+2. Calculate the AoA of each ToA within its revolution.
+
+This two-step process can be performed with a single function. In this chapter, we write a function receiving a vector of ToAs and a vector of zero-crossing times as inputs. It returns a matrix of values that includes the AoAs and identified revolution numbers. We will, once again, use Numba to speed things up. Learning how to leverage Numba gives you a skill with applications in most code-centric industries.
 
 ## Following along
 The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_03_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.
 
+You can open a Google Colab session of the worksheet here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_03_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
 
-You can open a Google Colab session of the worksheet by clicking here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_03_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
-
-You need to use one of the following Python versions to run the worksheet:
-<img src="https://img.shields.io/badge/python-3.6-blue.svg">
-<img src="https://img.shields.io/badge/python-3.7-blue.svg">
-<img src="https://img.shields.io/badge/python-3.8-blue.svg">
+You need to use one of these Python versions to run the worksheet:
 <img src="https://img.shields.io/badge/python-3.9-blue.svg">
 <img src="https://img.shields.io/badge/python-3.10-blue.svg">
 <img src="https://img.shields.io/badge/python-3.11-blue.svg">
+.
 
 ## Algorithm
 
+To perform this conversion from time to angle, our algorithm calculates several quantities for each ToA:
+
+1.  The revolution number, $n$, in which the ToA occurs.
+
+2.  The zero-crossing times at the start and end of the ToA's revolution, referred to as $zc_n$ and $zc_{n+1}$ respectively.
+
+3.  The angular velocity of the shaft in the revolution, $\Omega_n$.
+
+4.  The shaft's angular position when the ToA was triggered. This is referred to as the AoA of the ToA. Each ToA therefore has one AoA.
+
+Let's consider a simple example. We have measured 6 ToAs and 3 zero-crossing times:
+
+``` python
+ToAs = [0.3,0.5,0.7,1.3,1.5,1.7]
+zc_times = [0.0, 1.0, 2.0]
+```
+
+We place the ToAs and the zero-crossing times on a horizontal axis. This makes it simpler to visualize.
+
+The clickable tabs below present the calculations for each ToA.
+
+=== "ToA no 1"
+
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                              |
+                              | 
+                              ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 0
+    zc_start           = 0.0
+    zc_end             = 1.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.3 - 0.0) = 0.6 π
+    ```
+
+    The allocated values after the first ToA is shown below 👇.
+
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+
+=== "ToA no 2"
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                                      |
+                                      | 
+                                      ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 0
+    zc_start           = 0.0
+    zc_end             = 1.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.5 - 0.0) = 1.0 π
+    ```
+
+    The allocated values after the second ToA is shown below 👇.
+    
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.5 | 1.0 π |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+
+=== "ToA no 3"
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                                              |
+                                              | 
+                                              ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 0
+    zc_start           = 0.0
+    zc_end             = 1.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.7 - 0.0) = 1.4 π
+    ```
+
+    The allocated values after the third ToA is shown below 👇.
+    
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.5 | 1.0 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.7 | 1.4 π |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+
+=== "ToA no 4"
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                                                             |
+                                                             | 
+                                                             ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 1
+    zc_start           = 1.0
+    zc_end             = 2.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.3 - 1.0) = 0.6 π
+    ```
+    
+    The allocated values after the fourth ToA is shown below 👇.
+
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.5 | 1.0 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.7 | 1.4 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.3 | 0.6 π |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+
+=== "ToA no 5"
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                                                                     |
+                                                                     | 
+                                                                     ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 1
+    zc_start           = 1.0
+    zc_end             = 2.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.5 - 1.0) = 1.0 π
+    ```
+    
+    The allocated values after the fifth ToA is shown below 👇.
+
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.5 | 1.0 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.7 | 1.4 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.3 | 0.6 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.5 | 1.0 π |
+    | ? |  ?           |  ?         |  ?    |  ?  |  ?    |
+
+=== "ToA no 6"
+
+	``` console
+	ToAs           = [       0.3     0.5     0.7            1.3     1.5     1.7         ]
+                                                                             |
+                                                                             | 
+                                                                             ↓ 
+                     __|_______________________________|______________________________|__
+	zc_times       = [0.0                             1.0                            2.0]
+    revolution_no  = [0                               1                              2  ]
+    Calculated values:
+    
+    current_revolution = 1
+    zc_start           = 1.0
+    zc_end             = 2.0
+    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
+    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.7 - 1.0) = 1.4 π
+    ```
+    
+    The allocated values after the sixth ToA is shown below 👇.
+
+    | n | n_start_time | n_end_time | Omega | ToA | AoA   |
+    |---|--------------|------------|-------|-----|-----  |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.3 | 0.6 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.5 | 1.0 π |
+    | 0 | 0.0          | 1.0        | 2.0π  | 0.7 | 1.4 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.3 | 0.6 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.5 | 1.0 π |
+    | 1 | 1.0          | 2.0        | 2.0π  | 1.7 | 1.4 π |
+
+Each calculation is performed sequentially. The results of each calculation are appended to the output matrix.
+
+!!! tip "The blade count is unknown"
+    
+    You'll notice I have not stated how many blades are on the rotor for this simple example. This was by choice. At this stage of analysis, we do not need to incorporate the number of blades. We simply need to determine the revolution in which a ToA occurs and the corresponding AoA.
+
+    You may be able to guess there are 3 blades. You should, however, not adapt your algorithm to *expect* a specific number of them. The reason for this is there can be missing or double ToAs and zero-crossing times. If you expect a certain number of time stamps but the measurement does not contain exactly what you require, your analysis will be corrupted.
+
+	The algorithm presented in this chapter may be more complex than slicing the ToAs equally into bins, but it will save you from a lot of headaches in the future.
+
+Based on the above example, we can write the code to calculate the AoA of each ToA. I have included comments that can be opened by clicking on the :material-plus-circle: symbols. 
+
+If these symbols are not visible, refresh the page. If they're still not visible, download Google Chrome and try again 😁.
+
+
 ``` py linenums="1"
-from numba import njit
+from numba import njit #(1)!
 import numpy as np
 
 @njit
-def calculate_aoa(
+def calculate_aoa(#(2)!
     arr_opr_zero_crossing : np.ndarray, 
     arr_probe_toas : np.ndarray
 ):
@@ -150,610 +425,188 @@ def calculate_aoa(
             matrix corresponds to a ToA value. The columns 
             are:
             0: The revolution number
-            1: The zero crossing time at the start of the revolution
-            2: The zero crossing time at the end of the revolution
+            1: The zero-crossing time at the start of the revolution
+            2: The zero-crossing time at the end of the revolution
             3: The angular velocity of the revolution
 			4: The ToA
             5: The AoA of the ToA value
     """
     num_toas = len(arr_probe_toas)
     AoA_matrix = np.zeros( (num_toas, 6))
-
+	#(3)!
     AoA_matrix[:, 0] = -1
 
-    current_zero_crossing_start = arr_opr_zero_crossing[0]
-    current_zero_crossing_end = arr_opr_zero_crossing[1]
+    current_revolution_start_time = arr_opr_zero_crossing[0]
+    current_revolution_end_time = arr_opr_zero_crossing[1]
     current_n = 0
-
+	#(4)!
     for i, toa in enumerate(arr_probe_toas):
-
-        while toa > current_zero_crossing_end:
+		#(5)!
+        while toa > current_revolution_end_time:
             current_n += 1
             if current_n >= (len(arr_opr_zero_crossing) - 1):
                 break
-            current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-            current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
+            current_revolution_start_time = arr_opr_zero_crossing[current_n]
+            current_revolution_end_time = arr_opr_zero_crossing[current_n + 1]
 
         if current_n >= (len(arr_opr_zero_crossing) - 1):
             break
-
-        if toa > current_zero_crossing_start:
+		#(6)!
+        if toa > current_revolution_start_time:
             AoA_matrix[i, 0] = current_n
-            AoA_matrix[i, 1] = current_zero_crossing_start
-            AoA_matrix[i, 2] = current_zero_crossing_end
+            AoA_matrix[i, 1] = current_revolution_start_time
+            AoA_matrix[i, 2] = current_revolution_end_time
             Omega = 2 * np.pi / (
-                current_zero_crossing_end 
-                - current_zero_crossing_start
+                current_revolution_end_time 
+                - current_revolution_start_time
             )
             AoA_matrix[i, 3] = Omega
             AoA_matrix[i, 4] = toa
             AoA_matrix[i, 5] = Omega * (
                 toa 
-                - current_zero_crossing_start
+                - current_revolution_start_time
             )
-
+	#(7)!
     return AoA_matrix
 ```
 
-This function appears intimidating, but we're going to go through it slowly, step by step.
-
-### Imports
-
-``` py linenums="1"
-from numba import njit
-import numpy as np
-# Some code omitted below 👇
-```
-
-??? note "Full code"
-	``` py hl_lines="1 2" linenums="1" 
+1.	<h3> Imports </h3>
+	
+	``` py linenums="1"
 	from numba import njit
 	import numpy as np
+	```
 
+	There are two imports:
+
+	1.  `njit` from the `numba` library. `njit` instructs `numba` to compile the function to machine code.
+	
+	2.  `numpy`. We rename as `np`. This means we can access the Numpy library through `np`. This is a common convention. Numpy is a numerical computation library. 
+
+2.	<h3> Function definition </h3>
+
+	``` py linenums="4"
 	@njit
 	def calculate_aoa(
 		arr_opr_zero_crossing : np.ndarray, 
 		arr_probe_toas : np.ndarray
 	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
-	```
-We have three imports:
-
-1. `njit` from the `numba` library. `njit` is a *decorator* that tells the `numba` compiler to compile the function to machine code. This step speeds `calculate_aoa` up to near C speed. 
-2. `numpy`, which we rename using an *alias* to `np`. This means we can access the Numpy library through writing `np`. This is a common convention. Numpy is a numerical computation library. 
-
-### Function definition
-
-``` py linenums="3"
-# Some code omitted above 👆
-@njit
-def calculate_aoa(
-	arr_opr_zero_crossing : np.ndarray, 
-	arr_probe_toas : np.ndarray
-):
-# Some code omitted below 👇
-```
-
-??? note "Full code"
-	``` py hl_lines="4 5 6 7 8" linenums="1" 
-	from numba import njit
-	import numpy as np
-
-	@njit
-	def calculate_aoa(
-		arr_opr_zero_crossing : np.ndarray, 
-		arr_probe_toas : np.ndarray
-	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
-	```
-In Python, you define a function using the `def` keyword. We define a function called `calculate_aoa` on Line 6. This function has two arguments:
-
-1. `arr_opr_zero_crossing`, which is the array containing the OPR zero-crossing times.
-2. `arr_probe_toas`, which is the array containing the ToA values from a single probe.
-
-In Line 4 we wrap our function with the `njit` *decorator*. A *decorator* in Python allows you to alter a function before it is run. In this case, we are telling the `numba` compiler to compile the function to machine code, significantly speeding up the function.
-
-### Initialising the AoA matrix and other variables
-
-``` py linenums="30"
-# Some code omitted above 👆
-num_toas = len(arr_probe_toas)
-AoA_matrix = np.zeros( (num_toas, 6) )
-
-AoA_matrix[:, 0] = -1
-
-current_zero_crossing_start = arr_opr_zero_crossing[0]
-current_zero_crossing_end = arr_opr_zero_crossing[1]
-current_n = 0
-# Some code omitted below 👇
-```
-??? note "Full code"
-	``` py hl_lines="31 32 34 36 37 38" linenums="1"
-	from numba import njit
-	import numpy as np
-
-	@njit
-	def calculate_aoa(
-		arr_opr_zero_crossing : np.ndarray, 
-		arr_probe_toas : np.ndarray
-	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
 	```
 
-In this piece of code we initialize constants we are going to use and variables we are going to populate: 
+	In Python, you define a function with the `def` keyword. We define a function called `calculate_aoa` in Line 5. This function has two arguments (an argument is a fancy word for an input):
 
-* In Line 31, we get the number of ToA values in the `arr_probe_toas` array. We are going use this variable to instantiate our output matrix. 
-* In Line 32 we instantiate our output matrix, i.e. the variable that will contain the algorithm's results. This matrix is called `AoA_matrix`. The AoA matrix is a (`num_toas` $\times$ 6) matrix. Each column will hold the following kinds of values:
+	1.	`arr_opr_zero_crossing` : the array of OPR zero-crossing times.
+	
+	2.	`arr_probe_toas`: the array of ToAs from a single probe.
 
-	* __column 1__: The revolution number within which each ToA falls
-	* __column 2__: The zero crossing time at the start of the revolution
-	* __column 3__: The zero crossing time at the end of the revolution
-	* __column 4__: The angular velocity of the shaft within the revolution
-	* __column 5__: The ToA value
-	* __column 6__: The AoA of the ToA value
+3.	<h3> Initialize the AoA matrix and other variables </h3> 
+	``` py linenums="31"
+	num_toas = len(arr_probe_toas)
+	AoA_matrix = np.zeros( (num_toas, 6) )
 
-* In Line 34 we initialize the revolution number of all the rows in `AoA_matrix` to -1. We are going to use the -1 revolution number to flag the ToAs that could not be converted to AoAs.
-* In Line 36-38 we introduce the concept of the *current revolution*. Since this is a sequential function we will handle each shaft revolution in turn. `current_n` keeps track of the revolution the loop is in, `current_zero_crossing_start` holds the start of the current revolution, and  `current_zero_crossing_end` holds the end of the current revolution. These "current" values will be updated as we iterate through the ToA values.
+	AoA_matrix[:, 0] = -1
 
-
-### Master loop
-``` python linenums="39"
-# Some code omitted above 👆
-for i, toa in enumerate(arr_probe_toas):
-# Some code omitted below 👇
-```
-??? note "Full code"
-	``` py hl_lines="40" linenums="1"
-	from numba import njit
-	import numpy as np
-
-	@njit
-	def calculate_aoa(
-		arr_opr_zero_crossing : np.ndarray, 
-		arr_probe_toas : np.ndarray
-	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
+	current_revolution_start_time = arr_opr_zero_crossing[0]
+	current_revolution_end_time = arr_opr_zero_crossing[1]
+	current_n = 0
 	```
 
+	Here we initialize constants and variables required in the rest of the function: 
 
-This `for` loop is the master loop of the algorithm. It iterates through each ToA value in the `arr_probe_toas` array. The counter, `i`, starts at `0`- corresponding to the first ToA value - and increments after each iteration. The variable `toa` is the current ToA value.
+	*	In Line 31, we calculate the number of ToAs in `arr_probe_toas`. We need this length to initialize the output matrix. 
+	
+	*	In Line 32 we instantiate the output matrix. The output matrix will contain the algorithm's results. This matrix is called `AoA_matrix`. The AoA matrix is a (`num_toas` $\times$ 6) matrix. Its columns represent:
 
-### Search for the correct shaft revolution
-``` python linenums="41"
-# Some code omitted above 👆
-while toa > current_zero_crossing_end:
-	current_n += 1
-	if current_n >= (len(arr_opr_zero_crossing) - 1):
-		break
-	current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-	current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-if current_n >= (len(arr_opr_zero_crossing) - 1):
-	break
-# Some code omitted below 👇
-```
-??? note "Full code"
-	``` py hl_lines="42 43 44 45 46 47 49 50" linenums="1"
-	from numba import njit
-	import numpy as np
-
-	@njit
-	def calculate_aoa(
-		arr_opr_zero_crossing : np.ndarray, 
-		arr_probe_toas : np.ndarray
-	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
-	```
+		* __column 1__: The revolution number within which each ToA falls
+		* __column 2__: The start time of the revolution
+		* __column 3__: The end time of the revolution
+		* __column 4__: The angular velocity of the shaft within the revolution
+		* __column 5__: The ToA
+		* __column 6__: The AoA of the ToA
 
 	
-This code section has the responsibility of finding the shaft revolution within which the current ToA occurs. This is achieved by repeatedly checking, in Line 42, if the current ToA is larger than the current shaft revolution's end time. If it is, then we know that the shaft has completed a revolution since the previous ToA. We then increment the current shaft revolution (` current_n`) variable. We also update the current shaft revolution's start and end times in lines 46 and 47.
+	*	In Line 34 we set the entire revolution number column to -1. We use -1 to flag the ToAs that could not be converted to AoAs.
+	
+	*	In Line 36-38 we introduce the concept of the *current revolution*. Since this is a sequential function, we process each shaft revolution in turn. `current_n` is the revolution number the ToAs are currently in, `current_revolution_start_time` and `current_revolution_end_time`  is the start and end zero-crossing times of the current revolution. 
+	
+	These "current" values are updated as we iterate through the ToAs.
 
-We add checks in lines 44 and 49 that break out of the main loop if there are no more zero-crossing times to compare the ToAs to. If this happens, our algorithm has finished its job.
-
-### Calculate the AoA matrix values for each ToA
-``` py linenums="51"
-# Some code omitted above 👆
-if toa > current_zero_crossing_start:
-	AoA_matrix[i, 0] = current_n
-	AoA_matrix[i, 1] = current_zero_crossing_start
-	AoA_matrix[i, 2] = current_zero_crossing_end
-	Omega = 2 * np.pi / (
-		current_zero_crossing_end 
-		- current_zero_crossing_start
-	)
-	AoA_matrix[i, 3] = Omega
-	AoA_matrix[i, 4] = toa
-	AoA_matrix[i, 5] = Omega * (
-		toa 
-		- current_zero_crossing_start
-	)
-
-return AoA_matrix
-```
-
-??? note "Full code"
-	``` py hl_lines="52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68" linenums="1"
-	from numba import njit
-	import numpy as np
-
-	@njit
-	def calculate_aoa(
-		arr_opr_zero_crossing : np.ndarray, 
-		arr_probe_toas : np.ndarray
-	):
-		"""
-		This function calculates the angle of arrival of 
-		each ToA value relative to the revolution in 
-		which it occurs.
-
-		Args:
-			arr_opr_zero_crossing (np.array): An array of 
-				OPR zero-crossing times. 
-			arr_probe_toas (np.array): An array of 
-				ToA values.
-
-		Returns:
-			np.array: A matrix of AoA values. Each row in the 
-				matrix corresponds to a ToA value. The columns 
-				are:
-				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
-				3: The angular velocity of the revolution
-				4: The ToA
-				5: The AoA of the ToA value
-		"""
-		num_toas = len(arr_probe_toas)
-		AoA_matrix = np.zeros( (num_toas, 6))
-
-		AoA_matrix[:, 0] = -1
-
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
-		current_n = 0
-
-		for i, toa in enumerate(arr_probe_toas):
-
-			while toa > current_zero_crossing_end:
-				current_n += 1
-				if current_n >= (len(arr_opr_zero_crossing) - 1):
-					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
-
-			if current_n >= (len(arr_opr_zero_crossing) - 1):
-				break
-
-			if toa > current_zero_crossing_start:
-				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
-				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
-				)
-				AoA_matrix[i, 3] = Omega
-				AoA_matrix[i, 4] = toa
-				AoA_matrix[i, 5] = Omega * (
-					toa 
-					- current_zero_crossing_start
-				)
-
-		return AoA_matrix
+4.	<h3> Master loop </h3>
+	
+	``` python linenums="40"
+	for i, toa in enumerate(arr_probe_toas):
 	```
 
-This section is responsible for calculating the AoA values. In Line 52 we test whether the current ToA value is larger than the current revolution's start time. If we pass this test, we know that this ToA  falls within the `current_n` revolution. We then assign the current revolution, starting zero-crossing time, and ending zero-crossing time to the AoA matrix in lines 53 - 55.
+	This `for` loop iterates through each ToA in `arr_probe_toas`. The counter, `i`, starts at `0`- corresponding to the first ToA value - and increments after each iteration. The variable `toa` is the current ToA value being considered.
 
-In lines 56 - 65 we calculate the shaft speed and the corresponding AoA value for this ToA as defined in [Equation 1](#equation_01) and [Equation 2](#equation_02) respectively.
+5.	<h3> Search for the correct shaft revolution </h3>
+	
+	``` python linenums="42"
+	while toa > current_revolution_end_time:
+		current_n += 1
+		if current_n >= (len(arr_opr_zero_crossing) - 1):
+			break
+		current_revolution_start_time = arr_opr_zero_crossing[current_n]
+		current_revolution_end_time = arr_opr_zero_crossing[current_n + 1]
 
-If we've reached Line 67, it means we have either iterated over all ToAs, or we don't have OPR zero-crossing times left. We therefore return the AoA matrix.
+	if current_n >= (len(arr_opr_zero_crossing) - 1):
+		break
+	```
+	
+	Here we find the shaft revolution within which the current ToA occurs. It repeatedly checks, in Line 42, if the current ToA is larger than the current revolution's end time. If it is, the shaft has completed a revolution since the previous ToA. We therefore increment the current revolution (`current_n`) variable. We also update the current revolution's start and end times in lines 46 and 47.
+
+	The statements in Lines 44 and 49 checks whether we have iterated over all the zero-crossing times. If this happens, our algorithm cannot perform any more comparisons. We therefore break out of the loop.
+
+6.	<h3> Calculate the AoA matrix values for each ToA </h3>
+	
+	``` py linenums="52"
+	if toa > current_revolution_start_time:
+		AoA_matrix[i, 0] = current_n
+		AoA_matrix[i, 1] = current_revolution_start_time
+		AoA_matrix[i, 2] = current_revolution_end_time
+		Omega = 2 * np.pi / (
+			current_revolution_end_time 
+			- current_revolution_start_time
+		)
+		AoA_matrix[i, 3] = Omega
+		AoA_matrix[i, 4] = toa
+		AoA_matrix[i, 5] = Omega * (
+			toa 
+			- current_revolution_start_time
+		)
+
+	return AoA_matrix
+	```
+	
+	This is where we calculate the AoAs. In Line 52 we check whether the current ToA is larger than the current revolution's start time. If this test is passed, it means this ToA falls within the `current_n`th revolution. We assign the current revolution's start and end time to the AoA matrix in lines 53 - 55.
+
+	In lines 56 - 65 the shaft speed and AoA as defined in [Equation 1](#equation_01) and [Equation 2](#equation_02) are calculated.
+
+7.	When we reach Line 67, it means we have either iterated over all ToAs, or we have reached the end of the encoder's timestamps. 
+	
+	The output matrix is returned.
+
 
 ## Example usage
 
-We'll use some real experimental data to test this function. We're going to use a shaft run-up and down from Du Toit et al. [@du2019stochastic]. In the experiment, a five blade rotor was run up and down, as already indicated in [Figure 1](#figure_01). Four eddy current probes were used to measure the ToAs. 
+We'll use some real experimental data to test this function. We use a shaft run-up and run-down from Du Toit et al. [@du2019stochastic]. In the experiment, a five blade rotor was run-up and run-down, as already indicated in [Figure 3](#figure_03). Four eddy current probes were used to measure the ToAs. 
 
-ToA extraction has already been done. We're only going to use a single probe's data for this example.  
+The ToAs have already been extracted in this dataset. 
+
+We use only one probe's data for this example:
 
 ``` py linenums="1"
 dataset = Datasets["data/intro_to_btt/intro_to_btt_ch03"] #(1)!
-df_opr_zero_crossings = \ #(2)!
-	dataset['table/du_toit_2017_test_1_opr_zero_crossings'] #(3)!
-df_probe_toas = dataset['table/du_toit_2017_test_1_prox_1_toas'] #(4)!
-AoA_matrix = calculate_aoa(#(5)!
+df_opr_zero_crossings = (
+	dataset['table/du_toit_2017_test_1_opr_zero_crossings'] #(2)!
+)
+
+df_probe_toas = dataset['table/du_toit_2017_test_1_prox_1_toas'] #(3)!
+AoA_matrix = calculate_aoa(#(4)!
     df_opr_zero_crossings["time"].to_numpy(),
     df_probe_toas["time"].to_numpy()
 )
-df_AoA = pd.DataFrame(#(6)!
+df_AoA = pd.DataFrame(#(5)!
     AoA_matrix, 
     columns=[
         "n",
@@ -766,36 +619,35 @@ df_AoA = pd.DataFrame(#(6)!
 )
 ```
 
-1.  This downloads the data from Bladesight's data repository. The dataset comprises 6 tests. Each test has one set of OPR zero-crossing times, four sets of ToAs, and one set of MPR zero-crossing times. We do not use the MPR zero-crossing times in this tutorial.
-2.  The `\` token allows us to break a line. It is simply to improve readability.
-3.  This line loads the OPR zero-crossing times from Test 1 as a Pandas DataFrame.
-4.  This line loads the first proximity probe's ToAs from Test 1 as a Pandas DataFrame.
-5.  In this line, we run the `calculate_aoa` function using the OPR zero-crossing times and the ToAs as inputs. Note how we convert the Pandas columns to Numpy arrays using `.to_numpy()`
-6.  The algorithm returns a numpy matrix, which does not have column names. Here we convert the matrix into a DataFrame. DataFrames are much simpler to work with.
+1.  Download the data from Bladesight's repository. The dataset comprises 6 measurements. Each test has one set of OPR zero-crossing times and four sets of ToAs. There is also a set of MPR values not used in this chapter.
+2.  Load the OPR zero-crossing times from Test 1 as a Pandas DataFrame.
+3.  Load the first proximity probe's ToAs from Test 1 as a Pandas DataFrame.
+4.  Call the `calculate_aoa` function with the OPR zero-crossing times and the ToAs as inputs. Note we convert the Pandas columns to Numpy arrays with `.to_numpy()`
+5.  The algorithm returns a matrix. Numpy matrices and arrays do not have column names. Here we convert the matrix into a DataFrame. DataFrames are much simpler to work with.
 
-We show the first 10 rows of the AoA DataFrame in [Table 1](#table_01) below.
+The first 10 rows of the AoA DataFrame are presented in [Table 1](#table_01) below.
 
 <figure markdown>
   <figcaption><strong><a name='table_01'>Table 1</a></strong>: The first 10 rows of the AoA DataFrame. </figcaption>
 </figure>
 {{ read_csv('docs/tutorials/intro_to_btt/ch3/AoA_top_10.csv') }}
 
-We note two things:
+We note two observations:
 
-*  The first two rows have `n` values of -1. This means the first two ToAs were recorded *before* the first zero-crossing time. We can therefore not calculate the AoA values for these ToAs. You'll find a couple of these values at the end of the DataFrame as well.
-*  We see that the `AoA` values seem to repeat themselves every 5 rows. This is because the shaft has 5 blades.
+*  The first two rows have `n` values of -1. This means the first two ToAs were recorded *before* the first zero-crossing time. We can therefore not calculate the AoAs for these ToAs. You'll find a couple of these values at the end of the DataFrame as well.
+*  The `AoA` values repeat themselves every 5 rows. This is because the rotor has 5 blades.
 
-We can simply drop the ToA values that could not be converted to AoAs. We do this by filtering the DataFrame to only include rows where `n` is not equal to -1.
+We drop the ToAs we could not convert to AoAs. These values are identified where `n` equals -1.
 
 ``` py linenums="1"
 df_AoA = df_AoA[df_AoA["n"] != -1]
 df_AoA.reset_index(inplace=True, drop=True) #(1)!
 ```
 
-1.	Because we dropped the first two rows of data, the DataFrame's index is going to start at 2. It's always best to reset the index after dropping rows, unless the index contains important information.
+1.	Because we dropped the first two rows of data, the DataFrame's index starts at 2. It's always best to reset the index after dropping rows, unless the index contains important information.
 
 
-In [Figure 2](#figure_02) below, we show a plot of the AoA values for the first blade over all revolutions. We also plot the shaft speed on a secondary y-axis.
+In [Figure 4](#figure_04) below, we present a plot of the AoAs for the first blade over all revolutions. We also plot the angular velocity on a secondary y-axis.
 
 <script src="blade_1_aoas.js" > </script>
 <div>
@@ -823,49 +675,62 @@ In [Figure 2](#figure_02) below, we show a plot of the AoA values for the first 
 	<a onclick="window.fig_blade_1_aoas_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_01'>Figure 2</a></strong>: The AoAs of the first blade arriving at the first proximity probe. </figcaption>
+  <figcaption><strong><a name='figure_04'>Figure 4</a></strong>: The AoAs of the first blade at the first proximity probe. </figcaption>
 </figure>
 
-In [Figure 2](#figure_02) above, we see that the AoA values are not constant. We now discuss three forms of noise found in the signal.
+In [Figure 4](#figure_04) above, the AoAs are not constant. Why not? In a sense, the entire discipline of BTT is about understanding what causes the AoAs to change.
+
+We briefly discuss six topics that may be responsible for the AoAs to change:
+
+## Discussion
 
 ### Sensor limited bandwidth noise
-Firstly, we see that the AoA values exhibit a drift that seems to be correlated to the shaft speed. In other words, as the shaft speeds up, the AoA values increase proportionally to the shaft speed. The moment the shaft starts to run down, the AoA values decrease proportionally to the shaft speed. 
+The drift in [Figure 4](#figure_04) appears to be correlated to the rotor's angular velocity. In other words, as the shaft speeds up, the AoAs increase proportionally to the rotational speed. The moment the rotor starts to run down, the AoAs decrease. 
 
-This is *not* related to blade vibration. This is related to the bandwidth of the sensor you are using. Any sensor has a limited bandwidth. As a blade's tip moves faster, its presence inside your sensor's field of view becomes shorter. This causes the input function experienced by the sensor to contain more energy at higher frequencies. 
+This is *not* related to blade vibration. This is related to the bandwidth of the sensor you are using. Any sensor has a limited frequency response. As the tips move faster, their presence inside your sensor's field of view become shorter. This causes the input function experienced by the sensor to contain more energy at higher frequencies.
 
-If your sensor's bandwidth is limited, the response cuts out these high frequency components, leading to lower amplitude pulses. A lower amplitude pulse will exhibit later ToA triggering, and hence a larger AoA value. 
+If your sensor's bandwidth is limited, it cuts out these high frequency components. This results in lower amplitude pulses. A lower amplitude pulse will manifest itself as delayed ToA triggering, and hence a larger AoA value.
 
-This is not a problem, however, because our resonance events occur at higher frequencies than this phenomenon. In later chapters, we will remove this form of noise using a simple detrending algorithm.
+This is not a problem, though, because our resonance events occur at higher frequencies than this phenomenon. In later chapters, we remove this noise with a detrending algorithm.
 
 ### Blade vibration
-There are four clear resonance events in this signal. They occur at 7.5, 17.83, 24.3, and 34.5 seconds respectively. We will delve into the theory of resonance in a later chapter. For now, we highlight that there are actually just two unique resonances. The two resonances occur at 1087 RPM and 1275 RPM on both the run-up and the run down.
+There are four clear resonance events in this signal. They occur at 7.5, 17.83, 24.3, and 34.5 seconds respectively. We delve into the theory of resonance in Chapter 7. For now, we highlight there are just *two unique* resonances. The two resonances occur at 1087 RPM and 1275 RPM on both the run-up and the run-down.
 
 ### High frequency noise
-We also observe high-frequency noise that seems random. This could be because of many things, such as electrical noise, shaft torsional vibration, casing vibration, or even higher frequency or random vibration of the blades. You may remove this noise, or construct inference algorithms that take it into account. 
+The signal also contains high-frequency random noise. It has many possible causes such as electrical noise, shaft torsional vibration, casing vibration, or higher frequency blade vibration. This noise may be filtered out. You can also construct your inference algorithms to handle them. 
+
+### Non-Constant shaft speed
+In [Equation 1](#equation_01) we assumed the rotor's speed was constant within a revolution. This assumption, though not strictly correct, simplifies our processing and often incurs acceptably small errors. If you're interested in the effect of non-constant shaft speed on the AoAs, you can read about it here [@diamond2019improved].
+
+### Untwist and centrifugal stiffening
+As the rotor speeds up, the blades are subjected to increased centrifugal force. Most blade designs react to the centrifugal force by twisting. The twisting of the blade causes the AoA to change, because the blade's tip is now in a different static position.
+
+You need to understand your blade's design to understand how it reacts to centrifugal forces.
+
+### Increased pressure on blades
+Increased rotor speed will cause increased fluid pressure on the blades. This will result in a static deflection of the blade. This deflection will cause the AoA to change. How much the AoA changes depends on the blade's stiffness and the fluid pressure.
 
 ## Conclusion
-In this chapter, we have converted the ToA values into AoA values. Using only this step, we have managed to reveal some resonance events to the naked eye.
-
-We are, however, only at the start of our journey. In the next chapter, we'll learn how to identify individual blades from this AoA DataFrame.
+In this chapter, we have converted ToAs to AoAs. We are now firmly positioned in the distance domain, where we can reason about deflection, not time. At this stage we have not used any information about the rotor's characteristics. In the next chapter, we start to make the analysis specific to our rotor. We use the blade count to allocate the AoAs to the correct blades. 
 
 !!! success "Outcomes"
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we use a shaft encoder to calculate the shaft speed, $\Omega$, and the start and end of each revolution. 
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand we use a shaft encoder to calculate the shaft speed, $\Omega$, and the start and end of each revolution. 
 
-    :material-checkbox-marked:{ .checkbox-success .heart } Understand that we need to find the shaft revolution in which each ToA occurs.
+    :material-checkbox-marked:{ .checkbox-success .heart } Understand we need to find the revolution in which each ToA occurs.
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that each ToA is used to calculate the precise shaft circumferential displacement in said revolution, leading to the AoA.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand each ToA is used to calculate the precise shaft circumferential displacement in said revolution. This is the AoA of each ToA.
 	
-	:material-checkbox-marked:{ .checkbox-success .heart } Write a function that calculates a matrix of AoA values from the shaft encoder zero-crossing times and the ToA values.
+	:material-checkbox-marked:{ .checkbox-success .heart } Write a function that calculates a matrix of AoAs from the shaft encoder zero-crossing times and the ToAs.
 
 {==
 
-Consider doing the coding exercises below 👇 to solidify your understanding of the concepts we've covered in this chapter. 
+I present coding exercises 👇 to solidify your the concepts covered in this chapter. 
 
 ==}
 
 ## Acknowledgements
-I thank XXX for reviewing this chapter.
+Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
 \bibliography
 
@@ -883,7 +748,7 @@ I thank XXX for reviewing this chapter.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-10-07
+            2024-02-13
         </p>
     </div>
 </div>
@@ -893,17 +758,17 @@ I thank XXX for reviewing this chapter.
 Here are some coding exercises to solidify the concepts we've covered in this chapter.
 
 ### Problem 1 :yawning_face:
-In this chapter, we've written the `calculate_aoa` function. This function receives and returns Numpy arrays, even though we work with Pandas DataFrames natively. We therefore needed to use the `.to_numpy()` method to convert the Pandas objects to numpy arrays. We also needed to cast the resulting matrix into a Pandas DataFrame, and drop the ToA values that could not be converted to AoA values. 
+In this chapter, we've written the `calculate_aoa` function. This function receives and returns Numpy arrays, though we work with Pandas DataFrames natively. We therefore needed to use the `.to_numpy()` method to convert the Pandas objects to numpy arrays. We also needed to cast the resulting matrix into a Pandas DataFrame, and drop the ToAs we could not convert to AoAs. 
 
 In future, we do not want to do this every time we call the function.
 
 {==
 
-:material-pencil-plus-outline: Write a new function, called `transform_ToAs_to_AoAs`, that receives Pandas DataFrames as inputs and returns a Pandas DataFrame as output. The function should call the `calculate_aoa` function to do the actual work.
+:material-pencil-plus-outline: Write a new function, called `transform_ToAs_to_AoAs`, accepting Pandas DataFrames as inputs and returning a Pandas DataFrame as output. The function should call the `calculate_aoa` function to do the actual work.
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
 	``` py linenums="1"
 	def transform_ToAs_to_AoAs(
 		df_opr_zero_crossings : pd.DataFrame,
@@ -945,7 +810,7 @@ In future, we do not want to do this every time we call the function.
 		return df_AoA
 	```
 
-	1.	We may want to pass in DataFrames with different columns names than the ones we used in the example. We therefore use the `.iloc` method to get the first column of each DataFrame, regardless of what it is called.
+	1.	We may want to pass in DataFrames with different column names than the ones we used in the example. We therefore use the `.iloc` method to get the first column of each DataFrame, regardless of what it is called.
 
 
 	Example usage:
@@ -961,17 +826,17 @@ In future, we do not want to do this every time we call the function.
 	```
 
 ### Problem 2 :neutral_face:
-Because our Python functions are being converted to C, it is tempting to treat our code inefficiencies with a wink and a wry smile, like one does with a child that does something naughty you are secretly proud of.
+Because our Python functions are converted to C, one is tempted to treat code inefficiencies with a wink and a wry smile, as one does with a child that does something naughty you are secretly proud of.
 
 We must, however, resist this temptation. We must always strive to write efficient code. 
 
 {==
 
-:material-pencil-plus-outline: We are doing unnecessary calculations in the `calculate_aoa` function. Can you spot where? Rewrite the function to remove this inefficiency.
+:material-pencil-plus-outline: There are unnecessary calculations in the `calculate_aoa` function. Can you spot where? Rewrite the function to remove this inefficiency.
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
 	``` py linenums="1" hl_lines="35 36 37 38 49 50 51 52"	
 	@njit
 	def calculate_aoa(
@@ -994,8 +859,8 @@ We must, however, resist this temptation. We must always strive to write efficie
 				matrix corresponds to a ToA value. The columns 
 				are:
 				0: The revolution number
-				1: The zero crossing time at the start of the revolution
-				2: The zero crossing time at the end of the revolution
+				1: The zero-crossing time at the start of the revolution
+				2: The zero-crossing time at the end of the revolution
 				3: The angular velocity of the revolution
 				4: The ToA
 				5: The AoA of the ToA value
@@ -1005,56 +870,56 @@ We must, however, resist this temptation. We must always strive to write efficie
 
 		AoA_matrix[:, 0] = -1
 
-		current_zero_crossing_start = arr_opr_zero_crossing[0]
-		current_zero_crossing_end = arr_opr_zero_crossing[1]
+		current_revolution_start_time = arr_opr_zero_crossing[0]
+		current_revolution_end_time = arr_opr_zero_crossing[1]
 		Omega = 2 * np.pi / (
-			current_zero_crossing_end 
-			- current_zero_crossing_start
+			current_revolution_end_time 
+			- current_revolution_start_time
 		)
 		current_n = 0
 
 		for i, toa in enumerate(arr_probe_toas):
 
-			while toa > current_zero_crossing_end:
+			while toa > current_revolution_end_time:
 				current_n += 1
 				if current_n >= (len(arr_opr_zero_crossing) - 1):
 					break
-				current_zero_crossing_start = arr_opr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_opr_zero_crossing[current_n + 1]
+				current_revolution_start_time = arr_opr_zero_crossing[current_n]
+				current_revolution_end_time = arr_opr_zero_crossing[current_n + 1]
 				Omega = 2 * np.pi / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
+					current_revolution_end_time 
+					- current_revolution_start_time
 				)
 			if current_n >= (len(arr_opr_zero_crossing) - 1):
 				break
-
-			if toa > current_zero_crossing_start:
+			#
+			if toa > current_revolution_start_time:
 				AoA_matrix[i, 0] = current_n
-				AoA_matrix[i, 1] = current_zero_crossing_start
-				AoA_matrix[i, 2] = current_zero_crossing_end
+				AoA_matrix[i, 1] = current_revolution_start_time
+				AoA_matrix[i, 2] = current_revolution_end_time
 				AoA_matrix[i, 3] = Omega
 				AoA_matrix[i, 4] = toa
 				AoA_matrix[i, 5] = Omega * (
 					toa 
-					- current_zero_crossing_start
+					- current_revolution_start_time
 				)
 
 		return AoA_matrix
 	```
-	We have moved the calculation of the shaft speed to the while loop from the if statement at the bottom. Now, every time we update the zero-crossing times, we calculate the shaft speed only once. The previous method calculated the shaft speed once for every blade on the rotor, since that is the number of ToAs occurring inside the revolution.
+	We have moved the calculation of $\Omega$ to the while loop from the if statement at the bottom. Now, every time we update the zero-crossing times, we calculate the rotor's speed only once. The previous method calculated the shaft speed once for every ToA.
 
 ### Problem 3 :thinking:
-The dataset we used in this chapter also has MPR zero-crossing times which we did not use. The MPR zero crossing times can be loaded with the following command:
+The dataset we used in this chapter also has MPR zero-crossing times we did not use. These values can be loaded with this command:
 
 ``` py
 df_mpr_zero_crossings = dataset['table/du_toit_2017_test_1_mpr_zero_crossings']
 ```
 
-The MPR encoder used to measure these zero-crossing times has 79 sections. You can therefore assume that each zero-crossing time corresponds to $\frac{1}{79}$ of a shaft rotation.
+The MPR encoder used for this measurement has 79 sections. You can therefore assume each encoder section represents $\frac{1}{79}$th of a rotation.
 
 {==
 
-:material-pencil-plus-outline: Write a new function, `calculate_aoa_from_mpr`, that receives the MPR timestamps, the number of sections in the MPR, and the ToA values as inputs. The function should return a DataFrame with the AoA values. The resulting AoA matrix should also include the MPR section number within which each ToA occurs.
+:material-pencil-plus-outline: Write a new function, `calculate_aoa_from_mpr`, accepting the MPR timestamps, the number of sections in the MPR, and the ToAs as inputs. The function should return a DataFrame with the AoAs. The resulting AoA matrix should also include the MPR section number within which each ToA occurs.
 
 ==}
 
@@ -1079,7 +944,7 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 	</script>
 </div>
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
 	``` py linenums="1"
 	def calculate_aoa_from_mpr(
 		arr_mpr_zero_crossing : np.ndarray,
@@ -1104,8 +969,8 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 				are:
 				0: The revolution number
 				1: The section number
-				2: The zero crossing time at the start of the revolution
-				3: The zero crossing time at the end of the revolution
+				2: The zero-crossing time at the start of the revolution
+				3: The zero-crossing time at the end of the revolution
 				4: The angular velocity of the revolution
 				5: The ToA
 				6: The AoA of the ToA value
@@ -1115,11 +980,11 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 		rad_per_section = 2 * np.pi / mpr_sections
 		AoA_matrix[:, 0] = -1
 
-		current_zero_crossing_start = arr_mpr_zero_crossing[0]
-		current_zero_crossing_end = arr_mpr_zero_crossing[1]
+		current_revolution_start_time = arr_mpr_zero_crossing[0]
+		current_revolution_end_time = arr_mpr_zero_crossing[1]
 		Omega = rad_per_section / (
-			current_zero_crossing_end 
-			- current_zero_crossing_start
+			current_revolution_end_time 
+			- current_revolution_start_time
 		)
 		current_n = 0
 		current_revo = 0
@@ -1127,15 +992,15 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 
 		for i, toa in enumerate(arr_probe_toas):
 
-			while toa > current_zero_crossing_end:
+			while toa > current_revolution_end_time:
 				current_n += 1
 				if current_n >= (len(arr_mpr_zero_crossing) - 1):
 					break
-				current_zero_crossing_start = arr_mpr_zero_crossing[current_n]
-				current_zero_crossing_end = arr_mpr_zero_crossing[current_n + 1]
+				current_revolution_start_time = arr_mpr_zero_crossing[current_n]
+				current_revolution_end_time = arr_mpr_zero_crossing[current_n + 1]
 				Omega = rad_per_section / (
-					current_zero_crossing_end 
-					- current_zero_crossing_start
+					current_revolution_end_time 
+					- current_revolution_start_time
 				)
 				current_section += 1
 				if current_section == mpr_sections:
@@ -1146,16 +1011,16 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 			if current_n >= (len(arr_mpr_zero_crossing) - 1):
 				break
 
-			if toa > current_zero_crossing_start:
+			if toa > current_revolution_start_time:
 				AoA_matrix[i, 0] = current_revo
 				AoA_matrix[i, 1] = current_section
-				AoA_matrix[i, 2] = current_zero_crossing_start
-				AoA_matrix[i, 3] = current_zero_crossing_end
+				AoA_matrix[i, 2] = current_revolution_start_time
+				AoA_matrix[i, 3] = current_revolution_end_time
 				AoA_matrix[i, 4] = Omega
 				AoA_matrix[i, 5] = toa
 				AoA_matrix[i, 6] = Omega * (
 					toa
-					- current_zero_crossing_start
+					- current_revolution_start_time
 				) + current_section * rad_per_section
 
 		return AoA_matrix
@@ -1206,9 +1071,9 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 		return df_AoA
 	```
 
-	The function `calculate_aoa_from_mpr` increments each section, instead of each revolution. The function is, however, capable of transforming the ToAs using an OPR encoder if you set `mpr_sections` to 1.
+	The function `calculate_aoa_from_mpr` increments each section, instead of each revolution. The function can, however, transform the ToAs with an OPR encoder if you set `mpr_sections` to 1.
 
-	In [Figure 3](#figure_03) below, we show the AoA values as calculated using the MPR algorithm vs the exact same values calculated using the OPR algorithm. We see that the AoA values from the MPR algorithm appear less noisy than the AoA values from the OPR algorithm. 
+	In [Figure 5](#figure_05) below, we show the AoAs calculated from the MPR encoder vs the same values calculated from the OPR encoder. The AoAs from the MPR algorithm appear less noisy than the AoAs from the OPR algorithm. 
 	<div>
 		<div>
 			<canvas id="ch03_blade_5_aoas_using_mpr"'></canvas>
@@ -1217,10 +1082,10 @@ The MPR encoder used to measure these zero-crossing times has 79 sections. You c
 	</div>
 	<script> render_chart_blade_5_aoas_using_mpr(); </script>
 	<figure markdown>
-	  <figcaption><strong><a name='figure_03'>Figure 3</a></strong>: The AoAs of the fifth blade arriving at the first proximity probe. The AoAs were calculated using the MPR algorithm and the OPR algorithm. </figcaption>
+	  <figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The AoAs of the fifth blade at the first proximity probe. The AoAs were calculated with both the MPR encoder and the OPR encoder. </figcaption>
 	</figure>
 
-	MPR encoders will always produce more accurate BTT results than OPR encoders. One reason for this is because MPR encoders capture high frequency shaft torsional vibration, allowing us to remove it from the AoAs. An OPR encoder cannot capture this torsional vibration. High frequency shaft torsional vibration will therefore *appear* as high-frequency content in our AoAs when using OPR encoders.
+	MPR encoders will always produce more accurate BTT results than OPR encoders. One reason for this is because MPR encoders capture high frequency shaft torsional vibration. This allows us to remove it from the AoAs. An OPR encoder cannot capture this torsional vibration. High frequency shaft torsional vibration therefore *appears* as high-frequency content in our AoAs when we use OPR encoders.
 
-	MPR encoder signal processing is, however, nontrivial. For instance, we have assumed here that all encoder sections have the same circumferential width. This is almost never the case. We will not venture into the dark art of MPR encoders here, we'll leave that for a future tutorial!
+	MPR encoder signal processing is, however, nontrivial. For instance, we have assumed here all encoder sections have the same circumferential width. This is almost never the case. We will not venture into the dark art of MPR encoders here. That's a topic for a future tutorial.
 

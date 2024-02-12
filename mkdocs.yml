@@ -107,7 +107,7 @@ nav:
   - Introduction to Blade Tip Timing:
     - 1. Blade Tip Timing's fundamental principle: tutorials/intro_to_btt/ch1/index.md
     - 2. Time of Arrival (ToA): tutorials/intro_to_btt/ch2/index.md
-    #- 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
+    - 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
     #- 4. Aligning the blades: tutorials/intro_to_btt/ch4/index.md
     #- 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md
     #- 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
