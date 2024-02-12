@@ -98,9 +98,6 @@ After processing the shaft encoder's analogue waveform, we have a vector of zero
 	| $n$ | The revolution number |
 	| $zc_{n}$ | The $n$th zero-crossing time |
 
-<figure markdown>
-  <figcaption><strong><a name='equation_01'>Equation 1</a></strong></figcaption>
-</figure>
 
 An example of the shaft speed calculated from [Equation 1](#equation_01) is presented in [Figure 3](#figure_03) below.
 <script src="shaft_run_up_and_down.js" > </script>
