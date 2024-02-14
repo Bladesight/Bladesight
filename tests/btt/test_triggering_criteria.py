@@ -113,7 +113,10 @@ def test_threshold_crossing_interp_zig_zag_falling(arr_zig_zag):
     assert len(arr_toa) == 4
     assert np.allclose(arr_toa, [1.5, 3.5, 5.5, 7.5])
 
-
+def test_wrong_n_est(arr_zig_zag):
+    arr_t, arr_s = arr_zig_zag
+    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=1)
+    assert 0
 
 # Test threshold_crossing_interp todo:
 # - Test with n_est, ensure exception is raised if 
