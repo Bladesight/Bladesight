@@ -3,7 +3,6 @@ from typing import Optional
 import numpy as np
 from numba import njit
 
-# Untested
 @njit
 def threshold_crossing_interp(
     arr_t: np.ndarray,
@@ -38,7 +37,7 @@ def threshold_crossing_interp(
         arr_toa = -1 * np.ones(arr_t.shape)
     else:
         arr_toa = -1 * np.ones(n_est)
-
+    
     # Initialise the index of the ToA array
     i_toa = 0
 
@@ -54,12 +53,28 @@ def threshold_crossing_interp(
         if trigger_on_rising_edge:
             if (prev_sample < threshold) and (curr_sample >= threshold):
                 # Interpolate the ToA
+                if i_toa >= arr_toa.shape[0]:
+                    raise ValueError(
+                        "The number of ToAs has exceeded the estimated number of ToAs. "
+                        f"n_est is currently {n_est}. You must increase it. This error occurred"
+                        f" at the sample index {i_sample} out of {arr_s.shape[0]}. "
+                        f"Your ToA array has therefore been filled within {round(100 * i_sample/arr_s.shape[0])} % "
+                        "of the signal."
+                    )
                 arr_toa[i_toa] = arr_t[i_sample - 1] + (
                     arr_t[i_sample] - arr_t[i_sample - 1]
                 ) * (threshold - prev_sample) / (curr_sample - prev_sample)
                 i_toa += 1
         else:
             if (prev_sample > threshold) and (curr_sample <= threshold):
+                if i_toa >= arr_toa.shape[0]:
+                    raise ValueError(
+                        "The number of ToAs has exceeded the estimated number of ToAs. "
+                        f"n_est is currently {n_est}. You must increase it. This error occurred"
+                        f" at the sample index {i_sample} out of {arr_s.shape[0]}. "
+                        f"Your ToA array has therefore been filled within {round(100 * i_sample/arr_s.shape[0])} % "
+                        "of the signal."
+                    )
                 # Interpolate the ToA
                 arr_toa[i_toa] = arr_t[i_sample - 1] + (
                     arr_t[i_sample] - arr_t[i_sample - 1]
