@@ -115,8 +115,21 @@ def test_threshold_crossing_interp_zig_zag_falling(arr_zig_zag):
 
 def test_wrong_n_est(arr_zig_zag):
     arr_t, arr_s = arr_zig_zag
-    arr_toa = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=1)
-    assert 0
+    with pytest.raises(ValueError):
+        triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=1)
+    with pytest.raises(ValueError):
+        triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=4)
+    arr_toas_rising = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=5)
+    assert len(arr_toas_rising) == 5
+    assert np.allclose(arr_toas_rising, [0.5, 2.5, 4.5, 6.5, 8.5])
+
+    with pytest.raises(ValueError):
+        triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=1, trigger_on_rising_edge=False)
+    with pytest.raises(ValueError):
+        triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=3, trigger_on_rising_edge=False)
+    arr_toas_falling = triggering_criteria.threshold_crossing_interp(arr_t, arr_s, 2.5, n_est=4, trigger_on_rising_edge=False)
+    assert len(arr_toas_falling) == 4
+    assert np.allclose(arr_toas_falling, [1.5, 3.5, 5.5, 7.5])
 
 # Test threshold_crossing_interp todo:
 # - Test with n_est, ensure exception is raised if 
