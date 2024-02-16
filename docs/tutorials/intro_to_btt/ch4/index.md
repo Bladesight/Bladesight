@@ -17,6 +17,28 @@ card_title: Intro to BTT Ch4 - Identifying the blades
 card_url: "ch4/"
 ---
 # Identifying the blades
+
+Taxonomy is the science of labelling and classifying entities. It is usually associated with the biological sciences, but it is a cornerstone of every scientific endeavor. 
+
+This chapter deals with the taxonomy of AoA values. What exactly needs to be classified? We need to classify the AoA values into bins, such that each bin contains the AoA values of a single blade. In this chapter, for the first time, we use information specific to the rotor being measured.
+
+Here's an illustration of what we've covered so far, and what we're about to cover:
+
+<figure markdown>
+  ![Blade Taxonomy](Ch4_taxonomy.svg){ width=700}
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: 
+		An illustration of this chapter's theme. We have one proximity probe and one One Pulse per Revolution (OPR) sensor. In Chapter 3, we converted the ToAs into an array of AoAs. This chapter takes the next logical step: allocating the AoA values to specific blades.
+	</figcaption>
+</figure>
+
+We see XXX here.
+
+Kort 'n storie om te verduidelik wat hier aangaan en wat ons wil bereik?
+
+PRENTJIE WAT BENADRUK WAT NOU GEBEUR
+
+Benadruk dat hierdie alles gaan oor een probe!
+
 In the previous section, we have converted the ToAs into AoAs. We also displayed the AoAs of the first blade. How did we know this was the first blade?
 
 Our example was simple enough that selecting the AoAs of the first blade was obvious. Our blades arrive on time, every time, like a bus schedule that's never wrong. We could therefore select every 5th value from our AoA DataFrame. Easy-peasy.
@@ -50,11 +72,17 @@ df_prox_1 = transform_ToAs_to_AoAs(
 
 blade_arrival_count, histogram_bins = np.histogram(
     df_prox_1["AoA"],
-    bins=np.linspace(0, 2*np.pi, 50)
+    bins=np.linspace(0, 2*np.pi, 50)#(1)!
 )
 ```
 
 1.	The `np.linspace` function creates 50 equidistant values between 0 and $2 \pi$. These values are used as the bin edges for the histogram. The `np.histogram` function returns the number of values that fall within each bin, as well as the bin edges. There are 49 bins, but 50 bin edges. The number of bins is one less than the number of bin edges.
+
+!!! note "A discussion on bin count ?"
+
+	Verduidelik hoekom ons 50 bins het.
+
+	In werklikheid gaan jy altyd soveel bins hê as wat jy lemme het.
 
 The histogram is shown in [Figure 1](#figure_01) below. For convenience, we have changed the x-axis units to degrees.
 
@@ -114,15 +142,26 @@ Let's take an initial stab at the optimal way to bin the blades. We'll proceed f
 bin_edges = [0, 72, 144, 216, 288, 360]
 ```
 
+PRENTJIE VAN "FIRST STAB MET WISKUNDIGE WAARDES"
+
 Though this might work for the example were busy with, it would fail for other examples. If, for example, the tachometer had been located 16.16° earlier - thereby causing the second blade's grouping to be around 72° - we would have exactly the problem described above.
 
+VERDUIDELIK TACHO BETER MET PRENTJIE
+
 A much better guess would be to offset the bin edges such that the second edge (currently 72°), falls right between the first two AoA values. The first two AoA values are 16° and 88.2°. The optimal edge between them would therefore be 52.1°. We can achieve this by shifting the bin edges 72 - 52.1 = 19.9° earlier. 
+
+VERDUIDELIK HOE EK 52.1 GRADE BEREKEN HET
+
+Beantwoord: How do you know what AoA value to use (for the circled paragraph in the below
+figure)? do you use the mean AoA for each blade/bin?
 
 The new bin edges would be:
 
 ```
 bin_edges = [-19.9,  52.1, 124.1, 196.1, 268.1, 340.1]
 ```
+
+PRENTJIE VAN "SECOND STAB MET BETER BINS"
 
 This bin edge choice would maximize the distance between each blade's AoAs and its respective bin edges. Put conversely, it would minimize the distance between each blade's AoAs and the centre of the bin. 
 
@@ -421,7 +460,7 @@ for d_theta in d_thetas:#(6)!
 ```
 
 1.	We specify the number of blades. This is used to calculate the bin edges.
-2.	We specify the range of offsets to consider. We'll consider 200 offsets between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$. 
+2.	We specify the range of offsets to consider. We'll consider 200 offsets between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$.
 3.	We convert the AoA DataFrame into a numpy array. Our function requires a Numpy array.
 4.	We initialize an empty list to store the quality factors.
 5.	We initialize the optimal Q value to infinity. This is a trick to ensure that the first value we calculate is always the optimal value. It can be unseated by a better value later.
@@ -463,6 +502,14 @@ The `Q` factor for each `d_theta` is shown in [Figure 2](#figure_02) below.
 </figure>
 And voila! We see that the optimal offset is -20.08 degrees. We also see that there are many offsets that result in an invalid quality factor.
 
+??? note "How to choose the offset count"
+	
+	Verduidelik hoekom jy 200 gekies het.
+
+??? note "Optimization"
+
+	how do we select the number of indices in the dtheta array (see below screenshot).
+
 ## Grouping the blades
 
 It is trivial, after having determined the optimal bin edges, to process the proximity probe AoA DataFrame such that we have a separate DataFrame for each blade. 
@@ -486,6 +533,10 @@ for b in range(B):
 >>>     print(f"Blade {b} mean: {blade_dfs[b]['AoA'].mean()}, std: {blade_dfs[b]['AoA'].std()}")
 ```
 
+SIT CODE COMMENTS IN!
+
+DIT IS NIE DUIDELIK HOE 'n DATAFRAME PER PROXIMITY PROBE GESKEP IS NIE
+
 ``` console
 Blade 0 mean: 0.280844143512115, std: 0.0014568064245125216
 Blade 1 mean: 1.5390655934492143, std: 0.001784799129959647
@@ -496,9 +547,15 @@ Blade 4 mean: 5.305095908129366, std: 0.0014525709531342695
 
 Finally, we now have 5 dataframes, each one containing only the information from a single blade. 
 
+BESPREEK:
+Why do you report the mean and standard deviation of the blades? Does it have a
+connection to the location of the bin locations or widths?
+
 ## Wrapping blades
 
 Let's implement a static shift to the AoA values from the original, non-binned, DataFrame. Note that a static shift in AoA values does not change any objective information. We should be able to find the exact same $Q$ value as we did in the previous section.
+
+SIT 'n PRENTJIE IN VAN HOE 'n LEM op die OPR val
 
 ``` py linenums="1" hl_lines="3"
 df_prox_1_shifted = df_prox_1.copy(deep=True)
@@ -518,6 +575,12 @@ for d_theta in d_thetas:
         optimal_d_theta = d_theta*1
     Qs.append(Q)
 ```
+
+BEANTWOORD 👇
+What happens if the optimal offset we determine causes a bin edge to be exactly
+where an OPR is being triggered?
+(I’m not sure if I’m explaining this properly but I hope you understand?)
+
 
 In Line 1 above, we create a copy of our original DataFrame. In Line 2, we shift the AoA values by blade 0's mean AoA value as calculated in the previous section. 
 
@@ -603,11 +666,18 @@ I'm going to leave it to you to make this change.
 
 	In lines 31 - 40, we check for AoA values that occur after the right most bin edge. These values are therefore being treated as if they occur in the first bin.
 
+BEANTWOORD: Complications of Non-equidistant probe spacing:Does blade alignment (Ch4 to Ch5 of the tutorial) become more challenging? or
+what are the implications of this
+
 {==
 
 :material-pencil-plus-outline: After you've finished the above, create a function called `transform_prox_AoAs_to_blade_AoAs` that receives the proximity probe AoA DataFrame and the number of blades on the rotor, and returns a list of DataFrames, each one containing the AoA values for a single blade. This function should therefore perform both the determination of the optimal bin edges, as well as the splitting of the AoA values into separate DataFrames.
 
 ==}
+
+Reageer op Justin se paragraaf:
+- Using dataset for I recorded for MSS
+
 
 ??? example "Reveal answer (Please try it yourself before peeking)"
 	``` py linenums="1" 
