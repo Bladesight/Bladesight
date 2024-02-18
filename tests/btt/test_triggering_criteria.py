@@ -131,6 +131,20 @@ def test_wrong_n_est(arr_zig_zag):
     assert len(arr_toas_falling) == 4
     assert np.allclose(arr_toas_falling, [1.5, 3.5, 5.5, 7.5])
 
+def test_hysteresis_rising_on_simple_ramp(arr_simple_ramp_up):
+    arr_t, arr_s = arr_simple_ramp_up
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_pos(
+        arr_t,
+        arr_s,
+        5,
+        2,
+        1
+    )
+    assert len(arr_toas) == 1
+    assert np.allclose(arr_toas, 5.0)
+    ...
+
+
 # Test threshold_crossing_interp todo:
 # - Test with n_est, ensure exception is raised if 
 #    n_est is less than the number of ToAs
