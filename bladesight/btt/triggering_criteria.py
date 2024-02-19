@@ -156,7 +156,7 @@ def threshold_crossing_hysteresis_pos(
 
 # Untested
 @njit
-def seq_threshold_crossing_hysteresis_neg(
+def threshold_crossing_hysteresis_neg(
     arr_t : np.ndarray,
     arr_s : np.ndarray,
     threshold : float,
