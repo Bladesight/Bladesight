@@ -142,7 +142,18 @@ def test_hysteresis_rising_on_simple_ramp(arr_simple_ramp_up):
     )
     assert len(arr_toas) == 1
     assert np.allclose(arr_toas, 5.0)
-    ...
+    
+
+def test_hysteresis_falling_on_simple_ramp(arr_simple_ramp_up):
+    arr_t, arr_s = arr_simple_ramp_up
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_neg(
+        arr_t,
+        arr_s,
+        5,
+        2,
+        1
+    )
+    assert len(arr_toas) == 0
 
 
 # Test threshold_crossing_interp todo:
