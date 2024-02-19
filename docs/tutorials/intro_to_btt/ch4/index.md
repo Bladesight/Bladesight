@@ -1,5 +1,5 @@
 ---
-date: 2023-10-08
+date: 2024-02-20
 tags:
   - Blade Tip Timing
   - BTT
@@ -10,155 +10,270 @@ tags:
   - Mechanical Vibration
 hide:
   - tags
-description: This chapter explains how to allocate the AoA values to specific blades.
+description: This chapter explains how to allocate AoAs to specific blades.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: main_intro_to_btt_ch4.html
 card_title: Intro to BTT Ch4 - Identifying the blades
 card_url: "ch4/"
 ---
-# Identifying the blades
-In the previous section, we have converted the ToAs into AoAs. We also displayed the AoAs of the first blade. How did we know this was the first blade?
+??? abstract "You are here"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch4.svg){ width="500" }
+	</figure>
 
-Our example was simple enough that selecting the AoAs of the first blade was obvious. Our blades arrive on time, every time, like a bus schedule that's never wrong. We could therefore select every 5th value from our AoA DataFrame. Easy-peasy.
+<style>
+:root {
+  --md-tooltip-width: 600px;
+}
+</style>
 
-In the real world this is rarely the case. Noise may cause some ToAs to be triggered twice, or never. Also, if a blade arrives at or near the same time as your OPR zero-crossing times, it may lead to the blade arriving either at the start of the current revolution, or at the end of the previous revolution, depending on the vibrational state of the blade.
+# Allocating AoAs to blades
+Taxonomy is the discipline of classifying entities. It is usually associated with the biological sciences. It is, however, a useful concept in many fields.
 
-A better policy for blade identification is to use an algorithm. 
+This chapter deals with the taxonomy of AoA values. What exactly needs to be classified? We need to classify the AoAs into bins, such that each bin contains the AoAs of a single blade.
 
-## AoA histogram
+Here's an illustration of what we've covered so far, and what we're about to cover:
 
-We'll start by constructing a histogram of the AoAs from a single proximity probe. You can use the `np.histogram` method in numpy to do this. Below, we show how to import the data, calculate the AoAs, and calculate the histogram.
+<figure markdown>
+  ![Blade Taxonomy](Ch4_taxonomy.svg){ width=700}
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: 
+		An illustration of this chapter's theme. We have one proximity probe and one One Pulse per Revolution (OPR) sensor. In Chapter 3, we converted the ToAs into an array of AoAs. This chapter takes the next logical step: allocating the AoAs to specific blades.
+	</figcaption>
+</figure>
 
-!!! tip "Bladesight functions"
-	In the previous chapter, we created algorithms for transforming the ToAs into AoAs. These functions have been added to the `bladesight` package, such that it can be imported. 
+[Figure 1](#figure_01) restates that we converted ToAs into AoAs in the previous chapter. We still only have a large, unstructured array of AoAs. In this chapter, for the first time, we use information specific to the rotor: the number of blades.
 
-	All the algorithms built up during this tutorial will be added to the `bladesight` package.
+It may seem overly redundant to dedicate an entire chapter to identify which AoAs belong to which blades. Is it not obvious that the second blade arrives after the first? This may sometimes be the case, but it is too simplistic an approach. It's the kind of solution a Large Language Model(LLM) like ChatGPT would give. Real engineering problems do not bend to the whims of LLMs.
+
+This chapter develops a robust methodology to assign AoAs to specific blades. Giving yourself permission to study the fundamentals will pay dividends in the future.
+
+## First attempt
+Let's generate example data to help us explore the problem space. I've generated AoAs for a 5 blade rotor using the code below. Do not get bogged down in the details of this code. The important thing is that we have 5 blades and one sensor. This produces a vector of AoAs. 
+
+``` py
+import numpy as np
+import pandas as pd
+
+delta = -20
+blade_means = np.deg2rad([72, 144+delta, 216+delta, 288+delta, 360+delta])#(1)!
+aoa_values = []
+BLADE_COUNT = 5
+# Set random seed for reproducibility
+np.random.seed(0)#(2)!
+for n in range(50):#(3)!
+    r = 0.5 + 0.5/50 * n#(4)!
+    for b in range(BLADE_COUNT):
+        aoa_current = blade_means[b] + np.random.uniform(-np.pi*0.07, np.pi*0.07)#(5)!
+        # Reject values with probability < 0.05
+        if np.random.rand() > 0.05:#(6)!
+            aoa_values.append({
+                "n" : n,
+                "aoa" : aoa_current,
+                "plot_r" : r,#(7)!
+            })
+df_aoas = pd.DataFrame(aoa_values)
+```
+
+1.  We specify the mean AoA for each blade. We also specify a `delta` value that we use to shift the mean AoA for blades 2 through 5. 
+
+    This is to simulate the effect of blades that are not perfectly equidistant from one another. Our example shifts all except the first blade by 20 degrees. This is an extreme amount to shift. In practice, the blades will be more-or-less equidistant from one another. We use this `delta` to showcase the complexity introduced by non-equidistant blades.
+
+2.  We set the random seed to ensure reproducibility. It ensures that our random values are the same every time we run the code.
+3.  We generate data for 50 shaft revolutions. Why 50? It's an arbitrary number that helps us make our point.
+4.  This `radius` value has __no physical meaning__. It is simply a value that enables us to plot the AoAs on a polar plot. It is __not__ related to the radius of the rotor.
+5.  We generate a random AoA value for each blade, as if it passed by the proximity sensor. We add a random value between $-\pi \times 0.07$ and $\pi \times 0.07$ to the mean AoA value. This is to simulate the effect of noise and vibration. Why $-\pi \times 0.07$ and $\pi \times 0.07$? Once again, these values are arbitrary but sufficient to illustrate the point.
+6.  We reject 5% of the AoAs. This is to simulate the effect of 'missing pulses' in our data. Our BTT DAQ should, in theory, be able to capture all the pulses. In practice, however, this is often not the case. We need to develop an algorithm that can handle missing ToAs.
+7.  We reiterate that the `radius` value has no physical meaning. It is simply a value that enables us to plot the AoAs on a polar plot.
+
+The AoAs are plotted in [Figure 2](#figure_02) below.
+
+<figure markdown>
+  ![Unallocated AoAs](preamble_unallocated_aoas.png){ width="700"}
+    <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: The raw AoAs are shown on a polar plot. The radial dimension is not related to the blade's radius. We've spread our AoAs radially because it's simpler to visualize.  
+    </figcaption>
+</figure>
+
+In [Figure 2](#figure_02) above, there are five distinct "groups" of AoAs. Intuitively, we expect each group to correspond to a blade. We now develop an algorithm to assign each AoA to a blade.
+
+### Sequential allocation
+To help us reason through the first approach, the first 10 AoAs are presented in [Table 1](#table_01) below:
+<figure markdown>
+  <figcaption><strong><a name='table_01'>Table 1</a></strong>: The first 10 AoAs. </figcaption>
+</figure>
+{{ read_csv('docs/tutorials/intro_to_btt/ch4/preamble_aoa_values_head.csv') }}
+
+Humans excel at pattern recognition. From [Table 1](#table_01) above, it's clear the AoAs arrive in a sequence. Each AoA in the table seems to increase by $\frac{2 \pi}{5}$ radians until the fifth value, after which the pattern repeats itself. It seems obvious that we should be able to allocate the AoAs sequentially. In other words, blade 1's AoA is located in row 1, then blade 2, and so on.
+
+A reasonable strategy would be to assign every 5th AoA to the same blade:
+
+``` py
+df_aoa_sequential = df_aoas.copy(deep=True)
+df_aoa_sequential['blade'] = None
+df_aoa_sequential.loc[::5, 'blade'] = 1 #(1)!
+df_aoa_sequential.loc[1::5, 'blade'] = 2
+df_aoa_sequential.loc[2::5, 'blade'] = 3
+df_aoa_sequential.loc[3::5, 'blade'] = 4
+df_aoa_sequential.loc[4::5, 'blade'] = 5
+```
+
+1.  `[::5]` is Python notation for "select every 5th value".
+
+Every AoA is now assigned. We can therefore use a different style marker to discern between the assigned groups. The results are displayed in [Figure 3](#figure_03) below.
+
+<figure markdown>
+  ![Sequential allocation](preamble_sequential_allocation_aoas.png){ width="700"}
+    <figcaption><strong><a name='figure_03'>Figure 3</a></strong>: This plot indicates the results of sequential AoA allocation. In other words, we've grouped every 5th AoA value together. 
+    </figcaption>
+</figure>
+
+[Figure 3](#figure_03) is a disaster. :scream:
+
+We would expect five distinct groups clustered around different circumferential areas. Rather, each AoA group has members spread out over the entire circumferential range from 0 to 360 degrees.
+
+Why did this happen? Because we introduced "missing pulses" when we generated the AoAs. If only one pulse is missing, all of our AoAs will be incorrectly grouped. This is a common problem in BTT analysis. We must therefore develop a sequence-independent algorithm.
+
+### Binned allocation
+Let's rather group the AoAs into angular bins. We create five equally spaced bins and slice the AoA vector up into these bins. The first bin's edge starts at 0 degrees. Each bin is $\frac{360}{5}$ degrees wide. 
+
+``` console
+bin_left_edges  ->  [0,  72,  144, 216, 288]
+bin_right_edges -> [72, 144, 216, 288, 360]
+```
+The allocation is performed below:
+
+``` python
+df_aoa_binned = df_aoas.copy(deep=True)
+df_aoa_binned['blade'] = None
+bin_edges = [0, 72, 144, 216, 288] #(1)!
+bin_edges_rad = np.deg2rad(bin_edges) #(2)!
+for b, bin_left_edge in enumerate(bin_edges_rad): #(3)!
+    bin_right_edge = bin_left_edge + 2*np.pi/5 #(4)!
+    ix_in_bin = (
+        (df_aoa_binned['aoa'] >= bin_left_edge) 
+        & (df_aoa_binned['aoa'] < bin_right_edge)
+    ) #(5)!
+    df_aoa_binned.loc[ix_in_bin, 'blade'] = b + 1 #(6)!
+```
+
+1.  We specify the left edges of the bins. They are all equally wide.
+2.  We convert from degrees to radians to get them to the same unit as the AoAs.
+3.  The `enumerate` function returns the index and left edge of the bin we are currently considering.
+4.  We calculate the position of the right edge. It's always $\frac{2 \pi}{5}$ radians larger than the left edge.
+5.  We create a boolean mask to identify the AoAs that fall within the bin we are currently considering.
+6.  We use the mask to allocate the appropriate AoAs to its corresponding blade.
+
+The groups are plotted in [Figure 4](#figure_04) below. The group edges have been added to the plot.
+
+<figure markdown>
+  ![Binned allocation](preamble_simple_bin_allocation_aoas.png){ width="700"}
+    <figcaption><strong><a name='figure_04'>Figure 4</a></strong>: The AoA groups as a consequence of binning. The AoA allocation is better, but not perfect. The AoAs from blades 1 and 2 are mixed.
+    </figcaption>
+</figure>
+
+[Figure 4](#figure_04) above is a significant improvement over [Figure 3](#figure_03). The groups seem more sensible.
+
+However, some of blade 1's AoAs are grouped with blade 2. This is because the AoAs from blade 1 fall close to the first bin's edge. We cannot control where the AoAs fall. It is a function of the rotor's blade count and the location of our OPR sensor. Our algorithm should be able to adapt to this.
+
+### Rotated bin allocation
+Instead of the first bin starting at 0 degrees, we subtract an offset to each edge. Let's subtract an offset. We call the offset `d_theta`. Let's set `d_theta` equal to half the current bin width, 72°/2 = 36°, for this example. 
+
+``` console
+bin_left_edges  -> [-36,36,  108, 180, 252]
+bin_right_edges -> [36, 108, 180, 252, 324]
+```
+
+The code to perform the allocation is similar to the previous example. We need, however, to include a second mask to check for the AoAs close to the 0°/360° boundary. We'll discuss this in more depth later in the chapter. 
+
+``` python linenums="1" hl_lines="13 14"
+df_aoa_rotated_binned = df_aoas.copy(deep=True)
+df_aoa_rotated_binned['blade'] = None
+bin_edges_new = [-36, 36, 108, 180, 252]
+bin_edges_new_rad = np.deg2rad(bin_edges_new)
+for b, bin_left_edge in enumerate(bin_edges_new_rad):
+    bin_right_edge = bin_left_edge + 2*np.pi/5
+    ix_in_bin = (
+        (
+                (df_aoa_rotated_binned['aoa'] >= bin_left_edge) 
+                & (df_aoa_rotated_binned['aoa'] < bin_right_edge)
+        )
+        | (
+                ((df_aoa_rotated_binned['aoa'] - 2*np.pi) >= bin_left_edge) # (1)!
+                & ((df_aoa_rotated_binned['aoa'] - 2*np.pi) < bin_right_edge)
+        )
+    )
+    df_aoa_rotated_binned.loc[ix_in_bin, 'blade'] = b + 1
+```
+
+1.  The second mask to check for AoAs close to the 0°/360° boundary.
+
+We plot the result in [Figure 5](#figure_05) below.
+
+<figure markdown>
+  ![Rotated bin allocation](preamble_rotated_bin_allocation_aoas.png){ width="700"}
+    <figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The grouping as a consequence of a *rotated* bin approach. Our groups are finally correct :clap: .
+    </figcaption>
+</figure>
+
+Finally our allocation is perfect. The AoAs from each blade are grouped together. This is the allocation we always want to achieve. 
+
+In this example, we've manually chosen the offset. We would rather use an algorithm to automate the process. 
+
+How can we determine the quality of the allocation? Intuitively, we expect the AoAs from each blade to occur in the middle of its bin. The closer it is to an edge, the higher the likelihood of misclassification.
+
+This chapter therefore develops an algorithm to identify the optimal offset, `d_theta`. The optimal offset causes each bin's AoAs to be located in the middle of the bin.
+
+!!! question "Outcomes"
+
+	:material-checkbox-blank-outline: Calculate the optimal `d_theta` to group the AoAs into blade bins by minimizing a quality factor $Q$.
+
+	:material-checkbox-blank-outline: Understand that the first blade may arrive close to the OPR zero-crossing time. This can make the blade appear either at the start *or* end of the revolution. We need to cater for this scenario.
+	
+	:material-checkbox-blank-outline: Write a function that determines the optimal blade bins for a set of AoAs, and split the proximity probe AoA DataFrames into several individual blade DataFrames.
+
+## Follow along
+The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.
+
+You can open a Google Colab session of the worksheet here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
+
+You need to use one of these Python versions to run the worksheet:
+<img src="https://img.shields.io/badge/python-3.9-blue.svg">
+<img src="https://img.shields.io/badge/python-3.10-blue.svg">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg">.
+
+
+## Load the data
+
+We load the same dataset that we used for Chapter 3. We only get the AoAs from the first probe and store it in `df_prox_1`. 
 
 ``` py linenums="1"
 from bladesight import Datasets
 from bladesight.btt.aoa import transform_ToAs_to_AoAs
 
 dataset = Datasets['data/intro_to_btt/intro_to_btt_ch03']
-df_opr_zero_crossings = \
-    dataset[f"table/du_toit_2017_test_1_opr_zero_crossings"]
+df_opr_zero_crossings = dataset[f"table/du_toit_2017_test_1_opr_zero_crossings"]
 df_prox_1_toas = dataset[f"table/du_toit_2017_test_1_prox_1_toas"]
 
 df_prox_1 = transform_ToAs_to_AoAs(
     df_opr_zero_crossings,
     df_prox_1_toas
 )
-
-blade_arrival_count, histogram_bins = np.histogram(
-    df_prox_1["AoA"],
-    bins=np.linspace(0, 2*np.pi, 50)
-)
 ```
 
-1.	The `np.linspace` function creates 50 equidistant values between 0 and $2 \pi$. These values are used as the bin edges for the histogram. The `np.histogram` function returns the number of values that fall within each bin, as well as the bin edges. There are 49 bins, but 50 bin edges. The number of bins is one less than the number of bin edges.
+## Our algorithm
+We've discussed that a "good" allocation is one where the AoAs from each blade occur close to the center of its bin. To quantify this intuitive approach, we create a quality factor, $Q$.
 
-The histogram is shown in [Figure 1](#figure_01) below. For convenience, we have changed the x-axis units to degrees.
+$Q$ is the sum of squared errors between the center of each bin and each AoA within it.
 
-<script src="all_aoas_histogram.js" > </script>
-<div>
-	<div>
-		<canvas id="ch03_all_aoas_histogram"'></canvas>
-	</div>
-	<script>
-		async function render_chart_all_aoas_histogram() {
-			const ctx = document.getElementById('ch03_all_aoas_histogram');
-			// If this is a mobile device, set the canvas height to 400
-			if (window.innerWidth < 500) {
-				ctx.height = 400;
-			}
-			while (typeof Chart == "undefined") {
-				await new Promise(r => setTimeout(r, 1000));
-			}
-			Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
-			window.fig_all_aoas_histogram = new Chart(ctx, window.all_aoas_histogram);
-			window.fig_all_aoas_histogram_reset = function resetZoomFig1() {
-					window.fig_all_aoas_histogram.resetZoom();
-				}
-			}
-		render_chart_all_aoas_histogram();
-	</script>
-	<a onclick="window.fig_all_aoas_histogram_reset()" class='md-button'>Reset Zoom</a>
-</div>
-<figure markdown>
-  <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: 
-	The AoAs of all the blades from a single proximity probe. The AoAs are grouped into 49 bins. The number of AoAs that fall within each bin is shown on the y-axis. The bin edges are shown on the x-axis. Five distinct blade groups can be identified.
-  </figcaption>
-</figure>
+\begin{equation}
+Q = \sum_{b=1}^{B} \sum_{n=1}^{N_b} \left (\hat{AoA}_{b} (\delta \theta) - AoA_{b, n}\right)^2
+\end{equation}
 
-In [Figure 1](#figure_01) above, we can identify the 5 blades with the naked eye. Each blade appears as a single vertical bar at a circumferential position. Blade 2's group seems anomalous. It appears to be spread over two short adjacent bars, instead of one narrow bar. The reason for this is because the AoAs of blade 2 *happens to fall* on both sides of the 88.16° histogram bin edge.
-
-Suppose we decided, for whatever reason, that all blades arriving earlier than 88.16° belong to blade 1. The results would be disastrous. We would be assigning AoAs from blade 2 to blade 1. This would cause the AoAs for blade's 1 and 2 to be incorrect, thereby turning our exquisitely measured BTT data into garbage.
-
-To the human eye, its tempting to scoff at such a mistake. It is, after all, trivial to tell them apart. Unfortunately, it is impractical to parse each set of AoA values by eye. We need to develop an algorithm to do this for us.
-
-!!! question "Outcomes"
-
-	:material-checkbox-blank-outline: Understand that we need to calculate the optimal bin edges to group the AoAs into blade bins.
-
-    :material-checkbox-blank-outline: Understand that we can calculate the optimal bin edges by minimizing a quality factor, $Q$.
-
-	:material-checkbox-blank-outline: Understand that the first blade may arrive close to the OPR zero-crossing time, which means it could either appear at the start or end of the revolution. We need to cater for this scenario.
-	
-	:material-checkbox-blank-outline: Write a function that determines the optimal blade bins for a set of AoA values, and split the proximity probe AoA DataFrames into several individual blade DataFrames.
-
-
-## Determine blade bins
-
-Let's take an initial stab at the optimal way to bin the blades. We'll proceed from the example, where we have 5 blades. A reasonable guess for our bin edges would be to split the distance from 0 to 360 degrees into 5 equidistant sections, thereby resulting in the following 6 bin edges:
-
-```
-bin_edges = [0, 72, 144, 216, 288, 360]
-```
-
-Though this might work for the example were busy with, it would fail for other examples. If, for example, the tachometer had been located 16.16° earlier - thereby causing the second blade's grouping to be around 72° - we would have exactly the problem described above.
-
-A much better guess would be to offset the bin edges such that the second edge (currently 72°), falls right between the first two AoA values. The first two AoA values are 16° and 88.2°. The optimal edge between them would therefore be 52.1°. We can achieve this by shifting the bin edges 72 - 52.1 = 19.9° earlier. 
-
-The new bin edges would be:
-
-```
-bin_edges = [-19.9,  52.1, 124.1, 196.1, 268.1, 340.1]
-```
-
-This bin edge choice would maximize the distance between each blade's AoAs and its respective bin edges. Put conversely, it would minimize the distance between each blade's AoAs and the centre of the bin. 
-
-We can therefore phrase the problem as such: determine a constant bin edge offset, `d_theta`, that minimizes the mean distance between the AoA values inside each bin and the center of said bin.
-
-## Following along
-The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.
-
-
-You can open a Google Colab session of the worksheet by clicking here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_04_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
-
-You need to use one of the following Python versions to run the worksheet:
-<img src="https://img.shields.io/badge/python-3.6-blue.svg">
-<img src="https://img.shields.io/badge/python-3.7-blue.svg">
-<img src="https://img.shields.io/badge/python-3.8-blue.svg">
-<img src="https://img.shields.io/badge/python-3.9-blue.svg">
-<img src="https://img.shields.io/badge/python-3.10-blue.svg">
-<img src="https://img.shields.io/badge/python-3.11-blue.svg">
-
-
-## Algorithm to determine alignment bins
-
-Let's define a quality factor, $Q$, that represents the quality of our alignment. This factor is determined by calculating the sum of squared errors between each bin center and the AoA values falling inside said bin.
-
-$$
-Q = \sum_{b=1}^{B} \sum_{n=1}^{N_b} \left (\hat{AoA}_{b} - AoA_{b, n}\right)^2
-$$
-
-<figure markdown>
-  <figcaption><strong><a name='equation_01'>Equation 1</a></strong></figcaption>
-</figure>
 
 ??? info "Symbols"
 	| Symbol | Description |
 	| :---: | :--- |
-	| $Q$ | The blade binning quality factor|
+	| $Q$ | The blade bin quality factor|
+    | $\delta \theta$ | `d_theta`, the offset we apply to the bin edges|
 	| $b$ | The blade index|
 	| $B$ | The total number of blades|
 	| $n$ | The index of the AoA inside bin $b$ |
@@ -180,230 +295,115 @@ $$
 	\end{align}
 	$$
 
-Below we present a function that calculates Q for a given blade number and offset.
+The below function calculates Q for a given blade number and offset. I've added detailed comments that can be opened by clicking on the :material-plus-circle: symbols. If they do not open, please refresh the page.
 
 ``` py linenums="1"
-def calculate_Q(
+def calculate_Q( #(1)!
     arr_aoas : np.ndarray,
     d_theta : float,
     N : int
 ) -> Tuple[float, np.ndarray]:
     bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
     Q = 0
-    for b in range(N):
+    for b in range(N):#(2)!
         left_edge = bin_edges[b]
         right_edge = bin_edges[b + 1]
         bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
         
-		bin_centre = (left_edge + right_edge)/2
+		bin_centre = (left_edge + right_edge)/2 #(3)!
 		Q += np.sum(
             (
                 arr_aoas[bin_mask] 
                 - bin_centre
             )**2 
         )
-    if np.sum(arr_aoas < bin_edges[0]) > 0:
+    if np.sum(arr_aoas < bin_edges[0]) > 0:#(4)!
         return np.nan, bin_edges
     if np.sum(arr_aoas > bin_edges[-1]) > 0:
         return np.nan, bin_edges
     return Q, bin_edges
 ```
 
-Let's go through the main parts of this function.
+1.  <h2> Initialization </h2>
 
-### Initialization
+    ```py linenums="1"
+    def calculate_Q(
+        arr_aoas : np.ndarray,
+        d_theta : float,
+        N : int
+    ) -> Tuple[float, np.ndarray]:
+        bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
+        Q = 0
+    ```
+    In lines 1 - 4, the function name and input arguments are defined. `arr_aoas` is a numpy array of AoAs, in *radians*, `d_theta` is our guess for the shift to apply to the "standard" edges, and `N` is the number of blades. 
 
-```py linenums="1"
-def calculate_Q(
-	arr_aoas : np.ndarray,
-	d_theta : float,
-	N : int
-) -> Tuple[float, np.ndarray]:
-	bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
-	Q = 0
-# Some code omitted below 👇
-```
+    In Line 5, we specify the function's return type. It's a tuple - a fancy word for an immutable list - with two values: `Q` and `bin_edges`. `Q` is the quality factor, and `bin_edges` are the edges caused by this choice of `d_theta`.
 
-??? note "Full code"
-	``` py linenums="1" hl_lines="1 2 3 4 5 6 7"
-	def calculate_Q(
-		arr_aoas : np.ndarray,
-		d_theta : float,
-		N : int
-	) -> Tuple[float, np.ndarray]:
-		bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
-		Q = 0
-		for b in range(N):
-			left_edge = bin_edges[b]
-			right_edge = bin_edges[b + 1]
-			bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
-			
-			bin_centre = (left_edge + right_edge)/2
-			Q += np.sum(
-				(
-					arr_aoas[bin_mask] 
-					- bin_centre
-				)**2 
-			)
-		if np.sum(arr_aoas < bin_edges[0]) > 0:
-			return np.nan, bin_edges
-		if np.sum(arr_aoas > bin_edges[-1]) > 0:
-			return np.nan, bin_edges
-		return Q, bin_edges
-	```
+    !!! note "Note"
+        You need to import the `Tuple` type from the `typing` library.
 
-In lines 1 - 4, the function name and input arguments are defined. `arr_aoas` is a numpy array of AoA values, in *radians*, `d_theta` is our guess for the shift to apply to the "standard" bin edges, and `N` is the number of blades. 
+        ``` py
+        from typing import Tuple
+        ```
 
-In Line 5, we specify that the function returns a tuple - a fancy word for an immutable list - with two values: `Q` and `bin_edges`. `Q` is the quality factor, and `bin_edges` are the bin edges resulting from this choice of `d_theta`.
+    In Line 6, we calculate the `bin_edges` based on the choice of `d_theta`.
 
-!!! note "Note"
-	You need to import the `Tuple` type from the `typing` library.
+    In Line 7, we initialize the quality factor to zero.
 
-	``` py
-	from typing import Tuple
-	```
+2.  <h2> Identify the AoAs inside each bin </h2>
+    
+    ```py linenums="7"
+    for b in range(N):
+        left_edge = bin_edges[b]
+        right_edge = bin_edges[b + 1]
+        bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
+    ```
 
-In Line 6, we calculate the `bin_edges` using `d_theta`.
+    In Line 7, we enter our main loop, whereby we will consider each bin in turn.
 
-In Line 7, we initialize the quality factor to zero.
+    In lines 8 and 9, we select the left and right edges of the current bin.
 
-### Identify the AoAs falling inside each bin
+    In Line 10, we determine which AoAs fall within the current bin. `bin_mask` is a boolean array, with the same length as `arr_aoas`. If the mask has a value of `True` at a given index, it means the corresponding AoA value falls within the current bin.
 
-```py linenums="7"
-# Some code omitted above 👆
-for b in range(N):
-	left_edge = bin_edges[b]
-	right_edge = bin_edges[b + 1]
-	bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
-# Some code omitted below 👇
-```
+3.  <h2> Determine each bin's Q factor contribution</h2>
 
-??? note "Full code"
-	``` py linenums="1" hl_lines="8 9 10 11"
-	def calculate_Q(
-		arr_aoas : np.ndarray,
-		d_theta : float,
-		N : int
-	) -> Tuple[float, np.ndarray]:
-		bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
-		Q = 0
-		for b in range(N):
-			left_edge = bin_edges[b]
-			right_edge = bin_edges[b + 1]
-			bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
-			
-			bin_centre = (left_edge + right_edge)/2
-			Q += np.sum(
-				(
-					arr_aoas[bin_mask] 
-					- bin_centre
-				)**2 
-			)
-		if np.sum(arr_aoas < bin_edges[0]) > 0:
-			return np.nan, bin_edges
-		if np.sum(arr_aoas > bin_edges[-1]) > 0:
-			return np.nan, bin_edges
-		return Q, bin_edges
-	```
+    ```py linenums="12"
+    bin_centre = (left_edge + right_edge)/2
+    Q += np.sum(
+        (
+            arr_aoas[bin_mask] 
+            - bin_centre
+        )**2 
+    )
+    ```
 
-In Line 8, we enter our main loop, whereby we will consider each bin in turn.
+    In Line 12, the center of the bin is calculated. This is $\hat{AoA}_{b}$ in [Equation 1](#equation_01).
 
-In lines 9 and 10, we select the left and right edges of the bin we are currently considering.
+    In lines 13 - 18, we calculate the squared difference between each AoA and its corresponding bin's center. We sum these squared differences and add it to $Q$. If the centre is close to the AoAs, $Q$ will not increase much. If the centre is far from the AoAs, $Q$ will increase significantly.
 
-In Line 11, we determine which AoA values fall within the bin we are currently considering. `bin_mask` is a boolean array, with the same length as `arr_aoas`. If the mask has a value of `True` at a given index, then the AoA value at that index falls within the bin we are currently considering.
+4.  <h2>Sanity checks and return</h2>
 
-### Determine each bin's Q factor contribution
+    ```py linenums="20"
+    if np.sum(arr_aoas < bin_edges[0]) > 0:
+        return np.nan, bin_edges
+    if np.sum(arr_aoas > bin_edges[-1]) > 0:
+        return np.nan, bin_edges
+    return Q, bin_edges
+    ```
 
-```py linenums="12"
-# Some code omitted above 👆
-bin_centre = (left_edge + right_edge)/2
-Q += np.sum(
-	(
-		arr_aoas[bin_mask] 
-		- bin_centre
-	)**2 
-)
-# Some code omitted below 👇
-```
+    We've added sanity checks to the function. Why is it necessary to add sanity checks? Our code in lines 8 to 19 only consider AoAs between the left and right edges of the current bin. The offset `d_theta` will shift the edges such that some AoAs do not fall within any bin.
 
-??? note "Full code"
-	``` py linenums="1" hl_lines="13 14 15 16 17 18 19"
-	def calculate_Q(
-		arr_aoas : np.ndarray,
-		d_theta : float,
-		N : int
-	) -> Tuple[float, np.ndarray]:
-		bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
-		Q = 0
-		for b in range(N):
-			left_edge = bin_edges[b]
-			right_edge = bin_edges[b + 1]
-			bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
-			
-			bin_centre = (left_edge + right_edge)/2
-			Q += np.sum(
-				(
-					arr_aoas[bin_mask] 
-					- bin_centre
-				)**2 
-			)
-		if np.sum(arr_aoas < bin_edges[0]) > 0:
-			return np.nan, bin_edges
-		if np.sum(arr_aoas > bin_edges[-1]) > 0:
-			return np.nan, bin_edges
-		return Q, bin_edges
-	```
-In Line 13, we calculate the centre of this bin, by taking the average of the left and right edges. This is $\hat{AoA}_{b}$ in [Equation 1](#equation_01).
+    For instance, if `d_theta` is -10°, the last bin's right edge will be at 350°. If the final blade is clustered around 355°, our algorithm will not consider it in the $Q$ factor because every value in our `bin_mask` will be `False` for anything above 350°.
+    
+    We therefore check, in lines 20 and 22, if `d_theta` is valid. `d_theta` is invalid if any AoAs occur outside the far left or right bin edges. We return `np.nan` for `Q` to indicate `dtheta` is invalid.
 
-In lines 14 - 19, we calculate the squared difference between each AoA value and the bin centre. We then sum these squared differences and add it to $Q$. If the bin centre is close to the AoA values in this bin, $Q$ will increase minimally. If the bin centre is far from the AoA values in this bin, $Q$ will increase significantly. 
-
-### Sanity checks and return
-```py linenums="19"
-# Some code omitted above 👆
-if np.sum(arr_aoas < bin_edges[0]) > 0:
-	return np.nan, bin_edges
-if np.sum(arr_aoas > bin_edges[-1]) > 0:
-	return np.nan, bin_edges
-return Q, bin_edges
-```
-
-??? note "Full code"
-	``` py linenums="1" hl_lines="20 21 22 23 24" 
-	def calculate_Q(
-		arr_aoas : np.ndarray,
-		d_theta : float,
-		N : int
-	) -> Tuple[float, np.ndarray]:
-		bin_edges = np.linspace(0 + d_theta, 2*np.pi + d_theta, N + 1)
-		Q = 0
-		for b in range(N):
-			left_edge = bin_edges[b]
-			right_edge = bin_edges[b + 1]
-			bin_mask = (arr_aoas > left_edge) & (arr_aoas <= right_edge)
-			
-			bin_centre = (left_edge + right_edge)/2
-			Q += np.sum(
-				(
-					arr_aoas[bin_mask] 
-					- bin_centre
-				)**2 
-			)
-		if np.sum(arr_aoas < bin_edges[0]) > 0:
-			return np.nan, bin_edges
-		if np.sum(arr_aoas > bin_edges[-1]) > 0:
-			return np.nan, bin_edges
-		return Q, bin_edges
-	```
-
-The sanity checks added here are imperative. Our logic in lines 8 to 19 only considers AoA values that fall within one of the bins. It is possible for the offset guess `d_theta` to shift the bins so much that some AoA values do not fall within any bin. These AoA values will therefore not contribute to $Q$, and our optimal `d_theta` will be a fraud!
-
-We therefore check, in lines 20 and 22, whether any AoA values occur before the left most bin edge, or after the right most edge. If this is the case, we return `np.nan` for `Q`, meaning this `d_theta` is invalid.
-
-Finally, in Line 24, we return `Q` and `bin_edges`.
+    Finally, in Line 24, we return `Q` and `bin_edges`.
 
 ## Implementation example
 
-We can see the algorithm in action by iterating over a range of `d_theta` values. We'll start by attempting offsets that are between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$, essentially shifting the "standard" bins left and right by 72°. We'll then plot the resulting $Q$ values.
+We can now calculated $Q$ for a range of possible `d_theta`s. We perform the calculation for `d_theta`s between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$. This shifts the "standard" bins left and right by a maximum of 72°. 
+
+The $Q$ factor for each `d_theta` is calculated below.
 
 ``` py linenums="1"
 B = 5#(1)!
@@ -420,16 +420,16 @@ for d_theta in d_thetas:#(6)!
     Qs.append(Q)#(8)!
 ```
 
-1.	We specify the number of blades. This is used to calculate the bin edges.
-2.	We specify the range of offsets to consider. We'll consider 200 offsets between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$. 
-3.	We convert the AoA DataFrame into a numpy array. Our function requires a Numpy array.
+1.	The number of blades.
+2.	We specify the range of offsets to consider. We'll consider 200 offsets between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$.
+3.	We convert the AoA DataFrame into a Numpy array because our function does not work with a Pandas series.
 4.	We initialize an empty list to store the quality factors.
-5.	We initialize the optimal Q value to infinity. This is a trick to ensure that the first value we calculate is always the optimal value. It can be unseated by a better value later.
+5.	We initialize the optimal Q value to infinity. This is a trick to ensure the first value we calculate is always the optimal value. It can be unseated by a better value later.
 6.	We iterate over the range of offsets to consider.
-7.	If the quality factor we just calculated is less than the optimal quality value, we update the optimal values.
+7.	If the quality factor we just calculated is less than the best value so far, we update all the "optimal" values.
 8.	We append the quality factor to a list. This will be used to plot the quality factor as a function of the offset.
 
-The `Q` factor for each `d_theta` is shown in [Figure 2](#figure_02) below.
+The `Q` factor for each `d_theta` is plotted in [Figure 6](#figure_06) below.
 
 <script src="q_factor_plot.js" > </script>
 <div>
@@ -457,33 +457,52 @@ The `Q` factor for each `d_theta` is shown in [Figure 2](#figure_02) below.
 	<a onclick="window.fig_q_factor_plot_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: 
+  <figcaption><strong><a name='figure_06'>Figure 6</a></strong>: 
 	The quality factor, Q, as a function of the offset, d_theta. The optimal offset is -20.08°.
   </figcaption>
 </figure>
-And voila! We see that the optimal offset is -20.08 degrees. We also see that there are many offsets that result in an invalid quality factor.
 
-## Grouping the blades
+And voila! The optimal offset is -20.08 degrees.
 
-It is trivial, after having determined the optimal bin edges, to process the proximity probe AoA DataFrame such that we have a separate DataFrame for each blade. 
+??? note "How to choose the offset count"
+	
+    I've selected 200 values between $-\frac{\pi}{5}$ and $\frac{\pi}{5}$ to search through. The choice of 200 is arbitrary, you can choose your own value. You need to ensure, however, your grid is fine enough to capture the optimal offset. If you choose too few values, you may miss the optimal offset. If you choose too many values, you may waste time.
 
-We present code that does this below.
+??? note "The effects of non-equidistant probe spacing"
+
+    At this stage it may be unclear how probe spacing affects our analysis. Especially, how non-equidistant probe spacing affects our analysis.
+
+    I cannot stress this enough: The algorithm we've developed here is only applied to AoAs from one probe. Multiple probes are combined using a different approach, which we discuss in the next chapter.
+
+??? note "Why not use an optimization algorithm"
+
+    To find the optimum `d_theta`, we've resorted to a simple one dimensional grid-search algorithm. This is because the problem is simple. 
+    
+    We could use a more sophisticated optimization algorithm, but it would be overkill for this problem.
+
+## One DataFrame per blade
+Now that we have the optimal bin edges, we cut the proximity probe AoA DataFrame into separate DataFrames for each blade:
 
 ``` py linenums="1"
-blade_dfs = []
-for b in range(B):
-    ix_bin = (
+blade_dfs = []#(1)!
+for b in range(B):#(2)!
+    ix_bin = (#(3)!
         (df_prox_1["AoA"] > optimal_bin_edges[b])
         & (df_prox_1["AoA"] <= optimal_bin_edges[b + 1])
     )
     blade_dfs.append(
-        df_prox_1.loc[ix_bin]
+        df_prox_1.loc[ix_bin] #(4)!
     )
 ```
 
+1.  We initialize an empty list to store the DataFrames for each blade.
+2.  The for loop allows us to consider each blade in turn.
+3.  `ix_bin` is our boolean mask which indicates if the AoAs fall inside bin number `b`.
+4.  We use the `.loc` method to only select the values inside bin `b`.
+
 ``` py linenums="1"
->>> for b in range(B):
->>>     print(f"Blade {b} mean: {blade_dfs[b]['AoA'].mean()}, std: {blade_dfs[b]['AoA'].std()}")
+for b in range(B):
+    print(f"Blade {b} mean: {blade_dfs[b]['AoA'].mean()}, std: {blade_dfs[b]['AoA'].std()}")
 ```
 
 ``` console
@@ -494,23 +513,28 @@ Blade 3 mean: 4.045575640802255, std: 0.0017088093157144036
 Blade 4 mean: 5.305095908129366, std: 0.0014525709531342695
 ```
 
-Finally, we now have 5 dataframes, each one containing only the information from a single blade. 
+Finally, we have 5 DataFrames, one for each blade. 
 
-## Wrapping blades
+??? note "Why report the mean and standard deviation?"
 
-Let's implement a static shift to the AoA values from the original, non-binned, DataFrame. Note that a static shift in AoA values does not change any objective information. We should be able to find the exact same $Q$ value as we did in the previous section.
+    I use the mean and standard deviation as a check for the quality of the allocation. The mean of each blade's dataframe should correspond to the bin center. The standard deviation should be small, because all AoAs should be close to the center.
+
+    If, for some reason, your alignment is off, the standard deviations will shoot through the roof.
+
+## Blade wrap-around
+Let's shift the AoAs from their original position to illustrate an extreme case. This shift is artificial. It is, however, equivalent to what would happen if we positioned the proximity probe or the OPR sensor at a different circumferential location. In short, a constant shift of the AoAs don't objectively change anything about them. We should be able to find the same $Q$ value as we did in the previous section.
 
 ``` py linenums="1" hl_lines="3"
-df_prox_1_shifted = df_prox_1.copy(deep=True)
+df_prox_1_shifted = df_prox_1.copy(deep=True) #(1)!
 df_prox_1_shifted['AoA'] = df_prox_1_shifted['AoA'] - 0.280844143512115
-df_prox_1_shifted['AoA'] = df_prox_1_shifted['AoA'] % (2*np.pi)
+df_prox_1_shifted['AoA'] = df_prox_1_shifted['AoA'] % (2*np.pi) #(2)!
 
 B = 5
 d_thetas = np.linspace(-np.pi/B, np.pi/B, 200)
 arr_aoas = df_prox_1_shifted["AoA"].to_numpy()
 Qs = []
 optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
-for d_theta in d_thetas:
+for d_theta in d_thetas: #(3)!
     Q, bin_edges = calculate_Q(arr_aoas, d_theta, B)
     if Q < optimal_Q:
         optimal_Q = Q*1
@@ -519,13 +543,12 @@ for d_theta in d_thetas:
     Qs.append(Q)
 ```
 
-In Line 1 above, we create a copy of our original DataFrame. In Line 2, we shift the AoA values by blade 0's mean AoA value as calculated in the previous section. 
+1.  We create a copy of our original DataFrame. In Line 2, we shift the AoAs by blade 1's mean AoA value as calculated in the previous section. 
+2.  We've highlighted Line 3 because it is important. Our artificially constructed `df_prox_1_shifted` DataFrame from Line 2 will contain some `AoA` values that are negative. 
 
-We've highlighted Line 3 because it is so important. Our artificially constructed `df_prox_1_shifted` DataFrame from Line 2 will contain some `AoA` values that are negative.
+    In practice our BTT system will always produce positive AoAs. These artificially shifted values should therefore appear *at the end of the next revolution*. To simulate this effect, we wrap the AoAs to the range $[0, 2 \pi]$ in Line 3.
 
-In practice, our function that converts ToAs to AoAs, `transform_ToAs_to_AoAs`, will always produce AoA values that are positive. These values will therefore appear *at the end of the next revolution*. To simulate this effect, we wrap the AoA values to the range $[0, 2 \pi]$ in Line 3.
-
-We then, from Line 5 onwards, repeat the same process as before, attempting to find the optimal bin edges. The only difference is that we use the `df_prox_1_shifted` DataFrame instead of the `df_prox_1` DataFrame.
+3.  From Line 5 onward, we repeat the same process as before to find the optimal bin edges. The only difference is we use the `df_prox_1_shifted` DataFrame instead of the `df_prox_1` DataFrame.
 
 We print the optimal $Q$ value below.
 
@@ -536,23 +559,56 @@ inf
 None
 ```
 
-The optimal $Q$ is infinity and the optimal bin edges equals `None` :scream: !
+The optimal $Q$ is infinity and the optimal edges equals `None` :scream: !
 
-This is what happens when you've got one blade that arrives at a proximity probe at approximately the same time as the tacho's zero-crossing time. Some of the AoA values will appear at the end of the previous revolution, and some will appear at the beginning of the current revolution.
+We plot a histogram of the AoAs in [Figure 7](#figure_07) below to investigate what went wrong.
 
-The algorithm we've developed will fail for such cases, because there will be some values that do not fall within the binning.
+<script src="wrapped_aoa_histogram.js" > </script>
+<div>
+	<div>
+		<canvas id="ch03_wrapped_aoa_histogram"'></canvas>
+	</div>
+	<script>
+		async function render_wrapped_aoa_histogram() {
+			const ctx = document.getElementById('ch03_wrapped_aoa_histogram');
+			// If this is a mobile device, set the canvas height to 400
+			if (window.innerWidth < 500) {
+				ctx.height = 400;
+			}
+			while (typeof Chart == "undefined") {
+				await new Promise(r => setTimeout(r, 1000));
+			}
+			Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+			window.fig_wrapped_aoa_histogram = new Chart(ctx, window.wrapped_aoa_histogram);
+			window.fig_wrapped_aoa_histogram_reset = function resetZoomFigWrappedAoAs() {
+					window.fig_wrapped_aoa_histogram.resetZoom();
+				}
+			}
+		render_wrapped_aoa_histogram();
+	</script>
+	<a onclick="window.fig_wrapped_aoa_histogram_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure markdown>
+  <figcaption><strong><a name='figure_07'>Figure 7</a></strong>: 
+	A histogram of our artificially shifted AoAs. We see that the first blade appears both at the start and end of the revolution.
+  </figcaption>
+</figure>
 
-We can cater for this scenario by adapting our `calculate_Q` algorithm to handle AoAs that fall outside the bin edges.
+This is what happens when a blade arrives at the proximity probe at approximately the same time that the OPR triggers a zero-crossing time. Some of the AoAs will appear at the end of the previous revolution, and some will appear at the beginning of the current revolution.
 
-I'm going to leave it to you to make this change. 
+The algorithm we've developed will fail for such cases, because some values fall before or after the far left and right edges.
+
+We should change `calculate_Q` to handle blade wrap-around.
+
+I'll leave it to you to make this change as an exercise 👇.
 
 {==
 
-:material-pencil-plus-outline: Write an updated `calculate_Q` function that incorporates the AoA values that fall outside the bin edges, instead of simply returning `nan` for Q.
+:material-pencil-plus-outline: Currently, `calculate_Q` returns `nan` when some blades are outside the furthest bin edges. Blade wrap-around will always trigger this response.  Write an updated `calculate_Q` function that handles AoAs outside of the bin edges.
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
 	``` py linenums="1" hl_lines="20 21 22 23 24 25 26 27 28 29 31 32 33 34 35 36 37 38 39 40"  
 	def calculate_Q(
 		arr_aoas : np.ndarray,
@@ -597,120 +653,107 @@ I'm going to leave it to you to make this change.
 		return Q, bin_edges
 	```
 
-	In the `calculate_Q` above, we've added lines of code in the 'sanity check' sections to handle AoA values that fall outside the bin edges.
+	In `calculate_Q` above, we've added lines of code in the 'sanity check' sections to handle AoAs outside the bin edges.
 
-	In lines 20 - 29, we check for AoA values that occur before the left most bin edge. These values are therefore being treated as if they occur in the last bin.
+	In lines 20 - 29, we check for AoAs occurring before the left most bin edge. These values are therefore treated as if they occur in the last bin.
 
-	In lines 31 - 40, we check for AoA values that occur after the right most bin edge. These values are therefore being treated as if they occur in the first bin.
+	In lines 31 - 40, we check for AoAs occurring after the right most bin edge. These values are therefore treated as if they occur in the first bin.
 
 {==
 
-:material-pencil-plus-outline: After you've finished the above, create a function called `transform_prox_AoAs_to_blade_AoAs` that receives the proximity probe AoA DataFrame and the number of blades on the rotor, and returns a list of DataFrames, each one containing the AoA values for a single blade. This function should therefore perform both the determination of the optimal bin edges, as well as the splitting of the AoA values into separate DataFrames.
+:material-pencil-plus-outline: After you've completed the function above, create a new function performing everything this chapter covered automatically. Call the function `transform_prox_AoAs_to_blade_AoAs`. 
+
+This function should receive the proximity probe AoA DataFrame and the number of blades on the rotor, and return a list of DataFrames, one for each blade. 
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
-	``` py linenums="1" 
-	def transform_prox_AoAs_to_blade_AoAs(
-		df_prox : pd.DataFrame,
-		B : int,
-	) -> List[pd.DataFrame]:
-		""" This function takes a dataframe containing the AoA values of a proximity probe, 
-		and returns a list of dataframes, each containing the AoA values of a single blade.
 
-		Args:
-			df_prox (pd.DataFrame): The dataframe containing the AoA values 
-				of the proximity probe.
-			B (int): The number of blades.
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
+	
+    ``` py linenums="1" 
+    def transform_prox_AoAs_to_blade_AoAs(
+        df_prox: pd.DataFrame,
+        B: int,
+        d_theta_increments: int = 200,
+    ) -> List[pd.DataFrame]:
+        """This function takes a DataFrame containing the AoAs of a proximity probe,
+        and returns a list of DataFrame, each containing the AoAs of a single blade.
 
-		Returns:
-			List[pd.DataFrame]: A list of dataframes, each containing the 
-				AoA values of a single blade.
-		"""
-		d_thetas = np.linspace(-2*np.pi/B, 0, 200)
-		arr_aoas = df_prox["AoA"].to_numpy()
-		Qs = []
-		optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
-		for d_theta in d_thetas:
-			Q, bin_edges = calculate_Q(arr_aoas, d_theta, B)
-			if Q < optimal_Q:
-				optimal_Q = Q*1
-				optimal_bin_edges = bin_edges
-				optimal_d_theta = d_theta*1
-			Qs.append(Q)
+        Args:
+            df_prox (pd.DataFrame): The dataframe containing the AoAs
+                of the proximity probe.
+            B (int): The number of blades.
+            d_theta_increments (int, optional): The number of increments
 
-		blade_dfs = []
-		for b in range(B):
-			ix_bin = (
-				(df_prox["AoA"] > optimal_bin_edges[b])
-				& (df_prox["AoA"] <= optimal_bin_edges[b + 1])
-			)
-			if b == 0:
-				ix_bin = ix_bin | (df_prox["AoA"] > optimal_bin_edges[-1])
-				df_bin = (
-					df_prox
-					.loc[ix_bin]
-					.copy()
-					.reset_index(drop=True)
-					.sort_values("ToA")
-				)
+        Returns:
+            List[pd.DataFrame]: A list of dataframes, each containing the AoA
+            values of a single blade.
+        """
+        d_thetas = np.linspace(-0.5 * np.pi / B, 1.5 * np.pi / B, d_theta_increments)
+        arr_aoas = df_prox["AoA"].to_numpy()
+        Qs = []
+        optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
+        for d_theta in d_thetas:
+            Q, bin_edges = calculate_Q(arr_aoas, d_theta, B)
+            if Q < optimal_Q:
+                optimal_Q = Q * 1
+                optimal_bin_edges = bin_edges
+                optimal_d_theta = d_theta * 1
+            Qs.append(Q)
 
-				ix_wrap = df_bin["AoA"] > optimal_bin_edges[-1]
-				df_bin.loc[ ix_wrap, "AoA"] = df_bin.loc[ ix_wrap, "AoA"] - 2*np.pi 
-			elif b == B-1:
-				ix_bin = ix_bin | (df_prox["AoA"] <= optimal_bin_edges[0])
-				df_bin = (
-					df_prox
-					.loc[ix_bin]
-					.copy()
-					.reset_index(drop=True)
-					.sort_values("ToA")
-				)
+        blade_dfs = []
+        blade_median_AoAs = []
+        for b in range(B):
+            ix_bin = (df_prox["AoA"] > optimal_bin_edges[b]) & (
+                df_prox["AoA"] <= optimal_bin_edges[b + 1]
+            )
+            if b == 0:
+                ix_bin = ix_bin | (df_prox["AoA"] > optimal_bin_edges[-1])
+                df_bin = (
+                    df_prox.loc[ix_bin].copy().reset_index(drop=True).sort_values("ToA")
+                )
 
-				ix_wrap = df_bin["AoA"] > optimal_bin_edges[-1]
-				df_bin.loc[ ix_wrap, "AoA"] = 2*np.pi - df_bin.loc[ ix_wrap, "AoA"] 
-			else:
-				df_bin = (
-					df_prox
-					.loc[ix_bin]
-					.copy()
-					.reset_index(drop=True)
-					.sort_values("ToA")
-				)
-			blade_dfs.append(
-				df_bin
-			)
-		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		ADD CODE HERE TO SHIFT THE BLADES TO THE CORRECT POSITIONS
-		return blade_dfs
+                ix_wrap = df_bin["AoA"] > optimal_bin_edges[-1]
+                df_bin.loc[ix_wrap, "AoA"] = df_bin.loc[ix_wrap, "AoA"] - 2 * np.pi
+            elif b == B - 1:
+                ix_bin = ix_bin | (df_prox["AoA"] <= optimal_bin_edges[0])
+                df_bin = (
+                    df_prox.loc[ix_bin].copy().reset_index(drop=True).sort_values("ToA")
+                )
+
+                ix_wrap = df_bin["AoA"] > optimal_bin_edges[-1]
+                df_bin.loc[ix_wrap, "AoA"] = 2 * np.pi - df_bin.loc[ix_wrap, "AoA"]
+            else:
+                df_bin = (
+                    df_prox.loc[ix_bin].copy().reset_index(drop=True).sort_values("ToA")
+                )
+            blade_dfs.append(df_bin)
+            blade_median_AoAs.append( df_bin["AoA"].median()  )
+        blade_order = np.argsort(blade_median_AoAs)
+        return [blade_dfs[i] for i in blade_order]
 	```
 
-	We've decided to only shift the `d_theta` value between $-\frac{2\pi}{B}$ and 0. This is simply a matter of preference, because we'd like the first blade to occur as close as possible to 0 degrees.
-
+	We've decided to only search for the optimal `d_theta` value between $-\frac{2\pi}{B}$ and 0. This is simply a matter of preference, because I want the first blade to occur as close as possible to 0 degrees. If you allow `d_theta` to be positive, it may result in the first blade being classified as the last blade. This is not a problem, but it is a matter of preference.
 
 ## Conclusion
+Blade alignment is like parallel parking - it seems so simple, but you can make a proper mess of it if you're not careful.
 
-Blade alignment is a bit like parallel parking - it seems so simple we often approach it without the respect it deserves, but it can make you look like a fool.
+I've promised that, by the end of this tutorial, you'll be able to infer parameters for vibration frequency, amplitude and phase for every blade. In this chapter we've enabled the "for every blade" part. Before this chapter, we just had a massive array of AoAs with no structure to it. We now have one AoA DataFrame for every blade. 
 
-We started this tutorial with raw time stamps, we now have an AoA DataFrame for every blade arriving at a proximity probe. Everything we've done up to this point involves only a single proximity probe. BTT systems typically have multiple proximity probes. 
+This chapter involves *only a single proximity probe*. BTT systems normally use multiple proximity probes. 
 
-In the next chapter, we'll combine information from multiple probes together. We'll also investigate a nice visual way to check if we've done our alignment and grouping properly: *the stack plot*.
+In the next chapter, we'll combine information from multiple probes together. We'll also investigate a nice visual way to check if we've done our alignment properly: *the stack plot*.
 
 !!! question "Outcomes"
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we need to calculate the optimal bin edges to group the AoAs into blade bins.
+	:material-checkbox-marked:{ .checkbox-success .heart } Calculate the optimal `d_theta` to group the AoAs into blade bins by minimizing a quality factor $Q$.
 
-    :material-checkbox-marked:{ .checkbox-success .heart } Understand that we can calculate the optimal bin edges by minimizing a quality factor, $Q$.
-
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that the first blade may arrive close to the OPR zero-crossing time, which means it could either appear at the start or end of the revolution. We need to cater for this scenario.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand that the first blade may arrive close to the OPR zero-crossing time. This can make the blade appear either at the start *or* end of the revolution. We need to cater for this scenario.
 	
-	:material-checkbox-marked:{ .checkbox-success .heart } Write a function that determines the optimal blade bins for a set of AoA values, and split the proximity probe AoA DataFrame into several individual blade DataFrames.
+	:material-checkbox-marked:{ .checkbox-success .heart } Write a function that determines the optimal blade bins for a set of AoAs, and split the proximity probe AoA DataFrames into several individual blade DataFrames.
 
 ## Acknowledgements
-I thank XXX for reviewing this chapter.
-
-\bibliography
+Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
 <div style='display:flex'>
     <div>
@@ -726,7 +769,9 @@ I thank XXX for reviewing this chapter.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-10-10
+            2024-02-20
         </p>
     </div>
 </div>
+
+\bibliography

@@ -264,6 +264,7 @@ def calculate_Q(
 def transform_prox_AoAs_to_blade_AoAs(
     df_prox: pd.DataFrame,
     B: int,
+    d_theta_increments: int = 200,
 ) -> List[pd.DataFrame]:
     """This function takes a DataFrame containing the AoA values of a proximity probe,
     and returns a list of DataFrame, each containing the AoA values of a single blade.
@@ -272,12 +273,13 @@ def transform_prox_AoAs_to_blade_AoAs(
         df_prox (pd.DataFrame): The dataframe containing the AoA values
             of the proximity probe.
         B (int): The number of blades.
+        d_theta_increments (int, optional): The number of increments
 
     Returns:
         List[pd.DataFrame]: A list of dataframes, each containing the AoA
         values of a single blade.
     """
-    d_thetas = np.linspace(-0.5 * np.pi / B, 1.5 * np.pi / B, 200)
+    d_thetas = np.linspace(-0.5 * np.pi / B, 1.5 * np.pi / B, d_theta_increments)
     arr_aoas = df_prox["AoA"].to_numpy()
     Qs = []
     optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
