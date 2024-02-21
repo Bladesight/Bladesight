@@ -155,6 +155,20 @@ def test_hysteresis_falling_on_simple_ramp(arr_simple_ramp_up):
     )
     assert len(arr_toas) == 0
 
+def test_hysteresis_rising_zig_zag(arr_zig_zag):
+    arr_t, arr_s = arr_zig_zag
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_pos(
+        arr_t,
+        arr_s,
+        2.5,
+        1,
+        10
+    )
+    assert len(arr_toas) == 5
+    assert np.allclose(arr_toas, [0.5, 2.5, 4.5, 6.5, 8.5])
+
+
+
 
 # Test threshold_crossing_interp todo:
 # - Test with n_est, ensure exception is raised if 
