@@ -759,7 +759,7 @@ The below algorithm implements hysteresis to determine the ToAs on the rising ed
 
 ``` py linenums="1"
 @njit
-def seq_threshold_crossing_hysteresis_pos(
+def seq_threshold_crossing_hysteresis_rising(
     arr_t : np.ndarray,
     arr_s : np.ndarray,
     threshold : float,
@@ -812,7 +812,7 @@ def seq_threshold_crossing_hysteresis_pos(
 We can use this function to extract the ToAs from the noisy signal:
 
 ``` py
->>> toas = seq_threshold_crossing_hysteresis_pos(
+>>> toas = seq_threshold_crossing_hysteresis_rising(
 	df_proximity_probe_noisy['time'].values, 
 	df_proximity_probe_noisy['data'].values, 
 	threshold=0.4, 
@@ -993,14 +993,14 @@ We've showcased how a trigger criterion with hysteresis works on the rising edge
 
 {==
 
-:material-pencil-plus-outline: Write a new function, called `seq_threshold_crossing_hysteresis_neg`, that extracts the ToAs on the falling edge using hysteresis.
+:material-pencil-plus-outline: Write a new function, called `seq_threshold_crossing_hysteresis_falling`, that extracts the ToAs on the falling edge using hysteresis.
 
 ==}
 
 ??? example "Reveal answer (Please try it yourself before peeking)"
 	``` py linenums="1"
 	@njit
-	def seq_threshold_crossing_hysteresis_neg(
+	def seq_threshold_crossing_hysteresis_falling(
 		arr_t : np.ndarray,
 		arr_s : np.ndarray,
 		threshold : float,
@@ -1070,7 +1070,7 @@ We've showcased how a trigger criterion with hysteresis works on the rising edge
 	```
 	Example usage:
 	``` py
-	>>> toas = seq_threshold_crossing_hysteresis_neg(
+	>>> toas = seq_threshold_crossing_hysteresis_falling(
 		df_proximity_probe_noisy['time'].values, 
 		df_proximity_probe_noisy['data'].values, 
 		threshold=0.4, 

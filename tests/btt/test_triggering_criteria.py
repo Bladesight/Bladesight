@@ -133,7 +133,7 @@ def test_wrong_n_est(arr_zig_zag):
 
 def test_hysteresis_rising_on_simple_ramp(arr_simple_ramp_up):
     arr_t, arr_s = arr_simple_ramp_up
-    arr_toas = triggering_criteria.threshold_crossing_hysteresis_pos(
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_rising(
         arr_t,
         arr_s,
         5,
@@ -146,7 +146,7 @@ def test_hysteresis_rising_on_simple_ramp(arr_simple_ramp_up):
 
 def test_hysteresis_falling_on_simple_ramp(arr_simple_ramp_up):
     arr_t, arr_s = arr_simple_ramp_up
-    arr_toas = triggering_criteria.threshold_crossing_hysteresis_neg(
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_falling(
         arr_t,
         arr_s,
         5,
@@ -155,9 +155,9 @@ def test_hysteresis_falling_on_simple_ramp(arr_simple_ramp_up):
     )
     assert len(arr_toas) == 0
 
-def test_hysteresis_rising_zig_zag(arr_zig_zag):
+def test_hysteresis_rising_zig_zag_rising(arr_zig_zag):
     arr_t, arr_s = arr_zig_zag
-    arr_toas = triggering_criteria.threshold_crossing_hysteresis_pos(
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_rising(
         arr_t,
         arr_s,
         2.5,
@@ -166,6 +166,18 @@ def test_hysteresis_rising_zig_zag(arr_zig_zag):
     )
     assert len(arr_toas) == 5
     assert np.allclose(arr_toas, [0.5, 2.5, 4.5, 6.5, 8.5])
+
+def test_hysteresis_rising_zig_zag_falling(arr_zig_zag):
+    arr_t, arr_s = arr_zig_zag
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_falling(
+        arr_t,
+        arr_s,
+        2.5,
+        1,
+        10
+    )
+    assert len(arr_toas) == 4
+    assert np.allclose(arr_toas, [1.5, 3.5, 5.5, 7.5])
 
 
 
