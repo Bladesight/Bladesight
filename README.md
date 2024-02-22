@@ -69,7 +69,7 @@ Please email me at <a href="mailto:dawie.diamond@bladesight.com">dawie.diamond@b
 I include all the functions that are used frequently throughout the tutorials in the bladesight package. This is to avoid cluttering the tutorials with code that is not relevant to the tutorial's objective.
 
 ```python
-from bladesight.btt.triggering_criteria import threshold_crossing_hysteresis_pos
+from bladesight.btt.triggering_criteria import threshold_crossing_hysteresis_rising
 ```
 
 ## License

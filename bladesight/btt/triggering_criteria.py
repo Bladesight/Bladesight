@@ -87,9 +87,9 @@ def threshold_crossing_interp(
     # Return the array containing the ToAs
     return arr_toa[:i_toa]
 
-# Untested
+
 @njit
-def threshold_crossing_hysteresis_pos(
+def threshold_crossing_hysteresis_rising(
     arr_t: np.ndarray,
     arr_s: np.ndarray,
     threshold: float,
@@ -156,7 +156,7 @@ def threshold_crossing_hysteresis_pos(
 
 # Untested
 @njit
-def threshold_crossing_hysteresis_neg(
+def threshold_crossing_hysteresis_falling(
     arr_t : np.ndarray,
     arr_s : np.ndarray,
     threshold : float,

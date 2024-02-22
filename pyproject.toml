@@ -60,6 +60,7 @@ pandas = "^2.0.1"
 plotly = "^5.14.1"
 mkdocs-table-reader-plugin = "^2.0"
 mkdocs-bibtex = "^2.11.0"
+mkdocstrings = {extras = ["python"], version = "^0.24.0"}
 
 
 [tool.poetry.group.dev.dependencies]
