@@ -27,4 +27,5 @@ jobs:
       - run: pip install mkdocs-glightbox 
       - run: pip install pypandoc
       - run: pip install setuptools
+      - run: pip install 'mkdocstrings[python]'
       - run: mkdocs gh-deploy --force
