@@ -253,8 +253,9 @@ class Dataset:
     
     Args:
         path (pathlib.Path): The path to the dataset.
-
-    Usage example:
+    
+    Examples:
+    ---------
         >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
         >>> dataset.tables
         ['dataset_1', 'dataset_2']
@@ -348,7 +349,10 @@ class BladesightDatasetDirectory:
     """This object is used to access datasets from the 
     Bladesight Data bucket. It also lists the local datasets.
 
-    Usage example:
+    Examples:
+    ---------
+    Load a dataset into memory:
+
         >>> Datasets = BladesightDatasetDirectory()
         >>> dataset = Datasets["data/intro_to_btt/intro_to_btt_ch02"]
         >>> df_table = dataset["table/dataset_1"]
