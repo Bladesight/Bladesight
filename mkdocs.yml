@@ -117,8 +117,10 @@ nav:
     #- 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
     #- Afterword: tutorials/intro_to_btt/afterword.md
   - User Reference:
+    - reference/dataset_handler.md
     - btt:
       - reference/btt/triggering_criteria.md
+
 
 
 
