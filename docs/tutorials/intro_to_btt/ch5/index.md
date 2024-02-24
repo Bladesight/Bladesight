@@ -1,5 +1,5 @@
 ---
-date: 2023-10-15
+date: 2024-02-2
 tags:
   - Blade Tip Timing
   - BTT
@@ -19,6 +19,11 @@ card_url: "ch5/"
 # Working with multiple probes
 In the previous chapter, we focused on the identification and grouping of individual blades arriving at a *single* proximity probe. Building upon this foundational knowledge, we are now going to delve into the process of combining data from several proximity probes together. 
 
+<figure markdown>
+  ![Probe AoAs vector to list of Blade AoAs](intro_to_pythonCh5_first_gif.gif)
+  <figcaption><a id='figure_01'><strong>Figure 1:</strong></a>...</figcaption>
+</figure>
+
 This chapter will culminate in the ability to create a consolidated DataFrame for each blade.
 
 !!! question "Outcomes"
@@ -30,6 +35,13 @@ This chapter will culminate in the ability to create a consolidated DataFrame fo
 	:material-checkbox-blank-outline: Understand that the order in which the blades arrive at each proximity probe is important, and that we need to align the blades from each proximity probe to the blades from the first proximity probe.
 	
 	:material-checkbox-blank-outline: Write functions to convert the AoAs associated with individual proximity probes into consolidated rotor blade DataFrames which contain all the ToAs and AoAs for each blade over all the probes.
+
+<figure markdown>
+  ![Probe AoAs vector to list of Blade AoAs](Ch05_What_we_do.svg){ width="700" }
+  <figcaption><a id='figure_02'><strong>Figure 2:</strong></a>...</figcaption>
+</figure>
+
+
 
 ## Following along
 The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_05_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.
@@ -45,7 +57,14 @@ You need to use one of the following Python versions to run the worksheet:
 <img src="https://img.shields.io/badge/python-3.10-blue.svg">
 <img src="https://img.shields.io/badge/python-3.11-blue.svg">
 
-## Assembling probe level merged DataFrames
+## Step 1: Pivot the AoA vectors for each probe
+
+<figure markdown>
+  ![Probe AoAs vector to list of Blade AoAs](Ch05_What_we_do_step1.svg){ width="700" }
+  <figcaption><a id='figure_02'><strong>Figure 2:</strong></a>...</figcaption>
+</figure>
+
+MAKE IT CLEAR THAT WE ARE STILL WORKING WITH A SINGLE PROBE!!!
 
 At the end of the previous chapter, we built an algorithm that receives the AoAs from a single proximity probe, and grouped the AoAs into individual blades. We therefore ended up with a list of DataFrames, each containing the AoAs for a single blade. 
 
@@ -67,7 +86,7 @@ In [Figure 2](#figure_02) above 👆, we see that a function called `align_blade
 
 Why do we do this? Simply because its easier to work with a single DataFrame than with a list of DataFrames. There are other ways of performing the work discussed in this chapter, but we believe this is the most intuitive method.
 
-The function to perform this transformation this is given below.
+The function to perform this transformation is given below.
 
 ``` py linenums="1"
 def align_blade_AoAs_along_revolutions(
@@ -94,18 +113,37 @@ def align_blade_AoAs_along_revolutions(
 ```
 
 1.  The `prox_AoA_dfs` is a list of DataFrames from a single proximity probe where each element in the list represents the AoA values from a single blade. This list is the output of the `transform_prox_AoAs_to_blade_AoAs` from the previous chapter.
+    
+    The `List` type hint is used to indicate that `prox_AoA_dfs` is a list of DataFrames. You can import the `List` type hint from the `typing` module as such `from typing import List`.
+
 2.  We take the first blade as our reference. We will align the other blades to the first blade's DataFrame.
+
 3.  We rename the `ToA` and `AoA` columns to `ToA_1` and `AoA_1` respectively. The `1` indicates that these values belong to the first blade.
+
 4.  We loop over the remaining blades. We are going to merge each successive blade's DataFrame into the reference DataFrame.
+
 5.  The Pandas `.merge` method joins two DataFrames on a common key. Here, we merge the reference DataFrame with the current blade's DataFrame. 
     We rename the `ToA` and `AoA` columns to `ToA_{i+2}` and `AoA_{i+2}` respectively. The `i+2` is used because the `i` counter starts at zero. The first DataFrame we merge into the reference must, however, be 2. Therefore, we add 2 to the `i` counter.
+
 6.  We perform an `outer` join. This means that we retain all rows from both DataFrames, even if there is no matching value for the `n` key in one of them. If, for instance, the `n` for revolution 50 is missing from the current blade's DataFrame, the `ToA_2` and `AoA_2` columns will be filled with `NaN` values.
+
 7.  We join the DataFrames on the `n` key, which is the revolution number.
+
+!!!!EXPLAIN BETTER THIS QUESTION: In the code block under figure 2 why do we align to the first blade? is it just because
+its the first blade?
+
+!!!!EXPLAIN BETTER: Why do we use the first blade as the reference?
+
+!!!!JUSTIN's QUESTION:::I have a suggestion on the above code, is it easier if you perform the entire
+align_blade_AoAs_along_revolutions in a loop (so for blade 1 to blade b) instead of having
+only the second blade onwards in a loop? Perhaps I’m missing why you broke it up like
+this or having a misunderstanding?
+
+!!!!CHANGE FUNCTION NAME FROM ALIGN TO PIVOT OR SOMETHING SIMILAR
 
 From the above code block, we see that the first blade's DataFrame is used as the reference DataFrame. Each subsequent blade's DataFrame is merged into this reference. Merging is a common operation in most tabular-data based applications. Each time we merge we are expanding the DataFrame by adding two columns to it.
 
 The head of the resulting DataFrame is shown in [Table 1](#table_01) below.
-
 
 <figure markdown>
   <figcaption><a id='table_01'><strong>Table 1:</strong></a> Each proximity probe's AoAs after being recombined in a column-wise manner </figcaption>
@@ -113,17 +151,23 @@ The head of the resulting DataFrame is shown in [Table 1](#table_01) below.
 </figure>
 {{ read_csv('docs/tutorials/intro_to_btt/ch5/blade_dfs_recombined_head.csv') }}
 
+!!!!ADD A COLUMN EXPLANATION TABLE IN AN ADMONITION HERE
+
 We see that there are ToA and AoA columns for each blade, and only one row per revolution. This DataFrame is now ready for further analysis.
 
-## Determining the stack plot
+### Determining the stack plot
+
+!!!!INCLUDE AN IMAGE HERE OF WHAT THE STACK PLOT IS CONCEPTUALLY
 
 We now introduce the stack plot, a widely recognized tool in BTT. The stack plot visually represents the relative distance between consecutive blades as they pass a proximity probe. Ideally, the circumferential spacing between each set of adjacent blades would be the same for each pair. In reality, each rotor exhibits a unique pattern of blade spacing. We can use this unique pattern to assess whether our alignment has been done properly.
 
 In the example above, the consecutive distances between adjacent blades for the first shaft revolution is:
 
+!!!!I think there is code missing to generate the blade_dfs_recombined dataframe
+
 ``` py linenums="1"
 >>> df = blade_dfs_recombined[0]
->>> blade_2_min_1 = df.iloc[0]["AoA_2"] - df.iloc[0]["AoA_1"]
+>>> blade_2_min_1 = df.iloc[0]["AoA_2"] - df.iloc[0]["AoA_1"] #(1)!
 >>> blade_3_min_2 = df.iloc[0]["AoA_3"] - df.iloc[0]["AoA_2"]
 >>> blade_4_min_3 = df.iloc[0]["AoA_4"] - df.iloc[0]["AoA_3"]
 >>> blade_5_min_4 = df.iloc[0]["AoA_5"] - df.iloc[0]["AoA_4"]
@@ -134,6 +178,11 @@ In the example above, the consecutive distances between adjacent blades for the 
 >>> print("blade_5_min_4:", blade_5_min_4, "rad")
 >>> print("blade_1_min_5:", blade_1_min_5, "rad")
 ```
+
+1.  The `iloc[0]` method is used to access the first row of the DataFrame. It returns a Pandas Series, and we can access the `AoA` columns using the `[]` operator.
+
+!!!!MAKE THE NAMES its “blade 2 minus 1”?
+
 ``` console
 blade_2_min_1: 1.2629980304819501 rad
 blade_3_min_2: 1.2574606040202596 rad
@@ -141,6 +190,11 @@ blade_4_min_3: 1.2488114790250116 rad
 blade_5_min_4: 1.2490816162460137 rad
 blade_1_min_5: 1.2585900251951907 rad
 ```
+
+!!!!Would it be better to say “… .Here we consider the first blade’s AoA at the second
+revolution and subtract the last blade’s AoA observed during the first revolution. This
+means …”
+
 The calculation of the stack plot values is intuitive, except for the calculation of the last value, `blade_1_min_5`. Here, we subtract the AoA of the last blade from the `first` revolution (`n=0`) from the AoA from the first blade of the `second` revolution (`n=1`). This means the stack plot values for the last blade will be `None` for the last revolution.
 
 We can write a function that calculates the stack plot DataFrame for each probe. We call this function `create_stack_plot_df`:
@@ -208,6 +262,9 @@ dtype: object
 In the code above, we show the median stack plot values for each column in the stack plot DataFrame. The median value for `n` is useless here, and will not be plotted.
 
 [Figure 3](#figure03) below shows the median stack plot values for each blade.
+
+REMEMBER 2 PI / 5 = 1.2566370614359172
+
 <script src="stack_plot_probe_1.js" > </script>
 <div>
 	<div>
@@ -240,6 +297,10 @@ In the code above, we show the median stack plot values for each column in the s
 </figure>
 
 In [Figure 3](#figure_03) above, we see that the median difference between consecutive blades are all approximately equal to the *ideal* distance of $\frac{2 \pi}{5}=1.2566370614359172$. The differences that do exist, however, are valuable, and can be considered a "fingerprint" for this rotor.
+
+ONLY HERE DO WE MOVE TO MULTIPLE PROXIMITY PROBES TOGETHER.
+
+!!!!INCLUDE A DESCRIPTION OF OTHER USES OF THE STACK PLOT
 
 Now that we've figured out how to determine the stack plot for a single probe, we plot the stack plot values for all the probes on top of one another in [Figure 4](#figure04) below. This is simply a formality. We expect the stack plot for each probe to be identical because, well, its the same blades arriving at each probe. We expect all the lines to lie neatly on top of one another.
 
@@ -279,7 +340,21 @@ Oh no! :scream:
 
 The stack plots are clearly different. How can this be? How can the rotor suddenly change shape based on what probe we're looking at? The answer is that the rotor hasn't changed shape. The stack plot, as we presented it here, is a function of which blade arrives first at each probe.
 
+## Step 2: Combining the pivoted DataFrames from different probes
+
+<figure markdown>
+  ![Probe AoAs vector to list of Blade AoAs](Ch05_What_we_do_step2.svg){ width="700" }
+  <figcaption><a id='figure_02'><strong>Figure 2:</strong></a>...</figcaption>
+</figure>
+
 The first blade to arrive at probe number 1 and the first blade to arrive at probes 2, 3 and 4 is *not* the same blade. The effect this has is that the stack plot for probe's 2, 3 and 4 seems *shifted*. With only 5 blades in this rotor, we can simply inspect the stack plot to determine by how many blades the stack plot is shifted. 
+
+A nice way to visualize this is to plot the stack plot on a polar plot.
+
+<figure markdown>
+  ![Shift by 1](shift_by_1.gif)
+  <figcaption><a id='figure_01'><strong>Figure 1:</strong></a>...</figcaption>
+</figure>
 
 By looking at the first probe's stack plot, we see the large dip at `AoA_3` occurs at `AoA_4` in the stack plot for probes 2, 3 and 4. This means that the *first blade* to arrive at probe 1 arrives *second* at probes 2, 3 and 4. 
 
@@ -291,8 +366,21 @@ _____________________________________________    _______________________________
 ["AoA_1", "AoA_2", "AoA_3", "AoA_4", "AoA_5"] -> ["AoA_5", "AoA_1", "AoA_2", "AoA_3", "AoA_4"]
 ```
 
-### Offsetting the stack plot values 
+
+
+### Offsetting the stack plot values
+
+!!!!I feel when I first read this distinguishing between alignment and offsetting is quite
+difficult for me. I’m not sure if adding the difference of emphasizing the focus would
+help? I’m not sure if you think its just me that would struggle with this issue, if so leave
+it as is.
+
 The simplest way to solve our apparent conundrum is to rename the column headings from the probe 2, 3 and 4 stack plot DataFrames. We write a helper function that receives a list of column headings and an offset to shift them by, and returns the reordered column headings.
+
+!!!Currently I’m a bit confused on how you performed the column wise shifting? How do
+you determine “how many shifts are required” to ensure the stack plots match?
+
+!!!!The + buttons here do not open information or provide write up on the code like usual
 
 ``` py linenums="1"
 def shift_AoA_column_headings(
@@ -306,6 +394,8 @@ def shift_AoA_column_headings(
         + list(aoa_column_headings)[:shift_by]
     )
 ```
+
+!!!!EXPLAIN THIS CODE MUCH BETTER!👆
 
 1.  Before we perform the shift, we confirm that the user is not trying to shift the column headings by more than the number of blades. This would not make sense!
 2.  The shift operator is achieved by separating our column DataFrame at the `shift_by` value and concatenating the two parts in reverse order. We wrap the `aoa_column_headings` with the `list` function. This is strictly speaking not necessary if the user uses a Python list as the type for `aoa_column_headings`, but some people may want to pass `aoa_column_headings` as a Pandas series or a NumPy array, which would not work as-is.
@@ -333,12 +423,13 @@ Wonderful. We can now determine the column name mapping that would align the bla
 
 We can write a function that performs this renaming:
 
+
 ``` py linenums="1"
 def rename_df_columns_for_alignment(
     df_to_align : pd.DataFrame,#(1)!
     global_column_headings : List[str],#(2)!
     shift_by : int#(3)!
-) -> pd.DataFrame:int#(4)!
+) -> pd.DataFrame#(4)!
     shifted_dataframe_columns = shift_AoA_column_headings(#(5)!
         global_column_headings, 
         shift_by
@@ -367,6 +458,9 @@ def rename_df_columns_for_alignment(
 7.  We store the original column order of `df_to_align` in a variable. We will use this to re-order the columns in `df_to_align` later on.
 8.  We rename the columns in `df_to_align` using the `column_headings_to_rename` dictionary.
 9.  We return the columns in `df_to_align` in the original order.
+
+!!!!In the Google Colab notebook, may you please provide more insight to how you
+determined the offset list? (see the below screenshot)
 
 If we perform a renaming of the columns of the stack plot DataFrames for probes 2, 3 and 4, the stack plots can be redrawn and is shown in [Figure 5](#figure_05) below.
 
@@ -422,6 +516,10 @@ The engineering drawing for the probe holder used in the current dataset reveals
   The figure shows the engineering drawing for the component holding the probes for this chapter's dataset. We can see that the circumferential distance between adjacent probes is 9.67 * 2 = 19.34 degrees.
 </figure>
 
+!!!!spacing? I know at the bottom you say that there is a 19.34 degree spacing, but maybe
+still saying something on the equidistant vs non-equidistant spacing here is a nice
+addition?
+
 From [Figure 6](#figure_06) above, we see that the holes for the probes were manufactured to be 19.34 degrees from one another. 
 
 In reality, because of manufacturing tolerances, the manufactured spacing will be slightly different. Even if you could manufacture it perfectly, the probes themselves may not "respond" perfectly similar, leading to AoA values that do not correspond to the centerline of the intended probe locations. 
@@ -468,6 +566,8 @@ def predict_probe_offset(
 
 We can use the function above to check our previous assumption, that the offset for probes 2, 3, and 4 must be 1.
 
+!!!!Should the offsets length be equal to the number of probes?
+
 ``` py linenums="1"
 >>> probe_1_blade_1_AoA = blade_dfs_recombined[0]["AoA_1"].median()
 >>> probe_spacings = np.deg2rad(np.array([0, 19.34, 19.34*2, 19.34*3]))
@@ -481,6 +581,7 @@ We can use the function above to check our previous assumption, that the offset 
         )
         print(f"Probe {i + 1 }:", probe_offset)
 ```
+!!!!EXPLAIN CODE BETTER
 
 ``` console
 Probe 1: 0
@@ -491,7 +592,15 @@ Probe 4: 1
 
 We see here that, indeed, the optimal offset for probes 2, 3 and 4 is 1. We have also calculated the optimal offset for probe 1. This is simply a sanity check, and should always return 0.
 
-## Assembling global rotor level merged DataFrames
+### Assembling global rotor level merged DataFrames
+
+!!!!I think it will help a lot if you can make it more explicit that you are predicting probe
+offsets (with the predict_probe_offset function
+
+!!!!Perhaps may you please explain how the first code cell (shown in the screenshot
+below) came about. So explaining it from scratch like you did with previous code
+cells.
+
 We now have all the ingredients needed to assemble AoA DataFrames that represent the dynamic behavior of every single blade over all the probes. This is what we have been searching for all along: being able to measure the vibration of each blade individually.
 
 We write a function that constructs `B` DataFrames from each of the merged proximity probe level frames.  We will refer to these DataFrames as rotor blade DataFrames, meaning its values represent all the information we have about a single blade.
@@ -618,7 +727,7 @@ The first three rows in the rotor blade AoA DataFrame is shown in [Table 2](#tab
 </figure>
 {{ read_csv('docs/tutorials/intro_to_btt/ch5/rotor_blade_1_df_head.csv') }}
 
-From [Table 2](#table_02) above we see there are four AoA columns and four ToA columns, one for each probe. We can also identify which probe it is. This DataFrame looks confusingly similar to the DataFrame shown in [Table 1](#table_01). 
+From [Table 2](#table_02) above, we see there are four AoA columns and four ToA columns, one for each probe. We can also identify which probe it is. This DataFrame looks confusingly similar to the DataFrame shown in [Table 1](#table_01). 
 
 We present, in [Table 3](#table_03) below, the last rotor blade's AoA DataFrame to get a better perspective on what we have done.
 <figure markdown>
@@ -630,6 +739,12 @@ We present, in [Table 3](#table_03) below, the last rotor blade's AoA DataFrame 
 If we look at `AoA_p1` and `ToA_p1` for the first row, we see that they occur *after* the other ToA and AoA values in that row. This means that the first probe that "sees" blade 5 in every revolution is probe number 2, and the last probe to "see" it is probe number 1.
 
 Depending on the vibration analysis we're interested in, we might decide to collapse all AoA and ToA values into two large arrays. But mostly, we'll use them exactly in the form they are here.
+
+!!!!In the Google Colab notebook, at the end of the notebook there is a plot showing the
+resonances. I think this is mistakenly put in Chapter 5’s notebook and should be
+removed as this plot belongs to Chapter 6.
+
+!!!!I think including a picture of where the probes were positioned
 
 ## Conclusion
 
