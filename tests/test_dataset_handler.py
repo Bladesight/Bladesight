@@ -268,7 +268,7 @@ def test_Dataset(tmp_path):
 def test_replace_path_prefix_static_method():
     old_path = "bladesight-datasets/intro_to_btt/intro_to_btt_ch02"
 
-    new_path = BladesightDatasetDirectory.replace_path_prefix(
+    new_path = BladesightDatasetDirectory._replace_path_prefix(
         old_path,
         "data"
     )
