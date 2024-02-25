@@ -347,7 +347,9 @@ class Dataset:
 
 class BladesightDatasetDirectory:
     """This object is used to access datasets from the 
-    Bladesight Data bucket. It also lists the local datasets.
+    Bladesight Data bucket on S3. 
+    
+    It also lists the local datasets.
 
     Examples:
     ---------
@@ -360,7 +362,7 @@ class BladesightDatasetDirectory:
     def __init__(self):
         self.path = get_path_to_local_bladesight()
         self.local_datasets = [
-            self.replace_path_prefix(i) for i in get_local_datasets()
+            self._replace_path_prefix(i) for i in get_local_datasets()
         ]
         self._refresh_available_datasets()
     
@@ -402,7 +404,10 @@ class BladesightDatasetDirectory:
         Returns:
             Dataset: The dataset.
 
-        Usage example:
+        Examples:
+        ---------
+        Load a dataset into memory:
+
             >>> Datasets = BladesightDatasetDirectory()
             >>> dataset = Datasets["data/intro_to_btt/intro_to_btt_ch02"]
         """
@@ -412,16 +417,16 @@ class BladesightDatasetDirectory:
             )
 
         for local_dataset in self.local_datasets:
-            homogenized_local_name = self.replace_path_prefix(local_dataset)
+            homogenized_local_name = self._replace_path_prefix(local_dataset)
             if key == homogenized_local_name:
                 return Dataset(self.path / pathlib.Path(local_dataset + ".db"))
         else:
             # Download the dataset from the online datasets
             for online_set in self.online_datasets:
-                homogenized_online_name = self.replace_path_prefix(online_set)
+                homogenized_online_name = self._replace_path_prefix(online_set)
                 if key == homogenized_online_name:
                     download_dataset_from_bladesight_data(
-                        self.replace_path_prefix(key, BLADESIGHT_DATASETS_S3_BUCKET)
+                        self._replace_path_prefix(key, BLADESIGHT_DATASETS_S3_BUCKET)
                     )
                     self.local_datasets = get_local_datasets()
                     return self[key]
@@ -430,7 +435,7 @@ class BladesightDatasetDirectory:
                 raise KeyError(f"Dataset {key} not found.")
     
     @staticmethod
-    def replace_path_prefix(
+    def _replace_path_prefix(
         dataset_full_path: str, replace_prefix: str = "data"
     ) -> str:
         """This function is used to replace the first path prefix with the
@@ -447,7 +452,7 @@ class BladesightDatasetDirectory:
             str: The new path.
 
         Usage example:
-            >>> replace_path_prefix(
+            >>> _replace_path_prefix(
             ... "bladesight-data/intro_to_btt/intro_to_btt_ch02", 
             ... "data"
             ... )
@@ -461,7 +466,7 @@ class BladesightDatasetDirectory:
         We replace whatever prefix is in the 
         dataset with "data" 
         """
-        return [self.replace_path_prefix(i) for i in self.online_datasets]
+        return [self._replace_path_prefix(i) for i in self.online_datasets]
     
     def _refresh_available_datasets(self):
         """
