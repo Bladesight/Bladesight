@@ -2,7 +2,7 @@ from typing import List
 import pandas as pd
 import numpy as np
 
-def align_blade_AoAs_along_revolutions(
+def pivot_blade_AoAs_along_revolutions(
     prox_AoA_dfs : List[pd.DataFrame]
 ) -> pd.DataFrame:
     """This function aligns the AoA DataFrames (from the 
@@ -45,7 +45,7 @@ def create_stack_plot_df(df_blades_aligned : pd.DataFrame) -> pd.DataFrame:
         df_blades_aligned (pd.DataFrame): A DataFrame where every row contains the
         data pertaining to a single shaft revolution and every
         blade's ToA and AoA values are in its own column respectively. This
-        is the output of the `align_blade_AoAs_along_revolutions` function.
+        is the output of the `pivot_blade_AoAs_along_revolutions` function.
 
     Returns:
         pd.DataFrame: A DataFrame where every row contains the
@@ -59,18 +59,18 @@ def create_stack_plot_df(df_blades_aligned : pd.DataFrame) -> pd.DataFrame:
     stack_plot_diffs = {}
     stack_plot_diffs["n"] = df_blades_aligned["n"].to_numpy()
     for blade_no in range(B - 1):
-        further_blade_name = all_aoa_columns[blade_no + 1]
+        farther_blade_name = all_aoa_columns[blade_no + 1]
         closer_blade_name = all_aoa_columns[blade_no]
         arr_blade_diffs = (
-            df_blades_aligned[further_blade_name] 
+            df_blades_aligned[farther_blade_name] 
             - df_blades_aligned[closer_blade_name]
         ).to_numpy()
         
         stack_plot_diffs[closer_blade_name] = arr_blade_diffs
-    further_blade_name = all_aoa_columns[0]
+    farther_blade_name = all_aoa_columns[0]
     closer_blade_name = all_aoa_columns[B - 1]
     arr_blade_diffs = (
-        df_blades_aligned[further_blade_name].to_numpy()[1:] + 2*np.pi 
+        df_blades_aligned[farther_blade_name].to_numpy()[1:] + 2*np.pi 
         - df_blades_aligned[closer_blade_name].to_numpy()[:-1]
     )
     arr_blade_diffs = np.append(arr_blade_diffs, [None])
@@ -158,7 +158,7 @@ def predict_probe_offset(
             every row contains the data pertaining to a single shaft
             revolution and every blade's ToA and AoA values are in its
             own column respectively. This is the output of the
-            `align_blade_AoAs_along_revolutions` function.
+            `pivot_blade_AoAs_along_revolutions` function.
         starting_aoa (float): The mean AoA of the blade you want to
             project forward and identify in df_probe_AoAs. In radians.
         prox_probe_relative_distance (float): The relative distance
@@ -188,7 +188,7 @@ def assemble_rotor_AoA_dfs(
 ) -> List[pd.DataFrame]:
     """This function assembles the rotor blade AoA DataFrames. In other
     words, this function receives the grouped AoA DataFrames from each
-    probe, the one calculated by `align_blade_AoAs_along_revolutions` and 
+    probe, the one calculated by `pivot_blade_AoAs_along_revolutions` and 
     shifts the AoA values of each probe such that the first
     blade arriving at the first probe is aligned with the first blade
     arriving at the first probe. 
@@ -200,7 +200,7 @@ def assemble_rotor_AoA_dfs(
         prox_aligned_dfs (List[pd.DataFrame]): A list of DataFrames
             where each DataFrame contains the ToAs and AoAs of a single
             blade from a proximity probe. Each DataFrame is the output
-            of the `align_blade_AoAs_along_revolutions` function. 
+            of the `pivot_blade_AoAs_along_revolutions` function. 
         probe_spacing (List[int]): A list of relative probe spacing
             between the first probe and every other probe. There are one
             less value in this list than in prox_aligned_dfs.
