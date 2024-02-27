@@ -2,7 +2,7 @@ from typing import List
 import pandas as pd
 
 from .aoa import transform_ToAs_to_AoAs, transform_prox_AoAs_to_blade_AoAs
-from .align import align_blade_AoAs_along_revolutions, assemble_rotor_AoA_dfs
+from .align import pivot_blade_AoAs_along_revolutions, assemble_rotor_AoA_dfs
 from .zero import get_blade_tip_deflections_from_AoAs
 
 __all__ = [
@@ -46,7 +46,7 @@ def get_rotor_blade_AoAs(
         )
         
         blade_dfs_recombined.append(
-            align_blade_AoAs_along_revolutions(
+            pivot_blade_AoAs_along_revolutions(
                 transform_prox_AoAs_to_blade_AoAs(
                     df_prox, 
                     B
