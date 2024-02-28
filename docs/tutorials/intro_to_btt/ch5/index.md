@@ -1,5 +1,5 @@
 ---
-date: 2024-02-27
+date: 2024-02-28
 tags:
   - Blade Tip Timing
   - BTT
@@ -12,7 +12,7 @@ hide:
   - tags
 description: This chapter explains how to combine data from multiple proximity probes together.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: main_intro_to_btt_ch5.html
 card_title: Intro to BTT Ch5 - Working with multiple probes
 card_url: "ch5/"
 ---
@@ -834,7 +834,7 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2024-02-27
+            2024-02-28
         </p>
     </div>
 </div>
