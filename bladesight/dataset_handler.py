@@ -78,7 +78,10 @@ def download_dataset_from_bladesight_data(dataset_path_on_s3: str) -> None:
     Args:
         dataset_path_on_s3 (str): The path to the dataset on S3.
 
-    Usage example:
+    Examples:
+    ---------
+        Download a dataset into the local .bladesight directory
+
         >>> download_dataset_from_bladesight_data("bladesight-datasets/intro_to_btt/intro_to_btt_ch02")
     """
     s3 = s3fs.S3FileSystem(anon=True)
@@ -107,7 +110,10 @@ def _confirm_dataset_is_valid(path_to_db : pathlib.Path) -> None:
         FileNotFoundError: If the dataset does not exist.
         ValueError: If the dataset does not have a .db extension.
 
-    Usage example:
+    Examples:
+    ---------
+        Check that a dataset has a .db extention.
+        
         >>> _confirm_dataset_is_valid("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
     """
     if not path_to_db.exists():
