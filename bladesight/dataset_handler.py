@@ -147,12 +147,15 @@ def _read_sql(
     Raises:
         ValueError: If the return_mode is not 'pd' or 'pl'.
     
-    Usage example:
+    Examples:
+    ---------
+        Read a SQL query from a dataset into a Polars DataFrame.
+
         >>> _read_sql(
-            "bladesight-data/intro_to_btt/intro_to_btt_ch02.db", 
-            "SELECT * FROM metadata;",
-            "pl"
-        )
+        ... "bladesight-data/intro_to_btt/intro_to_btt_ch02.db", 
+        ... "SELECT * FROM metadata;",
+        ... "pl"
+        ... )
     """
     if return_mode not in ["pd", "pl"]:
         raise ValueError("return_mode must be 'pd' or 'pl'")
@@ -174,7 +177,10 @@ def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Union[Dict, Any]]:
     Returns:
         Dict[str, Union[Dict, Any]]: The metadata.
 
-    Usage example:
+    Examples:
+    ---------
+        Get all the metadata from a dataset.
+
         >>> _get_all_metadata("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
         {
             "CITATION": {
@@ -200,7 +206,10 @@ def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
     Returns:
         List[str]: The tables in the dataset.
 
-    Usage example:
+    Examples:
+    ---------
+        Get all the tables in a dataset.
+
         >>> _get_db_tables("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
         ['dataset_1', 'dataset_2']
     """
@@ -222,14 +231,17 @@ def _get_printable_citation(metadata: Dict[str, Dict]) -> str:
     Returns:
         str: The printable citation.
 
-    Usage example:
+    Examples:
+    ---------
+        Get a printable citation from the metadata.
+
         >>> _get_printable_citation({
-            "CITATION": {
-                "repr": "This is a citation",
-                "url": "https://example.com",
-                "doi": "10.1234/5678"
-            }
-        })
+        ... "CITATION": {
+        ...     "repr": "This is a citation",
+        ...     "url": "https://example.com",
+        ...     "doi": "10.1234/5678"
+        ...     }
+        ... })
         "If you use this dataset in published work, please \
          use the below citation:\n\nThis is a citation\nLink\
          to paper: https://example.com\nDOI: 10.1234/5678"
@@ -295,7 +307,10 @@ class Dataset:
         Raises:
             ValueError: If the library is not 'pd' or 'pl'.
 
-        Usage example:
+        Examples:
+        ---------
+            Set the dataframe library to polars.
+
             >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
             >>> dataset.set_dataframe_library("pl")
         """
@@ -316,7 +331,10 @@ class Dataset:
         Returns:
             Union[pd.DataFrame, pl.DataFrame]: The table.
 
-        Usage example:
+        Examples:
+        ---------
+            Load a table from the dataset into memory:
+
             >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
             >>> df_table = dataset["table/dataset_1"]
         """
@@ -383,11 +401,15 @@ class BladesightDatasetDirectory:
         Returns:
             bool: True if the key is in the correct format, False otherwise.
 
-        Usage example:
+        Examples:
+        ---------
+        Check if a key is in the correct format:
+
             >>> BladesightDatasetDirectory._getitem_key_correct_format(
             ... "data/intro_to_btt/intro_to_btt_ch02"
             ... )
             True
+
             >>> BladesightDatasetDirectory._getitem_key_correct_format(
             ... "intro_to_btt/intro_to_btt_ch02"
             ... )
@@ -457,7 +479,10 @@ class BladesightDatasetDirectory:
         Returns:
             str: The new path.
 
-        Usage example:
+        Examples:
+        ---------
+        Replace the first path prefix with "data":
+        
             >>> _replace_path_prefix(
             ... "bladesight-data/intro_to_btt/intro_to_btt_ch02", 
             ... "data"
