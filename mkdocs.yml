@@ -111,7 +111,7 @@ nav:
     - 3. Angle of Arrival (AoA): tutorials/intro_to_btt/ch3/index.md
     - 4. Allocating AoAs to blades: tutorials/intro_to_btt/ch4/index.md
     - 5. Working with multiple probes: tutorials/intro_to_btt/ch5/index.md
-    #- 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
+    - 6. Data Zeroing and Filtering: tutorials/intro_to_btt/ch6/index.md
     #- 7. Synchronous Vibration and Sampling: tutorials/intro_to_btt/ch7/index.md
     #- 8. Single Degree of Freedom (SDoF) Method: tutorials/intro_to_btt/ch8/index.md
     #- 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
