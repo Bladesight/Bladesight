@@ -14,7 +14,7 @@ def get_blade_tip_deflections_from_AoAs(
         2. Scales the AoAs to tip deflections.
         3. Detrends the tip deflections using a polynomial fit.
         4. Filters the tip deflections using a Butterworth filter.
-        5. Calculates the peak to peak tip deflection.
+        5. Calculates the peak-to-peak tip deflection.
 
     Args:
         df_rotor_blade_AoAs (pd.DataFrame): The DataFrame containing the AoAs of each 
@@ -28,7 +28,9 @@ def get_blade_tip_deflections_from_AoAs(
             frequency. Defaults to 0.3.
 
     Returns:
-        pd.DataFrame: The DataFrame containing the detrended and filtered tip deflections.
+        pd.DataFrame: The DataFrame containing the detrended and filtered 
+            tip deflections. This DataFrame also contains the peak-to-peak
+            tip deflection.
     """
     df = df_rotor_blade_AoAs.copy(deep=True)
     all_aoa_columns = [
