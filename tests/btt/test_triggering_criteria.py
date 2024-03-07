@@ -179,6 +179,35 @@ def test_hysteresis_rising_zig_zag_falling(arr_zig_zag):
     assert len(arr_toas) == 4
     assert np.allclose(arr_toas, [1.5, 3.5, 5.5, 7.5])
 
+@pytest.fixture
+def arr_zig_zag_multiple():
+    """ A zig zag signal that is supposed to trigger multiple times
+    when using the simple threshold.
+
+    Returns:
+        np.ndarray: A zig zag signal.
+        np.ndarray: The time array.
+    """
+    return np.arange(10), np.array([0, 10, 5, 10, 5, 10, 0, 10, 5, 10])
+
+def test_hysteresis_rising_zig_zag_multiple_rising(arr_zig_zag_multiple):
+    arr_t, arr_s = arr_zig_zag_multiple
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_rising(
+        arr_t,
+        arr_s,
+        10,
+        5
+    )
+    assert len(arr_toas) == 5
+    assert np.allclose(arr_toas, [1, 3, 5, 7, 9])
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_rising(
+        arr_t,
+        arr_s,
+        10,
+        5.01
+    )
+    assert len(arr_toas) == 2
+    assert np.allclose(arr_toas, [1, 7])
 
 
 
