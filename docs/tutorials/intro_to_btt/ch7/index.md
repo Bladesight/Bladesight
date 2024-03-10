@@ -1,5 +1,5 @@
 ---
-date: 2023-10-27
+date: 2024-03-12
 tags:
   - Blade Tip Timing
   - BTT
@@ -12,19 +12,21 @@ hide:
   - tags
 description: This chapter explains the physics behind rotor blade vibration and how we sample it.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: main_intro_to_btt_ch7.html
 card_title: Intro to BTT Ch7 - Synchronous Vibration and Sampling
 card_url: "ch7/"
 ---
+??? abstract "You are here"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch7.svg){ width="500" }
+	</figure>
+
 # Synchronous Vibration and Sampling
-Each chapter in this tutorial has been focused on describing one signal processing step at a time. This chapter is a bit different. We discuss *what we are seeing* instead of *how we process it*. In our journey to infer blade vibration, frequency, and phase from raw timestamps, this chapter will help us understand what the results mean.
+The previous chapters presented new signal processing steps along our journey. In this chapter, we slow down a bit. We discuss *why blades are vibrating* instead of *how we process it*. In our journey to infer blade vibration, frequency, and phase from raw timestamps, this chapter will help us understand what the results mean.
 
 Blades do not simply vibrate for no reason. Something causes the blades to vibrate. 
 
-
-We delve into the fundamentals of Single Degree of Freedom (SDoF) vibration. Most graduate students coming to this tutorial would have already encountered SDoF vibration in their studies. We, however, explain it through the lens of BTT. Hopefully, spending time on the fundamentals through a different lens will help you understand the subject better.
-
-In the previous chapter, we managed to convert the raw Angle of Arrival (AoA) values into tip deflections. We even identified a couple of resonances visually using the peak to peak vibration indicator. In this chapter, we discuss the physics behind a type of vibration called *synchronous vibration*. We also show how BTT systems *sample* synchronous vibration waveforms.
+We delve into the fundamentals of Single Degree of Freedom (SDoF) vibration. Most graduate students would have already encountered SDoF vibration in their studies. We, however, explain it through the lens of BTT. Hopefully, spending time on the fundamentals through a different lens will help you understand the subject better.
 
 !!! question "Outcomes"
 
@@ -43,11 +45,41 @@ In the previous chapter, we managed to convert the raw Angle of Arrival (AoA) va
 	:material-checkbox-blank-outline: Understand that BTT signals are generally aliased.
 
 ## Two kinds of vibration
+This chapter focuses on one kind of vibration, but we'll briefly categorize the two kinds of vibration here. We mostly focus on the kind of vibration most relevant to BTT.
 
-SECTION on SYNCHRONOUS AND ASYNCHRONOUS VIBRATION. WHY DOES SYNCHRONOUS VIBRATION OCCUR? WHY DOES ASYNCHRONOUS VIBRATION OCCUR?
+Here's a high-level overview of the two kinds of vibration:
+1.  Obstruction-driven vibration
+2.  Fluid-structure interaction-driven vibration
+
+[Figure 1](#figure_01) below illustrates the two kinds of vibration.
+
+<figure markdown>
+  <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: The magnitudes of the first few positive Fourier coefficients of the forcing function.
+  </figcaption>
+</figure>
+
+The left side of the figure shows there are 4 struts in the flow path. The struts obstructs the fluid, which causes pressure fluctuations downstream. These pressure fluctuations occur *once per revolution for each obstruction*. This statement is so important, I've put it in a box 👇.
+
+!!! success  "Obstruction-driven vibration, or Synchronous vibration"
+    
+    The pressure fluctuations caused by obstructions occur once per revolution for each obstruction. If there are 4 obstructions, the pressure fluctuations occur 4 times per revolution. It is not possible to have 4.5 pressure fluctuations per revolution, just like you cannot have 2.4 children. 
+    
+    This kind of vibration is therefore called "synchronous vibration", because it occurs at an integer multiple of the shaft speed. This integer multiple is called the Engine Order (EO).
+
+The right side of the figure shows an airfoil with a spring-mass damper system attached between it and the fluid. It means the structure is vibrating because of the fluid, and the fluid is vibrating because of the structure. These two systems feed off one another, and can result in significant vibration. This kind of vibration is called "asynchronous vibration", because it does not occur at an integer multiple of the shaft speed, it is dependant on the fluid and the structures properties.
+
+!!! warning "Asynchronous vibration is not well understood... by me"
+
+    Please do not take my explanation above as authoritative. I am not an expert in fluid-structure interaction, Computational Fluid Dynamics (CFD), or flutter. BTT is concerned with measuring the vibrations, regardless of what caused them. 
+
+    If you are an expert in fluid-structure interaction, Computational Fluid Dynamics (CFD), or flutter, and you would like to contribute to this tutorial, please get in touch.😀
+
+This chapter focuses on synchronous vibration because it is more difficult to measure than asynchronous vibration. We'll explain why this is the case later in the chapter. 
+
+For now, let's focus on synchronous vibration.
 
 ## Synchronous vibration
-Rotor blade vibration can be characterized according to the relationship between the vibration frequency and shaft speed. The two kinds of vibration are *synchronous* and *asynchronous* vibration. Synchronous vibration is defined as vibration occurring at an *integer multiple* of the shaft speed. This integer multiple is called the Engine Order (EO). 
+Rotor blade vibration can be characterized based on the relationship between the vibration frequency and shaft speed. The two kinds of vibration are *synchronous* and *asynchronous* vibration. Synchronous vibration is defined as vibration occurring at an *integer multiple* of the shaft speed. This integer multiple is called the Engine Order (EO). 
 
 The relationship between the excitation frequency and the shaft speed is given below:
 
@@ -75,7 +107,7 @@ $$
     \end{align}
     $$
 
-Synchronous vibration can therefore only take on a discrete set of values. If, for instance, the rotor speed is 3000 RPM (50 Hz), then the possible excitation frequencies are:
+Synchronous vibration can therefore only take on a discrete set of values. If, for instance, the rotor speed is 3000 RPM (50 Hz), the possible excitation frequencies are:
 
 <figure markdown>
   <figcaption><strong><a name='table_01'>Table 1</a></strong></figcaption>
@@ -95,35 +127,45 @@ Asynchronous vibration occurs when there is a non-integer relationship between t
 
 Synchronous vibration is more difficult to measure than asynchronous vibration. The reason for this will become apparent by the end of the chapter. This tutorial focuses on synchronous vibration.
 
-## Why do blades vibrate?
+## At which frequency are blades excited?
 
-A popular textbook [@rao1991turbomachine] on rotor blade vibration offers one explanation. It is said that a blade experiences a pressure fluctuation every time it passes a stator vane. The number of stator vanes multiplied by the shaft speed gives us the excitation frequency, also called the Nozzle Passing Frequency (NPF). Stator vanes definitely cause vibration, but is it responsible for causing damage?
+A popular textbook [@rao1991turbomachine] on rotor blade vibration offers one explanation. It is said a blade experiences a pressure fluctuation every time it passes a stator vane. The number of stator vanes multiplied by the shaft speed gives us the excitation frequency, also called the Nozzle Passing Frequency (NPF). Stator vanes definitely cause vibration, but does it actually cause damage?
 
-Structures theoretically have an infinite number of modes. However, the first few modes have the least damping, and the highest frequency response function (FRF) amplitudes. It is a generally accepted practice to disregard all modes except the first few when performing modal analysis. The first few modes are therefore the most likely to cause damage.
+Structures theoretically have an infinite number of modes. However, the first few modes have the least damping, and the highest frequency response function (FRF) amplitudes. It is a generally accepted practice to disregard all modes except the first few when modal analysis is performed. The first few modes are therefore the most likely to cause damage.
 
-Let's consider a rotor with 80 blades, and half the amount of stator blades, 45, rotating at 3000 RPM. The NPF is therefore:
+Let's consider a rotor with 80 blades, and half the amount of stator blades, 45. The rotor runs at 3000 RPM. The NPF is therefore:
 
 $$
 NPF = \frac{3000}{60} \times 2 \pi \times 45 \approx 14137 \text{ Hz}
 $$
 
-Even without knowing anything about the blades, 14130 Hz is a suspiciously high frequency to be among the first few modes. This is well above the typical range within which the lower natural frequencies of large blades occur. From experience, we are typically interested in natural frequencies below 2000 Hz. 
+Even with no knowledge of the blades, 14130 Hz is a suspiciously high frequency to be among the first few modes. This is well above the typical range within which the lower natural frequencies of large blades occur. In my work, I'm typically interested in natural frequencies below 2000 Hz. 
 
 !!! note "Note"
     Blade natural frequencies are not usually made public by blade manufacturers. No doubt there are exceptions to the 2000 Hz cutoff used above. In my experience, however, this is a good rule of thumb. The first natural frequency of rotor blades generally occur far below 14130 Hz.
 
-!!! note "What is the highest frequency you can measure using BTT?"
+!!! note "What is the highest frequency you can measure with BTT?"
 
-    SEE MY ARTICLE ON PROBE SPACING.
+    BTT signals are inherently aliased, as will be described later in this chapter. If you are designing an experimental setup and would like to calculate the positions for your probes, you can check out my paper about it [@diamond2018novel]. This space seems to have received attention recently. Here's a link to the Google Scholar page of citing articles to my paper: <a href="https://scholar.google.com/scholar?cites=10600910125193632917&as_sdt=2005&sciodt=0,5&hl=en" target="_blank">Google Scholar</a>.
+
+!!! warning "Do your own research"
+
+    I have said here that Nozzle Passing Frequencies (NPF) are not the main culprits for blade vibration. This is my take on it, based on my experience and understanding of vibration.
+    
+    There are, however, papers and sources claiming the opposite. A recent example that claims NPF is - in fact - a key concern, is Chapter 7 of the book "Forsthoffer's Proven Guidelines for Rotating Machinery Excellence" [@forsthoffer2021forsthoffer]. Other recent source do, however, share my sentiment that non NPF-related phenomena are the main culprits [@tanuma2022advances]. 
+    
+    I saw the statements attributes to these books here: <a href="https://www.sciencedirect.com/topics/engineering/campbell-diagram" target="_blank">Science Direct: Campbell Diagram</a>.
+
+    Please do your own research and come to your own conclusions. If you have a different take on this, please get in touch. I would love to include your take on this in this tutorial.
 
 The vibrations caused by the stator vanes are therefore not the culprit.
 
 How, then, does damaging vibration arise?
 
 ## A simple forcing function
-The aerodynamic behavior inside a turbomachine is a complex field. We will not attempt to explain how specific aerodynamic flow patterns arise. Instead, we will show it does not take much to cause excitations at the lowest EOs.
+The aerodynamic behavior inside a turbomachine is a complex field. We will not attempt to explain how specific aerodynamic flow patterns arise. Instead, we now discuss why it does not take much to cause excitations at the lowest EOs.
 
-Let's suppose we have a turbomachine that is inflicted with a *single discontinuity* in the working fluid's flow path upstream of the blades. The discontinuity could be a supporting structural element, such as a strut. The discontinuity will cause a *pressure fluctuation* downstream of it. As the blades rotate, they pass through this pressure fluctuation **once every revolution**. This, in turn, causes a force to be exerted on the blade **once every revolution**.
+Let's suppose we have a turbomachine afflicted with a *single discontinuity* in the working fluid's flow path upstream of the blades. The discontinuity could be a supporting structural element, such as a strut. The discontinuity will cause a *pressure fluctuation* downstream of it. As the blades rotate, they pass through this pressure fluctuation **once every revolution**. This, in turn, causes a force to be exerted on the blade **once every revolution**.
 
 Let's model this forcing function as a *unit impulse* when the blade is in the path of the discontinuity, and zero otherwise. We'll assume the downstream effects of the discontinuity occur between $\frac{2 \pi}{10}$ and $\frac{3 \pi}{10}$ radians. The forcing function can be expressed as:
 
@@ -134,7 +176,7 @@ f(\theta) = \begin{cases}
 \end{cases}
 $$
 
-We plot the forcing function experienced by each blade over multiple shaft revolutions in [Figure 1](#figure_01) below.
+We plot the forcing function experienced by each blade over multiple shaft revolutions in [Figure 2](#figure_02) below.
 <script src="once_per_revolution_force_edt.js" > </script>
 <div>
 	<div>
@@ -161,13 +203,13 @@ We plot the forcing function experienced by each blade over multiple shaft revol
 	<a onclick="window.fig_blade_once_per_revolution_force_edt_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: The forcing function that represents the effects of an idealized discontinuity in the flow path.</figcaption>
+  <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: The forcing function caused by an idealized discontinuity in the flow path.</figcaption>
   </figcaption>
 </figure>
 
-It is clear that the forcing function is periodic. A brief force is experienced by each blade once per revolution.
+The forcing function is clearly periodic. A brief force is experienced by each blade once per revolution.
 
-To understand which frequencies are excited by this forcing function, we plot the magnitudes of the first few positive Fourier coefficients in [Figure 2](#figure_02) below:
+To understand which frequencies are excited by this forcing function, we plot the magnitudes of the first few positive Fourier coefficients in [Figure 3](#figure_03) below:
 
 <script src="fft_once_per_revolution_force_edt.js" > </script>
 <div>
@@ -195,22 +237,33 @@ To understand which frequencies are excited by this forcing function, we plot th
     <a onclick="window.fig_blade_fft_once_per_revolution_force_edt_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_02'>Figure 2</a></strong>:  The magnitudes of the first few positive Fourier coefficients of the forcing function.
+  <figcaption><strong><a name='figure_03'>Figure 3</a></strong>:  The magnitudes of the first few positive Fourier coefficients of the forcing function.
   </figcaption>
 </figure>
 
 The frequency domain representation of the forcing function 👆 shows that, although the force occurs once per revolution, all EOs are excited by it.
 
-!!!!ADD MORE ABOUT WHY THIS IS HAPPENING. WHY ARE ALL EOs EXCITED?
+!!! tip "Why does the frequency domain look like this?"
+
+    When I first saw this result, it was completely counter intuitive. Why should a once per revolution excitation excite all EOs? 
+    
+    The answer is the forcing function is not a simple sinusoid. The fourier transform stipulates you can represent any time-domain signal as the sum of infinite sinusoidal terms. Our forcing function is therefore made up of an infinite number of sinusoids. It happens to be case for periodic signals that each sinusoid at an integer multiple of the shaft speed is significant, and the other ones are not.
+
+    I intended te derive this result analytically, but time caught me. If you can derive this result analytically, please get in touch. I would love to include your derivation here.
 
 
-
-??? note
+!!! note "Energy of the excitation and damping ratios"
     The energy of the excitation diminishes as the EO increases. This is one reason why the first few EOs are the most likely to cause damage. Another reason is because higher modes usually have larger damping ratios. This means they are less likely to cause damage than the lower modes.
 
 This explains why a simple discontinuity in the flow path can excite the first few EOs of vibration. Obviously, the forcing function inside a turbomachine is not as simple as the one we've modeled above. But the principle remains the same. A non-sinusoidal periodic forcing function will excite some or all of the low EOs.
 
-I BELIEVE THERE WILL ALMOST ALWAYS BE A ONCE PER REVOLUTION COMPONENT SOMEWHERE IN THE FORCING FUNCTION. THIS SHOULD ALLOW EXCITATION OF EACH EO, AT LEAST THE LOW ONES.
+!!! note "Discontinuities can be anything"
+
+    We intuitively understand struts or stator vanes count as discontinuities. In fact, there are many possible discontinuities in a turbomachine. A nonconcentric casing might be a discontinuity. An noncircular inlet might introduce a discontinuity.
+
+    I believe, given the breadth of possible obstructions, there will always be one once per revolution excitation source in a turbomachine. 
+    
+    This is an inkling I have, not a conclusion based on evidence. 😁
 
 ## Campbell diagram
 Synchronous vibration can only occur when the excitation frequency coincides with a blade natural frequency. It is straightforward to calculate the shaft speed that will cause excitation at a natural frequency. We simply substitute the EOs we expect may occur into [Equation 1](#equation_01) and solve for $\Omega$. 
@@ -229,15 +282,15 @@ $$
   <figcaption><strong><a name='equation_02'>Equation 2</a></strong></figcaption>
 </figure>
 
-Is it really that simple? Alas, the physics throws another curveball at us here. 
+Is it really so simple? Alas, the physics throws another curveball at us here. 
 
-Any rotating object experiences a centrifugal force. The centrifugal force experienced by a rotor blade acts radially from the center of the shaft towards the tip of the blade.
+Rotating objects experience centrifugal force. The centrifugal force experienced by a rotor blade acts radially from the center of the shaft toward the tip of the blade.
 
-This force causes the stiffness of the blade to increase, a phenomenon known as *centrifugal stiffening*. Increasing stiffness leads to increasing natural frequencies. The natural frequencies of the blades are therefore not constant, but generally increase as the rotor speeds up.
+This force causes the stiffness of the blade to increase, a phenomenon known as *centrifugal stiffening*. Elevated stiffness leads to increased natural frequencies. The natural frequencies of the blades are therefore not constant, but generally increase as the rotor speeds up.
 
 We need to take this effect into account when we calculate the possible resonance shaft speeds. The Campbell diagram is a handy tool to visually solve the problem. A Campbell diagram contains the natural frequencies of the blades as a function of rotor speed. The excitation frequencies for each EO are also plotted. 
 
-An illustrative Campbell diagram for a rotor blade's first three natural frequencies are shown in [Figure 3](#figure_03) below.
+An illustrative Campbell diagram for a rotor blade's first three natural frequencies are shown in [Figure 4](#figure_04) below.
 
 <script src="campbell_diagram.js" > </script>
 <div>
@@ -265,15 +318,15 @@ An illustrative Campbell diagram for a rotor blade's first three natural frequen
     <a onclick="window.fig_blade_campbell_diagram_reset()" class='md-button'>Reset Zoom</a>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_03'>Figure 3</a></strong>:  An illustrative Campbell diagram for a fictional rotor blade's first three natural frequencies.
+  <figcaption><strong><a name='figure_04'>Figure 4</a></strong>:  An illustrative Campbell diagram for a fictional rotor blade's first three natural frequencies.
   </figcaption>
 </figure>
 
-Figure [Figure 3](#figure_03) above illustrates the core concepts of the Campbell diagram. The three mode lines indicate three natural frequencies as they change with rotor speed. The dotted lines indicate the excitation frequency associated with each EO of interest. You'll notice the EO lines are perfectly straight. This is because the EO is directly proportional to the rotor speed.
+Figure [Figure 4](#figure_04) above illustrates the core concepts of the Campbell diagram. The three mode lines indicate three natural frequencies as they change with rotor speed. The dotted lines indicate the excitation frequency associated with each EO of interest. You'll notice the EO lines are perfectly straight. This is because the EO is directly proportional to the rotor speed.
 
-You'll see dark star-shaped markers on [Figure 3](#figure_03). These markers represent shaft speeds where one of the blade's natural frequencies coincide with an EO excitation frequency. Synchronous vibration can only occur at these discrete shaft speeds. We'll call these shaft speeds *resonance speeds*. 
+Dark star-shaped markers on [Figure 4](#figure_04) represent shaft speeds where one of the blade's natural frequencies coincide with an EO excitation frequency. Synchronous vibration can only occur at these discrete shaft speeds. We'll call these shaft speeds *resonance speeds*. 
 
-??? note
+!!! note "FEM and Campbell diagrams"
     The variation of natural frequencies with rotor speed is usually known from Finite Element Analysis (FEA) of the blades. It is almost inconceivable for a commercial rotor blade manufacturer to design a blade without also producing a Campbell diagram. 
     
     In the rare cases where you don't have access to one, you'll have to infer the vibration frequency algorithmically. Many methods have been proposed to do this, and they are all outside the scope of this tutorial.
@@ -288,7 +341,7 @@ $$
   <figcaption><strong><a name='equation_03'>Equation 3</a></strong></figcaption>
 </figure>
 
-Now we divide by $m$, resulting in a new equation of motion:
+Now we divide by $m$. This yields a new equation of motion:
 
 $$
 \ddot{x} + 2 \zeta \omega_n \dot{x} + \omega_n^2 x = f_0 \cdot \cos(\omega t) \\
@@ -379,7 +432,7 @@ $$
     | $\delta_{\text{st}}$ | Deflection under the static force $F_0$ | $m$ | $\delta_{\text{st}} \in \mathbb{R}$ |
     | $r$ | Excitation frequency ratio | - | $r \gt 0$ |
 
-Each blade will have different values for $\omega_n$, $\delta_{\text{st}}$, and $\zeta$. These values determine the vibration response of the blade. Intuition about the solution can be gained by fixing $\omega_n=125$ Hz and $\delta_{\text{st}} = 1$. We can then plot the solution for different values of $\zeta$ and $\omega$.
+Each blade will have different values for $\omega_n$, $\delta_{\text{st}}$, and $\zeta$. These values determine the vibration response of the blade. Intuition about the solution can be gained by fixing $\omega_n=125$ Hz and $\delta_{\text{st}} = 1$. We can plot the solution for different values of $\zeta$ and $\omega$.
 
 !!! note "Natural frequency unit"
     Normally, the unit you use for natural frequency (Hz or rad/s) depends on where you want to use it. Here, however, the natural frequency gets absorbed into the excitation frequency ratio, $r$. It therefore does not matter which unit you use here. We'll use Hz for convenience.
@@ -585,22 +638,21 @@ The *slider* below 👇 allows you to change the value of $\zeta$. The resulting
 	</script>
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_04'>Figure 4</a></strong>: The amplitude and phase of a single degree of freedom oscillator as a function of excitation frequency. We've fixed the natural frequency to 125 Hz and the static deflection to 1.
+  <figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The amplitude and phase of a single degree of freedom oscillator as a function of excitation frequency. We've fixed the natural frequency to 125 Hz and the static deflection to 1.
   </figcaption>
 </figure>
-Two observations from [Figure 4](#figure_04) are highlighted below:
+
+Two observations from [Figure 5](#figure_05) are highlighted below:
 
 * Larger damping ratios lead to smaller amplitudes.
-* The phase of the vibration *always shifts* by $\pi$ radians as the resonance is traversed. The rate at which this shift occurs  is controlled by the damping ratio. The larger the damping ratio, the slower the phase shift.
-
-!!!!ADD MORE EXPLANATION HERE. WHY IS THE PHASE SHIFTING BY PI? WHY IS THE AMPLITUDE DECREASING?
+* The phase of the vibration *always shifts* by $\pi$ radians as the resonance is traversed. This is a fundamental law of vibration. The rate at which this shift occurs  is controlled by the damping ratio. The larger the damping ratio, the slower the phase shift.
 
 ## Sampling
 We now have a mathematical expression that describes the shape of a blade tip's vibration response. Theoretically, we can use the expression to calculate the tip deflection at *any point in time*. However, *we cannot measure* the tip deflection at any point in time. We can only measure the tip deflection each time a blade passes a probe. 
 
-In other words, despite the fact that the blade's vibration response is continuous, we only get *one sample of that continuous waveform* each time a blade passes a probe.
+In other words, despite the fact that the blade's vibration response is continuous, we only get *one sample of the continuous waveform* each time a blade passes a probe.
 
-To illustrate this concept, we've simulated the vibration response of a blade and *artificially placed three proximity probes* into a "casing". The *slider* below 👇 allows you to change the shaft speed, and observe *both* the continuous vibration response in [Figure 5](#figure_05) __A)__ *and* the samples taken by our BTT system in [Figure 5](#figure_05) __B)__.
+To illustrate this concept, we've simulated the vibration response of a blade and *artificially placed three proximity probes* into a "casing". The *slider* below 👇 allows you to change the shaft speed, and observe *both* the continuous vibration response in [Figure 6](#figure_06) __A)__ *and* the samples taken by our BTT system in [Figure 6](#figure_06) __B)__.
 <div>
 	<div>
         <div>
@@ -907,7 +959,7 @@ To illustrate this concept, we've simulated the vibration response of a blade an
 
 </div>
 <figure markdown>
-  <figcaption><strong><a name='figure_05'>Figure 5</a></strong>: A) A blade's continuous vibration response as a function of the blade's angular position. B) The samples taken by our BTT system as a function of shaft speed. The shaft speed can be controlled by the slider. If it bothers you that we've expressed the continuous vibration vs angle instead of time, just keep reading.
+  <figcaption><strong><a name='figure_06'>Figure 6</a></strong>: A) A blade's continuous vibration response as a function of the blade's angular position. B) The samples taken by our BTT system as a function of shaft speed. The shaft speed can be controlled by the slider. If you're uncomfortable because we've expressed the continuous vibration vs angle instead of time, just keep reading.
   </figcaption>
 </figure>
 
@@ -919,21 +971,23 @@ To illustrate this concept, we've simulated the vibration response of a blade an
     * $\zeta = 0.01$
     * $\text{Sensor locations} = [45, 145, 275]$ deg
 
-In [Figure 5](#figure_05) above, we show the continuous tip deflection in __A)__. We've also *placed* three proximity probes, prefixed by P, in the *casing* above the signal. Each proximity probe will *sample* the continuous waveform at the value corresponding to the vertical dotted line going from the probe to the waveform. As you move the slider, you'll notice the continuous waveform changes in both amplitude and phase. You'll also notice the values sampled by each probe change.
+In [Figure 6](#figure_06) above, the continuous tip deflection in __A)__. We've also *placed* three proximity probes, prefixed by P, in the *casing* above the signal. Each proximity probe will *sample* the continuous waveform at the value corresponding to the vertical dotted line that stretches from the probe to the waveform. As you move the slider, you'll notice the continuous waveform changes in both amplitude and phase. You'll also notice the values sampled by each probe change.
 
-In [Figure 5](#figure_05) __B)__, we show the sampled values of the BTT system as a function of the entire shaft speed range. The instantaneous samples for the shaft speed as it is currently set is indicated by large markers on __B__. The corresponding samples are indicated on __A)__ at the ends of the vertical dotted lines.
+In [Figure 6](#figure_06) __B)__, the sampled values of the BTT system as a function of the entire shaft speed range. The instantaneous samples for the shaft speed as it is currently set is indicated by large markers on __B__. The corresponding samples are indicated on __A)__ at the ends of the vertical dotted lines.
 
 We cannot stress the implication of this figure enough, we're therefore going to use a fancy box 👇 to highlight it.
 
 !!! info "Continuous vs Sample signals"
-    We __are not__ measuring the continuous signal shown in [Figure 5](#figure_05) __A)__ above. We __only measure__ the sampled values for each probe as indicated in __B__) above.
+    We __are not__ measuring the continuous signal shown in [Figure 6](#figure_06) __A)__ above. We __only measure__ the sampled values for each probe as indicated in __B__) above.
 
     The task of frequency analysis in BTT is to *__infer the continuous waveform from the samples__*.
 
-## Substituting angle for time
-Some of you might be wondering why we have expressed the tip deflection as a function of time, $x(t)$ in [Equation 4](#equation_04), but we've plotted the tip deflection as a function of angle in [Figure 5](#figure_05). This is because we can substitute time for angle in our equations.
+## Substitute angle for time
+Back in [Equation 4](#equation_04), we expressed the tip deflection as a function of time: $x(t)$. In [Figure 6](#figure_06), however, we plotted the tip deflection as a function of angle. Why the apparent conflict?
 
-In reality the tip deflection *does* vary with time, but it is a faux dependance. To show why, we again show the definition of synchronous vibration:
+This is because we can substitute time for angle in our equations.
+
+In reality the tip deflection *does* vary with time, but it is a faux dependance. To show why, the definition of synchronous vibration is repeated below:
 
 $$
 \omega = \Omega \cdot EO
@@ -942,7 +996,7 @@ $$
   <figcaption><strong><a name='equation_12'>Equation 12</a></strong></figcaption>
 </figure>
 
-Now we remember that the shaft speed, $\Omega$, can be expressed as the distance traveled by the rotor from the start of a revolution until it reaches a sensor's position, $\theta_s$:
+recall the shaft speed, $\Omega$, can be expressed as the distance traveled by the rotor from the start of a revolution until it reaches a sensor's position, $\theta_s$:
 
 $$
 \Omega = \frac{\theta_s}{t}
@@ -973,20 +1027,18 @@ x(t) &= X(\omega) \cos \left( \frac{\theta_s}{t} \cdot EO \cdot t - \phi(\omega)
   <figcaption><strong><a name='equation_15'>Equation 15</a></strong></figcaption>
 </figure>
 
-The equation above shows that the tip deflection is only dependant on the EO, the location of the sensor, and the shaft speed  (since $\omega=\Omega \cdot EO$). The tip deflection is therefore *not* dependant on time.
+The tip deflection is only dependant on the EO, the location of the sensor, and the shaft speed (since $\omega=\Omega \cdot EO$). The tip deflection is therefore *not* dependant on time.
 
-The implications of this are profound. Normally in vibration measurement, the longer you measure something, the more information you get. Our equations reveal, however, that if you keep the shaft speed constant and you measure the tip deflections for all eternity, you will measure the exact same deflections over and over again. You effectively only have as many unique samples as there are sensors. 
+The implications of this are profound. Normally in vibration measurement, the longer you measure something, the more information you get. Our equations reveal, however, if you keep the shaft speed constant and you measure the tip deflections for all eternity, you will measure the exact same deflections over and over again. You effectively only have as many unique samples as there are sensors. 
 
-*This is why synchronous vibration is more difficult to analyze than asynchronous vibration.*
 
-!!!!An idea i have is to have a pop up bubble at the end where you say “Recall: we said
-that synchronous vibration is more difficult to measure….. to explicitly put this, this is
-why synchronous vibration is more difficult to measure….”
+!!! note "This is why synchronous vibration is more difficult to measure than asynchronous vibration."
 
-ADD SOMETHING
+    Recall we said at the beginning of the chapter that synchronous vibration is more difficult to measure than asynchronous vibration? This is the reason why. The continuous waveform will be sampled at approximately the same points over and over again. This makes it difficult to infer the continuous waveform from the samples. Asynchronous vibration, on the other hand, is not dependant on the shaft speed. The continuous waveform will be sampled at different points each time the shaft speed changes. This makes it easier to infer the continuous waveform from the samples.
+
 
 ## Aliasing
-It is often pointed out that BTT signals are aliased. This means that BTT systems sample a rate below the Nyquist frequency of the blade response. 
+It is often pointed out that BTT signals are aliased. This means BTT systems sample a rate below the Nyquist frequency of the blade response. 
 
 The Nyquist frequency is double the natural frequency we want to measure:
 
@@ -1019,28 +1071,21 @@ $$
     | $f_s$ | Sampling frequency | $Hz$ | $f_s \gt 0$ |
     | $\Omega$ | Shaft speed | $Hz$ | $\Omega \gt 0$ |
 
-We are only measuring 62.5 samples per second, whereas the required rate is 250 samples per second. This is why BTT signals are said to be aliased.
+We only measure 62.5 samples per second, whereas the required rate is 250 samples per second. This is why BTT signals are said to be aliased.
 
 !!! note
-    Although the above method provides intuition, I do not believe it is a mathematically sound deduction. We normally associate aliasing and the Nyquist frequency with signals that can be transformed using the Discrete Fourier Transform (DFT) . One requirement of the DFT is that the samples are equidistant along the discretization axis, like time or angle. BTT sensors are generally not equally far apart from one another. Even if you attempted to install them equidistantly, manufacturing errors would render the samples non-equidistant.
+    Although the above method provides intuition, I do not believe it is a mathematically sound deduction. We normally associate aliasing and the Nyquist frequency with signals that can be transformed using the Discrete Fourier Transform (DFT) . One requirement of the DFT is the samples are equidistant along the discretization axis, like time or angle. BTT sensors are generally not equally far apart from one another. Even if you attempted to install them equidistantly, manufacturing errors would render the samples non-equidistant.
 
     You can read about this in more detail in [@vanderplas2018understanding].
 
-## Shaft speed effects on vibration
-
-!!!!I don’t think this is strictly a Ch7 comment, but I think adding a discussion on how
-shaft speed (or shaft vibration) would effect blade vibration would be valuable.
-Specifically how does phenomena such as whirling manifest through a BTT
-system?
-
 ## Conclusion
 
-In this chapter, we've spent some time to understand the fundamentals behind synchronous vibration. We've shown that BTT systems sample a continuous vibration waveform, and that we need to infer the true vibration behavior from these samples.   
+In this chapter, we've spent some time to understand the fundamentals behind synchronous vibration. We've shown that BTT systems sample a continuous vibration waveform, and we need to infer the true vibration behavior from these samples.   
 
-The final two chapters in this tutorial shows two methods of inferring the true vibration behavior from the samples:
+The final two chapter describe two ways of completing our promised journey. The two remaining chapters describe different ways to infer vibration frequency, amplitude, and phase from the samples:
 
-* The Single Degree of Freedom (SDoF) fit method, and
-* The Circumferential Fourier Fit (CFF) method;
+* Ch8: The Single Degree of Freedom (SDoF) fit method, and
+* Ch9: The Circumferential Fourier Fit (CFF) method;
 
 !!! question "Outcomes"
 
@@ -1059,7 +1104,7 @@ The final two chapters in this tutorial shows two methods of inferring the true 
 	:material-checkbox-marked:{ .checkbox-success .heart } Understand that BTT signals are generally aliased.
 
 ## Acknowledgements
-I thank XXX for reviewing this chapter.
+Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
 \bibliography
 
@@ -1077,7 +1122,7 @@ I thank XXX for reviewing this chapter.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-10-31
+            2024-03-12
         </p>
     </div>
 </div>

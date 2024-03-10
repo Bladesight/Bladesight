@@ -617,8 +617,7 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
 
 ### 1. AoA to Tip Deflection algorithm
 
-We've performed several steps in this chapter to zero and filter a signal. We want to combine these steps into a single function that scales, zeroes and filters a signal. 
-
+We've performed several steps in this chapter to zero and filter a signal. We want to combine these steps into a single function that scales, zeroes and filters a signal.
 
 {==
 
