@@ -17,6 +17,13 @@ card_title: Intro to BTT Ch7 - Synchronous Vibration and Sampling
 card_url: "ch7/"
 ---
 # Synchronous Vibration and Sampling
+Each chapter in this tutorial has been focused on describing one signal processing step at a time. This chapter is a bit different. We discuss *what we are seeing* instead of *how we process it*. In our journey to infer blade vibration, frequency, and phase from raw timestamps, this chapter will help us understand what the results mean.
+
+Blades do not simply vibrate for no reason. Something causes the blades to vibrate. 
+
+
+We delve into the fundamentals of Single Degree of Freedom (SDoF) vibration. Most graduate students coming to this tutorial would have already encountered SDoF vibration in their studies. We, however, explain it through the lens of BTT. Hopefully, spending time on the fundamentals through a different lens will help you understand the subject better.
+
 In the previous chapter, we managed to convert the raw Angle of Arrival (AoA) values into tip deflections. We even identified a couple of resonances visually using the peak to peak vibration indicator. In this chapter, we discuss the physics behind a type of vibration called *synchronous vibration*. We also show how BTT systems *sample* synchronous vibration waveforms.
 
 !!! question "Outcomes"
@@ -35,6 +42,9 @@ In the previous chapter, we managed to convert the raw Angle of Arrival (AoA) va
 
 	:material-checkbox-blank-outline: Understand that BTT signals are generally aliased.
 
+## Two kinds of vibration
+
+SECTION on SYNCHRONOUS AND ASYNCHRONOUS VIBRATION. WHY DOES SYNCHRONOUS VIBRATION OCCUR? WHY DOES ASYNCHRONOUS VIBRATION OCCUR?
 
 ## Synchronous vibration
 Rotor blade vibration can be characterized according to the relationship between the vibration frequency and shaft speed. The two kinds of vibration are *synchronous* and *asynchronous* vibration. Synchronous vibration is defined as vibration occurring at an *integer multiple* of the shaft speed. This integer multiple is called the Engine Order (EO). 
@@ -81,11 +91,13 @@ Synchronous vibration can therefore only take on a discrete set of values. If, f
 | 5 |  250 |
 | ... | ...|
 
-Asynchronous vibration occurs when there is a non-integer relationship between the shaft speed and the excitation frequency. Synchronous vibration is more difficult to measure than asynchronous vibration. The reason for this will become apparent by the end of the chapter. This tutorial focuses on synchronous vibration.
+Asynchronous vibration occurs when there is a non-integer relationship between the shaft speed and the excitation frequency. We typically do not express asynchronous vibration as a non-integer EO, but would simply report the natural frequency without relation to the shaft speed. 
+
+Synchronous vibration is more difficult to measure than asynchronous vibration. The reason for this will become apparent by the end of the chapter. This tutorial focuses on synchronous vibration.
 
 ## Why do blades vibrate?
 
-A popular textbook [@rao1991turbomachine] on rotor blade vibration offers one explanation. It is said that a blade experiences a pressure fluctuation every time it passes a stator vane. The number of stator vanes multiplied by the shaft speed gives us the excitation frequency, also called the Nozzle Passing Frequency (NPF). Stator vanes definitely cause vibration, but is it responsible for causing damage? 
+A popular textbook [@rao1991turbomachine] on rotor blade vibration offers one explanation. It is said that a blade experiences a pressure fluctuation every time it passes a stator vane. The number of stator vanes multiplied by the shaft speed gives us the excitation frequency, also called the Nozzle Passing Frequency (NPF). Stator vanes definitely cause vibration, but is it responsible for causing damage?
 
 Structures theoretically have an infinite number of modes. However, the first few modes have the least damping, and the highest frequency response function (FRF) amplitudes. It is a generally accepted practice to disregard all modes except the first few when performing modal analysis. The first few modes are therefore the most likely to cause damage.
 
@@ -98,7 +110,11 @@ $$
 Even without knowing anything about the blades, 14130 Hz is a suspiciously high frequency to be among the first few modes. This is well above the typical range within which the lower natural frequencies of large blades occur. From experience, we are typically interested in natural frequencies below 2000 Hz. 
 
 !!! note "Note"
-    Blade natural frequencies are not usually made public by blade manufactures. No doubt there will be exceptions to the 2000 Hz cutoff proclaimed above. But in our experience, this is a good rule of thumb. The first natural frequency of rotor blades generally occur way below 14130 Hz.
+    Blade natural frequencies are not usually made public by blade manufacturers. No doubt there are exceptions to the 2000 Hz cutoff used above. In my experience, however, this is a good rule of thumb. The first natural frequency of rotor blades generally occur far below 14130 Hz.
+
+!!! note "What is the highest frequency you can measure using BTT?"
+
+    SEE MY ARTICLE ON PROBE SPACING.
 
 The vibrations caused by the stator vanes are therefore not the culprit.
 
@@ -184,10 +200,17 @@ To understand which frequencies are excited by this forcing function, we plot th
 </figure>
 
 The frequency domain representation of the forcing function 👆 shows that, although the force occurs once per revolution, all EOs are excited by it.
+
+!!!!ADD MORE ABOUT WHY THIS IS HAPPENING. WHY ARE ALL EOs EXCITED?
+
+
+
 ??? note
     The energy of the excitation diminishes as the EO increases. This is one reason why the first few EOs are the most likely to cause damage. Another reason is because higher modes usually have larger damping ratios. This means they are less likely to cause damage than the lower modes.
 
 This explains why a simple discontinuity in the flow path can excite the first few EOs of vibration. Obviously, the forcing function inside a turbomachine is not as simple as the one we've modeled above. But the principle remains the same. A non-sinusoidal periodic forcing function will excite some or all of the low EOs.
+
+I BELIEVE THERE WILL ALMOST ALWAYS BE A ONCE PER REVOLUTION COMPONENT SOMEWHERE IN THE FORCING FUNCTION. THIS SHOULD ALLOW EXCITATION OF EACH EO, AT LEAST THE LOW ONES.
 
 ## Campbell diagram
 Synchronous vibration can only occur when the excitation frequency coincides with a blade natural frequency. It is straightforward to calculate the shaft speed that will cause excitation at a natural frequency. We simply substitute the EOs we expect may occur into [Equation 1](#equation_01) and solve for $\Omega$. 
@@ -359,7 +382,7 @@ $$
 Each blade will have different values for $\omega_n$, $\delta_{\text{st}}$, and $\zeta$. These values determine the vibration response of the blade. Intuition about the solution can be gained by fixing $\omega_n=125$ Hz and $\delta_{\text{st}} = 1$. We can then plot the solution for different values of $\zeta$ and $\omega$.
 
 !!! note "Natural frequency unit"
-    Normally, it matters which unit you use for the natural frequency. But because the natural frequency gets absorbed into the excitation frequency ratio, $r$, it doesn't matter which unit you use here. We'll use Hz for convenience.
+    Normally, the unit you use for natural frequency (Hz or rad/s) depends on where you want to use it. Here, however, the natural frequency gets absorbed into the excitation frequency ratio, $r$. It therefore does not matter which unit you use here. We'll use Hz for convenience.
 
 The *slider* below 👇 allows you to change the value of $\zeta$. The resulting vibration amplitude and phase as a function of excitation frequency are plotted in [Figure 4](#figure_04) below.
 
@@ -569,6 +592,8 @@ Two observations from [Figure 4](#figure_04) are highlighted below:
 
 * Larger damping ratios lead to smaller amplitudes.
 * The phase of the vibration *always shifts* by $\pi$ radians as the resonance is traversed. The rate at which this shift occurs  is controlled by the damping ratio. The larger the damping ratio, the slower the phase shift.
+
+!!!!ADD MORE EXPLANATION HERE. WHY IS THE PHASE SHIFTING BY PI? WHY IS THE AMPLITUDE DECREASING?
 
 ## Sampling
 We now have a mathematical expression that describes the shape of a blade tip's vibration response. Theoretically, we can use the expression to calculate the tip deflection at *any point in time*. However, *we cannot measure* the tip deflection at any point in time. We can only measure the tip deflection each time a blade passes a probe. 
@@ -954,6 +979,12 @@ The implications of this are profound. Normally in vibration measurement, the lo
 
 *This is why synchronous vibration is more difficult to analyze than asynchronous vibration.*
 
+!!!!An idea i have is to have a pop up bubble at the end where you say “Recall: we said
+that synchronous vibration is more difficult to measure….. to explicitly put this, this is
+why synchronous vibration is more difficult to measure….”
+
+ADD SOMETHING
+
 ## Aliasing
 It is often pointed out that BTT signals are aliased. This means that BTT systems sample a rate below the Nyquist frequency of the blade response. 
 
@@ -994,6 +1025,13 @@ We are only measuring 62.5 samples per second, whereas the required rate is 250 
     Although the above method provides intuition, I do not believe it is a mathematically sound deduction. We normally associate aliasing and the Nyquist frequency with signals that can be transformed using the Discrete Fourier Transform (DFT) . One requirement of the DFT is that the samples are equidistant along the discretization axis, like time or angle. BTT sensors are generally not equally far apart from one another. Even if you attempted to install them equidistantly, manufacturing errors would render the samples non-equidistant.
 
     You can read about this in more detail in [@vanderplas2018understanding].
+
+## Shaft speed effects on vibration
+
+!!!!I don’t think this is strictly a Ch7 comment, but I think adding a discussion on how
+shaft speed (or shaft vibration) would effect blade vibration would be valuable.
+Specifically how does phenomena such as whirling manifest through a BTT
+system?
 
 ## Conclusion
 
