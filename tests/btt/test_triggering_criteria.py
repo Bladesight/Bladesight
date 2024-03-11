@@ -209,6 +209,24 @@ def test_hysteresis_rising_zig_zag_multiple_rising(arr_zig_zag_multiple):
     assert len(arr_toas) == 2
     assert np.allclose(arr_toas, [1, 7])
 
+def test_hysteresis_rising_zig_zag_multiple_falling(arr_zig_zag_multiple):
+    arr_t, arr_s = arr_zig_zag_multiple
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_falling(
+        arr_t,
+        arr_s,
+        5,
+        5
+    )
+    assert len(arr_toas) == 4
+    assert np.allclose(arr_toas, [2, 4, 5.5, 8])
+    arr_toas = triggering_criteria.threshold_crossing_hysteresis_falling(
+        arr_t,
+        arr_s,
+        5,
+        5.01
+    )
+    assert len(arr_toas) == 0
+
 
 
 # Test threshold_crossing_interp todo:
