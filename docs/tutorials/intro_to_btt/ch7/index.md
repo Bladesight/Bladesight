@@ -26,7 +26,6 @@ The previous chapters presented new signal processing steps along our journey to
 
 Blades do not simply vibrate for no reason. Something causes it. 
 
-
 In this chapter, we discuss *why blades are vibrating* instead of *how to process the signals*. This chapter will help us understand what the results mean.
 
 We delve into the fundamentals of Single Degree of Freedom (SDoF) vibration. Most graduate students would have already encountered SDoF vibration in their studies. We, however, explain it through the lens of BTT. Hopefully, spending time on the fundamentals through a different lens will help you understand the subject better.
