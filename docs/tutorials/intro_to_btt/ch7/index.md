@@ -435,6 +435,7 @@ $$
 <figure markdown>
   <figcaption><strong><a name='equation_11'>Equation 11</a></strong></figcaption>
 </figure>
+
 ??? info "Symbols"
         
     | Symbol | Meaning | SI Unit | Domain|

@@ -1,5 +1,5 @@
 ---
-date: 2024-03-12
+date: 2024-03-19
 tags:
   - Blade Tip Timing
   - BTT
@@ -21,12 +21,12 @@ In the previous chapter, we used a fully defined SDoF vibration model to *genera
 
 In this chapter, we do the opposite. 
 
-The *SDoF fit method* comprises solving the *inverse problem*. In other words, we *already have*  the sampled tip deflections for each probe. Now we need to find the SDoF model's parameters. I've put together a GIF that encompasses this chapter. Our model (represented by the red line) changes until it lies on top of the observed datapoints (blue).
+The *SDoF fit method* comprises solving the *inverse problem*. In other words, we *already have*  the sampled tip deflections for each probe. Now we need to find the SDoF model's parameters. I've put together a GIF that captures the essence of the task. Our model (represented by the red line) changes until it lies on top of the observed datapoints (blue).
 
 <figure markdown>
   ![SDoF Fit intro gif](intro_gif.gif)
   <figcaption><a id='figure_01'><strong>Figure 1:</strong></a>
-    An animation of how the SDoF fit method's predicted tip deflections change as the natural frequency, damping ratio, and static deflection change converge to the correct solution. I added some animations the dots and a glitch effect. These effects do not have any meaning... I just couldn't help myself 😁.
+    An animation of how the SDoF fit method's predicted tip deflections change as the natural frequency, damping ratio, and static deflection converge to the correct solution. I added some animations to the dots and a glitch effect. These effects do not have any meaning... I just couldn't help myself 😁.
   </figcaption>
 </figure>
 
@@ -55,27 +55,38 @@ X(\omega) = \frac{\delta_{\text{st}}}{ \sqrt{ (1 - r^2)^2 + (2 \zeta r)^2 } }\\
 r = \frac{\omega}{\omega_n}
 \end{equation}
 
-!!! note "Symbols"
+??? info "Symbols"
 
-    REPEAT THE SYMBOLS
+    | Symbol | Meaning | SI Unit | Domain|
+    | --- | --- | --- | --- |
+    | $x(t)$ | Tip deflection | $\mu m$ | $\mathbb{R}$ |
+    | $X(\omega)$ | Vibration amplitude | $\mu m$  | $\mathbb{R}+$  |
+    | $\delta_{\text{st}}$ | Static deflection | $\mu m$ | $\mathbb{R}+$ |
+    | $\zeta$ | Damping ratio | - | $[0,1)$ for underdamped systems |
+    | $\omega_n$ | Natural frequency | $rad/s$ or Hz | $\mathbb{R}+$ |
+    | $\theta_s$ | Sensor position | $rad$ | $[0, 2\pi]$ |
+    | $\phi(\omega)$ | Phase angle | $rad$ | $\mathbb{R}$ |
+    | $\omega$ | Excitation frequency | $rad/s$ or Hz | $\mathbb{R}+$ |
+    | $EO$ | Engine Order | - | $\mathbb{Z}+$ |
+
 
 Our task is to find values for $\delta_{\text{st}}$, $\zeta$, and $\omega_n$ that best fit the data. This approach was set forth as early as 1978. It is, to my best knowledge, the first BTT vibration inference method ever proposed [@zablotskiy1978measurement]. 
 
-In this chapter, we first produce a simple solution to the above equations. Layers of complexity are added incrementally. This incremental approach is used to emphasize the nonlinear nature of this method. If you spend the time to understand these complexities, you'll be able to apply the lessons wherever you need to fit parameters inside sinusoidal terms in the future. 
+In this chapter, we first produce a simple solution to the above equations. Layers of complexity are added incrementally. I use the incremental approach to emphasize the nonlinear nature of this problem. If you invest time in understanding these concepts, you can apply the lessons wherever you need to determine parameters inside sinusoidal terms in the future. 
 
-This chapter will culminate in the fulfillment of the promise I made at the start of the tutorial: you will be able to infer vibration frequency, amplitude, and phase from raw time stamps.
+This chapter culminates in the fulfillment of the promise I made at the start of the tutorial. You'll be able to infer blade frequency, amplitude, and phase from raw time stamps.
 
 !!! question "Outcomes"
 
-	:material-checkbox-blank-outline: Understand that we require an optimization function to determine the optimization function of the SDoF fit method.
+	:material-checkbox-blank-outline: Understand why we require an optimization function to determine the model parameters of the SDoF fit method.
 
-	:material-checkbox-blank-outline: Understand that we need to specify upper and lower bounds for the model parameters.
+	:material-checkbox-blank-outline: Understand why we need to specify upper and lower bounds for the model parameters.
 
-    :material-checkbox-blank-outline: Understand that the SDoF model, in its raw form, is not adequate. We need to add phase and amplitude offsets to the objective function.
+    :material-checkbox-blank-outline: Understand why the SDoF model, in its raw form, is not adequate. We need to add phase and amplitude offsets to the objective function.
 
 	:material-checkbox-blank-outline: Understand how we can loop over each probe's data to fit the SDoF model to multiple probes.
 	
-	:material-checkbox-blank-outline: Understand that the EO is treated differently to the amplitude and phase. Because the EO has only a discrete number of values it can be, we can iterate over many EOs and compare the objective function values to identify the optimal EO.
+	:material-checkbox-blank-outline: Understand why the EO is treated differently than the other model parameters. Because the EO can only be a positive integer, we iterate over the EOs to identify the optimal EO.
 
 
 ## Follow along
@@ -93,7 +104,7 @@ You need to use one of these Python versions to run the worksheet:
 ## Getting the dataset
 Let's use the dataset from Chapter 5 again. The functions developed in chapters 1 - 6 have been included in the `bladesight` package. 
 
-We can use these functions to generate the tip deflections for the dataset, as shown below:
+We use these functions to generate the tip deflections for the dataset:
 
 ``` py linenums="1"
 ds = Datasets["data/intro_to_btt/intro_to_btt_ch05"]
@@ -129,7 +140,7 @@ for df_AoAs in rotor_blade_AoA_dfs:
 3.  The order of the Butterworth filter.
 4.  The cutoff frequency of the Butterworth filter.
 
-We plot the peak-to-peak vibration for blade 1 in [Figure 1](#figure_01) below.
+We plot the peak-to-peak vibration for blade 1 in [Figure 2](#figure_02) below.
 
 <script src="c08_blade_1_pk_pk.js" > </script>
 <div>
@@ -158,11 +169,11 @@ We plot the peak-to-peak vibration for blade 1 in [Figure 1](#figure_01) below.
 </div>
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_01'>Figure 1</a></strong>: The peak-to-peak vibration levels for a five blade blisk with four probes. The edges of the peak-to-peak chart curls up but never returns back to a low value, as is usually the case with transient resonances. This is a consequence of the zeroing we performed. Since we aren't interested in those regions, we can live with this.
+        <strong><a name='figure_02'>Figure 2</a></strong>: The peak-to-peak vibration levels for a five blade blisk with four probes. The left and right edges of the peak-to-peak chart curls up but never returns back to a low value, as is usually the case with transient resonances. This is a consequence of the zeroing we performed. Since those regions don't contain resonances, we can live with these end effects.
   </figcaption>
 </figure>
 
-The peak-to-peak vbiration for blade 1 is presented in [Figure 1](figure_01) above. There seems to be symmetric resonance events on the up and downward ramps. 
+The peak-to-peak vibration for blade 1 is presented in [Figure 2](figure_02) above. There seems to be symmetric resonance events on the up and downward ramps. 
 
 For illustrative purposes, we focus on the resonance event between shaft revolutions 500 and 600.
 
@@ -170,7 +181,7 @@ For illustrative purposes, we focus on the resonance event between shaft revolut
 
     You may have noticed the ends of the peak-to-peak vibration increase without a subsequent decrease. Resonance events are usually identified by the peak-to-peak vibration increasing as the event starts, and decreasing as the event finishes.
     
-    The end effects observed in [Figure 1](#figure_01) is not a resonance event. It is an artifact of the order domain polynomial detrending we performed <a href=https://docs.bladesight.com/tutorials/intro_to_btt/ch6/#order-domain-polynomial-detrending target="_blank">in Chapter 6</a>. The order domain zeroing often skews the peak-to-peak vibration values near the edges of the resonance region.
+    The end effects observed in [Figure 2](#figure_02) is not a resonance event. It is an artifact of the order domain polynomial detrending we performed <a href=https://docs.bladesight.com/tutorials/intro_to_btt/ch6/#order-domain-polynomial-detrending target="_blank">in Chapter 6</a>. The order domain zeroing often skews the peak-to-peak vibration values near the edges.
     
     If there were resonances in those regions, we would have taken the time to perform better zeroing. From prior experience, I can confirm there are no resonances in those regions, so we can simply proceed.
 
@@ -195,15 +206,19 @@ the below domain constraint is required:
 -1 \leq \frac{x(t)}{X(\omega)} \leq 1
 \end{equation}
 
-How easy is it to solve for $EO$ using this inversion? I have no idea :man_shrugging: . It seems absurdly difficult to me. For one thing, the model parameters, $\delta_{\text{st}}$, $\zeta$, and $\omega_n$, are all inside the $X(\omega)$ and $\phi(\omega)$ terms. They are also unknown! For another thing, we have a domain constraint on the argument of the arccos function. This means we have to solve for $EO$ using a nonlinear constraint. I don't like the sound of that. If you do manage to find a closed form analytics solution for the model parameters, don't send it to me, send it to the Nobel committee.
+How easy is it to solve for $EO$ using this inversion? I have no idea :man_shrugging: . It seems absurdly difficult to me. 
 
-We therefore have to resort to computational techniques. We have to use an optimization algorithm to find the solution.
+Firstly, the model parameters, $\delta_{\text{st}}$, $\zeta$, and $\omega_n$, are all inside the $X(\omega)$ and $\phi(\omega)$ terms. They are also unknown! We could rearrange the equations to solve for these parameters, but we would have the same problem. Our model parameters cannot be solved for directly.
 
-The first step we take toward a solution is to *guess* the EO of vibration. The decision to arbitrarily `guess` the EO may make you uneasy. In most undergraduate courses, we are used to well-posed problems. Give me the mass of a body and the force acting on it, and I can tell you the acceleration with 100% certainty. Solving the SDoF fit method is not like that.
+Secondly, we have a domain constraint on the argument of the arccos function. This means we have to solve for $EO$ using a nonlinear constraint. I don't like the sound of that. If you do manage to find a closed form analytic solution for the model parameters, don't send it to me, send it to the Nobel committee.
+
+We therefore resort to computational techniques. We'll use an optimization algorithm to find the solution.
+
+The first step we take toward a solution is to *guess* the EO of vibration. The decision to arbitrarily *guess* the EO may make you uneasy. In most undergraduate courses, we are used to well-posed problems. Give me the mass of a body and the force acting on it, and I can tell you the acceleration with 100% certainty. Solving the SDoF fit method is not like that.
 
 Solving the SDoF fit problem is a bit like dating. The only way to find the right person is to first commit to the relationship, and assess how it goes.
 
-How can we make an intelligent guess as to the EO. We can use the formula below:
+How can we make an intelligent guess for the EO? We can use the formula below:
 
 \begin{equation}
 EO = \frac{\text{Natural frequency}}{\text{Shaft speed}}
@@ -211,26 +226,23 @@ EO = \frac{\text{Natural frequency}}{\text{Shaft speed}}
 
 We've seen this equation before. It is the definition of the Engine Order. The EO is the integer multiple of the shaft speed that determines the excitation frequency.
 
-For the blades used in this tutorial, I happen to know (because I designed these blades) that the blades' first natural frequency is approximately 125 Hz. Since we've already identified a resonance between revolutions 500 and 600, as shown in [Figure 1](#figure_01) above. Let's pick the median shaft speed inside this region to calculate the EO.
-
-The median shaft speed between shaft revolutions 500 and 600 is approximately 950 RPM. The EO can therefore be calculated as:
+For the blades used in this tutorial, I happen to know (because I designed these blades) that the blades' first natural frequency is approximately 125 Hz. To get a shaft speed, we take the median shaft speed inside the resonance region that we've identified between revolutions 500 and 600, which is 950 RPM:
 
 $$
 \text{EO} = \frac{125}{950 / 60} \approx 7.9
 $$
 
-We'll therefore start with a guess of 8 for our EO. Is this a good choice? That will be revealed at the end of this chapter.
+We'll therefore start with a guess of 8 for our EO. Is it a good guess? That will be revealed at the end of this chapter.
 
 !!! note "What if the natural frequencies are not known?"
 
     Don't worry. We just need to pick an EO to start with for our optimization algorithm. Later in the chapter, we loop over a range of EOs and compare the objective function values to identify the optimal EO. 
 
-
 !!! note "Why are we assuming there is only one frequency that dominates the response?"
 
     This entire chapter is based on the assumption that there is one frequency that dominates the response. That is the definition of the SDoF model. It is a simplification that is often good enough. Here's an appropriate quote often attributed to George Box: "All models are wrong, but some are useful" [@box1979robustness]. 
     
-    In reality, the blade will respond at many different frequencies simultaneously. However, if the blades are in resonance, which is the case were are almost always interested in, the response will be dominated by one frequency: the natural frequency.
+    In reality, the blade will respond at many different frequencies simultaneously. However, if the blades are in resonance, the response will likely be dominated by the natural frequency.
 
 ## Resonance window selection
 
@@ -243,13 +255,13 @@ df_resonance_window = tip_deflection_dfs[0].query("n > 500 and n < 600")
 ```
 In the code snippet above, we first select the tip deflections that belong to the first blade (`tip_deflection_dfs[0]`), and then we select only the tip deflections occurring between shaft revolutions 500 and 600 (`query("n > 500 and n < 600")`).
 
-!!! note "Can we automate this?"
+!!! note "Can't window selection be automated?"
 
     Yes. Techniques exist to automatically identify resonance regions. Some of them have been patented. They are not included here because they are not required for solving the SDoF fit equations.
 
 ## A simple objective function
 
-Many optimization algorithms are available in Python. These algorithms need an *objective function* to work. The objective function must return a low value for a good fit and a large value for a bad fit. The optimization algorithm searches for the parameters that minimizes the objective function.
+Many optimization algorithms are available in Python. These algorithms require an *objective function*. The objective function evaluates how *good* a proposed set of model parameters are by returning an error between the predicted tip deflections and the observed tip deflections. It should return a small error for a good fit and a large error for a bad fit. The optimization algorithm searches for parameters that minimize the objective function.
 
 Let's start with a simple objective function. We'll use the sum of squared error between the measured tip deflections, and the predicted tip deflections defined in [Equation 1](#eq_1) to [Equation 4](#eq_4). 
 
@@ -430,7 +442,7 @@ This method requires us to specify bounds for the optimization parameters. We ca
 ### Bounds for the natural frequency
 To set the bounds for the natural frequency, we can use a simple formula based on the engine order and the shaft speed. We have already identified the resonance window. We therefore have all shaft speed values occurring inside the resonance window.
 
-We can therefore calculate the minimum and maximum natural frequency as follows:
+We can therefore calculate the minimum and maximum possible natural frequency as follows:
 
 \begin{equation}
 \omega_{n, \textrm{min}} = EO \cdot \Omega_{\textrm{min}}
@@ -447,9 +459,9 @@ omega_n_max = df_resonance_window["Omega"].max() * EO
 ```
 
 ### Bounds for damping
-Our system is underdamped, which means the damping ratio, $\zeta$, is positive and less than 1 [@rao2003vibrations]. From experience, a range of 0.0001 and 0.3 should cover all cases encountered in practice.
+Our system is underdamped, which means the damping ratio, $\zeta$, is positive and less than 1 [@rao2003vibrations]. From experience, a range between 0.0001 and 0.3 should cover all cases encountered in practice.
 
-In the previous chapter, you had an opportunity to change the $\zeta$ parameter with a slider and observe the effect this has on the vibration response. You may recall that, when $\zeta$ is small, a tiny change in $\zeta$ causes a huge change in the vibration amplitude. The optimization algorithm is not privy this information. The more linear the optimization surface, the easier it is for the optimization algorithm to find the global minimum.
+In the previous chapter, you had an opportunity to change the $\zeta$ parameter with a slider and observe the effect this has on the vibration response. You may recall that, when $\zeta$ is small, a tiny change in $\zeta$ causes a huge change in the vibration amplitude. The optimization algorithm is not privy to this information. The more linear the optimization surface, the easier it is for the optimization algorithm to find the global minimum.
 
 We therefore transform the damping ratio by calculating its natural logarithm. This way, the optimization algorithm can work with a more straightforward relationship between the parameter it is optimizing, $\ln(\zeta)$, and the objective function. 
 
@@ -462,7 +474,7 @@ ln_zeta_min = np.log(0.0001)#(1)!
 ln_zeta_max = np.log(0.3)
 ```
 
-1.  You would expect the natural logarithm function to be `np.ln`. For some reason, it is actually `np.log`.
+1.  I expected the natural logarithm function to be `np.ln`. For some reason, it is actually `np.log`.
 
 ### Bounds for the static deflection
 
@@ -502,14 +514,14 @@ simple_solution = differential_evolution(
 2.  We provide the bounds for the optimization parameters. The optimization algorithm calculates there are 3 parameters, and therefore creates an array of three values being passed into the `model_params` argument of the `SDoF_simple_loss` function.
 3.  Each one of these arguments correspond to the positional arguments in the `SDoF_simple_loss` function after the `model_params` argument. The `differential_evolution` function will pass these arguments to the `SDoF_simple_loss` function in the same order.
 4.  We use the median value of the AoA as the sensor position. Remember, the `AoA_p1` column has not been zeroed or normalized yet. 
-5.  The seed is not strictly necessary, but it ensures the results are reproducible on the same computer. You may even get the exact same answers as me if you use the same seed.
+5.  The seed is not strictly necessary, but it ensures the results are reproducible on the same computer. You may even get the exact same answers as I did if you use the same seed.
 
 The `differential_evolution` function returns a `OptimizeResult` object. We can print this object:
 ``` py linenums="1"
->>>print(simple_solution)
- message: Optimization terminated successfully.
+>>> print(simple_solution)
 ```
 ``` console
+ message: Optimization terminated successfully.
  success: True
      fun: 1881551.798646529
        x: [ 7.887e+02 -6.175e+00  1.469e+00]
@@ -536,7 +548,7 @@ We have solved the SDoF fit method with a global optimization algorithm 👏.
 
 Can we confirm this solution is correct?
 
-It is always a good idea to plot the results. The predicted vs true tip deflections are shown in [Figure 2](#figure_02) below.
+It is always a good idea to plot the results. The predicted vs true tip deflections are presented in [Figure 3](#figure_03) below.
 <script src="c08_resonance_1_simple_fit.js" > </script>
 <div>
     <div>
@@ -564,15 +576,15 @@ It is always a good idea to plot the results. The predicted vs true tip deflecti
 </div>
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_02'>Figure 2</a></strong>: The SDoF fit method's predicted tip deflections vs the measured tip deflections.
+        <strong><a name='figure_03'>Figure 3</a></strong>: The SDoF fit method's predicted tip deflections vs the measured tip deflections.
   </figcaption>
 </figure>
 
-[Figure 2](#figure_02) reveals our model is not a good fit for the measured tip deflections. The two lines share some resemblance, but our fit is far from satisfactory.
+[Figure 3](#figure_03) reveals our model is not a good fit for the measured tip deflections. The two lines share some resemblance, but our fit is far from satisfactory.
 
 One thing our model does capture is the increase in amplitude around $n=560$. This suggests we are on the right track, but we need to refine our model further.
 
-However, there are two obvious shortcomings we need to address. First, our model predicts zero tip deflection near the start and end of the resonance. Contrast this to the measured tip deflections, which seems to settle at -80 and -110 μm respectively. 
+There are two shortcomings we need to fix. First, our model predicts zero tip deflection near the start and end of the resonance. Contrast this to the measured tip deflections, which seems to settle at -80 and -110 μm respectively. 
 
 The most likely reason for this is because our data zeroing step pushed the "measured" tip deflections past its true zero point. The seemingly negative values may be an artifact of the zeroing process. We need to account for this in our model.
 
@@ -580,11 +592,11 @@ Second, our model *only* produces positive tip deflections. The measured data, h
 
 Why is our model flat when it should predict tip deflections along this sudden dip? 
 
-Because we have made a terribly simplistic assumption concerning our *phase angle*. [Equation 3](#eq_03) expresses the phase angle between the forcing function and the tip deflection as a function of the forcing function frequency. This implicitly assumes the forcing function is zero at the start of each revolution. This is almost certainly untrue. In practice, the phase angle of the forcing function is almost certainly unknown. We therefore need to solve the forcing function offset as well.
+Because we have made a terribly simplistic assumption concerning our *phase angle*. [Equation 3](#eq_3) is the phase angle between the forcing function and the response. This implicitly assumes the forcing function is zero at the start of each revolution. In practice, the phase angle of the forcing function is almost certainly unknown. We therefore need to solve the forcing function offset as well.
 
 ## Amplitude and phase offsets
 
-We have diagnosed what's wrong with our model: it does not account for amplitude and phase offsets. How do we fix it? Let's start with the phase offset. This is a simple adjustment: we just add a constant term to the argument of the cosine function in [Equation 1](#eq_1). 
+We have diagnosed what's wrong with our model: it does not account for amplitude and phase offsets. How do we fix it? Let's start with the phase offset. This is a simple adjustment: we just add a constant term to the argument of the cosine function from [Equation 1](#eq_1). 
 
 The new equation is given below:
 
@@ -594,9 +606,9 @@ The new equation is given below:
 x(t) = X(\omega) \cos \left( \theta_s \cdot EO - \phi(\omega) + \phi_0 \right)
 \end{equation}
 
-where $\phi_0$ is our new phase offset. What are the possible values for $\phi_0$? Well, since the start of the forcing function is unknown, we can assume any value between 0 and $2 \pi$. That's our first improvement.
+where $\phi_0$ is our new phase offset. What are the possible values for $\phi_0$? Since the start of the forcing function is unknown, we can assume any value between 0 and $2 \pi$. That's our first improvement.
 
-Next, we need to add an amplitude offset. This is a bit more complicated. A reasonable attempt would be to just add a constant term to each probe's measurements. That would, however, imply our zeroing artifact at the start and the end of the resonance has the same value. No justification for this assumption exists.
+Next, we need to add an amplitude offset. This is more complicated. A reasonable attempt would be to just add a constant term to each probe's measurements. That would, however, imply our zeroing artifact at the start and the end of the resonance has the same value. No justification for this assumption exists.
 
 Instead, we introduce a linearly-varying amplitude correction. The correction function is defined by two terms, $z_{\Omega_{\textrm{median}}}$ and $z_{\Omega_{\textrm{max}}}$. These terms are defined as follows:
 
@@ -621,10 +633,11 @@ b_z = z_{\Omega_{\textrm{median}}} - m_z \cdot \Omega_{\textrm{median}}
 
 The terms $m_z$ and $b_z$ are the slope and intercept of the correction function. They depend on the correction factors, $z_{\Omega_{\textrm{median}}}$ and $z_{\Omega_{\textrm{max}}}$, and the median and maximum shaft speeds in the resonance window, $\Omega_{\textrm{median}}$ and $\Omega_{\textrm{max}}$.
 
-!!! tip "Correction function vs phase offset"
+!!! note "Correction function vs phase offset"
+    
+    We've added two new concepts: the phase offset term, $\phi_0$, and the correction factors, $z_{\Omega_{\textrm{median}}}$ and $z_{\Omega_{\textrm{max}}}$. There is a subtle difference between *where these two terms are applied*. 
+    
     The phase offset term, $\phi_0$, is part of our SDoF vibration model. It shifts the entire vibration waveform such that $\phi$ represents the phase difference between the force and the tip deflection. The correction function, $z(\Omega)$, is *not part of the SDoF vibration model*. This correction factor is applied to the *measured tip deflections*. 
-
-    This is a subtle but important difference.
 
 How do we choose the bounds for the correction factors? Hopefully, our optimization algorithm is smart enough to find the optimal solution without us constraining the correction factors too much. We therefore set the positive and negative bounds' size equal to the maximum absolute tip deflection in the resonance window.
 
@@ -767,7 +780,7 @@ def SDoF_loss(
     Returns:
         np.ndarray: The sum of squared error between the tip deflection data
 
-We've created a new function, `get_correction_values`. This function calculates the correction values for each sample based on the correction factors. The correction factors are the values are the valued that need to be determined during optimization.
+We've created a new function, `get_correction_values`. This function calculates the correction values for each sample based on the correction factors. The correction factors are the values that need to be determined during optimization.
 
 ## Solving the improved problem
 
@@ -816,7 +829,7 @@ z_max    =  134.43742560770318  µm
 
 The values are in the same region as the previous solution, except for the static deflection and newly added terms, which were zero by implication in the previous solution.
 
-The predicted vs true tip deflections are shown in [Figure 3](#figure_03) below.
+The predicted vs true tip deflections are presented in [Figure 4](#figure_04) below.
 
 <script src="c08_resonance_1_improved_fit.js" > </script>
 <div>
@@ -845,7 +858,7 @@ The predicted vs true tip deflections are shown in [Figure 3](#figure_03) below.
 </div>
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_03'>Figure 3</a></strong>: The improved SDoF fit method's predicted tip deflections vs the corrected measured tip deflections.
+        <strong><a name='figure_04'>Figure 4</a></strong>: The improved SDoF fit method's predicted tip deflections vs the corrected measured tip deflections.
   </figcaption>
 </figure>
 
@@ -857,7 +870,7 @@ We could delve into a solution. Unfortunately, it makes for a beautiful coding e
 
 We have seen how to apply the SDoF fit method to a single probe's tip deflections. Now we want to extend this method to multiple probes. How do we do that?
 
-The idea is very similar to the single probe case. In the single probe case, we had one array of observed tip deflections. Now, we have a set of observed tip deflection arrays, where each array in the set corresponds to a different probe. We also have different $\theta_s$ values for each probe, depending on the circumferential spacing between the probes. 
+The idea is similar to the single probe case. In the single probe case, we had one array of observed tip deflections. Now, we have a set of observed tip deflection arrays, where each array in the set corresponds to a different probe. We also have different $\theta_s$ values for each probe, depending on the circumferential spacing between the probes. 
 
 We have the same number of *model parameters*, because the model parameters are independent of the number of probes. We must, however, introduce a set of *correction values* for each probe. Because of this, our optimization search space scales linearly with the number of probes.
 
@@ -936,7 +949,7 @@ def SDoF_loss_multiple_probes(
             the predicted tip deflections.
 
 2.  This code unpacks the optimization algorithm model arguments, `model_params`, into the SDoF parameters and the correction factors. The last variable, `correction_factors`, has an asterisk, `*`, in front of it. This is Python's way of allocating *the rest* of `model_params` into `correction_factors`. With this notation, we can use the same loss function, regardless of how many probes we have.
-3.  `errors` are now initialized and will be incremented for each probe.
+3.  `error` are now initialized and will be incremented for each probe.
 4.  We loop over every probe. Essentially, we do exactly what we did in the previous loss function for each probe.
 5.  We grab the correction factors pertaining to this probe. The correction factors are located in `correction_factors` in the following order:
 
@@ -1027,7 +1040,7 @@ z_median_4 =  163.029855309319  µm
 z_max_4    =  160.06562042963864  µm
 ```
 
-Again, our model parameters are in the same region as the previous solution. The predicted vs true tip deflections are shown in [Figure 4](#figure_04) below. Each probe's fit is drawn on a different tab.
+Again, our model parameters are in the same region as the previous solution. The predicted vs true tip deflections are shown in [Figure 5](#figure_05) below. Each probe's fit is drawn on a different tab.
 
 === "Probe 1 fit"
     
@@ -1109,17 +1122,17 @@ Again, our model parameters are in the same region as the previous solution. The
 
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_04'>Figure 4</a></strong>: The improved SDoF fit method's predicted tip deflections vs the corrected measured tip deflections for each probe.
+        <strong><a name='figure_05'>Figure 5</a></strong>: The improved SDoF fit method's predicted tip deflections vs the corrected measured tip deflections for each probe.
   </figcaption>
 </figure>
 
-Were happy with the fit for each probe. Our model parameters did not change much from the single probe case. This is exactly what we want to see. A model should be able to fit multiple probes with the same parameters.
+We are happy with the fit for each probe. Our model parameters did not change much from the single probe case. This is exactly what we want to see. A model should be able to fit multiple probes with the same parameters.
 
 ## Estimating the EO
 
 Until this point, we have assumed the EO=8. The optimization algorithm will, however, converge to a solution regardless of our choice for EO. Which EO is the correct one?
 
-We can simply repeat the previous exercise for each EO and capture the objective function value. The EO that results in the lowest objective function value is the most likely to be correct.
+We can simply repeat the above exercise for multiple EOs and compare the objective function errors. The EO that results in the lowest error value is most likely the correct one.
 
 The code below shows us how to do this:
 
@@ -1205,30 +1218,30 @@ This loop takes approximately 1 minute and 30 seconds to run on my laptop. The o
 </div>
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_05'>Figure 5</a></strong>: The objective function value for each EO.
+        <strong><a name='figure_06'>Figure 6</a></strong>: The objective function value for each EO.
   </figcaption>
 </figure>
 
-From [Figure 5](#figure_05) above, our initial guess was correct 💪! The optimal solution errors for each EO decreases gradually as we approach EO=8. EO=8 exhibits the smallest value. It is therefore reasonable to assume the true EO of vibration is 8.
+From [Figure 6](#figure_06) above, our initial guess was correct 💪! The optimal solution errors for each EO decreases gradually as we approach EO=8. EO=8 exhibits the smallest value. It is therefore reasonable to assume the true EO of vibration is 8.
 
 ## Conclusion
 We've come a long way in this chapter. We've learned how to fit the SDoF fit parameters to BTT probe data with a global optimization function. We've also learned how to combine the data from multiple probes to get a more robust estimate of the model parameters.
 
 But what's even more remarkable is how well our simple model works. With just four parameters, we can capture the vibration of the blade tip over multiple revolutions with high accuracy.
 
-In the next and final chapter, we'll explore another way to infer the vibration parameters. This method, however, can be solved using linear algebra. It makes the faster and more suitable for real-time analysis.
+In the next and final chapter, we'll explore another way to infer the vibration parameters. This method, however, can be solved using linear algebra. It makes the solution faster and therefore more suitable for real-time analysis.
 
 !!! question "Outcomes"
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we require an optimization function to determine the optimization function of the SDoF fit method.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand why we require an optimization function to determine the model parameters of the SDoF fit method.
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we need to specify upper and lower bounds for the model parameters.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand why we need to specify upper and lower bounds for the model parameters.
 
-    :material-checkbox-marked:{ .checkbox-success .heart } Understand that the SDoF model, in its raw form, is not adequate. We need to add phase and amplitude offsets to the objective function.
+    :material-checkbox-marked:{ .checkbox-success .heart } Understand why the SDoF model, in its raw form, is not adequate. We need to add phase and amplitude offsets to the objective function.
 
 	:material-checkbox-marked:{ .checkbox-success .heart } Understand how we can loop over each probe's data to fit the SDoF model to multiple probes.
 	
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we can iterate over many EOs and compare the objective function values to identify the optimal EO.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand why the EO is treated differently than the other model parameters. Because the EO can only be a positive integer, we iterate over the EOs to identify the optimal EO.
 
 ## Acknowledgements
 Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
@@ -1249,7 +1262,7 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2024-03-12
+            2024-03-19
         </p>
     </div>
 </div>
@@ -1268,7 +1281,7 @@ Can you write a new objective function that produces a larger $\delta_{st}$?
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
     ``` py linenums="1"
     def SDoF_loss_multiple_probes(
             model_params : np.ndarray,
@@ -1417,7 +1430,7 @@ You may optionally accept other parameters to make the function more flexible.
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
     ``` py linenums="1"
     def perform_SDoF_fit(
         df_blade : pd.DataFrame,
@@ -1523,7 +1536,7 @@ You may optionally accept other parameters to make the function more flexible.
 
 ### 3. Comparing resonances on the upward and downward ramps
 
-Throughout this chapter, we've focused on the EO=8 resonance on the ramp-up. We also have an EO=8 resonance on the ramp-down. Since nothing changed in the setup between the two resonances, we would expect the model parameters to be the same for the other resonance.
+Throughout this chapter, we've focused on the EO=8 resonance on the ramp-up. We also have an EO=8 resonance on the ramp-down. Since nothing changed in the setup between the two resonances, we would expect the model parameters to be the same for both resonances.
 
 {==
 
@@ -1533,6 +1546,6 @@ Do the results make sense?
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
     
-    This is something you can do yourself. You're welcome to email me your results if you want to check the results.
+    This is something you can do yourself. You're welcome to email me your results if you want me to check it.
