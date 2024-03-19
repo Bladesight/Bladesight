@@ -941,8 +941,9 @@
                         "borderWidth": 4,
                         "label": {
                             "content": [
-                                "SDoF tip deflections",
-                                "are too large here"
+                                "Our model's (the red line above 👆)",
+                                "tip deflections are too large here.",
+                                "It should approach the blue line."
                             ],
                             "display": true,
                             "position": "right",
@@ -960,12 +961,14 @@
                         "type": "label",
                         "xValue": 68,
                         "yValue": -200,
-                        "xAdjust": 100,
-                        "yAdjust": -100,
+                        "xAdjust": -150,
+                        "yAdjust": 50,
                         "backgroundColor": "rgba(245,245,245)",
                         "content": [
-                            "We are missing,",
-                            "this entire slope"
+                            "Our model (the red line above 👆)",
+                            "is completely flat here.",
+                            "It should actually follow",
+                            "this downwards blue slope."
                         ],
                         "textAlign": "start",
                         "font": {
