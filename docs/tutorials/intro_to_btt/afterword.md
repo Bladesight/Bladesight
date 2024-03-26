@@ -1,5 +1,5 @@
 ---
-date: 2023-11-11
+date: 2024-03-26
 tags:
   - Blade Tip Timing
   - BTT
@@ -18,11 +18,15 @@ card_url: "afterword/"
 ---
 # Afterword
 
-Thank you so much for doing this tutorial! 
+Thank you so much for sticking with me on this tutorial. I know everyone's time is valuable, and I appreciate you spending some of yours with me. 
 
 If you're new to Python, I hope you've learned a lot. If you're a Python veteran, I hope you've learned a little.
 
-I hope the material has put you in a position to start exploring BTT.
+I hope the material has put you in a position to start your BTT journey.
+
+If you have any suggestions, questions, or comments, please feel free to reach out to me at <a href="mailto:dawie.diamond@bladesight.com">dawie.diamond@bladesight.com</a>.
+
+If you've found this tutorial helpful, please consider sharing it with your friends and colleagues. It would also be awesome if you can start the Github repo for this tutorial:  <a href="https://github.com/Bladesight/Bladesight" target="_blank">https://github.com/Bladesight/Bladesight</a>.
 
 <div style='display:flex'>
     <div>
@@ -38,7 +42,7 @@ I hope the material has put you in a position to start exploring BTT.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-11-12
+            2024-03-26
         </p>
     </div>
 </div>

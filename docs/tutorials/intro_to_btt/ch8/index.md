@@ -16,6 +16,10 @@ template: main_intro_to_btt_ch8.html
 card_title: Intro to BTT Ch8 - The SDoF fit method
 card_url: "ch8/"
 ---
+??? abstract "You are here"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch7.svg){ width="500" }
+	</figure>
 # Single Degree of Freedom (SDoF) Fit Method
 In the previous chapter, we used a fully defined SDoF vibration model to *generate* the samples we typically observe in BTT data. 
 

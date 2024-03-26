@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+{% if page and page.meta and page.meta.robots %}
+
+<meta property="og:title" content="{{page.meta.card_title}}" />
+<meta property="og:description" content="{{page.meta.description}}" />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch9.gif" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-btt{{page.meta.card_url}}" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="{{page.meta.card_title}}"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch9.gif"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-btt{{page.meta.card_url}}"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="{{page.meta.description}}"/>
+
+
+<meta name="robots" content="{{ page.meta.robots }}" />
+  
+{% else %}
+<meta name="robots" content="index, follow" />
+{% endif %}
+{% endblock %}
