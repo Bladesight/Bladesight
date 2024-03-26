@@ -1,5 +1,5 @@
 ---
-date: 2023-11-11
+date: 2024-03-26
 tags:
   - Blade Tip Timing
   - BTT
@@ -12,37 +12,52 @@ hide:
   - tags
 description: This chapter explains how we can use the Circumferential Fourier Fit method to estimate the vibration parameters of a rotor blade from BTT data.
 robots: index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration
-template: main_intro_to_btt.html
+template: main_intro_to_btt_ch9.html
 card_title: Intro to BTT Ch9 - Circumferential Fourier Fit Method
 card_url: "ch9/"
 ---
+??? abstract "You are here"
+	<figure markdown>
+	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch7.svg){ width="500" }
+	</figure>
+
 # Circumferential Fourier Fit (CFF) Method
+At the start of the tutorial, I promised you would learn how to infer blade frequency, amplitude, and phase from raw time stamps. In the previous chapter, we used the SDoF fit method to achieve this goal. The SDoF fit method is *physics-based*: it is derived from the Equations of Motion (EoM) of a harmonic oscillator. 
 
-In the previous chapter, we learned how to use the SDoF fit method to infer the vibration properties of a blade during resonance. This method is based on a *physical model*. This means the equations we use are derived from the Equations of Motion of a harmonic oscillator.
+Let's solve the problem again, but from a different angle. It's often a good idea to use two different techniques to reach the same destination. This solidifies our understanding of the problem and the solution.
 
-The SDoF fit method, however, has a dark side: it is slow. It takes about 8 seconds to solve the equations for a single resonance in the previous chapter. This might not seem like a lot, but when we have many blades and resonances to analyze, it becomes impractical to do in real time. 
+The SDoF fit method, however powerful it may be, has a dark side: it is slow. 
 
-We need a faster way to estimate the vibration parameters for real time analysis. That's where the Circumferential Fourier Fit (CFF) method comes in. The CFF method is a phenomenological model, meaning it is only concerned with fitting the measured data well, not with being consistent with the underlying physics. 
+It takes ~8 seconds to solve the equations for a single resonance. This might not seem like much, but when we have many blades and resonances to analyze, it becomes impractically slow. 
 
-In its most basic form, it fits a sinusoidal function to the measured data, using three coefficients: $A$, $B$, and $C$. The CFF method was first named as such, to my best knowledge, in [@joung2006analysis].
+For real time analysis, we need a faster way to estimate the vibration parameters. That's where the Circumferential Fourier Fit (CFF) method comes in. The CFF method is a phenomenological model. A phenomenological model is only concerned with fitting the measured data well, not with being consistent with the underlying physics. We use phenomenological models all the time. The entire discipline of Machine Learning(ML) is built around them.
+
+In its most basic form, it fits a sinusoidal function to the measured data with three coefficients: $A$, $B$, and $C$. The CFF method was first named as such, to my best knowledge, in [@joung2006analysis].
+
+<figure markdown>
+  ![CFF Fit intro gif](intro_gif.gif)
+  <figcaption><a id='figure_01'><strong>Figure 1:</strong></a>
+    An animation of how the CFF method fits one sinusoid to each revolution's data.
+  </figcaption>
+</figure>
 
 !!! question "Outcomes"
 
-	:material-checkbox-blank-outline: Understand that the CFF method is a phenomenological method that fits a sinusoidal function to each revolution of the blade vibration.
+	:material-checkbox-blank-outline: Understand that the CFF method is a phenomenological model that fits a sinusoidal function to each revolution of the blade vibration.
 
-	:material-checkbox-blank-outline: Understand how we can construct the CFF equations.
+	:material-checkbox-blank-outline: Construct the CFF equations.
 
-    :material-checkbox-blank-outline: Understand how the SDoF fit results and the CFF results can be compared to one another.
+    :material-checkbox-blank-outline: Compare results from the CFF and SDoF fit methods.
 	
-	:material-checkbox-blank-outline: Understand that we can iterate over many EOs and compare the sum of squared errors to identify the most likely EO.
+	:material-checkbox-blank-outline: Evaluate several candidate EOs to identify the most likely EO.
 
 ## Derivation
 
-The CFF method is similar to the SDoF method in that it assumes the blade tip exhibits sinusoidal vibration. The CFF method, however, completely ignores the modal properties, $\omega_n$, $\delta_{\text{st}}$, $\zeta$, and $\phi_0$. 
+The CFF method and the SDoF method share a common trait. Both assume the blade tip exhibits sinusoidal vibration. The CFF method, however, completely ignores the modal properties, $\omega_n$, $\delta_{\text{st}}$, $\zeta$, and $\phi_0$. 
 
 The CFF method calculates the vibration amplitude and phase directly for *each shaft revolution*. This results in linear equations, instead of the highly non-linear equations we had with the SDoF fit method.
 
-The tip vibration of *in every shaft revolution* is expressed as follows:
+The tip vibration *within every shaft revolution* is expressed as follows:
 
 <span id="eq_cff_fundamental_equation_blade_vibration"></span>
 
@@ -70,7 +85,7 @@ x(\theta_2) &= A \sin(\theta_2 \cdot EO) + B \cos(\theta_2 \cdot EO) + C \\
 x(\theta_n) &= A \sin(\theta_n \cdot EO) + B \cos(\theta_n \cdot EO) + C
 \end{align}
 
-In the above equation, $\theta_1$ represents the position of probe 1, $\theta_2$ represents the position of probe 2, and so on. The variable $n$ represents the number of probes.
+$\theta_1$ represents the position of probe 1, $\theta_2$ represents the position of probe 2, and so on. The variable $n$ represents the number of probes.
 
 This system can be written in matrix form as follows:
 
@@ -114,7 +129,7 @@ We finally represent the system in a more compact form:
 
 We have now rephrased the problem as a linear algebra problem where we want to solve for $\mathbf{b}$. 
 
-Once solved, we can calculate the amplitude and phase of the vibration within each revolution using the following equations:
+Once solved, we can calculate the amplitude and phase of the vibration within each revolution using:
 
 <span id="eq_cff_amplitude"></span>
 
@@ -128,15 +143,51 @@ X = \sqrt{A^2 + B^2}
 \phi = \arctan \left( \frac{A}{B} \right)
 \end{equation}
 
-The phase and amplitude can then be used in the following equation to calculate the tip deflections:
+The phase and amplitude can now be used to calculate the tip deflections:
 
 <span id="eq_cff_sinusoid"></span>
 
 \begin{equation}
-x(\theta_s) = X \sin(\theta_s \cdot EO - \phi) + C
+x(\theta_s) = X \cos(\theta_s \cdot EO - \phi) + C
 \end{equation}
 
 The above equation has exactly the same form as the SDoF fit method, only with a constant amplitude and phase within each revolution. 
+
+??? note "SDoF fit equations"
+
+    For comparison, here are the SDoF fit equations again:
+
+    \begin{equation}
+    x(t) = X(\omega) \cos \left( \theta_s \cdot EO - \phi(\omega) \right)
+    \end{equation}
+
+    \begin{equation}
+    X(\omega) = \frac{\delta_{\text{st}}}{ \sqrt{ (1 - r^2)^2 + (2 \zeta r)^2 } }\\
+    \end{equation}
+
+    \begin{equation}
+    \phi(\omega) = \arctan \left( \frac{2 \zeta r}{1 - r^2} \right)\\
+    \end{equation}
+
+    \begin{equation}
+    r = \frac{\omega}{\omega_n}
+    \end{equation}
+
+    | Symbol | Meaning | SI Unit | Domain|
+    | --- | --- | --- | --- |
+    | $x(t)$ | Tip deflection | $\mu m$ | $\mathbb{R}$ |
+    | $X(\omega)$ | Vibration amplitude | $\mu m$  | $\mathbb{R}+$  |
+    | $\delta_{\text{st}}$ | Static deflection | $\mu m$ | $\mathbb{R}+$ |
+    | $\zeta$ | Damping ratio | - | $[0,1)$ for underdamped systems |
+    | $\omega_n$ | Natural frequency | $rad/s$ or Hz | $\mathbb{R}+$ |
+    | $\theta_s$ | Sensor position | $rad$ | $[0, 2\pi]$ |
+    | $\phi(\omega)$ | Phase angle | $rad$ | $\mathbb{R}$ |
+    | $\omega$ | Excitation frequency | $rad/s$ or Hz | $\mathbb{R}+$ |
+    | $EO$ | Engine Order | - | $\mathbb{Z}+$ |
+
+    What's the difference between Equation 10 and Equation 11? 
+
+    The substantial difference between them is the SDoF fit method's $X$ and $\phi$ is a function of the excitation frequency, $\omega$. The CFF method's $X$ and $\phi$ are constant scalar variables within each revolution.
 
 !!! tip "Amplitude offset"
     The amplitude offset term, $C$, is generally kept as a part of the CFF model parameters. This stands in contrast to the SDoF fit method, where the correction factors are subtracted from the measured tip deflections before fitting the model.
@@ -146,19 +197,15 @@ The above equation has exactly the same form as the SDoF fit method, only with a
 The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_09_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.
 
 
-You can open a Google Colab session of the worksheet by clicking here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_09_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
+You can open a Google Colab session of the worksheet here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_09_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.
 
 You need to use one of the following Python versions to run the worksheet:
-<img src="https://img.shields.io/badge/python-3.6-blue.svg">
-<img src="https://img.shields.io/badge/python-3.7-blue.svg">
-<img src="https://img.shields.io/badge/python-3.8-blue.svg">
 <img src="https://img.shields.io/badge/python-3.9-blue.svg">
 <img src="https://img.shields.io/badge/python-3.10-blue.svg">
 <img src="https://img.shields.io/badge/python-3.11-blue.svg">
 
 ## Getting the dataset
-
-To see the CFF method in action, we will use the same dataset that we applied the SDoF fit method to. This way, we can compare the results. The dataset contains blade tip displacements measured by a four sensors for a run-up and a run-down.
+To see the CFF method in action, we will use the same dataset as used in the previous chapter. This way, we can compare the results from the CFF and SDoF fit methods. The dataset contains blade tip displacements measured by four sensors for a run-up and a run-down.
 
 ``` py linenums="1"
 ds = Datasets["data/intro_to_btt/intro_to_btt_ch05"]
@@ -233,8 +280,7 @@ def cff_method_single_revolution(
 ```
 
 1.  Here, we specify the suffix of the tip deflection signals. We'll leave this as the default `"_filt"` most of the time. We may, however, set this to `""` in order to fit the CFF method on the unfiltered tip deflections.
-2.  This function fits the CFF method for a resonance by 
-    using a single revolution of data for each set of CFF parameters.
+2.  This function fits the CFF method for a resonance. The model parameters, $A$, $B$, and $C$ are solved for each revolution of data.
 
     Args:
         
@@ -252,15 +298,15 @@ def cff_method_single_revolution(
         pd.DataFrame: A DataFrame containing the CFF parameters for 
             each shaft revolution. 
 
-3.  We identify the signals that contain the tip deflections. This list is also used to determine how many probes were used for the present dataset.
-4.  We initialize the matrix $\mathbf{A}$, which contain each sensor's sine, cosine and constant term coefficients. We initialize it as a `PROBE_COUNT X 3` matrix of ones, since the constant term is one throughout, and were going to override the other two columns.
+3.  We identify the names of the columns containing the tip deflections. This list is also used to determine how many probes were used for the present dataset.
+4.  We initialize the matrix $\mathbf{A}$, which contain each sensor's sine, cosine and constant term coefficients. We initialize it as a `PROBE_COUNT X 3` matrix of ones, since the constant term is one everywhere, and the other two columns will be assigned new values.
 5.  We calculate and assign the sine and cosine coefficients for each sensor.
 6.  Here, we calculate the pseudo inverse of `A`. The pseudo inverse is a matrix that, when multiplied with `A`, results in the identity matrix. We only do this once, since the matrix `A` is constant for each revolution.
 7.  This line is the reason why the CFF method is so fast. Because our `A` matrix is constant for each revolution, we can simply multiply its pseudo-inverse with the transpose of the observed tip deflections. This results in the CFF parameters for each revolution.
 8.  From here to the end, its all cosmetic. We create a dataframe containing the CFF parameters, the amplitude, phase, and the shaft revolution number.
-9.  We calculate the predicted tip deflections using the CFF parameters. This is for convenience so we don't need to recalculate it later to check our fits.
+9.  We calculate the predicted tip deflections with the CFF parameters. This is for convenience so we don't need to recalculate it later to check our fits.
 
-Implementing the method is simple:
+Here we implement the method:
 
 ``` py linenums="1"
 %%timeit #(1)!
@@ -268,7 +314,7 @@ PROBE_COUNT = 4
 df_cff_params = cff_method_single_revolution(
     df_resonance_window,
     [
-        df_resonance_window[f"AoA_p{i_probe + 1}"].median()
+        df_resonance_window[f"AoA_p{i_probe + 1}"].median()#(2)!
         for i_probe in range(PROBE_COUNT)
     ],
     EO
@@ -276,12 +322,11 @@ df_cff_params = cff_method_single_revolution(
 ```
 
 1.  We use the `%%timeit` magic command to measure the execution time of the cell. This only works when you're in a Jupyter Notebook
+2.  We use the median of the raw AoA values for the sensor location.
 
-You'll see that, once again, we use the median of the raw AoA values for the sensor location. 
+The `%%timeit` command is something specific to Jupyter notebooks. It causes Python to run the entire cell multiple times. The mean execution time is reported after the final iteration. This is useful for benchmarking code. This call runs for a total of... 3 ms! Contrast this to the SDoF fit method, which took approximately 8 seconds. The CFF method is therefore  ~2666 times faster than the SDoF fit method. This is a massive speed up ⏩!
 
-The `%%timeit` command is something specific to Jupyter notebooks. It causes Python to run the entire cell multiple times. The mean execution time is then reported. This is useful for benchmarking code. This call runs for a total of... 3 ms! Contrast this to the SDoF fit method, which took approximately 8 seconds. The CFF method is therefore  ~2666 times faster than the SDoF fit method. This is a massive speed up ⏩!
-
-Being faster is great, but does it actually work? Let's take a look at the predicted tip deflections vs the actual tip deflections:
+Faster speed is awesome, but is it accurate? Here's the predicted tip deflections vs the actual tip deflections:
 
 === "Probe 1 fit"
     
@@ -364,7 +409,7 @@ Being faster is great, but does it actually work? Let's take a look at the predi
 
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_01'>Figure 1</a></strong>: The CFF predicted tip deflections vs the actual tip deflections for each probe. The CFF method is able to fit the tip deflections very well.
+        <strong><a name='figure_02'>Figure 2</a></strong>: The CFF predicted tip deflections vs the actual tip deflections for each probe. The CFF method is able to fit the tip deflections very well.
   </figcaption>
 </figure>
 
@@ -372,9 +417,9 @@ Wow 👏! The CFF predicted values and the measured values are almost on top of 
 
 Contrast this with the SDoF method where we didn't get such a good fit. What do we conclude from this? Is the CFF method better than the SDoF fit method?
 
-I don't think so. We have to remember that the CFF method is a phenomenological method. It has 3 parameters and 4 measured values, therefore only slightly overdetermined. The odds are therefore stacked in its favor to fit the data well. In fact, the CFF method even fits the data well near the start of the resonance, where we mostly have noise. This should make us uneasy. If our model reliably reproduces noise, it means we probably have overfitting.
+I don't think so. We have to remember the CFF method is phenomenological. It needs to fit 3 parameters to 4 measured values in each revolution. The odds are therefore stacked in its favor to fit the data well. In fact, the CFF method even fits the data well near the start of the resonance, where we mostly have noise. This should make us uneasy. If our model accurately reproduces noise, it means we are overfitting.
 
-Now for the big question, what is our natural frequency? The simple answer is that we don't have one! Our CFF is not concerned with the underlying physics, so it doesn't have a natural frequency. We can, however, take the shaft speed where the fitted amplitude is a maximum.
+Now for the big question: what is our natural frequency? The simple answer is we don't have one! The CFF method is not concerned with the underlying physics, so it doesn't have a natural frequency. We can, however, assume that the shaft speed where the amplitude reaches its peak is where the natural frequency is exactly excited.
 
 Let's compare the CFF amplitude and phase to the SDoF fit amplitude and phase for the same resonance:
 
@@ -426,11 +471,11 @@ Let's compare the CFF amplitude and phase to the SDoF fit amplitude and phase fo
 
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_02'>Figure 2</a></strong>: The CFF amplitude and phase vs the SDoF fit amplitude and phase for the same resonance. We see the maximum amplitude between the two methods differ by approximately 200 μm. The phase, at least in the resonance region, is basically identical.
+        <strong><a name='figure_03'>Figure 3</a></strong>: The CFF method amplitude and phase vs the SDoF fit amplitude and phase for the same resonance. The maximum amplitude between the two methods differ by approximately 200 μm. The phase, at least in the resonance region, is basically identical.
   </figcaption>
 </figure>
 
-From [Figure 2](#figure_02) above, we see that the maximum amplitude of the CFF method occurs at revolution number 568. We can use the rotor speed in this resonance, multiplied by the EO, to get the CFF natural frequency:
+From [Figure 3](#figure_03) above, the maximum amplitude of the CFF method occurs at revolution number 568. We can use the rotor speed in this resonance, multiplied by the EO, to get the CFF natural frequency:
 
 ``` py linenums="1"
 >>> omega_n_568 = df_resonance_window.query("n == 568")["Omega"].iloc[0]*EO
@@ -446,18 +491,18 @@ CFF omega_n @ n=567: 126.273 Hz
 SDoF omega_n       : 126.270 Hz
 ```
 
-Wee see that the CFF natural frequency at revolution 568 is 0.3 Hz higher than the SDoF natural frequency. This is a difference of 0.2%. I believe it is a small difference, showing correspondence between the two methods. We also used the shaft speed at the previous revolution, n=567, to calculate the natural frequency. Now, the natural frequency is almost identical to the SDoF natural frequency.
+The CFF natural frequency at revolution 568 is 0.3 Hz higher than the SDoF natural frequency. This is a difference of 0.2%. I believe it is a small difference. The two methods seem to point to the same underlying physics. We also used the shaft speed at the previous revolution, n=567, to calculate the natural frequency. Now, the natural frequency is almost identical to the SDoF natural frequency.
 
-We see that the CFF method's maximum amplitude is approximately 200 μm lower than the SDoF method's maximum amplitude. This difference is large, approximately 28%. It is possible that the SDoF fit method may be overestimating the amplitude. If you did the coding exercise in the previous chapter, you would have implemented an SDoF fit method that rewards the ability to capture larger amplitudes.
+The CFF method's maximum amplitude is approximately 200 μm lower than the SDoF method's maximum amplitude. This difference is large, approximately 28%. It is possible the SDoF fit method may be overestimating the amplitude. If you did the coding exercise in the previous chapter, you would have implemented an SDoF fit method that rewards the ability to capture larger amplitudes.
 
-When looking at the phase plot, we see that the two methods produce similar phase shifts where the amplitudes are largest. The CFF method produces larger phase shifts outside the resonance region.
+The phase plot suggests the two methods produce similar phase shifts where the amplitudes are largest. The CFF method produces larger phase shifts outside the resonance region.
 
 Which one of the two is more accurate? I don't know. More effort needs to be put in to compensate for the zeroing artifacts in the CFF method. The only real way to judge which one is better is to have calibrated strain gauge data available. This falls outside the scope of the present tutorial.
 
-## Estimating the EO
-We have seen how the CFF method can fit the data well, as long as we know the correct EO. But what if we are not sure about the EO? How can we find out which one is the best for our data?
+## Estimate the EO
+The CFF method can fit the data well... as long as the correct EO is known beforehand. But what if we are not sure about the EO? How can we find out which one is the best for our data?
 
-We can repeat what we did in the previous chapter. We can try different EO values and calculate the sum of squared errors between the predicted and the measured tip deflections. The lower the error, the better the fit. So, we can look for the EO that gives us the lowest error value. That is likely to be the correct one for our data.
+We can repeat what we did in the previous chapter. We can try different EO values and calculate the sum of squared errors between the predicted and the measured tip deflections. The lower the error, the better the fit. So, we search for the EO that results in the lowest error value. That is likely to be the correct one for our data.
 
 The below code performs this calculation:
 
@@ -490,7 +535,7 @@ print("Most likely EO:", EOs[np.argmin(errors)])
 Most likely EO: 8
 ```
 
-The error values are plotted in [Figure 3](#figure_03) below.
+The error values are plotted in [Figure 4](#figure_04) below.
 
 <div>
     <div>
@@ -520,30 +565,30 @@ The error values are plotted in [Figure 3](#figure_03) below.
 </script>
 <figure markdown>
   <figcaption>
-        <strong><a name='figure_03'>Figure 3</a></strong>: The sum of squared errors between the predicted and measured tip deflections for each EO. We can see that EO=8 results in the lowest sum of squared error value.
+        <strong><a name='figure_04'>Figure 4</a></strong>: The sum of squared errors between the predicted and measured tip deflections for each EO. EO=8 results in the lowest sum of squared error value.
   </figcaption>
 </figure>
 
-From [Figure 3](#figure_03) above, we see that the EO with the lowest error value is 8. This is the correct value. You may need to zoom in a bit, since the error values for EOs 8 - 11 are close to one another.
+From [Figure 4](#figure_04) above, the EO with the lowest error value is 8. This is the correct value. You may need to zoom in a bit, since the error values for EOs 8 - 11 are close to one another.
 
 ## Conclusion
-In this chapter, we have shown how to apply the CFF method to a resonance event. The CFF method is a powerful tool that can be used to fit the blade tip deflection data with high accuracy. We can also estimate the natural frequency and EO of vibration using it.
+In this chapter, we have shown how to apply the CFF method to a resonance event. The CFF method is a powerful tool to fit the blade tip deflection data with high accuracy. The CFF method can also be used to estimate the natural frequency and EO of vibration.
 
 The main benefit of the CFF method is its speed. The CFF method is, in its rawest form, approximately 2666 times faster than the SDoF fit method. You should therefore be able to use it in real-time.
 
 !!! question "Outcomes"
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that the CFF method is a phenomenological method that fits a sinusoidal function to each revolution of the blade vibration.
+	:material-checkbox-marked:{ .checkbox-success .heart } Understand that the CFF method is a phenomenological model that fits a sinusoidal function to each revolution of the blade vibration.
 
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand how we can construct the CFF equations.
+	:material-checkbox-marked:{ .checkbox-success .heart } Construct the CFF equations.
 
-    :material-checkbox-marked:{ .checkbox-success .heart } Understand how the SDoF fit results and the CFF results can be compared to one another.
+    :material-checkbox-marked:{ .checkbox-success .heart } Compare results from the CFF and SDoF fit methods.
 	
-	:material-checkbox-marked:{ .checkbox-success .heart } Understand that we can iterate over many EOs and compare the sum of squared errors to identify the most likely EO.
+	:material-checkbox-marked:{ .checkbox-success .heart } Evaluate several candidate EOs to identify the most likely EO.
 
 
 ## Acknowledgements
-I thank XXX for reviewing this chapter.
+Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
 \bibliography
 
@@ -561,7 +606,7 @@ I thank XXX for reviewing this chapter.
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2023-11-11
+            2024-03-26
         </p>
     </div>
 </div>
@@ -571,7 +616,7 @@ I thank XXX for reviewing this chapter.
 ### 1. Multiple Revolution Case
 Solving the CFF parameters on a per revolution basis is great, but it may be prone to noise and outliers. In our example above, we have 3 unknown parameters and only 4 measurements. The system may be overdetermined, but we'd ideally like to have even more measurements to increase robustness to noise.
 
-We can change to problem such that the parameters $A$, $B$, and $C$ are fit across *multiple revolutions*. This should increase the robustness of the fit.
+We can change the problem to allow the parameters $A$, $B$, and $C$ are fit across *multiple revolutions*. This should increase the robustness of the fit.
 
 {==
 
@@ -587,7 +632,7 @@ The function should fit the CFF parameters over `1 + 2*extra_revolutions` consec
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
     ``` py linenums="1"
     def cff_method_multiple_revolutions(
         df_blade : pd.DataFrame,
@@ -680,11 +725,11 @@ The function should fit the CFF parameters over `1 + 2*extra_revolutions` consec
 
 ### 2. Writing a function we can use
 
-Were now going to write a single entrypoint, receiving the minimum amount of arguments, that we can use to fit the CFF method and estimate the EO. This will make it easier to use the CFF method in the future.
+Were now going to write a single entrypoint, receiving the minimum amount of arguments, to fit the CFF method and estimate the EO. This will make it easier to use the CFF method in the future.
 
 {==
 
-:material-pencil-plus-outline: Write a function, called, `perform_CFF_fit`, that receives the following three required arguments:
+:material-pencil-plus-outline: Write a function, called, `perform_CFF_fit`, receiving the following three required arguments:
 
 1.  The blade tip deflection DataFrame, `df_blade`.
 2.  The revolution number indicating the start of the resonance, `n_start`.
@@ -699,7 +744,7 @@ You may optionally accept other parameters to make the function more flexible.
 
 ==}
 
-??? example "Reveal answer (Please try it yourself before peeking)"
+??? example "Reveal answer (Please try it yourself before revealing the solution)"
     ``` py linenums="1"
     def perform_CFF_fit(
         df_blade : pd.DataFrame,

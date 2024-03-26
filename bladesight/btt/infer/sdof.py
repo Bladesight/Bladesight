@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 from scipy.optimize import differential_evolution
 
