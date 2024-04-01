@@ -1,5 +1,11 @@
 # Problem 1
 
+## Physical exercise
+
+* I jogged 6.0 km at Pecanwood Estate 
+
+* I did not time myself
+
 ## Problem Statement
 The problem on project euler can be found here:
 
@@ -81,7 +87,7 @@ Here's the GIF:
 
 Time taken for first solution: 60 + 10:38 minutes.
 
-## Proposed solution
+## Proposed/memorandum solution
 === ":simple-python: Python"
 
     ``` python title="prob_001.py"
@@ -106,7 +112,6 @@ Time taken for first solution: 60 + 10:38 minutes.
     The total is 233168 
     233168
     ```
-
 
 === ":simple-rust: Rust"
 
@@ -153,6 +158,8 @@ Time taken for first solution: 60 + 10:38 minutes.
     The total is 233168
     The total 2 is 233168
     ```
+
+Total Time for memorandum solution : 18 minutes
 
 <div style='display:flex'>
     <div>
