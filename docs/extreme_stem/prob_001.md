@@ -79,7 +79,7 @@ Here's the GIF:
 
 ![GIF](prob_001.gif){ width="500" }
 
-Time taken for first solution: 60 + 10:38
+Time taken for first solution: 60 + 10:38 minutes.
 
 <div style='display:flex'>
     <div>
