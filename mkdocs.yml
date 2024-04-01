@@ -117,7 +117,7 @@ nav:
     - 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
     - Afterword: tutorials/intro_to_btt/afterword.md
   - Extreme STEM: 
-    - extreme_stem/index.md
+    - What is Extreme Stem?: extreme_stem/index.md
     - Problem 1: extreme_stem/prob_001.md
   - User Reference:
     - reference/dataset_handler.md
