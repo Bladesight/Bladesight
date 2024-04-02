@@ -119,6 +119,7 @@ nav:
   - Extreme STEM: 
     - What is Extreme Stem?: extreme_stem/index.md
     - Problem 1: extreme_stem/prob_001.md
+    - Problem 2: extreme_stem/prob_002.md
   - User Reference:
     - reference/dataset_handler.md
     - btt:
