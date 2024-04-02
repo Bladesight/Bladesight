@@ -232,4 +232,83 @@ I'm soooper chuffed with my Rust solution. I created a struct to hold the `value
 
 Time taken for first solution: 60 + 1:26 minutes.
 
+## Proposed/memorandum solution
+It seems every third value is equal, which actually makes sense :man_facepalming:. I dont need to check for it.
+
+=== ":simple-python: Python"
+
+    ```python 
+    def fibonacci_series_equal_sum_model(upper_limit : int) -> int:
+        total = 2
+        fib_n_min2 = 1
+        fib_n_min1 = 2
+        n = 0
+        stop_limit = upper_limit / 2
+        while fib_n_min2 < stop_limit:
+            new_val =  fib_n_min2 + fib_n_min1
+            if n == 2:
+                n = 0
+                total += new_val
+            else:
+                n += 1
+            fib_n_min2 = fib_n_min1*1
+            fib_n_min1 = new_val*1
+        return total
+    ```
+=== ":simple-rust: Rust"
+
+    ``` rust
+
+    pub mod prob_002 {
+        use super::FibonacciNumber;
+
+        pub fn fibonacci_series(upper_limit : i64) -> i64 {
+            let mut fib_min1 = FibonacciNumber {
+                value: 1,
+                is_equal: false
+            };
+            let mut fib_min2 = FibonacciNumber {
+                value: 2,
+                is_equal: true
+            };
+            let mut total : i64 = 2;
+            let max_value = upper_limit ;
+            while fib_min2.value < max_value {
+                let new_fib = fib_min1.clone() + fib_min2.clone();
+                if new_fib.is_equal {
+                    total += new_fib.value;
+                };
+                fib_min1 = fib_min2.clone();
+                fib_min2 = new_fib.clone()
+            }
+            total
+        }
+
+        pub fn fin_series_model (upper_limit : i64) -> i64 {
+            let mut n: i64 = 0;
+            let mut total = 2;
+            let mut fib_min_1 = 1;
+            let mut fib_min_2 = 2;
+            let lim = upper_limit / 2;
+            while fib_min_1 < lim {
+                let new_val = fib_min_1 +  fib_min_2;
+                if n == 3 {
+                    n = 0;
+                    total += new_val;
+                } else {
+                    n += 1;
+                };
+                fib_min_2 = fib_min_1.clone();
+                fib_min_1 = new_val.clone();
+            }
+            total
+        }
+    }
+    ```
+
+
+I couldnt get the Rust going. I need to go pick up the kids.
+
+
+
 ![GIF](./prob_002.gif){width = 1200}
