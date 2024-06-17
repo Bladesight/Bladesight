@@ -1,11 +1,52 @@
 # Copyright (c) ARAMI Physical Asset Management Pty Ltd T/A Bladesight Inc. (2023)
 
-from typing import List, Tuple
+from typing import List, Tuple, Union, Literal
 
 import numpy as np
-import pandas as pd
 from numba import njit
 
+import pandas as pd
+import polars as pl
+
+def get_numpy_series_from_df(
+        df : Union[pd.DataFrame, pl.DataFrame],
+        column_name : Union[str, int] 
+    ) -> np.ndarray:
+    """This function extracts a single column from a DataFrame.
+
+    Args:
+        df (Union[pd.DataFrame, pl.DataFrame]): The DataFrame from which
+            to extract the column.
+        column_name Union[str, int]: The name or number of the column to
+            extract.
+
+    Returns:
+        np.ndarray: The extracted column.
+    """
+    if isinstance(df, pd.DataFrame):
+        if isinstance(column_name, int):
+            return df.iloc[:, column_name].to_numpy()
+        else:
+            return df[column_name].to_numpy()
+    elif isinstance(df, pl.DataFrame):        
+        return df[:, column_name].to_numpy()
+
+def get_df_return_lib(
+        df : Union[pd.DataFrame, pl.DataFrame]
+    ) -> Literal['pl', 'pd']:
+    """This function returns the library of the DataFrame.
+
+    Args:
+        df (Union[pd.DataFrame, pl.DataFrame]): The DataFrame to
+            determine the library of.
+
+    Returns:
+        Union[pd.DataFrame, pl.DataFrame]: The library of the DataFrame.
+    """
+    if isinstance(df, pd.DataFrame):
+        return 'pd'
+    elif isinstance(df, pl.DataFrame):
+        return 'pl'
 
 @njit
 def calculate_aoa(arr_opr_zero_crossing: np.ndarray, arr_probe_toas: np.ndarray):
@@ -64,11 +105,10 @@ def calculate_aoa(arr_opr_zero_crossing: np.ndarray, arr_probe_toas: np.ndarray)
 
     return AoA_matrix
 
-
 def transform_ToAs_to_AoAs(
-    df_opr_zero_crossings: pd.DataFrame,
-    df_probe_toas: pd.DataFrame,
-) -> pd.DataFrame:
+    df_opr_zero_crossings: Union[pd.DataFrame, pl.DataFrame],
+    df_probe_toas: Union[pd.DataFrame, pl.DataFrame],
+) -> Union[pd.DataFrame, pl.DataFrame]:
     """This function transforms the ToA values to AoA values for a
     single probe, given the OPR zero-crossing times and the proximity
     probe's ToA values. It receives Pandas DataFrames, and also
@@ -78,23 +118,44 @@ def transform_ToAs_to_AoAs(
     each DataFrame.
 
     Args:
-        df_opr_zero_crossings (pd.DataFrame): A DataFrame with the
+        df_opr_zero_crossings (Union[pd.DataFrame, pl.DataFrame]): A DataFrame with the
             OPR zero-crossing times.
-        df_probe_toas (pd.DataFrame): A DataFrame with the probe's
+        df_probe_toas (Union[pd.DataFrame, pl.DataFrame]): A DataFrame with the probe's
             ToA values.
 
     Returns:
-        pd.DataFrame: A DataFrame with the AoA values.
+        Union[pd.DataFrame, pl.DataFrame]: A DataFrame with the AoA values.
     """
+    return_type = get_df_return_lib(df_opr_zero_crossings)
     AoA_matrix = calculate_aoa(
-        df_opr_zero_crossings.iloc[:, 0].to_numpy(), df_probe_toas.iloc[:, 0].to_numpy()
+        get_numpy_series_from_df(
+            df_opr_zero_crossings, 
+            0
+        ), get_numpy_series_from_df(
+            df_probe_toas,
+            0
+        )
     )
-    df_AoA = pd.DataFrame(
-        AoA_matrix, columns=["n", "n_start_time", "n_end_time", "Omega", "ToA", "AoA"]
-    )
-    df_AoA = df_AoA[df_AoA["n"] != -1]
-    df_AoA.reset_index(inplace=True, drop=True)
-    return df_AoA
+    if return_type == 'pd':
+        df_AoA = pd.DataFrame(
+            AoA_matrix, columns=["n", "n_start_time", "n_end_time", "Omega", "ToA", "AoA"]
+        )
+        df_AoA = df_AoA[df_AoA["n"] != -1]
+        df_AoA.reset_index(inplace=True, drop=True)
+        return df_AoA
+    elif return_type == 'pl':
+        df_AoA = pl.DataFrame(
+            {
+                "n": AoA_matrix[:, 0],
+                "n_start_time": AoA_matrix[:, 1],
+                "n_end_time": AoA_matrix[:, 2],
+                "Omega": AoA_matrix[:, 3],
+                "ToA": AoA_matrix[:, 4],
+                "AoA": AoA_matrix[:, 5],
+            }
+        )
+        df_AoA = df_AoA.filter(df_AoA["n"] != -1)
+        return df_AoA
 
 
 ##########################################################################
@@ -220,6 +281,11 @@ def transform_ToAs_to_AoAs_mpr(
     return df_AoA
 
 
+##########################################################################
+#                    TRANSFORM PROX AoAs to Blade AoAs                   #
+##########################################################################
+
+
 def calculate_Q(
     arr_aoas: np.ndarray, d_theta: float, N: int
 ) -> Tuple[float, np.ndarray]:
@@ -262,25 +328,30 @@ def calculate_Q(
 
 
 def transform_prox_AoAs_to_blade_AoAs(
-    df_prox: pd.DataFrame,
+    df_prox: Union[pd.DataFrame, pl.DataFrame],
     B: int,
     d_theta_increments: int = 200,
-) -> List[pd.DataFrame]:
+    spurious_pulse_policy : Literal['drop', 'keep'] = 'drop'
+) -> List[Union[pd.DataFrame, pl.DataFrame]]:
     """This function takes a DataFrame containing the AoA values of a proximity probe,
     and returns a list of DataFrame, each containing the AoA values of a single blade.
 
     Args:
-        df_prox (pd.DataFrame): The dataframe containing the AoA values
+        df_prox (Union[pd.DataFrame, pl.DataFrame]): The dataframe containing the AoA values
             of the proximity probe.
         B (int): The number of blades.
-        d_theta_increments (int, optional): The number of increments
+        d_theta_increments (int, optional): The number of increments.
+        spurious_pulse_policy (Literal['drop', 'keep'], optional): The policy to handle
+            spurious pulses. Defaults to 'drop'.
 
     Returns:
-        List[pd.DataFrame]: A list of dataframes, each containing the AoA
+        List[Union[pd.DataFrame, pl.DataFrame]]: A list of dataframes, each containing the AoA
         values of a single blade.
     """
+    return_type = get_df_return_lib(df_prox)
+
     d_thetas = np.linspace(-0.5 * np.pi / B, 1.5 * np.pi / B, d_theta_increments)
-    arr_aoas = df_prox["AoA"].to_numpy()
+    arr_aoas = get_numpy_series_from_df(df_prox, "AoA")
     Qs = []
     optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
     for d_theta in d_thetas:
@@ -320,4 +391,14 @@ def transform_prox_AoAs_to_blade_AoAs(
         blade_dfs.append(df_bin)
         blade_median_AoAs.append( df_bin["AoA"].median()  )
     blade_order = np.argsort(blade_median_AoAs)
-    return [blade_dfs[i] for i in blade_order]
+    blade_dfs = [blade_dfs[i] for i in blade_order]
+    if spurious_pulse_policy == 'keep':
+        return blade_dfs
+    # Drop revolutions that has more than one occurrence of a blade
+    blade_dfs_to_return = []
+    for i, df in enumerate(blade_dfs):
+        n_count = df["n"].value_counts()
+        spurious_revos = n_count[n_count > 1].index
+        blade_dfs_to_return.append(df[~df["n"].isin(spurious_revos)])
+    return blade_dfs_to_return
+            

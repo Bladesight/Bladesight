@@ -193,7 +193,7 @@ def assemble_rotor_AoA_dfs(
     blade arriving at the first probe is aligned with the first blade
     arriving at the first probe. 
 
-    We then assemble B DataFrames containing only all the information
+    We then assemble B DataFrames containing only the information
     from a single blade over every probe.
 
     Args:
@@ -273,7 +273,7 @@ def assemble_rotor_AoA_dfs(
                 df_probe_AoAs_aligned[columns_to_merge].rename(
                     columns=rename_dict
                 ),
-                how="outer",
+                how="inner",
                 on="n"
             )
     return rotor_blade_dfs

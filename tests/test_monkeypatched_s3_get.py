@@ -8,6 +8,8 @@ def test_online_dataset_lookup_failing(monkeypatch):
     monkeypatch.setattr(bladesight.dataset_handler, "get_bladesight_datasets", mock_get_bladesight_datasets)
     Datasets = bladesight.dataset_handler.BladesightDatasetDirectory()
     assert Datasets.online_datasets == []
+    Datasets._ipython_key_completions_()
+    Datasets.local_datasets = []
     assert Datasets._ipython_key_completions_() == []
 
     def mock_get_bladesight_datasets():
@@ -18,11 +20,14 @@ def test_online_dataset_lookup_failing(monkeypatch):
         ]
     monkeypatch.setattr(bladesight.dataset_handler, "get_bladesight_datasets", mock_get_bladesight_datasets)
     Datasets = bladesight.dataset_handler.BladesightDatasetDirectory()
+    Datasets._ipython_key_completions_()
     assert Datasets.online_datasets == [
         "bladesight-data-mock/test1",
         "bladesight-data-mock/test2",
         "bladesight-data-mock/test3"
     ]
+    
+    Datasets.local_datasets = []
     assert Datasets._ipython_key_completions_() == [
         "data/test1",
         "data/test2",
@@ -46,6 +51,7 @@ def test_default_to_local_datasets(tmp_path, monkeypatch):
     path_to_csv.touch()
     Datasets = bladesight.dataset_handler.BladesightDatasetDirectory()
     assert Datasets.local_datasets == ["folder1/file1"]
+    Datasets._ipython_key_completions_()
     assert Datasets.online_datasets == ["folder1/file1"]
     assert Datasets._ipython_key_completions_() == ["data/file1"]
 

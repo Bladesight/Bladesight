@@ -1,7 +1,11 @@
 from typing import List
 import pandas as pd
 
-from .aoa import transform_ToAs_to_AoAs, transform_prox_AoAs_to_blade_AoAs
+from .aoa import (
+    transform_ToAs_to_AoAs, 
+    transform_ToAs_to_AoAs_mpr, 
+    transform_prox_AoAs_to_blade_AoAs
+)
 from .align import pivot_blade_AoAs_along_revolutions, assemble_rotor_AoA_dfs
 from .zero import get_blade_tip_deflections_from_AoAs
 
@@ -11,10 +15,11 @@ __all__ = [
 ]
 
 def get_rotor_blade_AoAs(
-    df_opr_zero_crossings : pd.DataFrame,
+    df_encoder_zero_crossings : pd.DataFrame,
     prox_probe_toas : List[pd.DataFrame],
     probe_spacings : List[float],
-    B : int
+    B : int,
+    encoder_sections : int = 1
 ) -> List[pd.DataFrame]:
     """This function converts the raw time stamps, both the OPR zero-crossing
     times and he proximity probe ToAs, and returns a DataFrame for each 
@@ -22,8 +27,10 @@ def get_rotor_blade_AoAs(
     proximity probes.
 
     Args:
-        df_opr_zero_crossings (pd.DataFrame): A DataFrame containing the
-            OPR zero-crossing times in its first column.
+        df_encoder_zero_crossings (pd.DataFrame): A DataFrame containing the
+            zero-crossing times in its first column. If these zero-crossing times
+            were recorded using an MPR shaft encoder, encoder_sections should be
+            greater than 1.
         prox_probe_toas (List[pd.DataFrame]): A list of DataFrames
             where each DataFrame contains the ToAs of a single
             blade from a proximity probe.
@@ -31,6 +38,8 @@ def get_rotor_blade_AoAs(
             the first probe and every other probe. There are one
             less value in this list than in prox_probe_toas.
         B (int): The number of blades.
+        encoder_sections (int, optional): The number of sections
+            the encoder is divided into. Defaults to 1.
 
     Returns:
         List[pd.DataFrame]: A list of DataFrames where each DataFrame
@@ -39,20 +48,37 @@ def get_rotor_blade_AoAs(
     """
     blade_dfs_recombined = []
 
-    for df_prox_toas in prox_probe_toas:
-        df_prox = transform_ToAs_to_AoAs(
-            df_opr_zero_crossings, 
-            df_prox_toas, 
-        )
-        
-        blade_dfs_recombined.append(
-            pivot_blade_AoAs_along_revolutions(
-                transform_prox_AoAs_to_blade_AoAs(
-                    df_prox, 
-                    B
+    if encoder_sections == 1:
+        for df_prox_toas in prox_probe_toas:
+            df_prox = transform_ToAs_to_AoAs(
+                df_encoder_zero_crossings, 
+                df_prox_toas, 
+            )
+            
+            blade_dfs_recombined.append(
+                pivot_blade_AoAs_along_revolutions(
+                    transform_prox_AoAs_to_blade_AoAs(
+                        df_prox, 
+                        B
+                    )
                 )
             )
-        )
+    elif encoder_sections > 1:
+        for df_prox_toas in prox_probe_toas:
+            df_prox = transform_ToAs_to_AoAs_mpr(
+                df_encoder_zero_crossings, 
+                df_prox_toas, 
+                encoder_sections
+            )
+            
+            blade_dfs_recombined.append(
+                pivot_blade_AoAs_along_revolutions(
+                    transform_prox_AoAs_to_blade_AoAs(
+                        df_prox, 
+                        B
+                    )
+                )
+            )
     
     rotor_AoA_dfs = assemble_rotor_AoA_dfs(
         prox_aligned_dfs=blade_dfs_recombined,

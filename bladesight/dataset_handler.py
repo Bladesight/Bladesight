@@ -1,7 +1,7 @@
 import json
 import os
 import pathlib
-from typing import Dict, List, Literal, Union, Any
+from typing import Dict, List, Literal, Union, Any, Optional
 
 import duckdb
 import pandas as pd
@@ -127,45 +127,133 @@ def _confirm_dataset_is_valid(path_to_db : pathlib.Path) -> None:
             "but it does not have a .db extension!"
         )
 
-def _read_sql(
+def _execute_sql_without_arg(
     path_to_db : pathlib.Path, 
     sql_query: str, 
-    return_mode: Literal["pd", "pl"] = "pd"
-) -> Union[pd.DataFrame, pl.DataFrame]:
+    return_mode: Literal['pd', 'pl', 'no_return'] = 'pd'
+) -> Union[pd.DataFrame, pl.DataFrame, None]:
     """This function executes a DuckDB SQL query on the dataset
     and returns its result as a pandas or polars DataFrame.
 
     Args:
         path_to_db (pathlib.Path): The path to the dataset.
         sql_query (str): The SQL query to execute.
-        return_mode (Literal["pd", 'pl'], optional): The return 
+        return_mode (Literal['pd', 'pl', 'no_return'], optional): The return 
             mode. Defaults to 'pd'.
 
     Returns:
-        Union[pd.DataFrame, pl.DataFrame]: The results of the query.
+        Union[pd.DataFrame, pl.DataFrame, None]: The results of the query.
 
     Raises:
-        ValueError: If the return_mode is not 'pd' or 'pl'.
+        ValueError: If the return_mode is not 'pd', 'pl' or 'no_return'.
     
     Examples:
     ---------
         Read a SQL query from a dataset into a Polars DataFrame.
 
-        >>> _read_sql(
+        >>> _execute_sql_without_arg(
         ... "bladesight-data/intro_to_btt/intro_to_btt_ch02.db", 
         ... "SELECT * FROM metadata;",
         ... "pl"
         ... )
     """
-    if return_mode not in ["pd", "pl"]:
-        raise ValueError("return_mode must be 'pd' or 'pl'")
+    if return_mode not in ["pd", "pl", "no_return"]:
+        raise ValueError("return_mode must be 'pd', 'pl' or 'no_return'")
     
     with duckdb.connect(str(path_to_db)) as con:
         if return_mode == "pd":
-            df = con.sql(sql_query).df()
+            df = con.execute(sql_query).df()
         elif return_mode == "pl":
-            df = con.sql(sql_query).pl()
+            df = con.execute(sql_query).pl()
+        elif return_mode == "no_return":
+            con.execute(sql_query)
+            df = None
     return df
+
+def _execute_sql_with_arg(
+    path_to_db : pathlib.Path, 
+    sql_query: str, 
+    df_in_memory: Union[pd.DataFrame, pl.DataFrame],
+    return_mode: Literal["pd", "pl", 'no_return'] = "pd"
+) -> Union[pd.DataFrame, pl.DataFrame, None]:
+    """This function executes a DuckDB SQL query on the dataset
+    and returns its result as a pandas or polars DataFrame.
+
+    Args:
+        path_to_db (pathlib.Path): The path to the dataset.
+        sql_query (str): The SQL query to execute.
+        df_in_memory (Union[pd.DataFrame, pl.DataFrame]): The DataFrame to use 
+            in the query.
+        return_mode (Literal["pd", 'pl', 'no_return'], optional): The return 
+            mode. Defaults to 'pd'.
+
+    Returns:
+        Union[pd.DataFrame, pl.DataFrame, None]: The results of the query.
+
+    Raises:
+        ValueError: If the return_mode is not 'pd', 'pl' or 'no_return'.
+    
+    Examples:
+    ---------
+        Read a SQL query from a dataset into a Polars DataFrame.
+
+        >>> _execute_sql_without_arg(
+        ... "bladesight-data/intro_to_btt/intro_to_btt_ch02.db", 
+        ... "SELECT * FROM metadata;",
+        ... "pl"
+        ... )
+    """
+    if return_mode not in ["pd", "pl", "no_return"]:
+        raise ValueError("return_mode must be 'pd', 'pl' or 'no_return'")
+    
+    with duckdb.connect(str(path_to_db)) as con:
+        if return_mode == "pd":
+            df = con.execute(sql_query).df()
+        elif return_mode == "pl":
+            df = con.execute(sql_query).pl()
+        elif return_mode == "no_return":
+            con.execute(sql_query)
+            df = None
+    return df
+
+
+def _set_metadata_key(
+        path_to_db : pathlib.Path, 
+        metadata_key : str, 
+        metadata: Dict[str, Dict]
+    ) -> None:
+    """This function sets the metadata in the dataset.
+
+    Args:
+        path_to_db (pathlib.Path): The path to the dataset.
+        metadata_key (str): The key for the metadata.
+        metadata (Dict[str, Dict]): The metadata.
+
+    Examples:
+    ---------
+        Set the metadata in a dataset.
+
+        >>> _set_metadata(
+        ... "bladesight-data/intro_to_btt/intro_to_btt_ch02.db",
+        ... {
+        ...     "CITATION": {
+        ...         "repr": "This is a citation",
+        ...         "url": "https://example.com",
+        ...         "doi": "10.1234/5678"
+        ...     }
+        ... }
+        ... )
+    """
+    with duckdb.connect(str(path_to_db)) as con:
+        con.execute("DELETE FROM metadata WHERE metadata_key = ?;", (metadata_key, ))
+        metadata_value_encoded = json.dumps(metadata)
+        con.execute(
+            "INSERT INTO metadata VALUES (?, ?);",
+            (
+                metadata_key,
+                metadata_value_encoded,
+            ),
+        )
 
 def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Union[Dict, Any]]:
     """This function returns a metadata dictionary
@@ -190,7 +278,7 @@ def _get_all_metadata(path_to_db : pathlib.Path) -> Dict[str, Union[Dict, Any]]:
             }
         }
     """
-    df_metadata = _read_sql(path_to_db, "SELECT * FROM metadata;")
+    df_metadata = _execute_sql_without_arg(path_to_db, "SELECT * FROM metadata;")
     metadata = {}
     for _, row in df_metadata.iterrows():
         metadata[row["metadata_key"]] = json.loads(row["metadata_value"])
@@ -213,7 +301,7 @@ def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
         >>> _get_db_tables("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
         ['dataset_1', 'dataset_2']
     """
-    all_tables = _read_sql(
+    all_tables = _execute_sql_without_arg(
         path_to_db,
         "SHOW TABLES;"
     )["name"].to_list()
@@ -297,6 +385,172 @@ class Dataset:
         self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
     
+    # Create a getter and setter for the metadata.doi property
+    @property
+    def doi(self) -> str:
+        """This function returns the DOI from the metadata.
+
+        Returns:
+            str: The DOI.
+
+        Examples:
+        ---------
+            Get the DOI from the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.doi
+            "10.1234/5678"
+        """
+        return self.metadata["CITATION"]["doi"]
+    
+    def _set_citation_field(
+            self, 
+            metadata_key : Literal["repr", "url", "doi"], 
+            new_value : str
+        ):
+        """This function sets a metadata field in the dataset.
+
+        Args:
+            metadata_key (Literal["repr", "url", "doi"]): The metadata key.
+            new_value (str): The new value.
+        
+        Examples:
+        ---------
+            Set the metadata field in the dataset.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset._set_citation_field("doi", "10.1234/5678")
+        """
+        self.metadata["CITATION"][metadata_key] = new_value
+        _set_metadata_key(self.path, "CITATION", self.metadata['CITATION'])
+        self.metadata: Dict[str, Dict] = _get_all_metadata(self.path)
+
+    @doi.setter
+    def doi(self, new_doi: str):
+        """This function sets the DOI in the metadata.
+
+        Args:
+            new_doi (str): The new DOI.
+
+        Examples:
+        ---------
+            Set the DOI in the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.doi = "10.1234/5678"
+        """
+        self._set_citation_field("doi", new_doi)
+
+    @property
+    def url(self) -> str:
+        """This function returns the URL from the metadata.
+
+        Returns:
+            str: The URL.
+
+        Examples:
+        ---------
+            Get the URL from the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.url
+            "https://example.com"
+        """
+        return self.metadata["CITATION"]["url"]
+    
+    @url.setter
+    def url(self, new_url: str):
+        """This function sets the URL in the metadata.
+
+        Args:
+            new_url (str): The new URL.
+
+        Examples:
+        ---------
+            Set the URL in the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.url = "https://example.com"
+        """
+        self._set_citation_field("url", new_url)
+
+    @property
+    def citation(self) -> str:
+        """This function returns the citation from the metadata.
+        This is syntactic sugar for the repr field in the CITATION.
+
+        Returns:
+            str: The citation.
+
+        Examples:
+        ---------
+            Get the citation from the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.citation
+            "This is a citation\nLink to paper: https://example.com\nDOI: 10.1234/5678"
+        """
+        return self.metadata["CITATION"]["repr"]
+
+    @citation.setter
+    def citation(self, new_citation: str):
+        """This function sets the citation in the metadata.
+        This is syntactic sugar for the repr field in the CITATION.
+
+        Args:
+            new_citation (str): The new citation.
+
+        Examples:
+        ---------
+            Set the citation in the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.citation = "This is a citation"
+        """
+        self._set_citation_field("repr", new_citation)
+    
+    def query(
+            self, 
+            sql_query: str, 
+            df_in_memory : Optional[Union[pd.DataFrame, pl.DataFrame]] = None,
+            no_return : bool = False
+        ) -> Union[pd.DataFrame, pl.DataFrame]:
+        """This function executes a SQL query on the dataset
+        and returns its result as a pandas or polars DataFrame.
+
+        Args:
+            sql_query (str): The SQL query to execute.
+            df_in_memory (Optional[Union[pd.DataFrame, pl.DataFrame]], optional):
+                An in-memory DataFrame to pass through to the query statement.
+                Defaults to None.
+            no_return (bool, optional): If True, the query will not return a DataFrame.
+                Use this with custom create statements.
+
+        Returns:
+            Union[pd.DataFrame, pl.DataFrame]: The results of the query.
+
+        Examples:
+        ---------
+            Query a dataset using SQL.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> df = dataset.query("SELECT * FROM table_1;")
+        """
+        if df_in_memory is not None:
+            if not isinstance(df_in_memory, (pd.DataFrame, pl.DataFrame)):
+                raise ValueError("df_in_memory must be a pandas or polars DataFrame")
+            return _execute_sql_with_arg(
+                self.path, 
+                sql_query, 
+                df_in_memory, 
+                return_mode=self.dataframe_library if not no_return else "no_return"
+            )
+        return _execute_sql_without_arg(
+            self.path, 
+            sql_query, 
+            return_mode=self.dataframe_library if not no_return else "no_return"
+        )
+
     def set_dataframe_library(self, library: Literal["pd", "pl"]):
         """This function sets the dataframe library to 
         use when returning data.
@@ -340,7 +594,7 @@ class Dataset:
         """
         table_name = key.replace("table/", "")
         if table_name in self.tables:
-            return _read_sql(
+            return _execute_sql_without_arg(
                 self.path,
                 f"SELECT * FROM {table_name};", 
                 return_mode=self.dataframe_library
@@ -369,6 +623,76 @@ class Dataset:
         table_string += "]"
         return f"Dataset({self.path}),\n\n Tables: \n {table_string}"
 
+    def __setitem__(self, key: str, df: Union[pd.DataFrame, pl.DataFrame]):
+        """This function sets a table in the dataset.
+
+        Args:
+            key (str): The name of the table.
+            df (Union[pd.DataFrame, pl.DataFrame]): The table.
+
+        Examples:
+        ---------
+            Set a table in the dataset.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> df = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+            >>> dataset["table/my_table"] = df
+        """
+        if not isinstance(df, (pd.DataFrame, pl.DataFrame)):
+            raise ValueError("df must be a pandas or polars DataFrame")
+        table_name = key.replace("table/", "")
+        if table_name in self.tables:
+            raise ValueError(
+                f"""Table {table_name} already exists in the dataset. """
+                """\nIf you want to overwrite this table, use the .drop_table method to drop"""
+                """it first."""
+            )
+        _execute_sql_with_arg(
+            self.path,
+            f"CREATE OR REPLACE TABLE {table_name} AS SELECT * FROM df",
+            df,
+            return_mode="no_return"
+        )
+        print(f"✅ Created table {table_name} in dataset {self.path}")
+        self.tables: List[str] = _get_db_tables(self.path)
+    
+    def refresh_tables(self):
+        """This function refreshes the tables in the dataset.
+
+        Examples:
+        ---------
+            Refresh the tables in the dataset.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.refresh_tables()
+        """
+        self.tables: List[str] = _get_db_tables(self.path)
+    
+    def drop_table(self, table_name: str):
+        """This function drops a table in the dataset.
+
+        Args:
+            key (str): The name of the table.
+
+        Examples:
+        ---------
+            Drop a table in the dataset.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.drop_table("table/my_table")
+        """
+        table_name = table_name.replace("table/", "")
+        if table_name in self.tables:
+            _execute_sql_without_arg(
+                self.path,
+                f"DROP TABLE {table_name};",
+                return_mode="no_return"
+            )
+            print(f"✅ Dropped table {table_name} in dataset {self.path}")
+            self.tables: List[str] = _get_db_tables(self.path)
+        else:
+            pass
+
 class BladesightDatasetDirectory:
     """This object is used to access datasets from the 
     Bladesight Data bucket on S3. 
@@ -388,8 +712,11 @@ class BladesightDatasetDirectory:
         self.local_datasets = [
             self._replace_path_prefix(i) for i in get_local_datasets()
         ]
-        self._refresh_available_datasets()
-    
+        self.local_datasets :  List[str] = get_local_datasets()
+        self.online_datasets : List[str] = []
+
+        self.online_loaded = False
+
     @staticmethod
     def _getitem_key_correct_format(key: str) -> bool:
         """This function checks if the key is in the correct format. The key
@@ -450,6 +777,9 @@ class BladesightDatasetDirectory:
                 return Dataset(self.path / pathlib.Path(local_dataset + ".db"))
         else:
             # Download the dataset from the online datasets
+            if self.online_loaded is False:
+                self._refresh_available_datasets()
+                self.online_loaded = True
             for online_set in self.online_datasets:
                 homogenized_online_name = self._replace_path_prefix(online_set)
                 if key == homogenized_online_name:
@@ -497,7 +827,16 @@ class BladesightDatasetDirectory:
         We replace whatever prefix is in the 
         dataset with "data" 
         """
-        return [self._replace_path_prefix(i) for i in self.online_datasets]
+        if self.online_loaded is False:
+            self._refresh_available_datasets()
+            self.online_loaded = True
+        local_sets_homogenized = [self._replace_path_prefix(i) for i in self.local_datasets]
+        online_sets_homogenized = [self._replace_path_prefix(i) for i in self.online_datasets]
+        composite_set = local_sets_homogenized
+        for i in online_sets_homogenized:
+            if i not in composite_set:
+                composite_set.append(i)
+        return composite_set
     
     def _refresh_available_datasets(self):
         """
@@ -511,5 +850,53 @@ class BladesightDatasetDirectory:
         except Exception as _:
             print("Could not read remote datasets. Only listing local datasets")
             self.online_datasets = self.local_datasets
+
+    def new_dataset(
+            self, 
+            dataset_name : str, 
+            exist_ok : bool = False 
+        ) -> Dataset:
+        """This function creates a new dataset object.
+
+        Args:
+            dataset_name (str): The name of the dataset.
+            exist_ok (bool, optional): If True, the function will not raise an error
+                if the dataset already exists. Defaults to False.
+        
+        Returns:
+            Dataset: The dataset object.
+
+        Examples:
+        ---------
+        Create a new dataset object:
+
+            >>> Datasets = BladesightDatasetDirectory()
+            >>> dataset = Datasets.new_dataset("intro_to_btt/intro_to_btt_ch02_my_dev")
+        """
+        if not dataset_name.startswith("data/"):
+            add_prefix = "data/"
+        else:
+            add_prefix = ""
+        new_dataset_path = self.path / pathlib.Path(add_prefix + dataset_name + ".db")
+        
+        # Check if the dataset already exists
+        if new_dataset_path.exists():
+            if exist_ok:
+                return self[add_prefix + dataset_name]
+            else:
+                raise FileExistsError(f"Dataset {dataset_name} already exists.")
+        
+        # Create a new dataset
+        with duckdb.connect(str(new_dataset_path)) as con:
+            con.execute("CREATE TABLE metadata (metadata_key TEXT, metadata_value TEXT);")
+        init_citation = {
+                "url" : "No citation provided in metadata table.",
+                "doi" : "No citation provided in metadata table.",
+                "repr": "No citation provided in metadata table."
+        }
+        _set_metadata_key(new_dataset_path, "CITATION", init_citation)
+        ds = Dataset(new_dataset_path)
+        self.local_datasets = get_local_datasets()
+        return ds
 
 Datasets = BladesightDatasetDirectory()
