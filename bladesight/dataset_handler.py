@@ -1,7 +1,8 @@
 import json
 import os
 import pathlib
-from typing import Dict, List, Literal, Union, Any, Optional, Self
+from typing import Dict, List, Literal, Union, Any, Optional
+from typing_extensions import Self
 import duckdb
 import pandas as pd
 import polars as pl
