@@ -7,9 +7,8 @@ import pandas as pd
 import polars as pl
 import s3fs
 from yaspin import yaspin
-
+import time
 BLADESIGHT_DATASETS_S3_BUCKET = "bladesight-datasets"
-
 
 def get_path_to_local_bladesight() -> pathlib.Path:
     """This function returns the path to the local datasets folder.
@@ -215,7 +214,6 @@ def _execute_sql_with_arg(
             df = None
     return df
 
-
 def _set_metadata_key(
         path_to_db : pathlib.Path, 
         metadata_key : str, 
@@ -304,7 +302,6 @@ def _get_db_tables(path_to_db : pathlib.Path) -> List[str]:
         path_to_db,
         "SHOW TABLES;"
     )["name"].to_list()
-    
     data_tables = list(set(all_tables) - set(["metadata"]))
     return sorted(data_tables)
 
@@ -770,7 +767,6 @@ class BladesightDatasetDirectory:
             raise KeyError(
                 f"Dataset {key} does not start with data/. The key should be in the format 'data/../../etc'."
             )
-
         for local_dataset in self.local_datasets:
             homogenized_local_name = self._replace_path_prefix(local_dataset)
             if key == homogenized_local_name:

@@ -3,7 +3,7 @@ from bladesight.dataset_handler import (
     get_local_datasets,
     get_bladesight_datasets,
     _confirm_dataset_is_valid,
-    _read_sql,
+    _execute_sql_without_arg,
     _get_db_tables,
     _get_all_metadata,
     _get_printable_citation,
@@ -75,21 +75,21 @@ def test_confirm_dataset_is_valid(tmp_path):
     path_to_file.touch()
     assert _confirm_dataset_is_valid(path_to_file) is None
 
-def test___read_sql(tmp_path):
+def test___execute_sql_without_arg(tmp_path):
     tmp_path.mkdir(parents=True, exist_ok=True)
     path_to_file = tmp_path / "test.db"
     with duckdb.connect(str(path_to_file)) as _:
         pass
-    df_empty_tables_pd = _read_sql(path_to_file, "SHOW TABLES;")
+    df_empty_tables_pd = _execute_sql_without_arg(path_to_file, "SHOW TABLES;")
     assert df_empty_tables_pd.shape == (0, 1)
     assert df_empty_tables_pd.columns[0] == "name"
     assert isinstance(df_empty_tables_pd, pd.DataFrame)
-    df_empty_tables_pl = _read_sql(path_to_file, "SHOW TABLES;", "pl")
+    df_empty_tables_pl = _execute_sql_without_arg(path_to_file, "SHOW TABLES;", "pl")
     assert df_empty_tables_pl.shape == (0, 1)
     assert df_empty_tables_pl.columns[0] == "name"
     assert isinstance(df_empty_tables_pl, pl.DataFrame)
     with pytest.raises(ValueError):
-        _read_sql(path_to_file, "SHOW TABLES;", "invalid")
+        _execute_sql_without_arg(path_to_file, "SHOW TABLES;", "invalid")
     df_table_1 = pl.DataFrame({
         "A" : [1,2,3,4],
         "B" : [5,6,7,8]
@@ -101,16 +101,16 @@ def test___read_sql(tmp_path):
     with duckdb.connect(str(path_to_file)) as con:
         con.execute("CREATE TABLE table_1 AS SELECT * FROM df_table_1")
         con.execute("CREATE TABLE table_2 AS SELECT * FROM df_table_2")
-    df_tables = _read_sql(path_to_file, "SHOW TABLES;")
+    df_tables = _execute_sql_without_arg(path_to_file, "SHOW TABLES;")
     assert df_tables.shape == (2, 1)
     assert df_tables.columns[0] == "name"
     assert df_tables["name"].to_list() == ["table_1", "table_2"]
     assert_frame_equal(
-        _read_sql(path_to_file, "SELECT * FROM table_1;","pl"), 
+        _execute_sql_without_arg(path_to_file, "SELECT * FROM table_1;","pl"), 
         df_table_1
     )
     assert_frame_equal(
-        _read_sql(path_to_file, "SELECT * FROM table_2;","pl"), 
+        _execute_sql_without_arg(path_to_file, "SELECT * FROM table_2;","pl"), 
         df_table_2
     )
 
