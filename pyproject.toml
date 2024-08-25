@@ -48,6 +48,7 @@ polars = ">=0.19.2"
 pandas = ">=1.5.1"
 numba = ">=0.57.0"
 scipy = "^1.11.3"
+pyarrow = "^17.0.0"
 
 
 [tool.poetry.group.docs.dependencies]

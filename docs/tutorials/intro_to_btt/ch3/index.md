@@ -25,6 +25,15 @@ card_url: "ch3/"
 :root {
   --md-tooltip-width: 600px;
 }
+
+.blog-timestamp-span {
+	display : flex;	
+}
+
+.blog-timestamp-span > svg {
+	margin-right: 5px;
+}
+
 </style>
 
 # Angle of Arrival (AoA)
@@ -745,7 +754,10 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2024-02-13
+		<span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-02-13</span>
+
+	<span class="md-icon blog-timestamp-span" title="Last update"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>2024-08-25
+	</span>
         </p>
     </div>
 </div>
@@ -1067,6 +1079,9 @@ The MPR encoder used for this measurement has 79 sections. You can therefore ass
 		df_AoA.reset_index(inplace=True, drop=True)
 		return df_AoA
 	```
+	<!-- Add note stating that this is not the best way to do MPR analysis-->
+	!!! warning "Note"
+		MPR encoder signal processing is, however, nontrivial. For instance, we have assumed here all encoder sections have the same circumferential width. This is almost never the case. I have recently added a correct MPR approach to Bladesight. I'll write a short tutorial on how to use it soon.
 
 	The function `calculate_aoa_from_mpr` increments each section, instead of each revolution. The function can, however, transform the ToAs with an OPR encoder if you set `mpr_sections` to 1.
 
@@ -1083,6 +1098,4 @@ The MPR encoder used for this measurement has 79 sections. You can therefore ass
 	</figure>
 
 	MPR encoders will always produce more accurate BTT results than OPR encoders. One reason for this is because MPR encoders capture high frequency shaft torsional vibration. This allows us to remove it from the AoAs. An OPR encoder cannot capture this torsional vibration. High frequency shaft torsional vibration therefore *appears* as high-frequency content in our AoAs when we use OPR encoders.
-
-	MPR encoder signal processing is, however, nontrivial. For instance, we have assumed here all encoder sections have the same circumferential width. This is almost never the case. We will not venture into the dark art of MPR encoders here. That's a topic for a future tutorial.
 
