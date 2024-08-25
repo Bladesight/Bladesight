@@ -1,8 +1,7 @@
 import json
 import os
 import pathlib
-from typing import Dict, List, Literal, Union, Any, Optional
-
+from typing import Dict, List, Literal, Union, Any, Optional, Self
 import duckdb
 import pandas as pd
 import polars as pl
@@ -668,7 +667,7 @@ class Dataset:
         """
         self.tables: List[str] = _get_db_tables(self.path)
     
-    def drop_table(self, table_name: str):
+    def drop_table(self, table_name: str) -> Self:
         """This function drops a table in the dataset.
 
         Args:
@@ -692,6 +691,7 @@ class Dataset:
             self.tables: List[str] = _get_db_tables(self.path)
         else:
             pass
+        return self
 
 class BladesightDatasetDirectory:
     """This object is used to access datasets from the 

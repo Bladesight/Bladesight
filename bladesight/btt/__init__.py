@@ -15,11 +15,11 @@ __all__ = [
 ]
 
 def get_rotor_blade_AoAs(
-    df_encoder_zero_crossings : pd.DataFrame,
+    df_encoder : pd.DataFrame,
     prox_probe_toas : List[pd.DataFrame],
     probe_spacings : List[float],
     B : int,
-    encoder_sections : int = 1
+    is_mpr : bool = False
 ) -> List[pd.DataFrame]:
     """This function converts the raw time stamps, both the OPR zero-crossing
     times and he proximity probe ToAs, and returns a DataFrame for each 
@@ -27,10 +27,13 @@ def get_rotor_blade_AoAs(
     proximity probes.
 
     Args:
-        df_encoder_zero_crossings (pd.DataFrame): A DataFrame containing the
-            zero-crossing times in its first column. If these zero-crossing times
-            were recorded using an MPR shaft encoder, encoder_sections should be
-            greater than 1.
+        df_encoder (pd.DataFrame): A DataFrame containing the
+            zero-crossing times and corresponding info. This DataFrame can
+            take on two values: 
+                1) OPR encoder: The first column of the DataFrame should be
+                the zero-crossing times of the OPR encoder.
+                2) MPR encoder: The DataFrame MUST be the result of the
+                bladesight.ias.calculate_mpr function.
         prox_probe_toas (List[pd.DataFrame]): A list of DataFrames
             where each DataFrame contains the ToAs of a single
             blade from a proximity probe.
@@ -38,8 +41,8 @@ def get_rotor_blade_AoAs(
             the first probe and every other probe. There are one
             less value in this list than in prox_probe_toas.
         B (int): The number of blades.
-        encoder_sections (int, optional): The number of sections
-            the encoder is divided into. Defaults to 1.
+        is_mpr (bool, optional): A flag to indicate if the encoder is
+            an MPR encoder. Defaults to False.
 
     Returns:
         List[pd.DataFrame]: A list of DataFrames where each DataFrame
@@ -48,10 +51,10 @@ def get_rotor_blade_AoAs(
     """
     blade_dfs_recombined = []
 
-    if encoder_sections == 1:
+    if not is_mpr:
         for df_prox_toas in prox_probe_toas:
             df_prox = transform_ToAs_to_AoAs(
-                df_encoder_zero_crossings, 
+                df_encoder, 
                 df_prox_toas, 
             )
             
@@ -63,14 +66,18 @@ def get_rotor_blade_AoAs(
                     )
                 )
             )
-    elif encoder_sections > 1:
+    else:
         for df_prox_toas in prox_probe_toas:
-            df_prox = transform_ToAs_to_AoAs_mpr(
-                df_encoder_zero_crossings, 
-                df_prox_toas, 
-                encoder_sections
-            )
-            
+            try:
+                df_prox = transform_ToAs_to_AoAs_mpr(
+                    df_encoder, 
+                    df_prox_toas
+                )
+            except AssertionError as e:
+                print("It looks like you did not pass the correct MPR encoder DataFrame.")
+                print("Please ensure you pass df_encoder as the result of the bladesight.ias.calculate_mpr function.")
+                raise e
+
             blade_dfs_recombined.append(
                 pivot_blade_AoAs_along_revolutions(
                     transform_prox_AoAs_to_blade_AoAs(

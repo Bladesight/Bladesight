@@ -234,51 +234,58 @@ def calculate_aoa_from_mpr(
 
     return AoA_matrix
 
-
 def transform_ToAs_to_AoAs_mpr(
     df_mpr_zero_crossings: pd.DataFrame,
-    df_probe_toas: pd.DataFrame,
-    mpr_sections: int = 1,
+    df_probe_toas: pd.DataFrame
 ) -> pd.DataFrame:
     """This function transforms the ToA values to AoA values for a
-    single probe, given the MPR zero-crossing times and the proximity
-    probe's ToA values.
+    single probe, given the MPR-calculated DataFrame.
 
     The timestamps are assumed to reside in the first column of
-    each DataFrame.
+    df_probe.
 
     Args:
-        df_opr_zero_crossings (pd.DataFrame): A DataFrame with the
-            OPR zero-crossing times.
+        df_opr_zero_crossings (pd.DataFrame): The result of the 
+            bladesight.ias.calculate_mpr function.
         df_probe_toas (pd.DataFrame): A DataFrame with the probe's
-            ToA values.
-        mpr_sections (int, optional): The number of sections
-            in the MPR encoder. Defaults to 1, in this case,
-            this function will be treated as an OPR encoder.
-
+            ToAs.
     Returns:
-        pd.DataFrame: A DataFrame with the AoA values.
+        pd.DataFrame: A DataFrame containing the AoA values.
     """
-    AoA_matrix = calculate_aoa_from_mpr(
-        df_mpr_zero_crossings.iloc[:, 0].to_numpy(),
-        df_probe_toas.iloc[:, 0].to_numpy(),
-        mpr_sections,
+    if df_mpr_zero_crossings.columns.to_list() != [
+        'section_start_time',
+        'section_end_time',
+        'section_distance',
+        'Omega',
+        'n',
+        'section_start',
+        'section_end'
+    ]:
+        raise AssertionError(
+            """The DataFrame must have the columns: 'section_start_time', """
+            """ 'section_end_time', 'section_distance', 'Omega', 'n', """ 
+            """ 'section_start', 'section_end'"""
+        )
+    df_AoAs = pd.merge_asof(
+        df_probe_toas,
+        df_mpr_zero_crossings,
+        left_on=df_probe_toas.columns[0],
+        right_on="section_start_time",
+        direction='backward'
+    ).dropna().reset_index(drop=True)
+
+    df_AoAs["AoA"] = (
+        (
+            (
+                df_AoAs["toa"] - df_AoAs["section_start_time"]
+            ) 
+            * df_AoAs["Omega"] 
+            + df_AoAs["section_start"]
+        ) % (2*np.pi)
     )
-    df_AoA = pd.DataFrame(
-        AoA_matrix,
-        columns=[
-            "n",
-            "mpr_section",
-            "section_start_time",
-            "section_end_time",
-            "Omega",
-            "ToA",
-            "AoA",
-        ],
+    return df_AoAs[['n', 'section_start_time', 'section_end_time', 'Omega', 'toa', 'AoA']].rename(
+        columns={'toa': 'ToA'}
     )
-    df_AoA = df_AoA[df_AoA["n"] != -1]
-    df_AoA.reset_index(inplace=True, drop=True)
-    return df_AoA
 
 
 ##########################################################################
@@ -325,7 +332,6 @@ def calculate_Q(
         bin_mask = arr_aoas > bin_edges[-1]
         Q += np.sum(((arr_aoas[bin_mask] - 2 * np.pi) - bin_centre_first) ** 2)
     return Q, bin_edges
-
 
 def transform_prox_AoAs_to_blade_AoAs(
     df_prox: Union[pd.DataFrame, pl.DataFrame],
