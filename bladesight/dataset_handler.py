@@ -8,7 +8,10 @@ import pandas as pd
 import polars as pl
 import s3fs
 from yaspin import yaspin
-import time
+from .utils import ( 
+    _get_dataframe_library_preference
+)
+
 BLADESIGHT_DATASETS_S3_BUCKET = "bladesight-datasets"
 
 def get_path_to_local_bladesight() -> pathlib.Path:
@@ -370,7 +373,6 @@ class Dataset:
                 "doi": "10.1234/5678"
             }
         }
-        >>> dataset.set_dataframe_library("pl")
         >>> df_table = dataset["table/dataset_1"]
         >>> dataset.print_citation()
     """
@@ -379,7 +381,6 @@ class Dataset:
         self.path = path
         self.tables: List[str] = _get_db_tables(self.path)
         self.metadata: Dict[str, Dict] = _get_all_metadata(self.path)
-        self.dataframe_library: Literal["pd", "pl"] = "pd"
         self.print_citation()
     
     # Create a getter and setter for the metadata.doi property
@@ -540,35 +541,13 @@ class Dataset:
                 self.path, 
                 sql_query, 
                 df_in_memory, 
-                return_mode=self.dataframe_library if not no_return else "no_return"
+                return_mode=_get_dataframe_library_preference() if not no_return else "no_return"
             )
         return _execute_sql_without_arg(
             self.path, 
             sql_query, 
-            return_mode=self.dataframe_library if not no_return else "no_return"
+            return_mode=_get_dataframe_library_preference() if not no_return else "no_return"
         )
-
-    def set_dataframe_library(self, library: Literal["pd", "pl"]):
-        """This function sets the dataframe library to 
-        use when returning data.
-
-        Args:
-            library (Literal['pd', 'pl']): The dataframe library to use.
-        
-        Raises:
-            ValueError: If the library is not 'pd' or 'pl'.
-
-        Examples:
-        ---------
-            Set the dataframe library to polars.
-
-            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
-            >>> dataset.set_dataframe_library("pl")
-        """
-        if library in ["pd", "pl"]:
-            self.dataframe_library = library
-        else:
-            raise ValueError("library must be 'pd' or 'pl'")    
     
     def __getitem__(self, key: str) -> Union[pd.DataFrame, pl.DataFrame]:
         """ This function returns a table from the dataset.
@@ -594,7 +573,7 @@ class Dataset:
             return _execute_sql_without_arg(
                 self.path,
                 f"SELECT * FROM {table_name};", 
-                return_mode=self.dataframe_library
+                return_mode=_get_dataframe_library_preference()
             )
         else:
             raise KeyError(
