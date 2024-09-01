@@ -10,6 +10,10 @@ from bladesight.dataset_handler import (
     Dataset,
     BladesightDatasetDirectory
 )
+from bladesight.utils import (
+    _get_dataframe_library_preference, 
+    set_dataframe_library_preference
+)
 from pathlib import Path
 import os
 import pytest
@@ -244,19 +248,20 @@ def test_Dataset(tmp_path):
         con.execute("CREATE TABLE test_2 AS SELECT * FROM df_test_2")
 
     ds = Dataset(path_to_file)
-    assert ds.dataframe_library == 'pd'
-    ds.set_dataframe_library('pl')
-    assert ds.dataframe_library == 'pl'
-    ds.set_dataframe_library('pd')
-    assert ds.dataframe_library == 'pd'
+    assert _get_dataframe_library_preference() == 'pd'
+    set_dataframe_library_preference('pl')
+    assert _get_dataframe_library_preference() == 'pl'
+    set_dataframe_library_preference('pd')
+    assert _get_dataframe_library_preference() == 'pd'
     with pytest.raises(ValueError):
-        ds.set_dataframe_library('invalid')
+        set_dataframe_library_preference('invalid')
     assert sorted(ds._ipython_key_completions_()) == ["table/test_1", "table/test_2"]
     repr = ds.__repr__()
     assert "table/test_1" in repr
     assert "table/test_2" in repr
     assert sorted(ds.tables) == ["test_1", "test_2"]
-    ds.set_dataframe_library('pl')
+    
+    set_dataframe_library_preference('pl')
     df_test_1_read = ds["table/test_1"]
     assert_frame_equal(df_test_1, df_test_1_read)
     df_test_2_read = ds["table/test_2"]
