@@ -117,10 +117,9 @@ nav:
     - 8. Single Degree of Freedom (SDoF) Method: tutorials/intro_to_btt/ch8/index.md
     - 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
     - Afterword: tutorials/intro_to_btt/afterword.md
-  #- Extreme STEM: 
-  #  - What is Extreme Stem?: extreme_stem/index.md
-  #  - Problem 1: extreme_stem/prob_001.md
-  #  - Problem 2: extreme_stem/prob_002.md
+  - Datasets:
+    - 1. Introduction to Datasets: tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45.index.md
+
   - User Reference:
     - reference/dataset_handler.md
     - btt:
