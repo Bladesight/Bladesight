@@ -118,7 +118,7 @@ nav:
     - 9. Circumferential Fourier Fit (CFF) Method: tutorials/intro_to_btt/ch9/index.md
     - Afterword: tutorials/intro_to_btt/afterword.md
   - Datasets:
-    - 1. Introduction to Datasets: tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45.index.md
+    - 1. Varying ramp rates with 45 degree pipe: tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45
 
   - User Reference:
     - reference/dataset_handler.md
