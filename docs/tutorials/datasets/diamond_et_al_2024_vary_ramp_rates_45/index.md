@@ -902,7 +902,7 @@ If you have any questions or need help with the dataset, please feel free to rea
 
 ## Acknowledgements
 
-A big thanks to the University of Pretoria for providing the test bench and the laboratory space to conduct these tests.
+A big thanks to the University of Pretoria for providing the test bench and the laboratory space to conduct these tests. Thanks a bunch to <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for his help with the experimental tests and partial write-up of the dataset.
 
 \bibliography
 
