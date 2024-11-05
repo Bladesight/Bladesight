@@ -181,7 +181,7 @@ You can now use DuckDB SQL to query your datasets. Why would you want to do this
 
 ### Download the dataset
 
-You can download the dataset using the below code:
+You can download the dataset using the below code. Note that the database is ~290 Mb in size, so it may take a while to download.
 
 === ":simple-pandas: Pandas only"
 
