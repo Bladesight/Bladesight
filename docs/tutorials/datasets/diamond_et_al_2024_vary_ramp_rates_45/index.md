@@ -902,7 +902,7 @@ If you have any questions or need help with the dataset, please feel free to rea
 
 ## Acknowledgements
 
-A big thanks to the University of Pretoria for providing the test bench and the laboratory space to conduct these tests. Thanks a bunch to <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for his help with the experimental tests and partial write-up of the dataset.
+A big thanks to the University of Pretoria for providing the test bench and the laboratory space to conduct these tests.
 
 \bibliography
 
@@ -934,6 +934,22 @@ A big thanks to the University of Pretoria for providing the test bench and the 
     <div style='margin-left:2rem'>
         <p>
             <strong>Justin Smith</strong>
+        </p>
+    </div>
+  </div>
+
+    <div style='display:flex;flex-direction:row'>
+    <div>
+        <a target="_blank" href="https://www.linkedin.com/in/alex-brocco-70218b25b/" class="" title="Alex Brocco" style="border-radius:100%;"> 
+            <img src="https://media.licdn.com/dms/image/v2/D4D03AQEc5OipnVK2WA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1671464693722?e=1736380800&v=beta&t=zGoAdMPrFQSvHHNkexkjZvDX1tkzgX2vDljTj0k0gc8" alt="Alex Brocco" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Alex Brocco</strong>
         </p>
     </div>
   </div>
