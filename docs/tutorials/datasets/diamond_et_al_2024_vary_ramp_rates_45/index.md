@@ -327,7 +327,6 @@ Let's take a look at the first 10 rows of the `toas_30_s` table:
 
     Output:
     
-    <f
 
 The `toa`, `voltage` and `is_rising` columns are self-explanatory. The `channel` column contains the acquisition channel. The following channels exist:
  
