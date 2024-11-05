@@ -19,6 +19,7 @@ theme:
     - content.code.copy
     - content.code.select
     - content.code.annotate
+    - content.tabs.link
     - announce.dismiss
 
   palette: 

@@ -49,7 +49,7 @@ def calculate_ias(
                 "SELECT * FROM arr_toas LIMIT 0"
             ).fetchnumpy().keys()
         )[0]} as toa FROM arr_toas""").fetchnumpy()["toa"]
-
+    print("Calculating the IAS. This may take a while...")
     df_mpr = determine_mpr_shaft_speed(
         arr_toas,
         N = N,
