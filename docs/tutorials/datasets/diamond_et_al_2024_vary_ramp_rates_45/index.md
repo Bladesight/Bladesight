@@ -326,8 +326,21 @@ Let's take a look at the first 10 rows of the `toas_30_s` table:
     ```
 
     Output:
-    
-    <f
+
+    ``` console
+
+          channel        toa  voltage  is_rising
+    0  Kraken OPR  10.170276     -0.3       True
+    1  Kraken OPR  10.170459     -0.2       True
+    2  Kraken OPR  10.170639      0.1       True
+    3  Kraken OPR  10.170820      0.3       True
+    4  Kraken OPR  10.179263      0.3      False
+    5  Kraken OPR  10.179440      0.1      False
+    6  Kraken OPR  10.179612     -0.2      False
+    7  Kraken OPR  10.179777     -0.3      False
+    8  Kraken OPR  10.269662     -0.3       True
+    9  Kraken OPR  10.269845     -0.2       True
+    ```
 
 The `toa`, `voltage` and `is_rising` columns are self-explanatory. The `channel` column contains the acquisition channel. The following channels exist:
  
@@ -881,6 +894,10 @@ Only the OROS was used to capture the MPR data. The MPR data is stored in the 'O
 
 
 ## Conclusion
+
+I hope you have fun. I believe there are many unexplored avenues in this dataset.
+
+If you have any questions or need help with the dataset, please feel free to reach out to me at dawie.diamond@bladesight.com . Also, if you find any bugs in the library, please reach out to me 🙏.
 
 
 ## Acknowledgements

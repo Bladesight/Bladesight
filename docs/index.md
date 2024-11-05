@@ -8,6 +8,10 @@ Bladesight is a company offering Blade Tip Timing hardware, open-source software
 
 You're probably looking for the *Introduction to Blade Tip Timing Using Python* tutorial. You can find it [:material-open-in-app: here](./tutorials/intro_to_btt/ch1/index.md).
 
+## Datasets
+
+We've recently added a dataset. You can find it <a href="https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/" target=_blank>here </a>. 
+
 ## About Bladesight
 
 If you'd like to learn more about Bladesight, you can visit our <a target="blank_" href="https://www.bladesight.com" > :material-open-in-new: website </a>
