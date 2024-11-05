@@ -882,6 +882,10 @@ Only the OROS was used to capture the MPR data. The MPR data is stored in the 'O
 
 ## Conclusion
 
+I hope you have fun. I believe there are many unexplored avenues in this dataset.
+
+If you have any questions or need help with the dataset, please feel free to reach out to me at dawie.diamond@bladesight.com . Also, if you find any bugs in the library, please reach out to me 🙏.
+
 
 ## Acknowledgements
 
