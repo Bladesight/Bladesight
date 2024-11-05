@@ -1,5 +1,6 @@
-from typing import List
+from typing import List, Union
 import pandas as pd
+import polars as pl
 
 from .aoa import (
     transform_ToAs_to_AoAs, 
@@ -16,7 +17,7 @@ __all__ = [
 
 def get_rotor_blade_AoAs(
     df_encoder : pd.DataFrame,
-    prox_probe_toas : List[pd.DataFrame],
+    prox_probe_toas : List[Union[pd.DataFrame, pl.DataFrame]],
     probe_spacings : List[float],
     B : int,
     is_mpr : bool = False
@@ -54,8 +55,8 @@ def get_rotor_blade_AoAs(
     if not is_mpr:
         for df_prox_toas in prox_probe_toas:
             df_prox = transform_ToAs_to_AoAs(
-                df_encoder, 
-                df_prox_toas, 
+                df_encoder.to_frame() if isinstance(df_encoder, (pd.Series, pl.Series)) else df_encoder, 
+                df_prox_toas.to_frame() if isinstance(df_prox_toas, (pd.Series, pl.Series)) else df_prox_toas
             )
             
             blade_dfs_recombined.append(
@@ -70,8 +71,8 @@ def get_rotor_blade_AoAs(
         for df_prox_toas in prox_probe_toas:
             try:
                 df_prox = transform_ToAs_to_AoAs_mpr(
-                    df_encoder, 
-                    df_prox_toas
+                    df_encoder.to_frame() if isinstance(df_encoder, (pd.Series, pl.Series)) else df_encoder, 
+                    df_prox_toas.to_frame() if isinstance(df_prox_toas, (pd.Series, pl.Series)) else df_prox_toas
                 )
             except AssertionError as e:
                 print("It looks like you did not pass the correct MPR encoder DataFrame.")

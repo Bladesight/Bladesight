@@ -351,6 +351,9 @@ def _get_printable_citation(metadata: Dict[str, Dict]) -> str:
 
     if "doi" in citation.keys():
         cite_main += f"""\nDOI: {citation['doi']}"""
+
+    if "license" in citation.keys():
+        cite_main += f"""\nLicense: {citation['license']}"""
     
     return cite_main
 
@@ -507,6 +510,40 @@ class Dataset:
         """
         self._set_citation_field("repr", new_citation)
     
+
+    @property
+    def license(self) -> str:
+        """This function returns the license from the metadata.
+
+        Returns:
+            str: The license.
+
+        Examples:
+        ---------
+            Get the license from the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.license
+            "CC BY 4.0"
+        """
+        return self.metadata["license"]
+    
+    @license.setter
+    def license(self, new_license: str):
+        """This function sets the license in the metadata.
+
+        Args:
+            new_license (str): The new license.
+
+        Examples:
+        ---------
+            Set the license in the metadata.
+
+            >>> dataset = Dataset("bladesight-data/intro_to_btt/intro_to_btt_ch02.db")
+            >>> dataset.license = "CC BY 4.0"
+        """
+        self._set_citation_field("license", new_license)
+
     def query(
             self, 
             sql_query: str, 
@@ -863,6 +900,7 @@ class BladesightDatasetDirectory:
                 raise FileExistsError(f"Dataset {dataset_name} already exists.")
         
         # Create a new dataset
+        pathlib.Path(new_dataset_path.parent).mkdir(parents=True, exist_ok=True)
         with duckdb.connect(str(new_dataset_path)) as con:
             con.execute("CREATE TABLE metadata (metadata_key TEXT, metadata_value TEXT);")
         init_citation = {
