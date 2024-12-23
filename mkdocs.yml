@@ -20,7 +20,7 @@ theme:
     - content.code.select
     - content.code.annotate
     - content.tabs.link
-    # - announce.dismiss
+    - announce.dismiss
 
   palette: 
     - media: "(prefers-color-scheme: light)"
