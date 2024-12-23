@@ -19,6 +19,7 @@ jobs:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
+      - run: sudo apt update
       - run: sudo apt install pandoc
       - run: sudo apt install pandoc-citeproc
       - run: pip install mkdocs-material
