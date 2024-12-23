@@ -40,7 +40,7 @@ Documentation = "https://docs.bladesight.com/"
 Repository = "https://github.com/Bladesight/Bladesight"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
+python = ">=3.9,<3.13"
 duckdb = "1.0.0"
 s3fs = "^2023.9.0"
 yaspin = "^3.0.1"
