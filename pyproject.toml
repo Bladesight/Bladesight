@@ -1,79 +1,63 @@
 [project]
 name = "bladesight"
+version = "0.16.0"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
-license = "MIT"
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "duckdb>=1.0.0",
+    "numba>=0.57.0",
+    "pandas>=1.5.1",
+    "polars>=0.19.2",
+    "pyarrow>=17.0.0",
+    "s3fs>=2023.9.0",
+    "scipy>=1.11.3",
+    "tqdm>=4.65.0",
+    "typing-extensions>=4.12.2",
+    "yaspin>=3.0.1",
+]
 authors = [
     { name = "Dawie Diamond", email = "dawie.diamond@bladesight.com" },
 ]
-requires-python = ">=3.9,<3.12"
 classifiers = [
-    "Intended Audience :: Mechanical Engineering Graduate Students",
-    "Intended Audience :: Test and Measurement Engineers",
+    "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python",
-    "Topic :: Mechanical Engineering",
-    "Topic :: Mechanical Engineering :: Test and Measurement",
-    "Topic :: Mechanical Engineering :: Noise and Vibration",
-    "Topic :: Mechanical Engineering :: Libraries",
-    "Development Status :: 1 - Beta",
-    "Environment :: Local",
-    "Framework :: Bladesight",
-    "Framework :: Bladesight :: 1",
+    "Topic :: Scientific/Engineering",
+    "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11"
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
 ]
-
-[tool.poetry]
-name = "bladesight"
-version = "0.15.0"
-description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
-authors = ["Dawie Diamond <dawie.diamond@bladesight.com>"]
-readme = "README.md"
 
 [project.urls]
 Homepage = "https://www.bladesight.com/"
 Documentation = "https://docs.bladesight.com/"
 Repository = "https://github.com/Bladesight/Bladesight"
 
-[tool.poetry.dependencies]
-python = ">=3.9,<3.12"
-duckdb = "1.0.0"
-s3fs = "^2023.9.0"
-yaspin = "^3.0.1"
-polars = ">=0.19.2"
-pandas = ">=1.5.1"
-numba = ">=0.57.0"
-scipy = "^1.11.3"
-pyarrow = "^17.0.0"
-typing-extensions = "^4.12.2"
-
-
-[tool.poetry.group.docs.dependencies]
-mkdocs = "^1.4.2"
-mkdocs-material = "^9.1.8"
-mkdocs-glightbox = "^0.3.4"
-pandas = "^2.0.1"
-plotly = "^5.14.1"
-mkdocs-table-reader-plugin = "^2.0"
-mkdocs-bibtex = "^2.11.0"
-mkdocstrings = {extras = ["python"], version = "^0.24.0"}
-
-
-[tool.poetry.group.dev.dependencies]
-ipython = "^8.13.2"
-tqdm = "^4.65.0"
-ipykernel = "^6.23.1"
-black = "^23.9.1"
-isort = "^5.12.0"
-
-
-[tool.poetry.group.test.dependencies]
-pytest = "^7.4.4"
+[dependency-groups]
+docs = [
+    "mkdocs-bibtex>=2.11.0",
+    "mkdocs-material>=9.1.8",
+    "mkdocs-table-reader-plugin>=2.0",
+    "mkdocs>=1.4.2",
+    "mkdocstrings[python]>=0.24.0",
+    "plotly>=5.14.1",
+]
+dev = [
+    "black>=24.10.0",
+    "ipykernel>=6.23.1",
+    "ipython>=8.13.2",
+    "isort>=5.13.2",
+]
+test = [
+    "pytest>=8.3.4",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
