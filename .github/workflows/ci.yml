@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
       - run: sudo apt update
       - run: sudo apt install pandoc
-      - run: sudo apt install citeproc
+      # - run: sudo apt install citeproc
       - run: pip install mkdocs-material
       - run: pip install mkdocs-table-reader-plugin
       - run: pip install mkdocs-bibtex
