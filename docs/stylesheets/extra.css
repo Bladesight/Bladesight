@@ -31,3 +31,45 @@
 .md-grid {
   max-width: 70rem;
 }
+
+.review {
+  display: hidden;
+  transform: scaleY(0);
+  transition: transform 0.2s ease-in-out;
+  transition: margin 0.2s ease-in-out;
+  background-color: blanchedalmond;
+}
+
+
+.show-review {
+  display: block;
+  transform: scaleY(1);
+  margin-bottom: 2rem;
+  margin-left:2rem;
+  padding-left: 1rem;
+}
+
+
+.show-review::before {
+  content: "Review";
+  position: absolute;
+  top: 0;
+  left: -1.5rem;
+  background-color: coral;
+  color: white;
+  padding: 0.3rem;
+  border-radius: 0.5rem 0 0.5rem 0.5rem;
+  font-size: x-small;
+}
+
+
+.review-toggle {
+  scale: 0.8;
+}
+
+.review-toggle.active {
+  background-color:coral;
+  color: white;
+  border: 1px solid #adadad;
+  box-shadow: 0 2px #666;
+}
