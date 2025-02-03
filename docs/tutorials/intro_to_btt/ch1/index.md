@@ -28,7 +28,7 @@ card_url: "ch1/"
 # Blade Tip Timing's fundamental principle
 
 ## Who's this tutorial for?
-This tutorial is for graduate students who want to use Blade Tip Timing (BTT) to measure rotor blade vibration. One of the earliest prominent BTT references is a 1967 article by Rudolph Hohenberg [@hohenberg1967detection]. There are, however, much older references found in patents [@campbell1924elastic,@mershon1937vibration,@hardigg1949apparatus,@shapiro1958vibration]. BTT has therefore been around for approximately 100 years. It is strange that so few getting-started resources for BTT exist. There have been academic publications that serve this end [@bouckaert2007tip,@witos2007tip], but I am unaware of a single book or tutorial dedicated to BTT. 
+This tutorial is for graduate students who want to use Blade Tip Timing (BTT) to measure rotor blade vibration. One of the earliest prominent BTT references is a 1967 article by Rudolph Hohenberg [@hohenberg1967detection]. There are, however, much older references found in patents [@campbell1924elastic] [@mershon1937vibration] [@hardigg1949apparatus] [@shapiro1958vibration]. BTT has therefore been around for approximately 100 years. It is strange that so few getting-started resources for BTT exist. There have been academic publications that serve this end [@bouckaert2007tip] [@witos2007tip], but I am unaware of a single book or tutorial dedicated to BTT. 
 
 <div class='review' data-author='Mirosław Witoś' data-innerhtml="<p>“The earliest BTT reference I could find is a 1967 article by Rudolph Hohenberg.”<p><p>BTT is much older. See e.g.:</p><ul>
     <li>Campbell W. (1924): Elastic fluid turbine rotor and method of avoiding tangential bucket vibration therein, Patent US 1,502,904.
