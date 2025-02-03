@@ -73,3 +73,11 @@
   border: 1px solid #adadad;
   box-shadow: 0 2px #666;
 }
+
+.blog-timestamp-span {
+  display : flex;	
+}
+
+.blog-timestamp-span > svg {
+  margin-right: 5px;
+}
