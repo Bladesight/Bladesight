@@ -235,6 +235,7 @@ dev = [
     { name = "ipykernel" },
     { name = "ipython" },
     { name = "isort" },
+    { name = "pytest" },
 ]
 docs = [
     { name = "mkdocs" },
@@ -268,6 +269,7 @@ dev = [
     { name = "ipykernel", specifier = ">=6.23.1" },
     { name = "ipython", specifier = ">=8.13.2" },
     { name = "isort", specifier = ">=5.13.2" },
+    { name = "pytest", specifier = ">=8.3.4" },
 ]
 docs = [
     { name = "mkdocs", specifier = ">=1.4.2" },
