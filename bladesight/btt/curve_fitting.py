@@ -206,28 +206,9 @@ def fit_poly(
     -----------
     [1] Curve fitting code developed using: https://gist.github.com/kadereub/9eae9cff356bb62cdbd672931e8e5ec4
     """
-    # # Normalize x and y
-    # x_mean, x_std = np.mean(x), np.std(x)
-    # y_mean, y_std = np.mean(y), np.std(y)
-    # x_norm = (x - x_mean) / x_std
-    # y_norm = (y - y_mean) / y_std
 
     a = _coeff_mat(x, deg)
     p = _fit_x(a, y, method = method, w = w, segments = segments)
-    
-    # # Generate coefficient matrix for normalized x
-    # a = _coeff_mat(x_norm, deg)
-    # # Fit polynomial to normalized data
-    # p_norm = _fit_x(a, y_norm)
-
-    # # Adjust coefficients for original scale
-    # p = np.zeros(deg + 1)
-    # for i in range(deg + 1):
-    #     p[i] = p_norm[i] * (y_std / (x_std ** i))
-    
-    # # Adjust the constant term
-    # for i in range(deg):
-    #     p[-1] += y_mean - p[i] * (x_mean ** (deg - i))
 
     return p[::-1]
 
