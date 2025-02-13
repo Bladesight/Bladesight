@@ -35,6 +35,21 @@ def _coeff_mat(x: np.ndarray, deg: int) -> np.ndarray:
 
 @njit
 def _fit_x_qr(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """
+    Solve the least squares problem a·x = b using a QR decomposition.
+
+    Parameters
+    ----------
+    a : np.ndarray
+        The coefficient matrix.
+    b : np.ndarray
+        The dependent variable values.
+
+    Returns
+    -------
+    np.ndarray
+        The solution vector x that minimizes the residuals in a·x = b.
+    """
     # q, r = np.linalg.qr(a)
     # return np.linalg.solve(r, np.dot(q.T, b))
     a_contig = np.ascontiguousarray(a)
@@ -46,6 +61,23 @@ def _fit_x_qr(a: np.ndarray, b: np.ndarray) -> np.ndarray:
 
 @njit
 def _fit_x_weighted(a: np.ndarray, b: np.ndarray, w: np.ndarray) -> np.ndarray:
+    """
+    Solve a weighted least squares problem a·x = b using a diagonal weight matrix.
+
+    Parameters
+    ----------
+    a : np.ndarray
+        The coefficient matrix.
+    b : np.ndarray
+        The dependent variable values.
+    w : np.ndarray
+        Weights for each data point.
+
+    Returns
+    -------
+    np.ndarray
+        The solution vector x that minimizes the weighted residuals.
+    """
     W = np.zeros((len(w), len(w)))
     for i in range(len(w)):
         W[i, i] = w[i]
@@ -58,11 +90,28 @@ def _fit_x_weighted(a: np.ndarray, b: np.ndarray, w: np.ndarray) -> np.ndarray:
     q, r = np.linalg.qr(a_w_contig)
     q_contig = np.ascontiguousarray(q)
     r_contig = np.ascontiguousarray(r)
-    # return np.linalg.solve(r, np.dot(q.T, b_w_contig))
+
     return np.linalg.solve(r_contig, np.dot(q_contig.T, b_w_contig)) # Use continguous arrays for Numba as its faster with np.dot
 
 @njit
 def _fit_x_piecewise(a: np.ndarray, b: np.ndarray, segments: int) -> np.ndarray:
+    """
+    Fit multiple least squares segments and combine their solutions.
+
+    Parameters
+    ----------
+    a : np.ndarray
+        The coefficient matrix.
+    b : np.ndarray
+        The dependent variable values.
+    segments : int
+        Number of segments to split the data into.
+
+    Returns
+    -------
+    np.ndarray
+        Combined solution coefficients from each segment.
+    """
     segment_size = len(a) // segments
     total_coeffs = (segments * (a.shape[1]))  # Total number of coefficients
     coeffs = np.zeros(total_coeffs)
@@ -78,7 +127,7 @@ def _fit_x_piecewise(a: np.ndarray, b: np.ndarray, segments: int) -> np.ndarray:
         r_contig = np.ascontiguousarray(r)
         segment_coeffs = np.linalg.solve(r_contig, np.dot(q_contig.T, b_segment_conting))
         coeffs[i * a.shape[1]:(i + 1) * a.shape[1]] = segment_coeffs
-    
+
     return coeffs
 
 @njit
@@ -156,7 +205,6 @@ def fit_poly(
     References:
     -----------
     [1] Curve fitting code developed using: https://gist.github.com/kadereub/9eae9cff356bb62cdbd672931e8e5ec4
-
     """
     # # Normalize x and y
     # x_mean, x_std = np.mean(x), np.std(x)
@@ -248,7 +296,7 @@ def eval_polynomial_derivative(coeffs: np.ndarray, x: Union[float, np.ndarray]) 
     Parameters
     ----------
     coeffs : np.ndarray
-        Coefficients of the polynomial.
+        Polynomial coefficients in descending order.
     x : float or np.ndarray
         Points at which to evaluate the derivative.
 
@@ -321,7 +369,6 @@ def threshold_crossing_hysteresis_curve_fit(
     NR_max_iter: Optional[int] = 500,
     n_est: Optional[float] = None,
     trigger_on_rising_edge: bool = True,
-
     ) -> np.ndarray:
     """A sequential threshold crossing algorithm that interpolates or performes a polynomial curve fit to find the Time of Arrival (ToA) between the two samples where the signal crosses the threshold.
 
@@ -418,21 +465,8 @@ def threshold_crossing_hysteresis_curve_fit(
                     arr_s_fit = arr_s[i_sample - poly_fit_range[0] : i_sample + poly_fit_range[1]]
 
                     # print("arr_t_fit: ", arr_t_fit, "\n arr_s_fit: ", arr_s_fit)
-                    # x_fit =  np.ones_like(arr_t_fit) *arr_t_fit
                     poly_fitted_coeffs = fit_poly(arr_t_fit, arr_s_fit, deg = int(poly_order), method = method, w = w, segments = segments)
                     # print("poly_fitted_coeffs: ", poly_fitted_coeffs)
-                    
-                    # y_fit = eval_polynomial(poly_fitted_coeffs, x_fit)
-
-                    # arr_toa[i_toa] = arr_t[i_sample - 1] + (arr_t[i_sample] - arr_t[i_sample - 1]) * (threshold - y_fit[int(-1*(poly_fit_range[1]-1))]) / (y_fit[poly_fit_range[0]-1] - y_fit[int(-1*(poly_fit_range[1]-1))])
-
-                    # Now trying to find the x value with polyfit but by exploiting knowing the polynomial function and not explicitly solving for roots
-                    # x_near_threshold = numba_linspace(arr_t_fit[0], arr_t_fit[-1], fitting_resolution)
-                    # y_near_threshold = eval_polynomial(poly_fitted_coeffs, x_near_threshold)
-
-                    # Find the index of the value closest to the threshold
-                    # idx = np.abs((y_near_threshold - threshold)**2).argmin()
-                    # arr_toa[i_toa] = x_near_threshold[idx]
 
                     # Using a Newton Raphson solver to find the x value that minimizes the difference between the threshold and the polynomial fit
                     interpolated_ToA_guess = arr_t[i_sample - 1] + (
@@ -440,8 +474,6 @@ def threshold_crossing_hysteresis_curve_fit(
                     ) * (threshold - prev_sample) / (curr_sample - prev_sample) # Use the interpolated point as an initial guess since it does not cost a lot computationally
                     
                     arr_toa[i_toa] = newton_raphson_minimize(np.array([threshold]), poly_fitted_coeffs, np.array([interpolated_ToA_guess]), tol = NR_tol, max_iter = NR_max_iter)[0] # Note that all the inputs need to be the same variable type (in this case numpy arrays) for Numba to work properly.
-
-                    # arr_toa[i_toa] = arr_t[i_sample - 1] + (arr_t[i_sample] - arr_t[i_sample - 1]) * (threshold - y_fit[poly_fit_range[0] - 1]) / (y_fit[int(-1*poly_fit_range[1])] - y_fit[poly_fit_range[0] - 1])
 
                     i_toa += 1
             
@@ -462,30 +494,13 @@ def threshold_crossing_hysteresis_curve_fit(
 
                     # x_fit =  np.ones_like(arr_t_fit) *arr_t_fit
                     poly_fitted_coeffs = fit_poly(arr_t_fit, arr_s_fit, deg = int(poly_order), method = method, w = w, segments = segments)
-                    
-                    # y_fit = eval_polynomial(poly_fitted_coeffs, x_fit)
-
-                    # arr_toa[i_toa] = arr_t[i_sample - 1] + (arr_t[i_sample] - arr_t[i_sample - 1]) * (threshold - y_fit[int(-1*(poly_fit_range[1]-1))]) / (y_fit[poly_fit_range[0]-1] - y_fit[int(-1*(poly_fit_range[1]-1))])
-
-                    # Now trying to find the x value with polyfit but by exploiting knowing the polynomial function and not explicitly solving for roots
-                    # x_near_threshold = numba_linspace(arr_t_fit[0], arr_t_fit[-1], fitting_resolution)
-                    # x_near_threshold = numba_linspace(arr_t_fit[poly_fit_range[0] - 1], arr_t_fit[int(-1*poly_fit_range[1])], fitting_resolution)
-                    # y_near_threshold = eval_polynomial(poly_fitted_coeffs, x_near_threshold)
-
-                    # # Find the index of the value closest to the threshold
-                    # idx = np.abs((y_near_threshold - threshold)**2).argmin()
-                    # arr_toa[i_toa] = x_near_threshold[idx]
-
 
                     # Using a Newton Raphson solver to find the x value that minimizes the difference between the threshold and the polynomial fit
                     interpolated_ToA_guess = arr_t[i_sample - 1] + (
                         arr_t[i_sample] - arr_t[i_sample - 1]
                     ) * (threshold - prev_sample) / (curr_sample - prev_sample) # Use the interpolated point as an initial guess since it does not cost a lot computationally
-                    
+
                     arr_toa[i_toa] = newton_raphson_minimize(np.array([threshold]), poly_fitted_coeffs, np.array([interpolated_ToA_guess]), tol = NR_tol, max_iter = NR_max_iter)[0] # Note that all the inputs need to be the same variable type (in this case numpy arrays) for Numba to work properly.
-
-
-                    # arr_toa[i_toa] = arr_t[i_sample - 1] + (arr_t[i_sample] - arr_t[i_sample - 1]) * (threshold - y_fit[poly_fit_range[0] - 1]) / (y_fit[int(-1*poly_fit_range[1])] - y_fit[poly_fit_range[0] - 1])
 
                     i_toa += 1
 
