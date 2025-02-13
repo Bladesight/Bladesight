@@ -50,8 +50,6 @@ def _fit_x_qr(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     np.ndarray
         The solution vector x that minimizes the residuals in a·x = b.
     """
-    # q, r = np.linalg.qr(a)
-    # return np.linalg.solve(r, np.dot(q.T, b))
     a_contig = np.ascontiguousarray(a)
     b_contig = np.ascontiguousarray(b)
     q, r = np.linalg.qr(a_contig)
