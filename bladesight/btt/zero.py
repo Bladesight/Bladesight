@@ -8,8 +8,6 @@ def get_blade_tip_deflections_from_AoAs(
     df_rotor_blade_AoAs : pd.DataFrame,
     blade_radius : float,
     poly_order : int = 11,
-    # filter_order : int = 2,
-    # filter_cutoff : float = 0.3
     filter_function: Optional[Callable] = None,
     filter_kwargs: Optional[dict] = None,
     verbose: Optional[bool] = False,
@@ -39,6 +37,32 @@ def get_blade_tip_deflections_from_AoAs(
         pd.DataFrame: The DataFrame containing the detrended and filtered 
             tip deflections. This DataFrame also contains the peak-to-peak
             tip deflection.
+
+    Example Usage:
+        def example_filter(signal, kernel_size):
+            return scisig.medfilt(signal, kernel_size=kernel_size)
+
+        df_rotor_blade_AoAs = pd.DataFrame({
+            'Omega': np.linspace(0, 10, 100),
+            'AoA_p1': np.random.randn(100),
+            'AoA_p2': np.random.randn(100)
+        })
+
+        blade_radius = 100.0
+        filter_function = example_filter
+        filter_args = {'kernel_size': 5}
+
+        df_filtered = get_blade_tip_deflections_from_AoAs_kernel(
+            df_rotor_blade_AoAs,
+            blade_radius,
+            filter_function,
+            filter_args,
+            poly_order=11,
+            filter_deflections_bool=True,
+            verbose=True
+        )
+
+        print(df_filtered.head())
     """
     if filter_kwargs is None:
         filter_kwargs = {}
