@@ -3,22 +3,6 @@ from typing import Optional, Tuple
 import numpy as np
 from numba import njit
 
-def verbose_print(verbose: bool, text: str):
-    """
-    Print the text if the verbose flag is True.
-
-    Parameters
-    ----------
-    verbose : bool
-        A flag indicating whether to print the text or not.
-    text : str
-        The f-string for the text to print.
-    Returns
-    -------
-    None, only prints the text if the verbose flag is True.
-    """
-    if verbose:
-        print(text)
 
 def get_constant_thresholds(
     sensor_array: np.ndarray,

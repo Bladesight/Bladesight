@@ -15,6 +15,24 @@ __all__ = [
     "get_blade_tip_deflections_from_AoAs"
 ]
 
+def verbose_print(verbose: bool, text: str):
+    """
+    Print the text if the verbose flag is True.
+
+    Parameters
+    ----------
+    verbose : bool
+        A flag indicating whether to print the text or not.
+    text : str
+        The f-string for the text to print.
+    Returns
+    -------
+    None, only prints the text if the verbose flag is True.
+    """
+    if verbose:
+        print(text)
+
+
 def get_rotor_blade_AoAs(
     df_encoder : pd.DataFrame,
     prox_probe_toas : List[Union[pd.DataFrame, pl.DataFrame]],
