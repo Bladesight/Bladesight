@@ -74,7 +74,6 @@ def get_blade_tip_deflections_from_AoAs(
         in df.columns 
         if col_name.startswith("AoA_p")
     ]
-    # butterworth_filter = butter(N=filter_order, Wn=filter_cutoff)
 
     for col in all_aoa_columns:
         df[col + "_norm"] = df[col].mean() - df[col]
@@ -83,7 +82,7 @@ def get_blade_tip_deflections_from_AoAs(
         poly = np.polyfit(df['Omega'], df[deflection_col_name], poly_order)
         df[deflection_col_name] = df[deflection_col_name] - np.polyval(poly, df['Omega'])
         
-        if filter_function is not None and filter_kwargs is not None:
+        if filter_function is not None and filter_kwargs is not None: # Filter tip deflections and denoted by columns with "_filt subfix"
             df[deflection_col_name + '_filt'] = filter_function(df[deflection_col_name].values, **filter_kwargs)
     
     if filter_function is not None and filter_kwargs is not None:
