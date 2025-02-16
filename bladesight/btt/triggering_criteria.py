@@ -3,6 +3,7 @@ from typing import Optional, Tuple
 import numpy as np
 from numba import njit
 
+from bladesight.btt import verbose_print
 
 def get_constant_thresholds(
     sensor_array: np.ndarray,
