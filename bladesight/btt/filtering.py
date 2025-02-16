@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from typing import List, Optional, Tuple, Callable
 
 
-def lowpass_filter(signal, Wn, order=5):
+def lowpass_filter(signal: np.ndarray, Wn: float, order: int = 5) -> np.ndarray:
     """
     Apply a low-pass filter to a signal.
 
