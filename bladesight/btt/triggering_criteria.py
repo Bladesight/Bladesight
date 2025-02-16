@@ -95,18 +95,17 @@ def get_constant_thresholds(
     ):
         raise ValueError("threshold_category_array must be between 0 and 100")
     
-    # print("sensor_type.lower()",sensor_type.lower())
     sensor_threshold_keys = [
     key for key in threshold_hysteresis_dict.keys() if key.lower().startswith(sensor_type.lower())
     ]
-    # print("sensor_threshold_keys 1", sensor_threshold_keys)
+
     if not sensor_threshold_keys:
         avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
         raise ValueError(f"{avail_keys}\n" + f"No keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
 
 
     threshold_keys = [key for key in sensor_threshold_keys if "threshold" in key]
-    # print('threshold_keys', threshold_keys)
+
     if not threshold_keys:
         avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
         raise ValueError(f"{avail_keys}\n" + f"No threshold keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
@@ -117,13 +116,11 @@ def get_constant_thresholds(
 
 
     hysteresis_keys = [key for key in sensor_hysteresis_keys if "hysteresis" in key.lower()]
-    # print("hysteresis_keys", hysteresis_keys)
     if not hysteresis_keys:
         avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
         raise ValueError(f"{avail_keys}\n" + f"No hysteresis keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
 
     threshold_level_key = [key for key in threshold_keys if threshold_category.lower() in key.lower()]
-    # print("threshold_level_key", threshold_level_key)
     if not threshold_level_key:
         raise ValueError(f"No threshold level key found for category '{threshold_category}' in threshold_hysteresis_dict for sensor type '{sensor_type}'")
 
@@ -162,9 +159,6 @@ def get_constant_thresholds(
     verbose_print(verbose, f"HYSTERESIS_LEVEL: {hysteresis_level_percent}% => {hysteresis_level} Volts")
 
     return threshold_level, hysteresis_level
-
-
-
 
 @njit
 def threshold_crossing_interp(
