@@ -16,39 +16,49 @@ def transform_ToAs_to_AoAs(
     df_opr_zero_crossings: Union[np.ndarray, pd.DataFrame, pl.DataFrame],
     df_probe_toas: Union[np.ndarray, pd.DataFrame, pl.DataFrame],
 ) -> Union[pd.DataFrame, pl.DataFrame]:
-    """This function transforms the ToA values to AoA values for a
+    """
+    Transform the Time of Arrival (ToA) values to Angle of Arrival (AoA) values for a
     single probe, given the OPR zero-crossing times and the proximity
     probe's ToA values. It receives Pandas DataFrames, and also
     cleans up the ToAs that could not be converted.
 
-    The timestamps are assumed to reside in the first column of
-    each DataFrame.
+    Parameters
+    ----------
+    df_opr_zero_crossings : Union[np.ndarray, pd.DataFrame, pl.DataFrame]
+        OPR zero-crossing timestamps. If a DataFrame is passed, the first column
+        is assumed to contain the timestamps.
+    df_probe_toas : Union[np.ndarray, pd.DataFrame, pl.DataFrame]
+        Proximity probe ToAs. If a DataFrame is passed, the first column
+        is assumed to contain the timestamps.
 
-    Args:
-        df_opr_zero_crossings (Union[np.ndarray, pd.DataFrame, pl.DataFrame]): The OPR zero-crossing
-            times. If a DataFrame is passed, the first column is assumed to contain the timestamps.
-        df_probe_toas (Union[np.ndarray, pd.DataFrame, pl.DataFrame]): The proximity probe's ToA values.
-            If a DataFrame is passed, the first column is assumed to contain the timestamps.
+    Returns
+    -------
+    Union[pd.DataFrame, pl.DataFrame]
+        DataFrame containing AoA values. Library depends on
+        user’s DataFrame preference (Pandas or Polars).
 
-    Returns:
-        Union[pd.DataFrame, pl.DataFrame]: A DataFrame with the AoA values.
+    Raises
+    ------
+    ValueError
+        If either df_opr_zero_crossings or df_probe_toas is invalid or if the
+        preferred DataFrame library is not 'pd' or 'pl'.
     """
     if not isinstance(df_opr_zero_crossings, (np.ndarray, pd.DataFrame, pl.DataFrame)):
         raise ValueError("df_opr_zero_crossings must be a numpy array or a DataFrame.")
     if not isinstance(df_probe_toas, (np.ndarray, pd.DataFrame, pl.DataFrame)):
         raise ValueError("df_probe_toas must be a numpy array or a DataFrame.")
     if isinstance(df_opr_zero_crossings, np.ndarray):
-        df_opr_zero_crossings = pl.DataFrame({'toas':df_opr_zero_crossings})
+        df_opr_zero_crossings = pl.DataFrame({"toas": df_opr_zero_crossings})
     if isinstance(df_probe_toas, np.ndarray):
-        df_probe_toas = pl.DataFrame({'toas':df_probe_toas})
-    first_column_opr = duckdb.execute(
-        "SELECT * FROM df_opr_zero_crossings LIMIT 0"
-    ).pl().columns[0]
-    
-    first_column_probe = duckdb.execute(
-        "SELECT * FROM df_probe_toas LIMIT 0"
-    ).pl().columns[0]
-    
+        df_probe_toas = pl.DataFrame({"toas": df_probe_toas})
+    first_column_opr = (
+        duckdb.execute("SELECT * FROM df_opr_zero_crossings LIMIT 0").pl().columns[0]
+    )
+
+    first_column_probe = (
+        duckdb.execute("SELECT * FROM df_probe_toas LIMIT 0").pl().columns[0]
+    )
+
     query = f"""
     WITH TAB1 AS (
         SELECT 
@@ -75,9 +85,9 @@ def transform_ToAs_to_AoAs(
     AND
         ToA <= n_end_time
     """
-    if _get_dataframe_library_preference() == 'pd':
+    if _get_dataframe_library_preference() == "pd":
         return duckdb.execute(query).df()
-    elif _get_dataframe_library_preference() == 'pl':
+    elif _get_dataframe_library_preference() == "pl":
         return duckdb.execute(query).pl()
     else:
         raise ValueError(
@@ -85,53 +95,59 @@ def transform_ToAs_to_AoAs(
             " Please set it using the bladesight.utils.set_dataframe_library_preference function."
         )
 
+
 def transform_ToAs_to_AoAs_mpr(
     df_ias: Union[pd.DataFrame, pl.DataFrame],
-    df_probe_toas: Union[pd.DataFrame, pl.DataFrame]
+    df_probe_toas: Union[pd.DataFrame, pl.DataFrame],
 ) -> Union[pd.DataFrame, pl.DataFrame]:
-    """This function transforms the ToA values to AoA values for a
-    single probe, given the IAS DataFrame.
+    """
+    Transform Time of Arrival (ToA) data into Angle of Arrival (AoA) for a single probe using MPR data.
 
-    The timestamps are assumed to reside in the first column of
-    df_probe.
+    Parameters
+    ----------
+    df_ias : Union[pd.DataFrame, pl.DataFrame]
+        The result of bladesight.ias.calculate_ias containing MPR data.
+    df_probe_toas : Union[pd.DataFrame, pl.DataFrame]
+        DataFrame with the probe's ToAs in its first column.
 
-    Args:
-        df_ias (Union[pd.DataFrame, pl.DataFrame]): The result of the 
-            bladesight.ias.calculate_ias function.
-        df_probe_toas (Union[pd.DataFrame, pl.DataFrame]): A DataFrame with the probe's
-            ToAs.
-    Returns:
-        pd.DataFrame: A DataFrame containing the AoA values.
+    Returns
+    -------
+    Union[pd.DataFrame, pl.DataFrame]
+        DataFrame containing ToA and AoA columns. The choice of Pandas or Polars
+        depends on user preference.
+
+    Raises
+    ------
+    TypeError
+        If df_ias or df_probe_toas is not a DataFrame.
+    AssertionError
+        If df_ias does not match the required MPR schema.
+    ValueError
+        If the DataFrame library preference is invalid.
     """
     if not isinstance(df_ias, (pd.DataFrame, pl.DataFrame)):
-        raise TypeError(
-            "df_ias must be a Pandas or Polars DataFrame."
-        )
+        raise TypeError("df_ias must be a Pandas or Polars DataFrame.")
     if not isinstance(df_probe_toas, (pd.DataFrame, pl.DataFrame)):
-        raise TypeError(
-            "df_probe_toas must be a Pandas or Polars DataFrame."
-        )
-    present_columns = duckdb.execute(
-        "SELECT * FROM df_ias LIMIT 0"
-    ).pl().columns
+        raise TypeError("df_probe_toas must be a Pandas or Polars DataFrame.")
+    present_columns = duckdb.execute("SELECT * FROM df_ias LIMIT 0").pl().columns
 
     if present_columns != [
-        'section_start_time',
-        'section_end_time',
-        'section_distance',
-        'Omega',
-        'n',
-        'section_start',
-        'section_end'
+        "section_start_time",
+        "section_end_time",
+        "section_distance",
+        "Omega",
+        "n",
+        "section_start",
+        "section_end",
     ]:
         raise AssertionError(
             """The DataFrame must have the columns: 'section_start_time', """
-            """ 'section_end_time', 'section_distance', 'Omega', 'n', """ 
+            """ 'section_end_time', 'section_distance', 'Omega', 'n', """
             """ 'section_start', 'section_end'"""
         )
-    left_merge_key = duckdb.execute(
-        "SELECT * FROM df_probe_toas LIMIT 0"
-    ).pl().columns[0]
+    left_merge_key = (
+        duckdb.execute("SELECT * FROM df_probe_toas LIMIT 0").pl().columns[0]
+    )
     query = f"""
         SELECT 
             ias.n,
@@ -145,9 +161,9 @@ def transform_ToAs_to_AoAs_mpr(
             df_ias ias
             ON {left_merge_key} >= section_start_time
         """
-    if _get_dataframe_library_preference() == 'pl':
+    if _get_dataframe_library_preference() == "pl":
         return duckdb.execute(query).pl()
-    elif _get_dataframe_library_preference() == 'pd':
+    elif _get_dataframe_library_preference() == "pd":
         return duckdb.execute(query).df()
     else:
         raise ValueError(
@@ -155,29 +171,35 @@ def transform_ToAs_to_AoAs_mpr(
             " Please set it using the bladesight.utils.set_dataframe_library_preference function."
         )
 
+
 ##########################################################################
 #                    TRANSFORM PROX AoAs to Blade AoAs                   #
 ##########################################################################
 
 
 def calculate_Q(
-    arr_aoas: Union[np.ndarray, pd.Series, pl.Series], 
-    d_theta: float,
-    N: int
+    arr_aoas: Union[np.ndarray, pd.Series, pl.Series], d_theta: float, N: int
 ) -> Tuple[float, np.ndarray]:
-    """This function calculates the binning quality factor, Q, 
-    given the AoA values, the number og blades and the bin offset.
+    """
+    Calculate the binning quality factor, Q, given Angle of Arrival (AoA) values, rotor blade count, and bin offset.
 
-    Args:
-        arr_aoas (np.ndarray): The proximity probe AoA values.
-            If a Pandas Series or Polars Series is passed, the values
+    Parameters
+    ----------
+    arr_aoas : Union[np.ndarray, pd.Series, pl.Series]
+        Proximity probe AoA values. If a Pandas Series or Polars Series is passed, the values
             are extracted.
-        d_theta (float): The bin offset.
-        N (int): The number of blades on the rotor.
+    d_theta : float
+        Bin offset (in radians).
+    N : int
+        Number of blades on the rotor.
 
-    Returns:
-        Tuple[float, np.ndarray]: The binning quality factor, Q, and
-        the bin edges.
+    Returns
+    -------
+    Tuple[float, np.ndarray]
+        Q : float
+            The binning quality factor.
+        bin_edges : np.ndarray
+            Bin edges used in the Q calculation.
     """
     if isinstance(arr_aoas, (pd.Series, pl.Series)):
         arr_aoas = arr_aoas.to_numpy()
@@ -206,31 +228,43 @@ def calculate_Q(
         Q += np.sum(((arr_aoas[bin_mask] - 2 * np.pi) - bin_centre_first) ** 2)
     return Q, bin_edges
 
+
 def transform_prox_AoAs_to_blade_AoAs(
     df_prox: Union[pd.DataFrame, pl.DataFrame],
     B: int,
     d_theta_increments: int = 200,
-    spurious_pulse_policy : Literal['drop', 'keep'] = 'drop'
+    spurious_pulse_policy: Literal["drop", "keep"] = "drop",
 ) -> List[Union[pd.DataFrame, pl.DataFrame]]:
-    """This function takes a DataFrame containing the AoA values of a proximity probe,
+    """
+    Convert proximity probe Angle of Arrivals (AoAs) into per-blade AoAs by optimal binning. 
+    This function takes a DataFrame containing the AoA values of a proximity probe,
     and returns a list of DataFrame, each containing the AoA values of a single blade.
 
-    Args:
-        df_prox (Union[pd.DataFrame, pl.DataFrame]): The dataframe containing the AoA values
-            of the proximity probe.
-        B (int): The number of blades.
-        d_theta_increments (int, optional): The number of increments.
-        spurious_pulse_policy (Literal['drop', 'keep'], optional): The policy to handle
-            spurious pulses. Defaults to 'drop'.
+    Parameters
+    ----------
+    df_prox : Union[pd.DataFrame, pl.DataFrame]
+        DataFrame containing the probe's AoA measurements.
+    B : int
+        Number of blades.
+    d_theta_increments : int, optional
+        Number of increments. The default is 200.
+    spurious_pulse_policy : {'drop', 'keep'}, optional
+        Policy to handle spurious pulses, by default 'drop'.
 
-    Returns:
-        List[Union[pd.DataFrame, pl.DataFrame]]: A list of dataframes, each containing the AoA
-        values of a single blade.
+    Returns
+    -------
+    List[Union[pd.DataFrame, pl.DataFrame]]
+        A list of DataFrames, each with AoA values corresponding to a single blade.
+
+    Notes
+    -----
+    Any revolutions with more than one occurrence of a blade are dropped
+    unless spurious_pulse_policy is set to 'keep'.
     """
     return_type = _get_dataframe_library_preference()
 
     d_thetas = np.linspace(-0.5 * np.pi / B, 1.5 * np.pi / B, d_theta_increments)
-    arr_aoas = duckdb.execute("SELECT AoA FROM df_prox").fetchnumpy()["AoA"]    
+    arr_aoas = duckdb.execute("SELECT AoA FROM df_prox").fetchnumpy()["AoA"]
     Qs = []
     optimal_Q, optimal_bin_edges, optimal_d_theta = np.inf, None, None
     for d_theta in d_thetas:
@@ -298,7 +332,7 @@ def transform_prox_AoAs_to_blade_AoAs(
                     )
                 ORDER BY ToA
             """
-        if return_type == 'pd':
+        if return_type == "pd":
             df_bin = duckdb.execute(query).df()
         else:
             df_bin = duckdb.execute(query).pl()
@@ -309,10 +343,10 @@ def transform_prox_AoAs_to_blade_AoAs(
 
     blade_order = np.argsort(blade_median_AoAs)
     blade_dfs = [blade_dfs[i] for i in blade_order]
-    
-    if spurious_pulse_policy == 'keep':
+
+    if spurious_pulse_policy == "keep":
         return blade_dfs
-    
+
     # Drop revolutions that has more than one occurrence of a blade
     blade_dfs_to_return = []
     query = """
@@ -321,7 +355,7 @@ def transform_prox_AoAs_to_blade_AoAs(
         ORDER BY n, ToA
     """
     for _, df in enumerate(blade_dfs):
-        if return_type == 'pd':
+        if return_type == "pd":
             blade_dfs_to_return.append(duckdb.execute(query).df())
         else:
             blade_dfs_to_return.append(duckdb.execute(query).pl())
