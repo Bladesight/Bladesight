@@ -349,46 +349,63 @@ def threshold_crossing_hysteresis_curve_fit(
     n_est: Optional[float] = None,
     trigger_on_rising_edge: bool = True,
     ) -> np.ndarray:
-    """A sequential threshold crossing algorithm that interpolates or performes a polynomial curve fit to find the Time of Arrival (ToA) between the two samples where the signal crosses the threshold.
+    """
+    A sequential threshold crossing algorithm that interpolates or performes a polynomial curve fit to find the Time of Arrival (ToA) between the two samples where the signal crosses the threshold.
 
-    Args:
-        arr_t (np.ndarray): The array containing the time values (time stamps of the signal).
-        arr_s (np.ndarray): The array containing the signal voltage values
-            corresponding to the time values. 
-        threshold (float): The threshold value used to trigger the Time of Arrivals (ToAs), in the same
-            units as the signal.
-        hysteresis_height (float): The height of the hysteresis, in the same
-            units as the signal.
-        poly_fit_bool (bool, optional): Whether to use polynomial fitting for
-            finding the ToA. Defaults to False. Note using a polynomial fit should be more accurate provided the polynomial fit is appropriate. Best to use if there are multiple samples near the threshold crossing.
-        poly_order (int, optional): The order of the polynomial to fit. Only
-            used if `poly_fit_bool` is True. Defaults to 2.
-        poly_fit_range (np.ndarray[int], optional): The range of data points to use for
-            polynomial fitting around the threshold crossing. Only used if
-            "poly_fit_bool" is True. Defaults to 3 either size of the zero crossing time index.
-        method : str
-        The fitting method to use ('qr', 'weighted', 'piecewise').
-        w : np.ndarray, optional
-            The weights for each data point (used for 'weighted' method).
-        segments : int, optional
-            The number of segments to divide the data into (used for 'piecewise' method).
-        NR_tol (float, optional): The tolerance for the Newton-Raphson solver. Defaults to 1e-4.
-        NR_max_iter (int, optional): The maximum number of iterations for the Newton-Raphson solver. Defaults to 100.
-        n_est (float, optional): The estimated number of ToAs in this
-            signal. Defaults to None. This number is used to pre-allocate the array
-            containing the ToAs. If this number is not provided, the array will
-            be pre-allocated as the same dimension as arr_t and arr_s.
-        trigger_on_rising_edge (bool, optional): Whether to trigger on the rising or falling edge of the pulse.
-            Defaults to True.
+    This function uses a hysteresis approach to set an upper or lower bound
+    around the threshold to reduce noise-induced false triggers, and can also
+    apply optional polynomial fitting to improve accuracy near the crossing.
 
-    Returns:
-        np.ndarray: An array containing the ToAs.
+    Parameters
+    ----------
+    arr_t : np.ndarray
+        Array of time values (time stamps of the signal).
+    arr_s : np.ndarray
+        Array of signal voltage values corresponding to arr_t.
+    threshold : float
+        Threshold value that triggers detection. Same units as the input signal.
+    hysteresis_height : float
+        Height of hysteresis, in the same units as the signal. Used to
+        avoid spurious threshold crossings caused by noise. Same units as the input signal.
+    poly_fit_bool : bool, optional
+        Whether to use polynomial fitting around the crossing point.
+        Defaults to False.
+        Note using a polynomial fit should be more accurate provided the polynomial fit is appropriate. Best to use if there are multiple samples near the threshold crossing.
+    poly_order : int, optional
+        Polynomial order if polynomial fitting is enabled. Defaults to 2.
+    poly_fit_range : np.ndarray, optional
+        Number of samples on either side of the crossing to include in the
+        polynomial fit. Defaults to [3, 3].
+    method : str, optional
+        Fitting method ('qr', 'weighted', or 'piecewise'). Defaults to 'qr'.
+    w : np.ndarray, optional
+        Weights for polynomial fitting if method is 'weighted'. Defaults to None.
+    segments : int, optional
+        Number of segments for polynomial fitting if method is 'piecewise'. Defaults to 1.
+    NR_tol : float, optional
+        Newton-Raphson solver tolerance. Defaults to 1e-4.
+    NR_max_iter : int, optional
+        Maximum iterations for Newton-Raphson solver. Defaults to 500.
+    n_est : float, optional
+        The estimated number of ToAs in this signal. Defaults to None. This number is used to pre-allocate the array
+        containing the ToAs. If this number is not provided, the array will
+        be pre-allocated as the same dimension as arr_t and arr_s.
+    trigger_on_rising_edge : bool, optional
+        If True, trigger on threshold crossings from below to above (rising).
+        If False, trigger on falling edge. Defaults to True.
+
+    Returns
+    -------
+    np.ndarray
+        Array containing detected ToAs.
+
     References:
     -----------
     This function is adapted and relies on code from the Bladesight tutorial using the Bladesight Python package.
     [1] D. H. Diamond, “Introduction to Blade Tip Timing,” Bladesight Learn. Accessed: Feb. 12, 2024. [Online]. Available: docs.bladesight.com
     [2] Curve fitting code developed using: https://gist.github.com/kadereub/9eae9cff356bb62cdbd672931e8e5ec4
     """
+
 
     if trigger_on_rising_edge == True:
         threshold_lower = threshold - hysteresis_height
