@@ -1,25 +1,21 @@
 import numpy as np
 from scipy.sparse.linalg import spsolve
 from scipy.sparse import csr_matrix
-import time
-from typing import Optional
 import polars as pl
 from tqdm import tqdm
 from numba import njit
+from typing import Union, List
 
 def perform_bayesian_geometry_compensation(
     t: np.ndarray,
     N: int,
     M: int,
-    e: np.ndarray = [],
-    beta: Optional[
-        float
-    ] = 10.0e10,  # I actually think paper says the default value for beta is 1E10 not 10E10
-    sigma: Optional[float] = 0.01,
+    e: Union[np.ndarray, List] = [],
+    beta: float = 10.0e10,  # I actually think paper says the default value for beta is 1E10 not 10E10
+    sigma: float = 0.01,
 ) -> np.ndarray:
-    """
-    Perform geometry compensation on an incremental shaft encoder with N sections 
-    measured over M revolutions.
+    """Perform geometry compensation on an incremental shaft 
+    encoder with N sections measured over M revolutions.
 
     An algorithm that performs shaft encoder geometry compensation for 
     arbitrary shaft speeds using Bayesian Geometry Compensation.
@@ -27,24 +23,34 @@ def perform_bayesian_geometry_compensation(
     Please reference the paper discussing the algorithm as 
     described in the "References" section.
 
-    Args:
-    t (np.ndarray) : 1D numpy array of zeros crossing 
-        times.  The first zero crossing time indicates the start of the 
-        first section.  This array should therefore 
+    Parameters
+    ----------
+    t : np.ndarray  
+        1D numpy array of zeros crossing times.  The first zero crossing 
+        time indicates the start of the first section.  This array should therefore 
         have exactly M*N + 1 elements.
-    N (int): The number of sections in the shaft encoder.
-    M (int): The number of complete revolutions over which 
+
+    N : int 
+        The number of sections in the shaft encoder.
+    M : int 
+        The number of complete revolutions over which 
         the compensation must be performed.
-    e (np.ndarray): An initial estimate for the 
-        encoder geometry.  If left an empty array, all sections are assumed equal.
-    beta (float):   Precision of the likelihood function.
-    sigma (float):  Standard deviation of the prior probability.
+    e : np.ndarray
+        An initial estimate for the encoder geometry.  If left an empty
+         array, all sections are assumed equal.
+    beta : float   
+        Precision of the likelihood function.
+    sigma : float  
+        Standard deviation of the prior probability.
 
-    Returns:
-        np.ndarray : An array containing the circumferential distances of all N sections.
+    Returns
+    -------
+        np.ndarray 
+            An array containing the circumferential distances of all N sections.
 
-    References:
-    This function is adapted from the following paper,
+    References
+    ----------
+
     [1] D. H. Diamond, P. S. Heyns, and A. J. Oberholster, “Online Shaft Encoder Geometry 
         Compensation for Arbitrary Shaft Speed Profiles Using Bayesian Regression,” Mechanical Systems 
         and Signal Processing, vol. 81, pp. 402–418, Dec. 2016, doi: 10.1016/j.ymssp.2016.02.060.
@@ -65,8 +71,6 @@ def perform_bayesian_geometry_compensation(
         )
     A = np.zeros((2 * M * N - 1, N + 2 * M * N))
     B = np.zeros((2 * M * N - 1, 1))
-    #A = np.empty((2 * M * N - 1, N + 2 * M * N)) # Use empty and not zeros to save on memory usage
-    #B = np.empty((2 * M * N - 1, 1)) # Use empty and not zeros to save on memory usage
 
     T = np.ediff1d(t)
 
@@ -125,17 +129,25 @@ def determine_mpr_speed_for_zero_crossings(
     """ This function is used to calibrate the encoder geometry and
     calculate the shaft speeds of the encoder.
 
-    Args:
-        arr_toas (np.ndarray): The time of arrivals of the encoder.
-        N (int): The number of sections in the encoder.
-        M (int): The number of revolutions spanned by arr_toas.
-        beta (float, optional): The beta value for the 
-            Bayesian Geometry Compensation. Defaults to 1E10.
-        sigma (float, optional): The sigma value for the 
-            Bayesian Geometry Compensation. Defaults to 10. 
+    Parameters
+    ----------
+    arr_toas : np.ndarray
+        The time of arrivals of the encoder.
+    N : int
+        The number of sections in the encoder.
+    M : int
+        The number of revolutions spanned by arr_toas.
+    beta : (float, optional)
+        The beta value for the Bayesian Geometry Compensation. Defaults 
+            to 1E10.
+    sigma : (float, optional)
+        The sigma value for the Bayesian Geometry Compensation. Defaults 
+        to 10. 
     
-    Returns:
-        pl.DataFrame: A DataFrame containing the shaft speeds of the encoder.
+    Returns
+    -------
+        pl.DataFrame
+            A DataFrame containing the shaft speeds of the encoder.
     """
     if arr_toas.shape[0] != N*M +1:
         raise ValueError("The length of arr_toas must be equal to N*M + 1")
@@ -162,19 +174,28 @@ def determine_mpr_shaft_speed(
     """ This function is used to calibrate the encoder geometry and
     calculate the shaft speeds of the encoder.
 
-    Args:
-        arr_toas (np.ndarray): The time of arrivals of the encoder.
-        N (int): The number of sections in the encoder.
-        M (int): The number of revolutions spanned by arr_toas.
-        beta (float, optional): The beta value for the 
-            Bayesian Geometry Compensation. Defaults to 1E10.
-        sigma (float, optional): The sigma value for the
-            Bayesian Geometry Compensation. Defaults to 0.01.
-        M_recalibrate (float, optional): The number of revolutions
-            after which the encoder should be recalibrated. Defaults to 7.76.
+    Parameters
+    ----------
+        arr_toas : np.ndarray
+            The time of arrivals of the encoder.
+        N : int
+            The number of sections in the encoder.
+        M : int
+            The number of revolutions spanned by arr_toas.
+        beta : float, optional
+            The beta value for the Bayesian Geometry Compensation. Defaults 
+            to 1E10.
+        sigma : float, optional
+            The sigma value for the Bayesian Geometry Compensation. Defaults 
+            to 0.01.
+        M_recalibrate : float, optional
+            The number of revolutions after which the encoder 
+            should be recalibrated. Defaults to 7.76.
 
-    Returns:
-        pl.DataFrame: A DataFrame containing the shaft speeds of the encoder.
+    Returns
+    -------
+        pl.DataFrame
+            A DataFrame containing the shaft speeds of the encoder.
     """
     len_t = len(arr_toas)
     recalibrate_interval = int(M_recalibrate*N) 
@@ -223,13 +244,18 @@ def determine_mpr_shaft_speed(
 def get_mpr_geometry(df_mpr_speed : pl.DataFrame, N : int) -> pl.DataFrame:
     """ This function calculates the geometry of the MPR encoder. 
 
-    Args:
-        df_mpr_speed (pl.DataFrame): The DataFrame containing the blade AoAs. This is the
+    Parameters
+    ----------
+        df_mpr_speed : pl.DataFrame
+            The DataFrame containing the blade AoAs. This is the
             result from the determine_mpr_shaft_speed function.
-        N (int): The number of sections in the encoder.
+        N : int
+            The number of sections in the encoder.
 
-    Returns:
-        pl.DataFrame: The DataFrame containing the geometry 
+    Returns
+    -------
+        pl.DataFrame
+            The DataFrame containing the geometry 
             of the MPR encoder.
     """
     n_samples_total = df_mpr_speed.height
@@ -315,7 +341,7 @@ def perform_alignment_err(
     arr_geometry: np.array,
     arr_geometry_start: np.array,
     arr_geometry_end: np.array,
-    alignment_error_threshold_multiplier: Optional[float] = 0.25
+    alignment_error_threshold_multiplier: float = 0.25
 ) -> np.ndarray:
     """ Get an array of alignment errors between the MPR encoder 
         and the geometry.
@@ -323,22 +349,34 @@ def perform_alignment_err(
         This will be used to determine the best alignment between the
         start of each revolution.
 
-    Args:
-        arr_sections (np.array): The MPR sections array. This is the 
+    Parameters
+    ----------
+        arr_sections : np.array 
+            The MPR sections array. This is the 
             'section_distance' column from the determine_mpr_shaft_speed
             function.
-        arr_geometry (np.array): The geometry array. This is the 
+        arr_geometry : np.array
+            The geometry array. This is the 
             'section_distance' column from the determine_geometry function. 
-        arr_geometry_start (np.array): The start of the geometry array.
-        arr_geometry_end (np.array): The end of the geometry
-        alignment_error_threshold_multiplier (float, optional): 
-            The multiplication factor to be multiplied with the absolute of the median of the alignment errors.
-            Sometimes there is a clear issue in the alignment and not all sections in a signal are aligned. Often this is identified by long breaks in the time signal. 
-            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not aligning sections as the error is too high. Defaults to 0.25.
         
-
-    Returns:
-        np.ndarray: The error between the two arrays. Must have
+        arr_geometry_start : np.array
+            The start of the geometry array.
+        
+        arr_geometry_end : np.array
+            The end of the geometry
+        
+        alignment_error_threshold_multiplier : float, optional 
+            The multiplication factor to be multiplied with the absolute of 
+            the median of the alignment errors. Sometimes there is a clear 
+            issue in the alignment and not all sections in a signal are 
+            aligned. Often this is identified by long breaks in the time signal. 
+            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not 
+            aligning sections as the error is too high. Defaults to 0.25.
+        
+    Returns
+    -------
+        np.ndarray
+            The error between the two arrays. Must have
             the same shape as arr_sections.
     """
     arr_errors = np.ones_like(arr_sections) * -1
