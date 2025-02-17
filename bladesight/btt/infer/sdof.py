@@ -11,25 +11,27 @@ def get_X(
         delta_st: float
     ) -> np.ndarray:
     """
-    This function returns the vibration amplitude of 
-    the blade vibration.
-    
-    x(ω) = 	δ_st / sqrt( (1 - r**2)**2 + (2*ζ*r)**2)
+    Compute the vibration amplitude of a single degree-of-freedom (SDoF) system.
 
-    where:
+    The amplitude is given by:
+    X(ω) = δ_st / sqrt((1 - r^2)^2 + (2 ζ r)^2),
+    where r = ω / ω_n.
 
-    r = ω/ω_0
+    Parameters
+    ----------
+    omega : np.ndarray
+        Excitation frequencies in rad/s.
+    omega_n : float
+        Natural frequency of the blade in rad/s.
+    zeta : float
+        Damping ratio of the blade vibration.
+    delta_st : float
+        Static deflection of the blade (often in µm).
 
-    Args:
-        omega (np.ndarray): The excitation frequencies in rad/s.
-        omega_n (float): The natural frequency of the blade in rad/s.
-        zeta (float): The damping ratio of the blade vibration.
-        delta_st (float, optional): The static deflection of the blade. 
-            This value is usually given in units of µm.
-
-    Returns:
-        np.ndarray: The amplitude of the blade vibration in the
-            same units as delta_st.
+    Returns
+    -------
+    np.ndarray
+        Vibration amplitude at each frequency in omega.
     """
     r = omega / omega_n
     return (
@@ -45,21 +47,26 @@ def get_phi(
     omega_n : float, 
     zeta: float
 ) -> np.ndarray:
-    """Get the phase between the tip deflection and 
-        the forcing function. 
+    """
+    Compute the phase of the blade vibration relative to the forcing function.
 
-    φ(ω) = arctan(2*ζ*r /  (1 - r**2))
-    
-    where:
-    r = ω/ω_n
+    The phase is given by:
+    φ(ω) = arctan(2 ζ r / (1 - r^2)),
+    where r = ω / ω_n.
 
-    Args:
-        omega (np.ndarray): The excitation frequencies in rad/s.
-        omega_0 (float): The natural frequency of the blade in rad/s.
-        delta (float): The damping ratio of the blade vibration.
+    Parameters
+    ----------
+    omega : np.ndarray
+        Excitation frequencies in rad/s.
+    omega_n : float
+        Natural frequency of the blade in rad/s.
+    zeta : float
+        Damping ratio of the blade vibration.
 
-    Returns:
-        np.ndarray: The phase of the blade vibration in rad.
+    Returns
+    -------
+    np.ndarray
+        Phase of the blade vibration in radians at each frequency in omega.
     """
     r = omega / omega_n
     return np.arctan2(2 * zeta * r,1 - r**2)
@@ -73,22 +80,30 @@ def predict_sdof_samples(
     phi_0 : float,
     arr_omega : np.ndarray
 ) -> np.ndarray:
-    """ This function determined the predicted SDoF fit
-    samples at a proximity probe given the SDoF parameters.
+    """
+    Predict using the fitted SDoF samples at a proximity probe given the SDoF parameters.
 
-    Args:
-        omega_n (float): The natural frequency of the SDoF system.
-        zeta (float): The damping ratio of the SDoF system.
-        delta_st (float): The static deflection of the SDoF system.
-        phi_0 (float): The phase offset of the SDoF system.
-        EO (int): The EO of vibration you want to fit.
-        theta_sensor (float): The sensor's angular position on the rotor.
-        phi_0 (float): The phase offset of the SDoF system.
-        arr_omega (np.ndarray): The angular velocity of the rotor corresponding
-            to each revolution for which we want to predict the SDoF samples.
+    Parameters
+    ----------
+    omega_n : float
+        Natural frequency of the SDoF system in rad/s.
+    zeta : float
+        Damping ratio of the SDoF system.
+    delta_st : float
+        Static deflection of the SDoF system.
+    EO : int
+        Engine order of vibration to fit.
+    theta_sensor : float
+        Angular position of the sensor on the rotor in radians.
+    phi_0 : float
+        Phase offset of the SDoF system in radians.
+    arr_omega : np.ndarray
+        Angular velocities of the rotor corresponding to each revolution.
 
-    Returns:
-        np.ndarray: The predicted SDoF samples.
+    Returns
+    -------
+    np.ndarray
+        Predicted SDoF samples.
     """
     X = get_X(arr_omega*EO, omega_n, zeta, delta_st)  
     phi = get_phi(arr_omega*EO, omega_n, zeta)
@@ -100,16 +115,22 @@ def get_correction_values(
     z_median : float,
     z_max : float, 
 ) -> np.ndarray:
-    """This function calculates the correction values for each sample
-    based on the correction factors.
+    """
+    Compute correction offsets for each sample based on the correction factors.
 
-    Args:
-        arr_omegas (float): The omega values for each sample.
-        z_median (float): The correction value at the median shaft speed.
-        z_max (float): The correction value at the max shaft speed.
+    Parameters
+    ----------
+    arr_omegas : np.ndarray
+        The omega values for each sample.
+    z_median : float
+        The correction value at the median shaft speed.
+    z_max : float
+        The correction value at the max shaft speed.
 
-    Returns:
-        np.ndarray: The sample offsets for each sample.
+    Returns
+    -------
+    np.ndarray
+        The sample offsets for each SDoF sample.
     """
     omega_median = np.median(arr_omegas)
     omega_max = np.min(arr_omegas)
@@ -132,37 +153,37 @@ def SDoF_loss_multiple_probes(
         theta_sensor_set : List[float],
         amplitude_scaling_factor : float = 1
     ) -> np.ndarray:
-    """ This function fits the SDoF parameters to 
-        multiple probes' data.
+    """
+    Fit the SDoF parameters to multiple probes' data.
 
-    Args:
-        model_params (np.ndarray): The SDoF fit method's model parameters. It
-            includes a list of the following parameters:
-            
+    Parameters
+    ----------
+    model_params : np.ndarray
+        The SDoF fit method's model parameters. It includes a list of the following parameters:
             omega_n (float): The natural frequency of the SDoF system.
             ln_zeta (float): The damping ratio of the SDoF system.
             delta_st (float): The static deflection of the SDoF system.
             phi_0 (float): The phase offset of the SDoF system.
             And then the z_median and z_max for each probe.
-                z_median (float): The amplitude offset at the 
-                    median shaft speed.
-                z_max (float): The maximum amplitude offset.
+            z_median (float): The amplitude offset at the median shaft speed.
+            z_max (float): The maximum amplitude offset.
+    tip_deflections_set : List[np.ndarray]
+        The tip deflection data for each probe.
+    arr_omega : np.ndarray
+        The angular velocity of the rotor corresponding to the tip deflection data.
+    EO : int
+        Engine order of vibration to fit.
+    theta_sensor_set : List[float]
+        Angular positions of each probe relative to the start of the revolution.
+    amplitude_scaling_factor : float, optional
+        A scaling factor to weight the measured tip deflections. Use this value 
+        to reward solutions that better capture the full amplitude of the tip deflections. 
+        Defaults to 1.
 
-        tip_deflections_set (List[np.ndarray]): The tip deflection data for each probe.
-        arr_omega (np.ndarray): The angular velocity of the rotor corresponding
-            to the tip deflection data.
-        EO (int): The EO of vibration you want to fit.
-        theta_sensor_set (List[float]): Each sensor's angular position 
-            relative to the start of the revolution.
-        amplitude_scaling_factor (float, optional): A scaling factor to
-            weight the measured tip deflections. Defaults to 1. Use this value
-            to reward solutions that better capture the full amplitude of the
-            tip deflections.
-
-    Returns:
-        np.ndarray: The sum of squared error between 
-            the tip deflection data of each probe and
-            the predicted tip deflections.
+    Returns
+    -------
+    np.ndarray
+        The sum of squared error between the tip deflection data of each probe and the predicted tip deflections.
     """
     omega_n, ln_zeta, delta_st, phi_0, *correction_factors = model_params
     zeta = np.exp(ln_zeta)
@@ -198,23 +219,33 @@ def perform_SDoF_fit(
     delta_st_max : int = 10,
     verbose : bool = False
 ) -> Dict[str, float]:
-    """This function receives a blade tip deflection DataFrame, and returns 
-    the SDoF fit model parameters after fitting.
+    """
+    Fit an SDoF model to blade tip deflection data over a specified revolution range.
 
-    Args:
-        df_blade (pd.DataFrame): The blade tip deflection DataFrame.
-        n_start (int): The starting revolution number of the resonance 
-            you want to fit.
-        n_end (int): The ending revolution number of the resonance 
-            you want to fit.
-        EOs (List[int], optional): The list of EOs to search for. Defaults 
-            to np.arange(1, 20).
-        delta_st_max (int, optional): The maximum static deflection within our optimization 
-            bounds. Defaults to 10.
-        verbose (bool, optional): Whether to print the progress. Defaults to False.
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        The blade tip deflection DataFrame.
+    n_start : int
+        The starting revolution number of the resonance to be used in the fit.
+    n_end : int
+        The ending revolution number of the resonance to be used in the fit.
+    EOs : List[int], optional
+        Range of engine orders to consider, by default np.arange(1, 20).
+    delta_st_max : int, optional
+        Maximum static deflection for the optimizer bounds, by default 10.
+    verbose : bool, optional
+        If True, print progress updates, by default False.
 
-    Returns:
-        Dict[str, float]: The fitted model parameters.
+    Returns
+    -------
+    Dict[str, Union[float, int]]
+        Fitted parameters, including:
+        - "omega_n": Natural frequency (in Hz).
+        - "zeta": Damping ratio.
+        - "delta_st": Static deflection.
+        - "phi_0": Phase offset in radians.
+        - "EO": Engine order with minimum error.
     """
     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
     measured_tip_deflection_signals = [

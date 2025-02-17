@@ -8,19 +8,24 @@ def cff_method_single_revolution(
     EO : int,
     signal_suffix : str = "_filt" 
 ) -> pd.DataFrame:
-    """ This function fits the CFF method for a resonance by 
-    using a single revolution of data for each set of CFF parameters.
+    """
+    Fit the Circumferential Fourier Fit(CFF) method for a single revolution of data for each set of CFF parameters.
 
-    Args:
-        df_blade (pd.DataFrame): The dataframe containing the tip deflections.
-        theta_sensor_set (List[float]): The sensor angles.
-        EO (int): The Engine Order.
-        signal_suffix (str, optional): The suffix of the tip deflection 
-            signals. Defaults to "_filt".
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        DataFrame containing the tip deflections and revolution numbers.
+    theta_sensor_set : List[float]
+        Positions (angles) of each sensor.
+    EO : int
+        Engine order.
+    signal_suffix : str, optional
+        Suffix of the tip deflection signals in the DataFrame, by default "_filt".
 
-    Returns:
-        pd.DataFrame: A DataFrame containing the CFF parameters for 
-            each shaft revolution. 
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with the CFF parameters (A, B, C, X, phi, n) and predicted tip deflections.
     """
     PROBE_COUNT = len(theta_sensor_set)
     tip_deflection_signals = [
@@ -58,21 +63,29 @@ def cff_method_multiple_revolutions(
     extra_revolutions : int,
     signal_suffix : str = "_filt" 
 ) -> pd.DataFrame:
-    """ This function fits the CFF method for a resonance by
-    using multiple revolutions of data for each set of CFF parameters.
-
-    Args:
-        df_blade (pd.DataFrame): The dataframe containing the tip deflections.
-        theta_sensor_set (List[float]): The sensor angles.
-        EO (int): The Engine Order.
-        extra_revolutions (int): The number of revolutions to use for the fit.
-        signal_suffix (str, optional): The suffix of the tip deflection 
-            signals. Defaults to "_filt".
-
-    Returns:
-        pd.DataFrame: A DataFrame containing the CFF parameters for 
-            each shaft revolution.
     """
+    Fit the Circumferential Fourier Fit(CFF) method for a resonance by using multiple revolutions of data for each set of CFF parameters.
+
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        DataFrame containing the tip deflections and revolution numbers.
+    theta_sensor_set : List[float]
+        Positions (angles) of each sensor.
+    EO : int
+        Engine order.
+    extra_revolutions : int
+        Number of revolutions to use for the fit.
+    signal_suffix : str, optional
+        Suffix of the tip deflection signals in the DataFrame, by default "_filt".
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with the CFF parameters (A, B, C, X, phi, n)
+        and predicted tip deflections for each revolution.
+    """
+
     PROBE_COUNT = len(theta_sensor_set)
     tip_deflection_signals = [
         f"x_p{i_probe + 1}{signal_suffix}" 
@@ -132,22 +145,32 @@ def perform_CFF_fit(
     EOs : List[int] = np.arange(1, 20),
     extra_revolutions : int = 1
 ) -> Dict[str, Union[pd.DataFrame, int]]:
-    """ This function performs the CFF method fit for a resonance. The function
-    iterates over EOs and selects the EO that gives the lowest sum of squared
-    errors between the measured and predicted tip deflections.
+    """
+    Perform the Circumferential Fourier Fit(CFF) method to find the best Engine Order (EO)
+    between n_start and n_end revolutions. The function iterates over EOs and selects 
+    the EO that gives the lowest sum of squared errors between the measured and 
+    predicted tip deflections.
 
-    Args:
-        df_blade (pd.DataFrame): The dataframe containing the tip deflections.
-        n_start (int): The start revolution number.
-        n_end (int): The end revolution number.
-        EOs (List[int], optional): The EOs to consider for this resonance. Defaults 
-            to np.arange(1, 20).
-        extra_revolutions (int, optional): How many extra revolutions to use for 
-            the fit. Defaults to 1.
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        DataFrame containing tip deflections and revolution numbers.
+    n_start : int
+        Start revolution index.
+    n_end : int
+        End revolution index.
+    EOs : List[int], optional
+        List of potential EOs to evaluate, by default np.arange(1, 20).
+    extra_revolutions : int, optional
+        Number of extra revolutions to use for the fit, by default 1.
 
-    Returns:
-        Dict[str, Union[pd.DataFrame, int]]: A dictionary containing the CFF 
-            parameters and the selected EO.
+    Returns
+    -------
+    Dict[str, Union[pd.DataFrame, int]]
+        Dictionary with two keys:
+        - "df_cff_params": pd.DataFrame containing the fitted CFF parameters
+        and predicted tip deflections for the selected EO.
+        - "EO": int specifying the EO that minimizes the sum of squared errors.
     """
     PROBE_COUNT = len(
         [
