@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union
 import polars as pl
 import pandas as pd
 import numpy as np
@@ -17,31 +17,42 @@ def calculate_ias(
         beta : float = 1E10,
         sigma : float = 0.01,
         M_recalibrate : float = 7.76,
-        alignment_error_threshold_multiplier: Optional[float] = 0.25
-    ) -> Union[pl.DataFrame ,pd.DataFrame]:
+        alignment_error_threshold_multiplier: float = 0.25
+    ) -> Union[pl.DataFrame, pd.DataFrame]:
     """ Calculate the shaft speed and corresponding sections
         of the MPR encoder.
 
-    Args:
-        arr_toas (Union[np.ndarray, pd.DataFrame, pl.DataFrame]): The time of 
-            arrivals of the encoder. If a Pandas or Polars DataFrame is
+    Parameters
+    ----------
+        arr_toas :Union[np.ndarray, pd.DataFrame, pl.DataFrame]
+            The time of arrivals of the encoder. If a Pandas or Polars DataFrame is
             supplied, the first column will be converted to a numpy array.
-        N (int): The number of sections in the encoder.
-        M (int): The number of revolutions spanned by arr_toas. Defaults to 10.
-        beta (float, optional): The beta value for the 
-            Bayesian Geometry Compensation. Defaults to 1E10.
-        sigma (float, optional): The sigma value for the
-            Bayesian Geometry Compensation. Defaults to 0.01.
-        M_recalibrate (float, optional): The number of revolutions
-            after which the encoder should be recalibrated. Defaults to 7.76.
-        alignment_error_threshold_multiplier (float, optional): 
-            The multiplication factor to be multiplied with the absolute of the median of the alignment errors.
-            Sometimes there is a clear issue in the alignment and not all sections in a signal are aligned. Often this is identified by long breaks in the time signal. 
-            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not aligning sections as the error is too high. Defaults to 0.25.
+        N : int
+            The number of sections in the encoder.
+        M : int
+            The number of revolutions spanned by arr_toas. Defaults to 10.
+        beta : float, optional
+            The beta value for the Bayesian Geometry Compensation. Defaults 
+            to 1E10.
+        sigma : float, optional
+            The sigma value for the Bayesian Geometry 
+            Compensation. Defaults to 0.01.
+        M_recalibrate : float, optional
+            The number of revolutions after which the encoder 
+            should be recalibrated. Defaults to 7.76.
+        alignment_error_threshold_multiplier : float, optional 
+            The multiplication factor to be multiplied with the absolute of 
+            the median of the alignment errors. Sometimes there is a clear 
+            issue in the alignment and not all sections in a signal are 
+            aligned. Often this is identified by long breaks in the time signal. 
+            
+            Recommendation: set to 0.5 or 0.8 to prevent the algorithm 
+            not aligning sections as the error is too high. Defaults to 0.25.
 
-    Returns:
-        pl.DataFrame | pd.DataFrame: A DataFrame containing the shaft 
-            speeds of the encoder.
+    Returns
+    -------
+        Union[pl.DataFrame, pd.DataFrame]
+            A DataFrame containing the shaft speeds of the encoder.
     """
     if M_recalibrate >= M:
         raise ValueError(
