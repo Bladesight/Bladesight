@@ -11,27 +11,42 @@ def threshold_crossing_interp(
     n_est: Optional[float] = None,
     trigger_on_rising_edge: bool = True,
 ) -> np.ndarray:
-    """A sequential threshold crossing algorithm that interpolates
-        the ToA between the two samples where the signal crosses
-        the threshold.
-
-    Args:
-        arr_t (np.ndarray): The array containing the time values.
-        arr_s (np.ndarray): The array containing the signal voltage values
-            corresponding to the time values.
-        threshold (float): The threshold value.
-        n_est (float, optional): The estimated number of ToAs in this signal. Defaults
-            to None. This number is used to pre-allocate the array containing the
-            ToAs. If this number is not provided, the array will be pre-allocated as
-            the same dimension as arr_t and arr_s.
-        trigger_on_rising_edge (bool, optional): Whether to trigger ToAs on the rising
-            or falling edge. Defaults to True. If True, the ToA is triggered on
-            the rising edge.
-
-    Returns:
-        np.ndarray: An array containing the ToAs.
     """
+    Sequentially detect threshold crossings in a signal and calculate Time of Arrival (ToA).
 
+    If the threshold is exceeded (on rising edge) or gone below (on falling edge),
+    the function interpolates between the two samples around the threshold
+    to determine the precise crossing time.
+
+    Parameters
+    ----------
+    arr_t : np.ndarray
+        Time array corresponding to each sample in arr_s.
+    arr_s : np.ndarray
+        Signal voltage array corresponding to the time values.
+    threshold : float
+        Threshold value in the same units as arr_s.
+    n_est : float, optional
+        The estimated number of ToAs in this signal.
+        Defaults to None.
+        This number is used to pre-allocate the array containing the
+        ToAs. If this number is not provided, the array will be pre-allocated as
+        the same dimension as arr_t and arr_s.
+    trigger_on_rising_edge : bool, optional
+        If True, triggers on the rising edge (threshold crossing from below
+        to above). If False, triggers on falling edge. Defaults to True.
+
+    Returns
+    -------
+    np.ndarray
+        Array of interpolated ToAs. Its length is determined by the
+        number of threshold crossings or n_est.
+
+    Raises
+    ------
+    ValueError
+        If the number of detected crossings exceeds the pre-allocated size.
+    """
     # Pre-allocate the array containing the ToAs
     if n_est is None:
         arr_toa = -1 * np.ones(arr_t.shape)
@@ -96,24 +111,34 @@ def threshold_crossing_hysteresis_rising(
     hysteresis_height: float,
     n_est: Optional[float] = None,
 ) -> np.ndarray:
-    """A sequential threshold crossing algorithm that interpolates
-        the ToA between the two samples where the signal crosses
-        the threshold.
+    """
+    Sequentially detect rising-edge threshold crossings in a signal using hysteresis.
 
-    Args:
-        arr_t (np.ndarray): The array containing the time values.
-        arr_s (np.ndarray): The array containing the signal voltage values
-            corresponding to the time values.
-        threshold (float): The threshold value.
-        hysteresis_height (float): The height of the hysteresis, in the same
-            units as the signal.
-        n_est (float, optional): The estimated number of ToAs in this
-            signal. Defaults to None. This number is used to pre-allocate the array
-            containing the ToAs. If this number is not provided, the array will
-            be pre-allocated as the same dimension as arr_t and arr_s.
+    A hysteresis band is established below the threshold to help
+    reduce noise-induced spurious triggers.
 
-    Returns:
-        np.ndarray: An array containing the ToAs.
+    Parameters
+    ----------
+    arr_t : np.ndarray
+        Time array corresponding to each sample in arr_s.
+    arr_s : np.ndarray
+        Signal voltage array corresponding to the time values.
+    threshold : float
+        Threshold value in the same units as arr_s.
+    hysteresis_height : float
+        Height of the hysteresis band below the threshold.
+    n_est : float, optional
+        The estimated number of ToAs in this
+        signal. 
+        Defaults to None. 
+        This number is used to pre-allocate the array
+        containing the ToAs. If this number is not provided, the array will
+        be pre-allocated as the same dimension as arr_t and arr_s.
+
+    Returns
+    -------
+    np.ndarray
+        Array of interpolated rising-edge ToAs.
     """
     threshold_lower = threshold - hysteresis_height
     trigger_state = True if arr_s[0] > threshold_lower else False
@@ -163,24 +188,34 @@ def threshold_crossing_hysteresis_falling(
     hysteresis_height : float,
     n_est : Optional[float] = None,
 ) -> np.ndarray:
-    """ This function implements the constant threshold triggering
-    method with hysteresis on the falling edge. The hysteresis
-    height is specified in the same units as the signal.
+    """
+    Sequentially detect falling-edge threshold crossings in a signal using hysteresis.
 
-    Args:
-        arr_t (np.ndarray): The time values of the signal.
-        arr_s (np.ndarray): The signal to determine the threshold
-            level for.
-        threshold (float): The threshold level to use for the
-            constant threshold triggering method.
-        hysteresis_height (float): The height of the hysteresis.
-            It has the same units as the signal.
-        n_est (Optional[float]): The estimated number of ToAs in
-            this signal. Defaults to None. This number is used to
-            pre-allocate the array containing the ToAs. If this
-            number is not provided, the array will be pre-allocated
-            as the same dimension as arr_t and arr_s. You should
-            specify this value for large signals.
+    A hysteresis band is established above the threshold to help
+    reduce noise-induced spurious triggers.
+
+    Parameters
+    ----------
+    arr_t : np.ndarray
+        Time array corresponding to each sample in arr_s.
+    arr_s : np.ndarray
+        Signal voltage array corresponding to the time values.
+    threshold : float
+        Threshold value in the same units as arr_s.
+    hysteresis_height : float
+        Height of the hysteresis band above the threshold.
+    n_est : float, optional
+        The estimated number of ToAs in this signal.
+        Defaults to None. 
+        This number is used to pre-allocate the array containing the ToAs. If this
+        number is not provided, the array will be pre-allocated
+        as the same dimension as arr_t and arr_s. You should
+        specify this value for large signals.
+
+    Returns
+    -------
+    np.ndarray
+        Array of interpolated falling-edge ToAs.
     """
     threshold_upper = threshold + hysteresis_height
     trigger_state = True if arr_s[0] < threshold_upper else False
