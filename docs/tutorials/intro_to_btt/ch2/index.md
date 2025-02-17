@@ -21,6 +21,16 @@ card_url: "ch2/"
 	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch2.svg){ width="500" }
 	</figure>
 
+??? note "Reviews"
+
+    Please read through the chapter prior to activating a review as I have kept the chapters deliberately terse. 
+    
+    Click to activate a review 👇 for more detailed comments from other experts.
+    
+    <a onclick="toggleBtnClicked('Mirosław Witoś')" class='md-button md-small review-toggle' data-author="Mirosław Witoś">
+        Mirosław Witoś
+    </a>
+
 # Time of Arrival (ToA)
 
 In the previous chapter, we've established that blade vibration causes the tips to move relative to the shaft's position. A deflected tip causes a shift in the proximity probe's waveform. The size of the shift is proportional to the deflection.
@@ -65,6 +75,11 @@ Here's the principle behind each criterion:
 </ol>
 
 We start our journey to convert raw BTT data into blade frequency, amplitude and phase by selecting one of these methods. Based on its simplicity, accuracy [@diamond2021constant] and widespread adoption, we choose the constant threshold method.
+
+<div class='review' data-author='Mirosław Witoś' data-innerhtml="<p>Fig 1. shows 4 methods of triggering the TOA timer control signal only  the position sensor (eddy current, capacitive and microwave sensors), not the rate of change (reluctance sensor working with ferromagnetic blades). It is unfortunate that the description of Fig. 1 omits important information about what position the blade tip is in relative to the sensor when the pulse is triggered. What are the advantages and disadvantages of each triggering method?</p>
+<p>Before referring to Fig. 1, it is useful to inform the reader about the type of sensor, its working principle and the conversion of the position of the blade tip relative to the sensor into an analog signal after the demodulator (typical characteristics of the effect of air gap, blade material conductivity and blades speed on voltage).</p>
+<p>No assumption that there is no overflow of the TOA time counter during measurement.</p><p><strong>Author's note:</strong>My knowledge of sensors' working principles is dangerous at best. I am therefore not going to discuss it. I've added a reference to an article covering the principle behind Inductive Probes in the `How can we set the *ideal* threshold level?`.</p>" >
+</div>
 
 ## Constant threshold trigger method
 This method continuously compares a probe's signal to a voltage threshold. Each time the threshold is crossed, a ToA is recorded.
@@ -492,7 +507,7 @@ These are the values in `sr_toas`:
 
         ![Threshold Select All Blades ](ch_2_threshold_select_all_blades.jpeg){ width="500" }
 
-    3.  Many BTT probes produce a first-derivative shaped signal. In other words, each pulse:
+    3.  Many BTT probes produce a first-derivative shaped signal, such as the one described in [@rokicki2021high]. In other words, each pulse:
     
         1.  starts at zero
         
@@ -914,6 +929,8 @@ Lets push on...
 ## Acknowledgements
 Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
+A special thanks to <a href="https://www.researchgate.net/profile/Miroslaw-Witos-2" target="_blank">Mirosław Witoś</a> for his detailed review of this chapter.
+
 \bibliography
 
 <div style='display:flex'>
@@ -930,7 +947,10 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-            2024-02-06
+            <span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-02-06</span>
+
+            <span class="md-icon blog-timestamp-span" title="Last update"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>2025-02-17
+            </span>
         </p>
     </div>
 </div>

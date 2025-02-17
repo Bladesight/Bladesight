@@ -1,6 +1,6 @@
 [project]
 name = "bladesight"
-version = "0.16.0"
+version = "0.17.0"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 readme = "README.md"
 requires-python = ">=3.9,<3.13"

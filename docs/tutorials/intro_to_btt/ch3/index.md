@@ -21,6 +21,16 @@ card_url: "ch3/"
 	![BTT Tutorial Roadmap](BTT_Tutorial_Outline_Ch3.svg){ width="500" }
 	</figure>
 
+??? note "Reviews"
+
+    Please read through the chapter prior to activating a review as I have kept the chapters deliberately terse. 
+    
+    Click to activate a review 👇 for more detailed comments from other experts.
+    
+    <a onclick="toggleBtnClicked('Mirosław Witoś')" class='md-button md-small review-toggle' data-author="Mirosław Witoś">
+        Mirosław Witoś
+    </a>
+
 <style>
 :root {
   --md-tooltip-width: 600px;
@@ -78,6 +88,9 @@ A typical shaft encoder is shown in [Figure 2](#figure_02) below. It consists of
     <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: A shaft encoder consists of a rotating shaft with a key and a stationary sensor mounted next to the key. The sensor "picks up" the presence of the key as it rotates by. A voltage pulse train is produced that is processed to find the zero-crossing times. </figcaption>
 </figure>
 
+<div class='review' data-author='Mirosław Witoś' data-innerhtml="<p>The introduction of zc variables only in Figure 2 (the values of the times of occurrence of the trigger pulse) deteriorates the clarity of the subsequent message, including formula (1). </p><p>It is advisable to introduce the zc variable in the text, and preferably use the typical time designations (t with subscript)</p><p><strong>Author's note:</strong> I've changed the notation to t_zc_i." >
+</div>
+
 The sensor in this case produces One Pulse per Revolution (OPR). Some shaft encoders produce Multiple Pulses per Revolution (MPR). This tutorial considers the OPR case. OPR encoders are more prevalent than their MPR counterparts.
 
 We extract the ToAs from the OPR signal with a trigger criteria, just like we used for the blade ToAs in the previous chapter. The OPR timestamps are often referred to as *zero-crossing* times. This terminology creates the impression they are registered only when the signal crosses 0 V. Though this is often the case, these timestamps can be extracted using any trigger criteria. Each timestamp therefore corresponds to the start of a new shaft revolution.
@@ -88,24 +101,27 @@ We extract the ToAs from the OPR signal with a trigger criteria, just like we us
 
 	Do not confuse zero-crossing times and ToAs:
 
-	1.	__Zero-crossing times__ refer to timestamps captured by the shaft encoder. They are the start of each revolution.
+	1.	__Zero-crossing times__ refer to timestamps captured by the shaft encoder. They are the start of each revolution. I've added the subscript $\mathbf{\textrm{zc}}$ to all zero-crossing times to differentiate them from the ToAs.
 
 	2.	__ToAs__ refer to the timestamps captured by the proximity probes in the casing. They are the times the blades passed the probes.
 
 After processing the shaft encoder's analogue waveform, we have a vector of zero-crossing times. The shaft speed between them can be calculated from [Equation 1](#equation_01) below.
 
 \begin{equation}
-\Omega_n = \frac{2 \pi}{zc_{n+1} - zc_{n}}
+\Omega_n = \frac{2 \pi}{t_{\textrm{zc}_{n+1}} - t_{\textrm{zc}_{n}}}
 \end{equation}
 
 <span id="equation_01"></span>
+
+<div class='review' data-author='Mirosław Witoś' data-innerhtml="<p>Formula (1) describes the average shaft speed, with a sampling rate of 1x per revolution. The use of this speed is justified only if there is no skewness or misalignment of the shaft. Otherwise, the determined AoA(TOA) will contain additional error.</p>" >
+</div>
 
 ??? info "Symbols"
 	| Symbol | Description |
 	| :---: | :--- |
 	| $\Omega_n$ | Shaft speed in the $n$th revolution |
 	| $n$ | The revolution number |
-	| $zc_{n}$ | The $n$th zero-crossing time |
+	| $t_{\textrm{zc}_{n}}$ | The $n$th zero-crossing time |
 
 
 An example of the shaft speed calculated from [Equation 1](#equation_01) is presented in [Figure 3](#figure_03) below.
@@ -159,7 +175,7 @@ The shaft's circumferential position when the ToA is registered is referred to a
 We use [Equation 2](#equation_02) below to calculate the AoA.
 
 \begin{equation}
-\textrm{AoA} (\textrm{ToA}) = \Omega_n \times (\textrm{ToA} - zc_{n})
+\textrm{AoA} (\textrm{ToA}) = \Omega_n \times (\textrm{ToA} - t_{\textrm{zc}_{n}})
 \end{equation}
 
 <span id="equation_02"></span>
@@ -171,7 +187,7 @@ We use [Equation 2](#equation_02) below to calculate the AoA.
 	| $n$ | The revolution number in which the ToA occurs |
 	| $\textrm{ToA}$ | The ToA. It must occur within revolution $n$  |
 	| $\Omega_n$ | The shaft speed in the $n$th revolution |
-	| $zc_{n}$ | The zero-crossing time at the start of the $n$th revolution |
+	| $t_{\text{zc}_{n}}$ | The zero-crossing time at the start of the $n$th revolution |
 
 Our algorithm must perform two cardinal tasks to calculate AoAs from ToAs:
 
@@ -208,7 +224,7 @@ Let's consider a simple example. We have measured 6 ToAs and 3 zero-crossing tim
 
 ``` python
 ToAs = [0.3,0.5,0.7,1.3,1.5,1.7]
-zc_times = [0.0, 1.0, 2.0]
+t_zc_times = [0.0, 1.0, 2.0]
 ```
 
 We place the ToAs and the zero-crossing times on a horizontal axis. This makes it simpler to visualize.
@@ -223,15 +239,15 @@ The clickable tabs below present the calculations for each ToA.
                               | 
                               ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 0
-    zc_start           = 0.0
-    zc_end             = 1.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.3 - 0.0) = 0.6 π
+    t_zc_start         = 0.0
+    t_zc_end           = 1.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (0.3 - 0.0) = 0.6 π
     ```
 
     The allocated values after the first ToA is shown below 👇.
@@ -252,15 +268,15 @@ The clickable tabs below present the calculations for each ToA.
                                       | 
                                       ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 0
-    zc_start           = 0.0
-    zc_end             = 1.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.5 - 0.0) = 1.0 π
+    t_zc_start         = 0.0
+    t_zc_end           = 1.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (0.5 - 0.0) = 1.0 π
     ```
 
     The allocated values after the second ToA is shown below 👇.
@@ -281,15 +297,15 @@ The clickable tabs below present the calculations for each ToA.
                                               | 
                                               ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 0
-    zc_start           = 0.0
-    zc_end             = 1.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (0.7 - 0.0) = 1.4 π
+    t_zc_start         = 0.0
+    t_zc_end           = 1.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (0.7 - 0.0) = 1.4 π
     ```
 
     The allocated values after the third ToA is shown below 👇.
@@ -310,15 +326,15 @@ The clickable tabs below present the calculations for each ToA.
                                                              | 
                                                              ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 1
-    zc_start           = 1.0
-    zc_end             = 2.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.3 - 1.0) = 0.6 π
+    t_zc_start         = 1.0
+    t_zc_end           = 2.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (1.3 - 1.0) = 0.6 π
     ```
     
     The allocated values after the fourth ToA is shown below 👇.
@@ -339,15 +355,15 @@ The clickable tabs below present the calculations for each ToA.
                                                                      | 
                                                                      ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 1
-    zc_start           = 1.0
-    zc_end             = 2.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.5 - 1.0) = 1.0 π
+    t_zc_start         = 1.0
+    t_zc_end           = 2.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (1.5 - 1.0) = 1.0 π
     ```
     
     The allocated values after the fifth ToA is shown below 👇.
@@ -369,15 +385,15 @@ The clickable tabs below present the calculations for each ToA.
                                                                              | 
                                                                              ↓ 
                      __|_______________________________|______________________________|__
-	zc_times       = [0.0                             1.0                            2.0]
+	t_zc_times     = [0.0                             1.0                            2.0]
     revolution_no  = [0                               1                              2  ]
     Calculated values:
     
     current_revolution = 1
-    zc_start           = 1.0
-    zc_end             = 2.0
-    Omega              = 2 π / (zc_end - zc_start) = 2 π / 1.0         = 2.0 π
-    AoA                = Omega * (ToA - zc_start)  = 2 π * (1.7 - 1.0) = 1.4 π
+    t_zc_start         = 1.0
+    t_zc_end           = 2.0
+    Omega              = 2 π / (t_zc_end - t_zc_start) = 2 π / 1.0       = 2.0 π
+    AoA                = Omega * (ToA - t_zc_start)  = 2 π * (1.7 - 1.0) = 1.4 π
     ```
     
     The allocated values after the sixth ToA is shown below 👇.
@@ -638,6 +654,9 @@ The first 10 rows of the AoA DataFrame are presented in [Table 1](#table_01) bel
 </figure>
 {{ read_csv('docs/tutorials/intro_to_btt/ch3/AoA_top_10.csv') }}
 
+<div class='review' data-author='Mirosław Witoś' data-innerhtml="<p>Table 1. omits measurement results below 100,136 rpm (a step change from 0 to 100,136 with a further very slow step change in speed), even though the eddy current sensor allows measurement from zero speed. I suggest adding an explanation about the accepted maximum permissible time between pulses.</p></p>" >
+</div>
+
 We note two observations:
 
 *  The first two rows have `n` values of -1. This means the first two ToAs were recorded *before* the first zero-crossing time. We can therefore not calculate the AoAs for these ToAs. You'll find a couple of these values at the end of the DataFrame as well.
@@ -738,6 +757,8 @@ I present coding exercises 👇 to solidify your the concepts covered in this ch
 ## Acknowledgements
 Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.
 
+A special thanks to <a href="https://www.researchgate.net/profile/Miroslaw-Witos-2" target="_blank">Mirosław Witoś</a> for his detailed review of this chapter.
+
 \bibliography
 
 <div style='display:flex'>
@@ -754,13 +775,14 @@ Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_bla
             <strong>Dawie Diamond</strong>
         </p>
         <p>
-		<span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-02-13</span>
+            <span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-02-13</span>
 
-		<span class="md-icon blog-timestamp-span" title="Last update"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>2024-08-25
-		</span>
+            <span class="md-icon blog-timestamp-span" title="Last update"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>2025-02-17
+            </span>
         </p>
     </div>
 </div>
+
 
 ## :material-weight-lifter:{ .checkbox-success } Coding Exercises
 
