@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 import polars as pl
 import pandas as pd
 import numpy as np
@@ -17,6 +17,7 @@ def calculate_ias(
         beta : float = 1E10,
         sigma : float = 0.01,
         M_recalibrate : float = 7.76,
+        alignment_error_threshold_multiplier: Optional[float] = 0.25
     ) -> Union[pl.DataFrame ,pd.DataFrame]:
     """ Calculate the shaft speed and corresponding sections
         of the MPR encoder.
@@ -33,6 +34,10 @@ def calculate_ias(
             Bayesian Geometry Compensation. Defaults to 0.01.
         M_recalibrate (float, optional): The number of revolutions
             after which the encoder should be recalibrated. Defaults to 7.76.
+        alignment_error_threshold_multiplier (float, optional): 
+            The multiplication factor to be multiplied with the absolute of the median of the alignment errors.
+            Sometimes there is a clear issue in the alignment and not all sections in a signal are aligned. Often this is identified by long breaks in the time signal. 
+            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not aligning sections as the error is too high. Defaults to 0.25.
 
     Returns:
         pl.DataFrame | pd.DataFrame: A DataFrame containing the shaft 
@@ -63,7 +68,8 @@ def calculate_ias(
         df_mpr["section_distance"].to_numpy(),
         df_geometry["section_distance"].to_numpy(),
         df_geometry["section_start"].to_numpy(),
-        df_geometry["section_end"].to_numpy()
+        df_geometry["section_end"].to_numpy(),
+        alignment_error_threshold_multiplier
     )
     df_mpr_speed = df_mpr.with_columns(
         [

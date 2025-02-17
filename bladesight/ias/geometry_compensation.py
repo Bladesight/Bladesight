@@ -315,6 +315,7 @@ def perform_alignment_err(
     arr_geometry: np.array,
     arr_geometry_start: np.array,
     arr_geometry_end: np.array,
+    alignment_error_threshold_multiplier: Optional[float] = 0.25
 ) -> np.ndarray:
     """ Get an array of alignment errors between the MPR encoder 
         and the geometry.
@@ -328,6 +329,13 @@ def perform_alignment_err(
             function.
         arr_geometry (np.array): The geometry array. This is the 
             'section_distance' column from the determine_geometry function. 
+        arr_geometry_start (np.array): The start of the geometry array.
+        arr_geometry_end (np.array): The end of the geometry
+        alignment_error_threshold_multiplier (float, optional): 
+            The multiplication factor to be multiplied with the absolute of the median of the alignment errors.
+            Sometimes there is a clear issue in the alignment and not all sections in a signal are aligned. Often this is identified by long breaks in the time signal. 
+            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not aligning sections as the error is too high. Defaults to 0.25.
+        
 
     Returns:
         np.ndarray: The error between the two arrays. Must have
@@ -337,7 +345,7 @@ def perform_alignment_err(
     N = len(arr_geometry)
     for i in np.arange(arr_sections.shape[0] - N):
         arr_errors[i] = np.sum(np.abs(arr_sections[i:i+N] - arr_geometry))
-    arr_err_threshold = np.median(arr_errors) * 0.25
+    arr_err_threshold = np.median(arr_errors) * alignment_error_threshold_multiplier
     arr_is_new_revo = np.zeros_like(arr_sections, dtype=np.int8)
     arr_sections_start = np.ones_like(arr_sections) * -1
     arr_sections_end = np.ones_like(arr_sections) * -1
