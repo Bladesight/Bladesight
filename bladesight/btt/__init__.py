@@ -22,33 +22,42 @@ def get_rotor_blade_AoAs(
     B : int,
     is_mpr : bool = False
 ) -> List[pd.DataFrame]:
-    """This function converts the raw time stamps, both the OPR zero-crossing
-    times and he proximity probe ToAs, and returns a DataFrame for each 
+    """
+    Convert the raw time stamps, both the OPR zero-crossing
+    times and the proximity probe ToAs, and returns a DataFrame for each 
     blade containing the ToA and AoA values for each blade over all the
     proximity probes.
 
-    Args:
-        df_encoder (pd.DataFrame): A DataFrame containing the
-            zero-crossing times and corresponding info. This DataFrame can
-            take on two values: 
+    Parameters
+    ----------
+    df_encoder : pd.DataFrame
+        A DataFrame containing the zero-crossing times and corresponding info. 
+        This DataFrame can take on two values: 
                 1) OPR encoder: The first column of the DataFrame should be
                 the zero-crossing times of the OPR encoder.
                 2) MPR encoder: The DataFrame MUST be the result of the
                 bladesight.ias.calculate_mpr function.
-        prox_probe_toas (List[pd.DataFrame]): A list of DataFrames
-            where each DataFrame contains the ToAs of a single
-            blade from a proximity probe.
-        probe_spacings (List[float]): The relative spacing between
-            the first probe and every other probe. There are one
-            less value in this list than in prox_probe_toas.
-        B (int): The number of blades.
-        is_mpr (bool, optional): A flag to indicate if the encoder is
-            an MPR encoder. Defaults to False.
+    prox_probe_toas : List[Union[pd.DataFrame, pl.DataFrame]]
+        A list of DataFrames where each DataFrame contains the ToAs of a single
+        blade from a proximity probe.
+    probe_spacings : List[float]
+        The relative spacing between the first probe and every other probe. 
+        There is one less value in this list than in prox_probe_toas.
+    B : int
+        Number of blades on the rotor.
+    is_mpr : bool, optional
+        Flag indicating if df_encoder is MPR-based. Default is False.
 
-    Returns:
-        List[pd.DataFrame]: A list of DataFrames where each DataFrame
-            contains the ToAs and AoAs of a single blade over all
-            the proximity probes.
+    Returns
+    -------
+    List[pd.DataFrame]
+        A list of DataFrames where each DataFrame contains the ToAs and AoAs of a single blade over all
+        the proximity probes.
+
+    Raises
+    ------
+    AssertionError
+        If ``df_encoder`` is not a valid MPR DataFrame when ``is_mpr=True``.
     """
     blade_dfs_recombined = []
 
