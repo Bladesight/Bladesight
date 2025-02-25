@@ -15,6 +15,9 @@ dependencies = [
     "tqdm>=4.65.0",
     "typing-extensions>=4.12.2",
     "yaspin>=3.0.1",
+    "pyswarm = ^0.6",
+    "scipy = ^1.12.0",
+
 ]
 authors = [
     { name = "Dawie Diamond", email = "dawie.diamond@bladesight.com" },
