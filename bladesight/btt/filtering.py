@@ -208,6 +208,9 @@ def hankel_denoising(
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
     ] = apply_PCA,
     decomposition_function_args: Optional[Tuple] = None,
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
+    # scaler_preprocessing_dict: Optional[dict] = {'with_mean': True, 'with_std': True},
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
 ) -> np.ndarray:
     """
     Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
@@ -230,8 +233,12 @@ def hankel_denoising(
     """
 
     # Standardising the data before performing PCA or ICA
-    signal_scalar = StandardScaler(with_mean=True, with_std=True)
-    signal = signal_scalar.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+    # signal_scalar = StandardScaler(with_mean=True, with_std=True)
+    # signal = signal_scalar.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+    if scaler_preprocessing_instance is not None:
+        signal = scaler_preprocessing_instance.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+    if scaler_preprocessing_instance is None:
+        signal = signal
 
     signal = np.asarray(signal)  # Ensure the signal is a NumPy array
     N = len(signal)
@@ -241,8 +248,12 @@ def hankel_denoising(
     # print("hankel_matrix.shape:", hankel_matrix.shape)
 
     # Standardize the Hankel matrix
-    scaler = StandardScaler()
-    hankel_standardized = scaler.fit_transform(hankel_matrix)
+    # scaler = StandardScaler()
+    # hankel_standardized = scaler.fit_transform(hankel_matrix)
+    if scaler_hankel_instance is not None:
+        hankel_standardized = scaler_hankel_instance.fit_transform(hankel_matrix)
+    if scaler_hankel_instance is None:
+        hankel_standardized = hankel_matrix
 
     # Apply the decomposition function (PCA or ICA)
     if decomposition_function_args is None:
@@ -257,7 +268,10 @@ def hankel_denoising(
         )
 
     # Inverse transform to original space
-    denoised_hankel = scaler.inverse_transform(reconstructed_hankel)
+    if scaler_hankel_instance is not None:
+        denoised_hankel = scaler_hankel_instance.inverse_transform(reconstructed_hankel)
+    if scaler_hankel_instance is None:
+        denoised_hankel = reconstructed_hankel
 
     # Average anti-diagonals to reconstruct the 1D signal
     denoised_signal = np.array(
@@ -272,8 +286,11 @@ def hankel_denoising(
     lag = np.argmax(cross_correlation) - (len(denoised_signal) - 1)
     denoised_signal_aligned = np.roll(denoised_signal, lag)
 
-    # return denoised_signal
-    denoised_signal_aligned = signal_scalar.inverse_transform(
-        denoised_signal_aligned.reshape(-1, 1)
-    ).reshape(-1)
+    if scaler_preprocessing_instance is not None: 
+        denoised_signal_aligned = scaler_preprocessing_instance.inverse_transform(
+            denoised_signal_aligned.reshape(-1, 1)
+        ).reshape(-1)
+    if scaler_preprocessing_instance is None:
+        denoised_signal_aligned = denoised_signal_aligned.reshape(-1)
+
     return denoised_signal_aligned
