@@ -209,7 +209,6 @@ def hankel_denoising(
     ] = apply_PCA,
     decomposition_function_args: Optional[Tuple] = None,
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
-    # scaler_preprocessing_dict: Optional[dict] = {'with_mean': True, 'with_std': True},
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
 ) -> np.ndarray:
     """
@@ -225,6 +224,12 @@ def hankel_denoising(
         The size of the Hankel matrix, by default 10.
     decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]], optional
         The decomposition function to apply (e.g., apply_PCA or apply_ICA), by default apply_PCA.
+    decomposition_function_args : Optional[Tuple], optional
+        The arguments to pass to the decomposition function, by default None.
+    scaler_preprocessing_instance : Optional[StandardScaler], optional
+        The instance of the StandardScaler to use for preprocessing the signal, by default StandardScaler(with_mean = True, with_std = True).
+    scaler_hankel_instance : Optional[StandardScaler], optional
+        The instance of the StandardScaler to use for preprocessing the Hankel matrix, by default StandardScaler(with_mean = True, with_std = True).
 
     Returns
     -------
