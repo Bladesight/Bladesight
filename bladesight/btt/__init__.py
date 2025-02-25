@@ -39,7 +39,7 @@ def get_rotor_blade_AoAs(
     probe_spacings : List[float],
     B : int,
     is_mpr : bool = False,
-    tramsform_prox_AoAs_to_blade_AoAs_kwargs : Optional[dict] = None
+    tramsform_prox_AoAs_to_blade_AoAs_kwargs : Optional[dict] = {}
 ) -> List[pd.DataFrame]:
     """This function converts the raw time stamps, both the OPR zero-crossing
     times and he proximity probe ToAs, and returns a DataFrame for each 
