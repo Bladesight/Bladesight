@@ -2,7 +2,6 @@ import numpy as np
 from typing import Optional, List, Tuple
 from .probe_spacing_calculator import calculate_condition_number, get_EO, get_PSR, get_arc_length
 
-
 def func_opt(
     theta: np.ndarray, 
     EO_array: np.ndarray,
@@ -44,7 +43,6 @@ def func_opt(
 
     return func_sum
 
-# loss_PSO = []
 def constraints_PSO(
     theta: np.ndarray, 
     # EO_array: Optional[np.ndarray] = EO_array, 
@@ -131,8 +129,6 @@ def objective_function(
     if alpha_EO is None:
         alpha_EO = np.ones(len(EO_array))
 
-
-
     #For equidistant spacing use the below code, otherwise commment it out
     if use_equidistant_spacing_bool == True:
         theta_array = [0]
@@ -146,19 +142,4 @@ def objective_function(
     # cost = func_opt(np.cumsum(theta_array), EO_array=EO_array, alpha_EO=alpha_EO) #Not sure about the cumsum here
 
     # cost_tracker.append(cost)
-    return cost
-
-loss_list_PSO = []
-def save_loss_progress_PSO(theta: np.ndarray,
-    use_equidistant_spacing_bool,
-    EO_array: [np.ndarray],
-    number_of_probes: Optional[int] = 4
-                        #,d_min: Optional[float] = 21, blade_outside_radius: Optional[float] = 440
-                        ): 
-    """
-    This is for saving the loss progress of the PSO algorithm. This can be used to make plots later on the loss landscape
-    """
-    cost = objective_function(theta = theta, use_equidistant_spacing_bool = use_equidistant_spacing_bool, EO_array = EO_array, number_of_probes = number_of_probes)#, d_min = 21, blade_outside_radius = 440)
-    global loss_list_PSO
-    loss_list_PSO.append(cost)
     return cost
