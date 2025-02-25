@@ -1,5 +1,7 @@
 import numpy as np
-from typing import Optional
+from typing import Optional, List, Tuple
+from .probe_spacing_calculator import calculate_condition_number, get_EO, get_PSR, get_arc_length
+
 
 def func_opt(
     theta: np.ndarray, 
@@ -46,7 +48,8 @@ def func_opt(
 def constraints_PSO(
     theta: np.ndarray, 
     # EO_array: Optional[np.ndarray] = EO_array, 
-    number_of_probes: Optional[int] = number_of_probes) -> List[float]:
+    number_of_probes: Optional[int] = 4
+    ) -> List[float]:
     """
     Calculate the constraints for the Particle Swarm Optimization (PSO) algorithm for probe spacing.
 
@@ -146,8 +149,11 @@ def objective_function(
     return cost
 
 loss_list_PSO = []
-def save_loss_progress_PSO(theta: np.ndarray, use_equidistant_spacing_bool, EO_array: Optional[np.ndarray] = EO_array, number_of_probes: Optional[int] = number_of_probes
-                        #    , d_min: Optional[float] = 21, blade_outside_radius: Optional[float] = 440
+def save_loss_progress_PSO(theta: np.ndarray,
+    use_equidistant_spacing_bool,
+    EO_array: [np.ndarray],
+    number_of_probes: Optional[int] = 4
+                        #,d_min: Optional[float] = 21, blade_outside_radius: Optional[float] = 440
                         ): 
     """
     This is for saving the loss progress of the PSO algorithm. This can be used to make plots later on the loss landscape

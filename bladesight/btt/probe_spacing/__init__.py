@@ -5,27 +5,27 @@ Journal of Vibration and Acoustics, vol. 140, no. 6, p. 061003, Dec. 2018, doi: 
 """
 import numpy as np
 import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 from typing import Optional, List, Tuple
-import scipy.optimize as sciopt
+# import scipy.optimize as sciopt
 
 from pyswarm import pso
 
 import numpy as np
-from typing import Optional, Tuple
+from typing import Optional, List, Tuple
 
 from .probe_spacing_calculator import get_EO, get_PSR, get_arc_length
-from .probe_spacing_optimiser import func_opt, constraints_PSO
+from .probe_spacing_optimiser import func_opt, constraints_PSO, objective_function
 
 def perform_PSO(
     use_equidistant_spacing_bool: bool,
     EO_array: np.ndarray,
-    number_of_probes: Optional[int],
-    lower_bound: np.ndarray,
-    upper_bound: np.ndarray,
-    num_particles: int,
-    num_iterations: int
+    number_of_probes: Optional[int] = 4,
+    lower_bound: Optional[np.ndarray] = None,
+    upper_bound: Optional[np.ndarray] = None,
+    num_particles: Optional[int] = 5000,
+    num_iterations: Optional[int] = 30,
 ) -> Tuple[np.ndarray, float]:
     """
     Perform Particle Swarm Optimization (PSO) to find the optimal probe spacing.
