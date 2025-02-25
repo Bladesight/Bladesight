@@ -10,8 +10,8 @@ from pyswarm import pso
 from typing import Optional, List, Tuple
 import plotly.graph_objects as go
 
-from .probe_spacing_calculator import get_EO, get_PSR, get_arc_length
-from .probe_spacing_optimiser import func_opt, constraints_PSO, objective_function#, save_loss_progress_PSO
+from .base_functions import get_EO, get_PSR, get_arc_length
+from .optimiser import func_opt, constraints_PSO, objective_function#, save_loss_progress_PSO
 
 loss_list_PSO = [] # Need this global variable to store the loss values during PSO iterations
 def save_loss_progress_PSO(

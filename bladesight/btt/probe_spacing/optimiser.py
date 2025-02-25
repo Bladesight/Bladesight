@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Optional, List, Tuple
-from .probe_spacing_calculator import calculate_condition_number, get_EO, get_PSR, get_arc_length
+from .base_functions import calculate_condition_number, get_EO, get_PSR, get_arc_length
 
 def func_opt(
     theta: np.ndarray, 
@@ -45,25 +45,41 @@ def func_opt(
 
 def constraints_PSO(
     theta: np.ndarray, 
-    # EO_array: Optional[np.ndarray] = EO_array, 
     number_of_probes: Optional[int] = 4
     ) -> List[float]:
     """
-    Calculate the constraints for the Particle Swarm Optimization (PSO) algorithm for probe spacing.
+    Calculate the constraints for the Particle Swarm Optimization (PSO) 
+    algorithm when determining probe spacing.
 
-    Parameters:
-    - theta: Array of circumferential probe positions in radians.
-    - number_of_probes: The total number of probes.
+    Parameters
+    ----------
+    theta : np.ndarray
+        Array of circumferential probe positions in radians. The array should 
+        have a size at least equal to ``number_of_probes``.
+    number_of_probes : int, optional
+        The total number of probes. Default is 4.
 
-    Returns:
-    - constraints_list: A list of constraints for the PSO algorithm.    
+    Returns
+    -------
+    list of float
+        A list of constraints derived from the differences between certain 
+        probe positions. In its current implementation, it collects the 
+        differences between theta[i] and theta[1] for i starting at 2.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> theta_example = np.array([0.0, 0.2, 0.5, 0.7])
+    >>> constraints = constraints_PSO(theta_example, number_of_probes=4)
+    >>> print(constraints)
+    [0.3, 0.5]
     """
 
     constraints_list = []
     for i in range(2, number_of_probes):
         constraints_list.append(theta[i] - theta[1])# - theta[0])
 
-    # #PSR constraints
+    # #PSR constraints --- this would be nice to include in the future, code is left here to show a possible starting point
     # PSR = get_PSR(EO_array, (np.sum(theta) - theta[0]))
     # constraints_list.append((1 - np.max(PSR))) #adding PSR constraint PSR < 100
     # constraints_list.append(-0.30 + np.min(PSR)) #adding PSR constraint PSR > 30
@@ -134,12 +150,9 @@ def objective_function(
         theta_array = [0]
         for i in range(number_of_probes-1):
             theta_array.append(theta[0])
-        # print("theta_array = ", theta_array)
         cost = func_opt(np.cumsum(theta_array), EO_array=EO_array, alpha_EO=alpha_EO) #Not sure about the cumsum here
 
     if use_equidistant_spacing_bool == False:
         cost = func_opt(np.cumsum(theta), EO_array=EO_array, alpha_EO=alpha_EO) #Not sure about the cumsum here
-    # cost = func_opt(np.cumsum(theta_array), EO_array=EO_array, alpha_EO=alpha_EO) #Not sure about the cumsum here
 
-    # cost_tracker.append(cost)
     return cost
