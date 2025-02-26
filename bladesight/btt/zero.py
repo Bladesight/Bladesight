@@ -93,3 +93,161 @@ def get_blade_tip_deflections_from_AoAs(
     df["pk-pk"] = x_matrix.max(axis=1) - x_matrix.min(axis=1) # If a filter function is supplied, the pk-pk values will be calculated from the filtered deflections
 
     return df
+
+
+def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
+    df_rotor_blade_AoAs: pd.DataFrame,
+    blade_radius: float,
+    poly_order: int = 11,
+    filter_function: Optional[Callable] = None,
+    filter_kwargs: Optional[dict] = None,
+    apply_filter_to_all_columns_at_once: bool = False,
+    verbose: Optional[bool] = False,
+) -> pd.DataFrame:
+    """
+    Detrends blade tip deflections from AoA data, then optionally applies a filter.
+    The filter can operate in one of two modes:
+
+    1. Single-Column Mode:
+        The filter function is applied separately to each deflection column.
+        (e.g., a simple lowpass filter that doesn't require other columns)
+
+    2. Multi-Column Mode:
+        The filter function is called once with a 2D array of shape
+        (n_samples, n_deflection_columns). This is useful for multi-signal
+        methods like 'hankel_denoising' or PCA-based filters that jointly
+        consider all columns.
+
+    Parameters
+    ----------
+    df_rotor_blade_AoAs : pd.DataFrame
+        Contains AoAs of each probe, typically with columns named 'AoA_pN'.
+    blade_radius : float
+        Radius of the blade (e.g., in microns).
+    poly_order : int, optional
+        Polynomial order for detrending, by default 11.
+    filter_function : Optional[Callable], optional
+        A user-provided function to filter the deflections. If None, no filter is applied.
+        - For single-column mode, the function should accept a 1D NumPy array and return a 1D array.
+        - For multi-column mode, it should accept a 2D NumPy array of shape
+            (n_samples, n_columns) and return a 2D array of the same shape.
+    filter_kwargs : Optional[dict], optional
+        Named arguments passed to the filter function.
+    apply_filter_to_all_columns_at_once : bool, default=False
+        If False, each deflection column is passed to 'filter_function' separately.
+        If True, all deflection columns are stacked into a 2D array and passed at once.
+    verbose : bool, default=False
+        Prints extra info if True.
+
+    Returns
+    -------
+    pd.DataFrame
+        A copy of the input with added columns:
+        - AoA_pN_norm: AoA columns shifted by mean
+        - x_pN: tip deflection signals (detrended)
+        - x_pN_filt: filtered signals (if 'filter_function' is provided)
+        - pk-pk: peak-to-peak deflection across columns (filtered if available)
+
+    Example
+    -------
+    # 1) Column-by-column filter usage:
+    def example_filter(signal_1d, window_size=5):
+        return scisig.medfilt(signal_1d, kernel_size=window_size)
+
+    df_filtered = get_blade_tip_deflections_from_AoAs(
+        df_rotor_blade_AoAs,
+        blade_radius=100.0,
+        filter_function=example_filter,
+        filter_kwargs={'window_size': 7},
+        apply_filter_to_all_columns_at_once=False
+    )
+
+    # 2) Multi-column filtering usage (e.g., PCA or hankel_denoising):
+    def example_multi_signal_filter(matrix_2d, n_components=1):
+        # matrix_2d: shape (n_samples, n_columns)
+        # return shape must match input
+        # ...
+        return matrix_2d  # placeholder for demonstration
+
+    df_filtered_multi = get_blade_tip_deflections_from_AoAs(
+        df_rotor_blade_AoAs,
+        blade_radius=100.0,
+        filter_function=example_multi_signal_filter,
+        filter_kwargs={'n_components': 1},
+        apply_filter_to_all_columns_at_once=True
+    )
+    """
+
+    if filter_kwargs is None:
+        filter_kwargs = {}
+
+    df = df_rotor_blade_AoAs.copy(deep=True)
+    all_aoa_columns = [col for col in df.columns if col.startswith("AoA_p")]
+    if verbose:
+        print(f"Detected AoA columns: {all_aoa_columns}")
+
+    # 1) Normalize and detrend each AoA column -> storing results in x_pN
+    deflection_cols = []
+    for col in all_aoa_columns:
+        # Shift by mean
+        norm_col = col + "_norm"
+        df[norm_col] = df[col].mean() - df[col]
+
+        # Scale to tip deflection
+        deflection_col_name = col.replace("AoA", "x")
+        df[deflection_col_name] = blade_radius * df[norm_col]
+
+        # Polynomial detrend
+        poly = np.polyfit(df["Omega"], df[deflection_col_name], poly_order)
+        df[deflection_col_name] -= np.polyval(poly, df["Omega"])
+        deflection_cols.append(deflection_col_name)
+
+    # 2) Apply filter if provided
+    # print(f"{apply_filter_to_all_columns_at_once=}")
+    if filter_function is not None:
+        if apply_filter_to_all_columns_at_once == False:
+            # ---- Single-Column Mode ----
+            # Filter each column separately
+            for col in deflection_cols:
+                filtered_data = filter_function(df[col].values, **filter_kwargs)
+                df[col + "_filt"] = filtered_data
+            # Use newly filtered columns for peak-to-peak
+            x_matrix = df[[col + "_filt" for col in deflection_cols]].to_numpy()
+
+        if apply_filter_to_all_columns_at_once == True:
+            # ---- Multi-Column Mode ----
+            # Stack columns => shape (n_rows, n_cols)
+            unfiltered_matrix = df[deflection_cols].to_numpy().reshape(len(deflection_cols), -1)
+            # print("unfiltered_matrix.shape", unfiltered_matrix.shape)
+            # filtered_matrix = filter_function(unfiltered_matrix, **filter_kwargs)
+            # if filtered_matrix.shape != unfiltered_matrix.shape:
+            #     raise ValueError("Filter did not return a matrix matching input shape.")
+
+            # Store each filtered column
+            for i, col in enumerate(deflection_cols):
+                filter_kwargs["target_signal_index"] = i
+                filtered_signal = filter_function(unfiltered_matrix, **filter_kwargs)
+                # df[col + "_filt"] = filtered_matrix[:, i]
+                df[col + "_filt"] = filtered_signal
+                # df[col + "_filt"] = filter_function(unfiltered_matrix, **filter_kwargs)
+
+            # Use newly filtered columns for peak-to-peak
+            x_matrix = df[[col + "_filt" for col in deflection_cols]].to_numpy()
+    else:
+        # No filter, use unfiltered columns for peak-to-peak
+        x_matrix = df[deflection_cols].to_numpy()
+
+    # 3) Compute peak-to-peak
+    # Each row => measure range across columns
+    df["pk-pk"] = x_matrix.max(axis=1) - x_matrix.min(axis=1)
+
+    if verbose:
+        filter_mode = "all columns at once" if apply_filter_to_all_columns_at_once else "each column separately"
+        print(f"Filtering mode: {filter_mode}")
+        if filter_function is not None:
+            print("Filtering was applied.")
+        else:
+            print("No filtering was applied.")
+        print(f"Final columns in df: {list(df.columns)}")
+
+    return df
