@@ -631,37 +631,103 @@ def hankel_denoising_robust(
     handle_nans: str = 'impute'  # Options: 'impute', 'drop', 'zero'
 ) -> np.ndarray:
     """
-    Robust version of hankel_denoising better suited for running in an optimiser where all sorts of solutions are generated.
-    
-    Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
-    
+    A robust implementation of Hankel matrix-based signal denoising with extensive
+    error handling, designed for optimization environments.
+
+    This function extends the standard hankel_denoising approach with comprehensive
+    error handling for NaN values, signal length issues, decomposition failures, and
+    other numerical instabilities that commonly occur when used within optimization 
+    routines.
+
     Parameters
     ----------
     signal : np.ndarray
-        The input signal to be denoised.
+        The input signal to be denoised. Can contain NaN/Inf values which will be
+        handled according to the `handle_nans` parameter.
     n_components : int, optional
-        The number of components to keep, by default 1.
+        The number of components to keep after decomposition. If the value exceeds
+        the maximum possible components (based on matrix dimensions), it will be
+        automatically reduced. Default is 1.
     hankel_size : int, optional
-        The size of the Hankel matrix, by default 10.
-    decomposition_function : Callable, optional
-        The decomposition function to apply (e.g., PCA or ICA).
-    decomposition_function_args : Optional[dict], optional
-        The arguments to pass to the decomposition function, by default None.
-    scaler_preprocessing_instance : Optional[StandardScaler], optional
-        The instance of the StandardScaler to use for preprocessing the signal.
-    scaler_hankel_instance : Optional[StandardScaler], optional
-        The instance of the StandardScaler to use for preprocessing the Hankel matrix.
-    pre_filter_function : Optional[Callable], optional
-        Function to pre-filter the signal before any other processing.
-    pre_filter_args : Optional[dict], optional
-        Arguments to pass to the pre_filter_function, by default None.
+        The number of rows in the Hankel matrix. If the signal is too short for
+        the specified size, it will be automatically reduced. Default is 10.
+    decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]], optional
+        Function that performs matrix decomposition, such as `apply_PCA` or `apply_ICA`.
+        Should take a matrix and number of components as input and return a tuple of
+        (components, reconstructed_matrix, additional_info).
+        If None is provided or if the function fails, a fallback SVD approach is used.
+    decomposition_function_args : dict, optional
+        Additional arguments to pass to the decomposition function. Default is None.
+    scaler_preprocessing_instance : StandardScaler, optional
+        StandardScaler instance for preprocessing the input signal before creating 
+        the Hankel matrix. Default is a StandardScaler with mean centering and scaling.
+        Set to None to skip preprocessing.
+    scaler_hankel_instance : StandardScaler, optional
+        StandardScaler instance for preprocessing the Hankel matrix before decomposition.
+        Default is a StandardScaler with mean centering and scaling.
+        Set to None to skip Hankel matrix preprocessing.
+    pre_filter_function : Callable, optional
+        Function to pre-filter the signal before any other processing (e.g., lowpass_filter).
+        Should take the signal as first argument, with additional parameters specified via
+        pre_filter_args. Default is None (no pre-filtering).
+    pre_filter_args : dict, optional
+        Arguments to pass to pre_filter_function. Default is None.
     handle_nans : str, optional
-        Strategy for handling NaN values: 'impute', 'drop', or 'zero', by default 'impute'.
-    
+        Strategy for handling NaN/Inf values in the input signal:
+        - 'impute': Replace with mean of valid values (or 0 if all invalid)
+        - 'drop': Remove NaN/Inf values (if too many are removed, falls back to imputation)
+        - 'zero': Replace all NaN/Inf values with zeros
+        Default is 'impute'.
+
     Returns
     -------
     np.ndarray
-        The denoised signal.
+        The denoised signal, with same length as the input signal. If processing
+        completely fails, returns the original signal.
+
+    Notes
+    -----
+    This function implements several robustness measures:
+    1. Automatic adjustment of hankel_size if the signal is too short
+    2. Multiple strategies for handling NaN/Inf values
+    3. Fallback mechanisms if decomposition fails
+    4. Signal alignment via cross-correlation
+    5. Length matching between input and output signals
+    6. Numerical stability checks and noise addition if needed
+    7. Comprehensive error handling throughout the processing pipeline
+
+    The implementation prioritizes returning a valid result over raising exceptions,
+    making it suitable for optimization contexts where arbitrary parameter values
+    might be explored.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scipy.signal import butter, filtfilt
+    >>> from sklearn.preprocessing import StandardScaler
+    >>> 
+    >>> # Create a noisy test signal with some NaN values
+    >>> t = np.linspace(0, 10, 1000)
+    >>> clean_signal = np.sin(t) + 0.5*np.sin(2.5*t)
+    >>> noisy_signal = clean_signal + 0.2*np.random.randn(len(t))
+    >>> noisy_signal[50:55] = np.nan  # Add some NaN values
+    >>> 
+    >>> # Define a pre-filter function
+    >>> def lowpass(signal, cutoff=0.1):
+    ...     b, a = butter(3, cutoff, btype='low')
+    ...     return filtfilt(b, a, signal)
+    >>> 
+    >>> # Apply robust denoising with NaN handling
+    >>> denoised = hankel_denoising_robust(
+    ...     noisy_signal,
+    ...     n_components=2,
+    ...     hankel_size=20,
+    ...     decomposition_function=apply_PCA,
+    ...     pre_filter_function=lowpass,
+    ...     pre_filter_args={'cutoff': 0.1},
+    ...     handle_nans='impute'
+    ... )
+    >>> print(f"Original signal shape: {noisy_signal.shape}, Denoised shape: {denoised.shape}")
     """
     # Ensure the signal is a NumPy array
     signal = np.asarray(signal)
