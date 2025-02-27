@@ -627,7 +627,7 @@ def hankel_denoising_robust(
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     pre_filter_function: Optional[Callable] = None,
-    pre_filter_args: Optional[dict] = None,
+    pre_filter_args: Optional[dict] = {},
     handle_nans: str = 'impute'  # Options: 'impute', 'drop', 'zero'
 ) -> np.ndarray:
     """
@@ -671,7 +671,7 @@ def hankel_denoising_robust(
         Should take the signal as first argument, with additional parameters specified via
         pre_filter_args. Default is None (no pre-filtering).
     pre_filter_args : dict, optional
-        Arguments to pass to pre_filter_function. Default is None.
+        Arguments to pass to pre_filter_function. Default is {}.
     handle_nans : str, optional
         Strategy for handling NaN/Inf values in the input signal:
         - 'impute': Replace with mean of valid values (or 0 if all invalid)
