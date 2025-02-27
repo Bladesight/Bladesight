@@ -1,10 +1,11 @@
 import numpy as np
 import scipy
+import scipy.stats
 from scipy.signal import butter, filtfilt
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.pyplot as plt
 from scipy.linalg import hankel
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, FastICA
 from sklearn.preprocessing import StandardScaler
 
 from typing import List, Optional, Tuple, Callable
@@ -199,11 +200,6 @@ def apply_PCA(
 
     return principal_components, reconstructed_hankel, explained_variance_ratio
 
-from scipy.linalg import hankel
-import scipy.stats
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import FastICA, PCA
-from typing import Callable, Tuple, List
 
 class ICA_ranker:
     """
