@@ -207,9 +207,11 @@ def hankel_denoising(
     decomposition_function: Callable[
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
     ] = apply_PCA,
-    decomposition_function_args: Optional[Tuple] = None,
-    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
-    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean = True, with_std = True),
+    decomposition_function_args: Optional[dict] = None,
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    pre_filter_function: Optional[Callable] = None,
+    pre_filter_args: Optional[dict] = None,
 ) -> np.ndarray:
     """
     Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
@@ -224,58 +226,59 @@ def hankel_denoising(
         The size of the Hankel matrix, by default 10.
     decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]], optional
         The decomposition function to apply (e.g., apply_PCA or apply_ICA), by default apply_PCA.
-    decomposition_function_args : Optional[Tuple], optional
+    decomposition_function_args : Optional[dict], optional
         The arguments to pass to the decomposition function, by default None.
     scaler_preprocessing_instance : Optional[StandardScaler], optional
-        The instance of the StandardScaler to use for preprocessing the signal, by default StandardScaler(with_mean = True, with_std = True).
+        The instance of the StandardScaler to use for preprocessing the signal, by default StandardScaler(with_mean=True, with_std=True).
     scaler_hankel_instance : Optional[StandardScaler], optional
-        The instance of the StandardScaler to use for preprocessing the Hankel matrix, by default StandardScaler(with_mean = True, with_std = True).
+        The instance of the StandardScaler to use for preprocessing the Hankel matrix, by default StandardScaler(with_mean=True, with_std=True).
+    pre_filter_function : Optional[Callable], optional
+        Function to pre-filter the signal before any other processing (e.g., lowpass_filter), by default None.
+    pre_filter_args : Optional[dict], optional
+        Arguments to pass to the pre_filter_function, by default None.
 
     Returns
     -------
     np.ndarray
         The denoised signal.
     """
-
-    # Standardising the data before performing PCA or ICA
-    # signal_scalar = StandardScaler(with_mean=True, with_std=True)
-    # signal = signal_scalar.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+    # Ensure the signal is a NumPy array
+    signal = np.asarray(signal)
+    original_signal = signal.copy()  # Keep original for alignment later
+    
+    # Apply pre-filtering if specified
+    if pre_filter_function is not None:
+        if pre_filter_args is None:
+            pre_filter_args = {}
+        signal = pre_filter_function(signal, **pre_filter_args)
+    
+    # Standardizing the data before performing PCA or ICA
     if scaler_preprocessing_instance is not None:
         signal = scaler_preprocessing_instance.fit_transform(signal.reshape(-1, 1)).reshape(-1)
-    if scaler_preprocessing_instance is None:
-        signal = signal
 
-    signal = np.asarray(signal)  # Ensure the signal is a NumPy array
     N = len(signal)
 
     # Create the Hankel matrix
-    hankel_matrix = hankel(signal[:hankel_size], signal[hankel_size - 1 :])
-    # print("hankel_matrix.shape:", hankel_matrix.shape)
+    hankel_matrix = hankel(signal[:hankel_size], signal[hankel_size - 1:])
 
     # Standardize the Hankel matrix
-    # scaler = StandardScaler()
-    # hankel_standardized = scaler.fit_transform(hankel_matrix)
     if scaler_hankel_instance is not None:
         hankel_standardized = scaler_hankel_instance.fit_transform(hankel_matrix)
-    if scaler_hankel_instance is None:
+    else:
         hankel_standardized = hankel_matrix
 
     # Apply the decomposition function (PCA or ICA)
     if decomposition_function_args is None:
-        _, reconstructed_hankel, _ = decomposition_function(
-            hankel_standardized, n_components
-        )
-    else:
-        _, reconstructed_hankel, _ = decomposition_function(
-            hankel_standardized,
-            n_components=n_components,
-            **decomposition_function_args,
-        )
+        decomposition_function_args = {}
+    
+    _, reconstructed_hankel, _ = decomposition_function(
+        hankel_standardized, n_components, **decomposition_function_args
+    )
 
     # Inverse transform to original space
     if scaler_hankel_instance is not None:
         denoised_hankel = scaler_hankel_instance.inverse_transform(reconstructed_hankel)
-    if scaler_hankel_instance is None:
+    else:
         denoised_hankel = reconstructed_hankel
 
     # Average anti-diagonals to reconstruct the 1D signal
@@ -286,17 +289,17 @@ def hankel_denoising(
         ]
     )
 
-    # Align the reconstructed signal with the original signal
-    cross_correlation = np.correlate(signal, denoised_signal, mode="full")
+    # Align the reconstructed signal with the original signal (before filtering)
+    # This ensures better alignment when pre-filtering might introduce phase shifts
+    cross_correlation = np.correlate(original_signal, denoised_signal, mode="full")
     lag = np.argmax(cross_correlation) - (len(denoised_signal) - 1)
     denoised_signal_aligned = np.roll(denoised_signal, lag)
 
-    if scaler_preprocessing_instance is not None: 
+    # Inverse transform if we used preprocessing scaling
+    if scaler_preprocessing_instance is not None:
         denoised_signal_aligned = scaler_preprocessing_instance.inverse_transform(
             denoised_signal_aligned.reshape(-1, 1)
         ).reshape(-1)
-    if scaler_preprocessing_instance is None:
-        denoised_signal_aligned = denoised_signal_aligned.reshape(-1)
 
     return denoised_signal_aligned
 
