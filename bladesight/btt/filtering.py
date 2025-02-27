@@ -618,6 +618,273 @@ def hankel_denoising(
 
     return denoised_signal_aligned
 
+def hankel_denoising_robust(
+    signal: np.ndarray,
+    n_components: int = 1,
+    hankel_size: int = 10,
+    decomposition_function: Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]] = None,
+    decomposition_function_args: Optional[dict] = None,
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    pre_filter_function: Optional[Callable] = None,
+    pre_filter_args: Optional[dict] = None,
+    handle_nans: str = 'impute'  # Options: 'impute', 'drop', 'zero'
+) -> np.ndarray:
+    """
+    Robust version of hankel_denoising better suited for running in an optimiser where all sorts of solutions are generated.
+    
+    Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
+    
+    Parameters
+    ----------
+    signal : np.ndarray
+        The input signal to be denoised.
+    n_components : int, optional
+        The number of components to keep, by default 1.
+    hankel_size : int, optional
+        The size of the Hankel matrix, by default 10.
+    decomposition_function : Callable, optional
+        The decomposition function to apply (e.g., PCA or ICA).
+    decomposition_function_args : Optional[dict], optional
+        The arguments to pass to the decomposition function, by default None.
+    scaler_preprocessing_instance : Optional[StandardScaler], optional
+        The instance of the StandardScaler to use for preprocessing the signal.
+    scaler_hankel_instance : Optional[StandardScaler], optional
+        The instance of the StandardScaler to use for preprocessing the Hankel matrix.
+    pre_filter_function : Optional[Callable], optional
+        Function to pre-filter the signal before any other processing.
+    pre_filter_args : Optional[dict], optional
+        Arguments to pass to the pre_filter_function, by default None.
+    handle_nans : str, optional
+        Strategy for handling NaN values: 'impute', 'drop', or 'zero', by default 'impute'.
+    
+    Returns
+    -------
+    np.ndarray
+        The denoised signal.
+    """
+    # Ensure the signal is a NumPy array
+    signal = np.asarray(signal)
+    original_signal = signal.copy()  # Keep original for alignment later
+    
+    # ----------- VALIDATIONS AND PREPARATIONS -----------
+    
+    # 1. Validate signal length vs hankel_size
+    min_required_length = hankel_size + 1  # Need at least this many points
+    if len(signal) < min_required_length:
+        print(f"Signal too short ({len(signal)}) for hankel_size {hankel_size}. Reducing hankel_size.")
+        hankel_size = max(2, len(signal) // 2 - 1)
+        print(f"New hankel_size: {hankel_size}")
+    
+    # 2. Handle NaN/Inf values in the input signal
+    nan_mask = np.isnan(signal) | np.isinf(signal)  # Check for both NaN and Inf
+    if np.any(nan_mask):
+        problem_count = np.sum(nan_mask)
+        print(f"Signal contains {problem_count} NaN/Inf values ({problem_count/len(signal)*100:.1f}%)")
+        
+        if handle_nans == 'impute':
+            # Use mean imputation for problematic values
+            valid_values = signal[~nan_mask]
+            if len(valid_values) > 0:
+                fill_value = np.mean(valid_values)
+            else:
+                fill_value = 0.0
+            signal = np.nan_to_num(signal, nan=fill_value, posinf=fill_value, neginf=-fill_value)
+        elif handle_nans == 'zero':
+            signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
+        elif handle_nans == 'drop':
+            valid_indices = ~nan_mask
+            if sum(valid_indices) < min_required_length:
+                print(f"Too few valid values ({sum(valid_indices)}) for hankel_size {hankel_size}.")
+                # Fall back to imputation since we can't drop too many values
+                valid_values = signal[~nan_mask]
+                if len(valid_values) > 0:
+                    fill_value = np.mean(valid_values)
+                else:
+                    fill_value = 0.0
+                signal = np.nan_to_num(signal, nan=fill_value, posinf=fill_value, neginf=-fill_value)
+            else:
+                signal = signal[valid_indices]
+                print(f"Signal length reduced to {len(signal)} after removing NaNs/Infs.")
+                # Adjust hankel_size if needed after dropping values
+                if len(signal) < hankel_size + 1:
+                    hankel_size = max(2, len(signal) // 2 - 1)
+    
+    # 3. Apply pre-filtering if specified
+    if pre_filter_function is not None:
+        if pre_filter_args is None:
+            pre_filter_args = {}
+        try:
+            signal = pre_filter_function(signal, **pre_filter_args)
+            # Check if pre-filter introduced problematic values
+            if np.any(np.isnan(signal)) or np.any(np.isinf(signal)):
+                print("Pre-filtering introduced NaN/Inf values, filling with zeros")
+                signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
+        except Exception as e:
+            print(f"Pre-filtering failed: {str(e)}. Using unfiltered signal.")
+    
+    # 4. Standardize the signal if requested
+    if scaler_preprocessing_instance is not None:
+        try:
+            # Ensure no NaN/Inf values before scaling
+            signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
+            signal = scaler_preprocessing_instance.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+        except Exception as e:
+            print(f"Standardization failed: {str(e)}, using original signal")
+    
+    # ----------- HANKEL MATRIX CREATION -----------
+    
+    # 5. Calculate valid Hankel matrix dimensions
+    N = len(signal)
+    n_cols = N - hankel_size + 1
+    
+    # Double-check that we can actually create a valid Hankel matrix
+    if n_cols <= 0:
+        print(f"Cannot create valid Hankel matrix: signal length {N}, hankel_size {hankel_size}")
+        # Return the best we can do - the input signal
+        return original_signal
+    
+    # Create the Hankel matrix with validated dimensions
+    hankel_matrix = np.zeros((hankel_size, n_cols))
+    for i in range(hankel_size):
+        hankel_matrix[i, :] = signal[i:i+n_cols]
+    
+    # 6. Standardize the Hankel matrix if requested
+    if scaler_hankel_instance is not None:
+        try:
+            # Ensure no NaN/Inf values before scaling
+            hankel_matrix = np.nan_to_num(hankel_matrix, nan=0.0, posinf=0.0, neginf=0.0)
+            hankel_standardized = scaler_hankel_instance.fit_transform(hankel_matrix)
+        except Exception as e:
+            print(f"Hankel standardization failed: {str(e)}, using non-standardized matrix")
+            hankel_standardized = hankel_matrix
+    else:
+        hankel_standardized = hankel_matrix
+    
+    # 7. Validate n_components before decomposition
+    max_possible_components = min(hankel_standardized.shape)
+    if n_components > max_possible_components:
+        print(f"Reducing n_components from {n_components} to {max_possible_components}")
+        n_components = max_possible_components
+    
+    if n_components < 1:
+        n_components = 1
+    
+    # Ensure there are no NaN/Inf values in the standardized matrix
+    if np.any(np.isnan(hankel_standardized)) or np.any(np.isinf(hankel_standardized)):
+        print("NaN or Inf values detected in Hankel matrix, replacing with zeros")
+        hankel_standardized = np.nan_to_num(hankel_standardized, nan=0.0, posinf=0.0, neginf=0.0)
+    
+    # Check if values are too small (numerical stability)
+    if np.abs(hankel_standardized).max() < 1e-10:
+        print("Warning: Very small values in matrix. Adding small noise for stability.")
+        hankel_standardized = hankel_standardized + np.random.normal(0, 1e-10, hankel_standardized.shape)
+    
+    # ----------- DECOMPOSITION AND RECONSTRUCTION -----------
+    
+    # 8. Apply decomposition to clean matrix
+    if decomposition_function_args is None:
+        decomposition_function_args = {}
+    
+    print(f"Hankel matrix shape: {hankel_standardized.shape}, n_components: {n_components}")
+    
+    try:
+        # Attempt to apply the decomposition function
+        _, reconstructed_hankel, _ = decomposition_function(
+            hankel_standardized, n_components, **decomposition_function_args
+        )
+        
+        # Verify the reconstruction worked and has no NaN/Inf values
+        if np.any(np.isnan(reconstructed_hankel)) or np.any(np.isinf(reconstructed_hankel)):
+            print("Decomposition produced NaN/Inf values. Using fallback.")
+            # Simple fallback: just keep the largest singular values/vectors
+            # This is essentially what PCA does but we'll do it manually
+            try:
+                U, s, Vt = np.linalg.svd(hankel_standardized, full_matrices=False)
+                reconstructed_hankel = np.dot(U[:, :n_components], np.dot(np.diag(s[:n_components]), Vt[:n_components, :]))
+            except Exception:
+                # If SVD fails too, just return the original matrix
+                print("SVD fallback failed. Using original matrix.")
+                reconstructed_hankel = hankel_standardized
+    
+    except Exception as e:
+        print(f"Decomposition failed: {str(e)}. Using fallback.")
+        # Simple fallback: use original matrix if decomposition completely fails
+        reconstructed_hankel = hankel_standardized
+    
+    # 9. Inverse transform to original space if needed
+    if scaler_hankel_instance is not None:
+        try:
+            denoised_hankel = scaler_hankel_instance.inverse_transform(reconstructed_hankel)
+        except Exception as e:
+            print(f"Inverse standardization failed: {str(e)}, using non-transformed matrix")
+            denoised_hankel = reconstructed_hankel
+    else:
+        denoised_hankel = reconstructed_hankel
+    
+    # Ensure no NaN/Inf in final Hankel matrix
+    if np.any(np.isnan(denoised_hankel)) or np.any(np.isinf(denoised_hankel)):
+        print("NaN or Inf values in denoised Hankel matrix. Replacing with zeros.")
+        denoised_hankel = np.nan_to_num(denoised_hankel, nan=0.0, posinf=0.0, neginf=0.0)
+    
+    # 10. Reconstruct by averaging anti-diagonals
+    denoised_signal = np.zeros(N)
+    counts = np.zeros(N)
+    
+    # Use explicit averaging of anti-diagonals
+    for i in range(hankel_size):
+        for j in range(n_cols):
+            idx = i + j
+            denoised_signal[idx] += denoised_hankel[i, j]
+            counts[idx] += 1
+    
+    # Avoid division by zero
+    counts[counts == 0] = 1
+    denoised_signal = denoised_signal / counts
+    
+    # 11. Align denoised signal with original signal
+    if len(original_signal) > 0 and len(denoised_signal) > 0:
+        # Make sure both signals have no NaNs for correlation
+        orig_for_corr = np.nan_to_num(original_signal, nan=0.0, posinf=0.0, neginf=0.0)
+        denoised_for_corr = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
+        
+        # Compute cross-correlation for alignment
+        try:
+            cross_correlation = np.correlate(orig_for_corr, denoised_for_corr, mode="full")
+            lag = np.argmax(cross_correlation) - (len(denoised_for_corr) - 1)
+            denoised_signal = np.roll(denoised_signal, lag)
+        except Exception as e:
+            print(f"Signal alignment failed: {str(e)}")
+    
+    # 12. Inverse transform the denoised signal if preprocessing scaling was used
+    if scaler_preprocessing_instance is not None:
+        try:
+            # Ensure no NaN/Inf values before inverse transform
+            clean_denoised = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
+            denoised_signal = scaler_preprocessing_instance.inverse_transform(
+                clean_denoised.reshape(-1, 1)
+            ).reshape(-1)
+        except Exception as e:
+            print(f"Signal inverse transform failed: {str(e)}")
+    
+    # Final check for NaN/Inf values
+    if np.any(np.isnan(denoised_signal)) or np.any(np.isinf(denoised_signal)):
+        print("Final signal contains NaN/Inf values. Replacing with zeros.")
+        denoised_signal = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
+    
+    # 13. Final validation - match length to original signal
+    if len(denoised_signal) != len(original_signal):
+        if len(denoised_signal) < len(original_signal):
+            # Pad with zeros
+            padding = np.zeros(len(original_signal) - len(denoised_signal))
+            denoised_signal = np.concatenate((denoised_signal, padding))
+        else:
+            # Truncate
+            denoised_signal = denoised_signal[:len(original_signal)]
+    
+    return denoised_signal
+
+
 def hankel_denoising_2D(
     signals: np.ndarray,  # shape (n_signals, n_samples)
     n_components: int,
