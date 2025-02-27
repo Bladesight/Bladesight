@@ -199,6 +199,304 @@ def apply_PCA(
 
     return principal_components, reconstructed_hankel, explained_variance_ratio
 
+from scipy.linalg import hankel
+import scipy.stats
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import FastICA, PCA
+from typing import Callable, Tuple, List
+
+class ICA_ranker:
+    """
+    Ranks independent components based on their similarity to the original signal.
+    
+    This class takes independent components, the original signal, and a metric function,
+    then computes scores for each component and ranks them in descending order of importance.
+    
+    Parameters
+    ----------
+    components : np.ndarray
+        The independent components to rank, shape (n_components, n_samples).
+    signal : np.ndarray
+        The original signal or reference for comparison.
+    metric : Callable[[np.ndarray, np.ndarray], float], optional
+        Function that compares two signals and returns a similarity score.
+        Default is innerProduct.
+        
+    Attributes
+    ----------
+    components : np.ndarray
+        The input components.
+    signal : np.ndarray
+        The input signal used for comparison.
+    metric : Callable
+        The metric function used for comparison.
+    sorts : np.ndarray
+        The indices that would sort the components by their scores.
+    scores : np.ndarray
+        The normalized scores (0-100) for each component, sorted in descending order.
+    rankedComponents : np.ndarray
+        The components sorted by their scores in descending order.
+        
+    Notes
+    -----
+    The ranking process:
+    1. Compute metric value between each component and the original signal
+    2. Normalize the absolute metric values to sum to 1
+    3. Convert to percentages (0-100)
+    4. Sort components by their scores in descending order
+        
+    References
+    ----------
+    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
+            Latent Dimensional Identification: Latent Expansion and Latent Condensation",
+            MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
+    ..      Please see the following GitHub for the corresponding code: https://github.com/Greeen16/LS-PIE
+    """
+    @staticmethod
+    def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
+        """
+        Compute inner product between two signals.
+        
+        Parameters
+        ----------
+        x : np.ndarray
+            First signal.
+        y : np.ndarray
+            Second signal.
+            
+        Returns
+        -------
+        float
+            Sum of the dot product between the two signals.
+        """
+        return np.sum(np.dot(y, x))
+    @staticmethod
+    def kurtosis(x: np.ndarray, y: np.ndarray) -> float:
+        """
+        Compute the difference in kurtosis between two signals.
+        
+        Parameters
+        ----------
+        x : np.ndarray
+            First signal.
+        y : np.ndarray
+            Second signal.
+            
+        Returns
+        -------
+        float
+            Sum of the difference in kurtosis between the two signals.
+        """
+        return np.sum(scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y))# + np.sum(np.dot(y, x))
+    
+    def __init__(self, components: np.ndarray, signal: np.ndarray, metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct):
+        self.components = components
+        self.signal = signal
+        self.metric = metric
+
+        # Collect the scores
+        metrics = [metric(signal, component) for component in components]
+        # print("metrics = ", metrics)
+        
+        # Normalize and sort
+        tot = np.sum([abs(met) for met in metrics])
+        Metrics = np.array([abs(met) for met in metrics]) / tot
+        sorts = Metrics.argsort()[::-1]
+        
+        self.sorts = sorts
+        self.scores = Metrics[sorts] * 100
+        self.rankedComponents = np.array(components)[sorts]
+
+class ICA_scaler:
+    """
+    Scales independent components based on their importance to the original signal.
+    
+    This class ranks components using ICA_ranker, then scales each component 
+    by its normalized score.
+    
+    Parameters
+    ----------
+    components : np.ndarray
+        The independent components to scale, shape (n_components, n_samples).
+    signal : np.ndarray
+        The original signal or reference for comparison.
+    metric : Callable[[np.ndarray, np.ndarray], float], optional
+        Function that compares two signals and returns a similarity score.
+        Default is innerProduct.
+        
+    Attributes
+    ----------
+    components : np.ndarray
+        The input components.
+    signal : np.ndarray
+        The input signal used for comparison.
+    metric : Callable
+        The metric function used for comparison.
+    scores : np.ndarray
+        The normalized scores (0-100) for each component, sorted in descending order.
+    scaledComponents : list
+        Components scaled by their scores, where each component is multiplied
+        by its normalized score (score/100).
+        
+    Notes
+    -----
+    The scaling process:
+    1. Rank components using ICA_ranker
+    2. Scale each ranked component by its normalized score (score/100)
+    
+    References
+    ----------
+    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
+            Latent Dimensional Identification: Latent Expansion and Latent Condensation",
+            MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
+    ..      Please see the following GitHub for the corresponding code: https://github.com/Greeen16/LS-PIE
+    """
+    @staticmethod
+    def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
+        """
+        Compute inner product between two signals.
+        
+        Parameters
+        ----------
+        x : np.ndarray
+            First signal.
+        y : np.ndarray
+            Second signal.
+            
+        Returns
+        -------
+        float
+            Sum of the dot product between the two signals.
+        """
+        return np.sum(np.dot(y, x))
+    @staticmethod
+    def kurtosis(x: np.ndarray, y: np.ndarray) -> float:
+        """
+        Compute the difference in kurtosis between two signals.
+        
+        Parameters
+        ----------
+        x : np.ndarray
+            First signal.
+        y : np.ndarray
+            Second signal.
+            
+        Returns
+        -------
+        float
+            Sum of the difference in kurtosis between the two signals.
+        """
+        return np.sum(scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y))# + np.sum(np.dot(y, x))
+        
+    def __init__(self, components: np.ndarray, signal: np.ndarray, metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct):
+        self.components = components
+        self.signal = signal
+        self.metric = metric
+
+        ranking = ICA_ranker(self.components, self.signal, self.metric)
+        self.scores = ranking.scores
+        rankedComps = ranking.rankedComponents
+        self.scaledComponents = [rankedComps[i] * self.scores[i] / 100 for i in range(len(self.scores))]
+        # print("self.scaledComponents:", self.scaledComponents)
+
+def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_components: int = 3, plot_components = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Apply Independent Component Analysis (ICA) to a Hankel matrix and reconstruct it.
+    
+    This function applies FastICA to extract independent components from the Hankel matrix,
+    then ranks and scales these components to reconstruct a denoised version of the matrix.
+    
+    Parameters
+    ----------
+    hankel_matrix : np.ndarray
+        The standardized Hankel matrix of shape (rows, cols).
+    n_components : int
+        The number of independent components to extract from the matrix.
+    n_reconstruction_components : int, optional
+        The number of components to use for reconstruction. Must be ≤ n_components.
+        Default is 3.
+    plot_components : bool, optional
+        Whether to generate a plot showing component scores and cumulative scores.
+        Default is False.
+        
+    Returns
+    -------
+    independent_components : np.ndarray
+        The extracted independent components, shape (n_components, n_samples).
+    reconstructed_hankel : np.ndarray
+        The reconstructed Hankel matrix using the top n_reconstruction_components.
+    mixing_matrix : np.ndarray
+        The mixing matrix from the FastICA algorithm.
+        
+    Notes
+    -----
+    The reconstruction process:
+    1. Apply FastICA to extract independent components
+    2. Rank and scale components by importance using ICA_scaler
+    3. Use the top n_reconstruction_components to reconstruct the Hankel matrix
+    4. The reconstructed matrix is calculated as: 
+        scaled_components.T @ mixing_matrix.T[:n_reconstruction_components, :]
+    
+    References
+    ----------
+    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal
+            Latent Dimensional Identification: Latent Expansion and Latent Condensation",
+            MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
+    ..      Please see the following GitHub for the corresponding code:
+    ..
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from scipy.linalg import hankel
+    >>> # Create a test signal with noise
+    >>> t = np.linspace(0, 10, 1000)
+    >>> signal = np.sin(t) + 0.2 * np.random.randn(len(t))
+    >>> # Create Hankel matrix
+    >>> h_size = 20
+    >>> h_matrix = hankel(signal[:h_size], signal[h_size-1:])
+    >>> # Apply ICA
+    >>> _, reconstructed, _ = apply_ICA(h_matrix, n_components=10, 
+    ...                                n_reconstruction_components=3)
+    >>> print(f"Original shape: {h_matrix.shape}, Reconstructed: {reconstructed.shape}")
+    """
+    ica = FastICA(n_components=n_components, tol = 1E-6)#, whiten=True) # Use whiten=False as i think sklearn is pre-processing the data and that is effecting reconstruction performance 
+    independent_components = ica.fit_transform(hankel_matrix).T
+    # print("independent_components:", independent_components)
+    # print("independent_components.shape:", independent_components.shape)
+    mixing_matrix = ica.mixing_
+    # print("Mixing matrix.shape:", mixing_matrix.shape)
+    
+    # Rank and scale the components
+    scaler_instance = ICA_scaler(independent_components, hankel_matrix)
+    # print("scaler_instance.scaledComponents:", scaler_instance.scaledComponents)
+    # scaled_components = np.array(scaler_instance.scaledComponents[:n_reconstruction_components])  # Us only the specified number of components
+    scaled_components = np.array(scaler_instance.scaledComponents[:n_reconstruction_components])  # Use only the specified number of components
+    # print('scaled_components:', scaled_components)
+    # print('scaled_components:', scaled_components.shape)
+    if plot_components == True:
+        plt.figure()
+        plt.title('ICA Component Scores')
+        # Plot component scores
+        ax1 = plt.gca()
+        line1, = ax1.plot(np.arange(1, n_components + 1, 1), scaler_instance.scores, marker='o', linestyle='-', label=f'Component Scores, sum = {np.round(sum(scaler_instance.scores), 2)}')
+        line2, = ax1.plot(np.arange(1, n_reconstruction_components + 1, 1), scaler_instance.scores[:n_reconstruction_components], marker='.', linestyle='-', label=f'First {n_reconstruction_components} Components, sum = {np.round(sum(scaler_instance.scores[:n_reconstruction_components]), 2)}')
+        ax1.set_xlabel('Component Index')
+        ax1.set_ylabel('Score')
+        # Create a second y-axis for cumulative scores
+        ax2 = ax1.twinx()
+        line3, = ax2.plot(np.arange(1, n_components + 1, 1), np.cumsum(scaler_instance.scores), marker='x', linestyle='--', color='r', label='Cumulative Score')
+        ax2.set_ylabel('Cumulative Score')
+        # Combine legends from both y-axes
+        lines = [line1, line2, line3]
+        labels = [line.get_label() for line in lines]
+        ax1.legend(lines, labels, loc='best')
+        plt.show()
+
+    reconstructed_hankel = np.dot(scaled_components.T, mixing_matrix.T[:n_reconstruction_components, :])
+    # reconstructed_hankel = np.dot(scaled_components, mixing_matrix)#[:n_reconstruction_components, :])
+    
+    return independent_components, reconstructed_hankel, mixing_matrix
 
 def hankel_denoising(
     signal: np.ndarray,
