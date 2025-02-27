@@ -211,7 +211,7 @@ def hankel_denoising(
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     pre_filter_function: Optional[Callable] = None,
-    pre_filter_args: Optional[dict] = None,
+    pre_filter_args: Optional[dict] = {},
 ) -> np.ndarray:
     """
     Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
@@ -234,13 +234,34 @@ def hankel_denoising(
         The instance of the StandardScaler to use for preprocessing the Hankel matrix, by default StandardScaler(with_mean=True, with_std=True).
     pre_filter_function : Optional[Callable], optional
         Function to pre-filter the signal before any other processing (e.g., lowpass_filter), by default None.
-    pre_filter_args : Optional[dict], optional
-        Arguments to pass to the pre_filter_function, by default None.
+    pre_filter_args : Optional[Dict], optional
+        Arguments to pass to the pre_filter_function, by default {}. These arguments should match the parameters expected by the pre_filter_function.
 
     Returns
     -------
     np.ndarray
         The denoised signal.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from sklearn.preprocessing import StandardScaler
+    >>> 
+    >>> def lowpass_filter(signal, Wn, order=5):
+    ...     from scipy.signal import butter, filtfilt
+    ...     b, a = butter(order, Wn, btype='low')
+    ...     return filtfilt(b, a, signal)
+    >>> 
+    >>> signal = np.random.randn(100)
+    >>> denoised_signal = hankel_denoising(
+    ...     signal,
+    ...     n_components=2,
+    ...     hankel_size=10,
+    ...     decomposition_function=apply_PCA,
+    ...     pre_filter_function=lowpass_filter,
+    ...     pre_filter_args={'Wn': 0.1, 'order': 3}
+    ... )
+    >>> print(denoised_signal)
     """
     # Ensure the signal is a NumPy array
     signal = np.asarray(signal)
