@@ -5,7 +5,7 @@ from scipy.signal import butter, filtfilt
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.pyplot as plt
 from scipy.linalg import hankel
-from sklearn.decomposition import PCA, FastICA
+from sklearn.decomposition import PCA, FastICA, KernelPCA
 from sklearn.preprocessing import StandardScaler
 
 from typing import List, Optional, Tuple, Callable
@@ -134,43 +134,88 @@ def gaussian_filter(
     """
     return gaussian_filter1d(deflection_series, sigma=sigma, order=order)
 
-
 def apply_PCA(
-    hankel_matrix: np.ndarray, n_components: int, plot_components=False
+    hankel_matrix: np.ndarray,
+    n_components: int,
+    PCA_kwargs: Optional[dict] = {},
+    kernel: Optional[str] = None,
+    # gamma: float = 1.0,
+    plot_components: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Apply PCA to the Hankel matrix and reconstruct it.
+    Apply either standard PCA or KernelPCA to the Hankel matrix and optionally reconstruct it.
+    If 'kernel' is None, standard PCA is used. Otherwise, KernelPCA is used with the given kernel.
 
     Parameters
     ----------
     hankel_matrix : np.ndarray
-        The standardized Hankel matrix.
+        The matrix to decompose (rows, columns).
     n_components : int
-        The number of principal components to keep.
+        The number of components to keep.
+    PCA_kwargs : Optional[dict], optional
+        Additional arguments to pass to either PCA (or kernel PCA, if a kernel is supplied). Default is an empty dictionary.
+    kernel : Optional[str], optional
+        Kernel type for KernelPCA (e.g., "rbf", "poly", "sigmoid"). If None, standard PCA is used.
+    plot_components : bool, optional
+        If True, plots the component scores and cumulative score.
 
     Returns
     -------
-    Tuple[np.ndarray, np.ndarray, np.ndarray]
-        The principal components, the reconstructed Hankel matrix, and the explained variance ratio.
+    principal_components : np.ndarray
+        The transformed data (component scores).
+    reconstructed_hankel : np.ndarray
+        The inverse-transformed matrix (if available).
+    explained_variance_ratio : np.ndarray
+        Ratio of variances (PCA) or ratio of eigenvalues (KernelPCA).
     """
-    pca = PCA(n_components=n_components)
-    principal_components = pca.fit_transform(hankel_matrix)
-    reconstructed_hankel = pca.inverse_transform(principal_components)
-    explained_variance_ratio = pca.explained_variance_ratio_
-    print(
-        "Variance explained by PCA components:",
-        explained_variance_ratio,
-        "sum:",
-        sum(explained_variance_ratio),
-    )
+    if kernel is None:
+        # Standard PCA path
+        pca_model = PCA(n_components=n_components, **PCA_kwargs)
+        principal_components = pca_model.fit_transform(hankel_matrix)
+        reconstructed_hankel = pca_model.inverse_transform(principal_components)
+        explained_variance_ratio = pca_model.explained_variance_ratio_
 
-    if plot_components == True:
+        print(
+            "Variance explained by PCA components:",
+            explained_variance_ratio,
+            "sum:",
+            sum(explained_variance_ratio),
+        )
+    else:
+        # KernelPCA path
+        kpca = KernelPCA(
+            n_components=n_components,
+            # kernel=kernel,
+            # gamma=gamma,
+            **PCA_kwargs,
+            # fit_inverse_transform=True
+        )
+        principal_components = kpca.fit_transform(hankel_matrix)
+        # Compute ratio of eigenvalues (KernelPCA doesn't have explained_variance_ratio_)
+        lambdas = kpca.lambdas_
+        explained_variance_ratio = lambdas / np.sum(lambdas)
+
+        try:
+            reconstructed_hankel = kpca.inverse_transform(principal_components)
+        except AttributeError:
+            print("inverse_transform not supported for this kernel/config.")
+            reconstructed_hankel = np.zeros_like(hankel_matrix)
+
+        print(
+            f"Variance explained by KernelPCA (kernel={kernel}) components:",
+            explained_variance_ratio,
+            "sum:",
+            sum(explained_variance_ratio),
+        )
+
+    # Optional plotting
+    if plot_components:
         plt.figure()
-        plt.title("PCA Component Scores")
-        # Plot component scores
+        title_str = "PCA Component Scores" if kernel is None else f"KernelPCA ({kernel=}) Component Scores"
+        plt.title(title_str)
         ax1 = plt.gca()
         (line1,) = ax1.plot(
-            np.arange(1, n_components + 1, 1),
+            np.arange(1, n_components + 1),
             explained_variance_ratio,
             marker="o",
             linestyle="-",
@@ -178,10 +223,10 @@ def apply_PCA(
         )
         ax1.set_xlabel("Component Index")
         ax1.set_ylabel("Score")
-        # Create a second y-axis for cumulative scores
+
         ax2 = ax1.twinx()
         (line2,) = ax2.plot(
-            np.arange(1, n_components + 1, 1),
+            np.arange(1, n_components + 1),
             np.cumsum(explained_variance_ratio),
             marker="x",
             linestyle="--",
@@ -189,14 +234,13 @@ def apply_PCA(
             label="Cumulative Score",
         )
         ax2.set_ylabel("Cumulative Score")
-        # Combine legends from both y-axes
+
         lines = [line1, line2]
         labels = [line.get_label() for line in lines]
         ax1.legend(lines, labels, loc="best")
         plt.show()
 
     return principal_components, reconstructed_hankel, explained_variance_ratio
-
 
 class ICA_ranker:
     """
