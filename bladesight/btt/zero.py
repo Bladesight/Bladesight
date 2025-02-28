@@ -7,7 +7,7 @@ from typing import Optional, Callable, Dict
 def get_blade_tip_deflections_from_AoAs(
     df_rotor_blade_AoAs : pd.DataFrame,
     blade_radius : float,
-    poly_order : int = 11,
+    poly_order : Optional[int] = 11,
     filter_function: Optional[Callable] = None,
     filter_kwargs: Optional[dict] = None,
     verbose: Optional[bool] = False,
@@ -98,7 +98,7 @@ def get_blade_tip_deflections_from_AoAs(
 def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
     df_rotor_blade_AoAs: pd.DataFrame,
     blade_radius: float,
-    poly_order: int = 11,
+    poly_order: Optional[int] = 11,
     filter_function: Optional[Callable] = None,
     filter_kwargs: Optional[dict] = None,
     apply_filter_to_all_columns_at_once: bool = False,
