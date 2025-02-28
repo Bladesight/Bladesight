@@ -498,14 +498,14 @@ def hankel_denoising(
     signal: np.ndarray,
     n_components: int,
     hankel_size: int,
-    decomposition_function: Callable[
+    decomposition_function: Optional[Callable[
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
-    ] = apply_PCA,
-    decomposition_function_args: Optional[dict] = None,
+    ]] = apply_PCA,
+    decomposition_function_kwargs: Optional[dict] = None,
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     pre_filter_function: Optional[Callable] = None,
-    pre_filter_args: Optional[dict] = {},
+    pre_filter_kwargs: Optional[dict] = {},
 ) -> np.ndarray:
     """
     Denoise a signal using Hankel matrix and a decomposition method (PCA or ICA).
@@ -514,13 +514,13 @@ def hankel_denoising(
     ----------
     signal : np.ndarray
         The input signal to be denoised.
-    n_components : int, optional
-        The number of components to keep, by default 1.
-    hankel_size : int, optional
-        The size of the Hankel matrix, by default 10.
+    n_components : int
+        The number of components to keep.
+    hankel_size : int
+        The size of the Hankel matrix.
     decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]], optional
         The decomposition function to apply (e.g., apply_PCA or apply_ICA), by default apply_PCA.
-    decomposition_function_args : Optional[dict], optional
+    decomposition_function_kwargs : Optional[dict], optional
         The arguments to pass to the decomposition function, by default None.
     scaler_preprocessing_instance : Optional[StandardScaler], optional
         The instance of the StandardScaler to use for preprocessing the signal, by default StandardScaler(with_mean=True, with_std=True).
@@ -528,7 +528,7 @@ def hankel_denoising(
         The instance of the StandardScaler to use for preprocessing the Hankel matrix, by default StandardScaler(with_mean=True, with_std=True).
     pre_filter_function : Optional[Callable], optional
         Function to pre-filter the signal before any other processing (e.g., lowpass_filter), by default None.
-    pre_filter_args : Optional[Dict], optional
+    pre_filter_kwargs : Optional[Dict], optional
         Arguments to pass to the pre_filter_function, by default {}. These arguments should match the parameters expected by the pre_filter_function.
 
     Returns
@@ -553,7 +553,7 @@ def hankel_denoising(
     ...     hankel_size=10,
     ...     decomposition_function=apply_PCA,
     ...     pre_filter_function=lowpass_filter,
-    ...     pre_filter_args={'Wn': 0.1, 'order': 3}
+    ...     pre_filter_kwargs={'Wn': 0.1, 'order': 3}
     ... )
     >>> print(denoised_signal)
     """
@@ -563,9 +563,9 @@ def hankel_denoising(
     
     # Apply pre-filtering if specified
     if pre_filter_function is not None:
-        if pre_filter_args is None:
-            pre_filter_args = {}
-        signal = pre_filter_function(signal, **pre_filter_args)
+        if pre_filter_kwargs is None:
+            pre_filter_kwargs = {}
+        signal = pre_filter_function(signal, **pre_filter_kwargs)
     
     # Standardizing the data before performing PCA or ICA
     if scaler_preprocessing_instance is not None:
@@ -583,11 +583,11 @@ def hankel_denoising(
         hankel_standardized = hankel_matrix
 
     # Apply the decomposition function (PCA or ICA)
-    if decomposition_function_args is None:
-        decomposition_function_args = {}
+    if decomposition_function_kwargs is None:
+        decomposition_function_kwargs = {}
     
     _, reconstructed_hankel, _ = decomposition_function(
-        hankel_standardized, n_components, **decomposition_function_args
+        hankel_standardized, n_components, **decomposition_function_kwargs
     )
 
     # Inverse transform to original space
@@ -620,14 +620,14 @@ def hankel_denoising(
 
 def hankel_denoising_robust(
     signal: np.ndarray,
-    n_components: int = 1,
-    hankel_size: int = 10,
-    decomposition_function: Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]] = None,
-    decomposition_function_args: Optional[dict] = None,
+    n_components: int,
+    hankel_size: int,
+    decomposition_function: Optional[Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]]] = apply_PCA,
+    decomposition_function_kwargs: Optional[dict] = None,
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     pre_filter_function: Optional[Callable] = None,
-    pre_filter_args: Optional[dict] = {},
+    pre_filter_kwargs: Optional[dict] = {},
     handle_nans: str = 'impute'  # Options: 'impute', 'drop', 'zero'
 ) -> np.ndarray:
     """
@@ -644,19 +644,19 @@ def hankel_denoising_robust(
     signal : np.ndarray
         The input signal to be denoised. Can contain NaN/Inf values which will be
         handled according to the `handle_nans` parameter.
-    n_components : int, optional
-        The number of components to keep after decomposition. If the value exceeds
+    n_components : int
+        The number of components supplied to the decomposition function. If the value exceeds
         the maximum possible components (based on matrix dimensions), it will be
-        automatically reduced. Default is 1.
-    hankel_size : int, optional
+        automatically reduced.
+    hankel_size : int
         The number of rows in the Hankel matrix. If the signal is too short for
-        the specified size, it will be automatically reduced. Default is 10.
+        the specified size, it will be automatically reduced.
     decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]], optional
         Function that performs matrix decomposition, such as `apply_PCA` or `apply_ICA`.
         Should take a matrix and number of components as input and return a tuple of
-        (components, reconstructed_matrix, additional_info).
+        (components, reconstructed_matrix, additional_info). Defaults to apply_PCA.
         If None is provided or if the function fails, a fallback SVD approach is used.
-    decomposition_function_args : dict, optional
+    decomposition_function_kwargs : dict, optional
         Additional arguments to pass to the decomposition function. Default is None.
     scaler_preprocessing_instance : StandardScaler, optional
         StandardScaler instance for preprocessing the input signal before creating 
@@ -669,8 +669,8 @@ def hankel_denoising_robust(
     pre_filter_function : Callable, optional
         Function to pre-filter the signal before any other processing (e.g., lowpass_filter).
         Should take the signal as first argument, with additional parameters specified via
-        pre_filter_args. Default is None (no pre-filtering).
-    pre_filter_args : dict, optional
+        pre_filter_kwargs. Default is None (no pre-filtering).
+    pre_filter_kwargs : dict, optional
         Arguments to pass to pre_filter_function. Default is {}.
     handle_nans : str, optional
         Strategy for handling NaN/Inf values in the input signal:
@@ -724,7 +724,7 @@ def hankel_denoising_robust(
     ...     hankel_size=20,
     ...     decomposition_function=apply_PCA,
     ...     pre_filter_function=lowpass,
-    ...     pre_filter_args={'cutoff': 0.1},
+    ...     pre_filter_kwargs={'cutoff': 0.1},
     ...     handle_nans='impute'
     ... )
     >>> print(f"Original signal shape: {noisy_signal.shape}, Denoised shape: {denoised.shape}")
@@ -778,10 +778,10 @@ def hankel_denoising_robust(
     
     # 3. Apply pre-filtering if specified
     if pre_filter_function is not None:
-        if pre_filter_args is None:
-            pre_filter_args = {}
+        if pre_filter_kwargs is None:
+            pre_filter_kwargs = {}
         try:
-            signal = pre_filter_function(signal, **pre_filter_args)
+            signal = pre_filter_function(signal, **pre_filter_kwargs)
             # Check if pre-filter introduced problematic values
             if np.any(np.isnan(signal)) or np.any(np.isinf(signal)):
                 print("Pre-filtering introduced NaN/Inf values, filling with zeros")
@@ -849,15 +849,15 @@ def hankel_denoising_robust(
     # ----------- DECOMPOSITION AND RECONSTRUCTION -----------
     
     # 8. Apply decomposition to clean matrix
-    if decomposition_function_args is None:
-        decomposition_function_args = {}
+    if decomposition_function_kwargs is None:
+        decomposition_function_kwargs = {}
     
     print(f"Hankel matrix shape: {hankel_standardized.shape}, n_components: {n_components}")
     
     try:
         # Attempt to apply the decomposition function
         _, reconstructed_hankel, _ = decomposition_function(
-            hankel_standardized, n_components, **decomposition_function_args
+            hankel_standardized, n_components, **decomposition_function_kwargs
         )
         
         # Verify the reconstruction worked and has no NaN/Inf values
@@ -958,7 +958,7 @@ def hankel_denoising_2D(
     decomposition_function: Callable[
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
     ],  # e.g., apply_PCA
-    decomposition_function_args: Optional[dict] = None,
+    decomposition_function_kwargs: Optional[dict] = None,
     scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
     target_signal_index: int = 0,
@@ -973,13 +973,13 @@ def hankel_denoising_2D(
     signals : np.ndarray
         A 2D array of shape (n_signals, n_samples), where each row is one signal.
     n_components : int, optional
-        The number of components to keep, by default 1.
+        The number of components for the decomposition function to use.
     hankel_size : int, optional
-        The size of the Hankel matrix, by default 10.
+        The size of the Hankel matrix.
     decomposition_function : Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]]
         A decomposition function (e.g., PCA or ICA) that takes a 2D array and returns
         (principal_components, reconstructed, explained_variance_ratio).
-    decomposition_function_args : Optional[dict], optional
+    decomposition_function_kwargs : Optional[dict], optional
         Arguments to pass to the decomposition function, by default None.
     scaler_preprocessing_instance : Optional[StandardScaler], optional
         StandardScaler for preprocessing each signal before Hankel transform, by default StandardScaler().
@@ -1041,11 +1041,11 @@ def hankel_denoising_2D(
     if scaler_hankel_instance is not None:
         stacked_hankel = scaler_hankel_instance.fit_transform(stacked_hankel)
 
-    if decomposition_function_args is None:
-        decomposition_function_args = {}
+    if decomposition_function_kwargs is None:
+        decomposition_function_kwargs = {}
 
     _, reconstructed, _ = decomposition_function(
-        stacked_hankel, n_components, **decomposition_function_args
+        stacked_hankel, n_components, **decomposition_function_kwargs
     )
 
     # Inverse transform the Hankel if it was scaled
