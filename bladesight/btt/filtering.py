@@ -496,8 +496,8 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
 
 def hankel_denoising(
     signal: np.ndarray,
-    n_components: int = 1,
-    hankel_size: int = 10,
+    n_components: int,
+    hankel_size: int,
     decomposition_function: Callable[
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
     ] = apply_PCA,
