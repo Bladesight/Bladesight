@@ -135,9 +135,6 @@ def gaussian_filter(
     return gaussian_filter1d(deflection_series, sigma=sigma, order=order)
 
 
-# Still add hankel-ICA and hankel-PCA filter, just need to sort out references for Jesse Stevens' functions and code
-
-
 def apply_PCA(
     hankel_matrix: np.ndarray, n_components: int, plot_components=False
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -246,7 +243,7 @@ class ICA_ranker:
     .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
             Latent Dimensional Identification: Latent Expansion and Latent Condensation",
             MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
-    ..      Please see the following GitHub for the corresponding code: https://github.com/Greeen16/LS-PIE
+    ..      Please see the following GitHub repository for the corresponding code: https://github.com/Greeen16/LS-PIE
     """
     @staticmethod
     def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
@@ -345,7 +342,7 @@ class ICA_scaler:
     .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
             Latent Dimensional Identification: Latent Expansion and Latent Condensation",
             MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
-    ..      Please see the following GitHub for the corresponding code: https://github.com/Greeen16/LS-PIE
+    ..      Please see the following GitHub repository for the corresponding code: https://github.com/Greeen16/LS-PIE
     """
     @staticmethod
     def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
@@ -438,7 +435,7 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
     .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal
             Latent Dimensional Identification: Latent Expansion and Latent Condensation",
             MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
-    ..      Please see the following GitHub for the corresponding code:
+    ..      Please see the following GitHub repository for the corresponding code:
     ..
 
     Examples
