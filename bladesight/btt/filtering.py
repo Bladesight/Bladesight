@@ -185,7 +185,7 @@ def apply_PCA(
         # KernelPCA path
         kpca = KernelPCA(
             n_components=n_components,
-            # kernel=kernel,
+            kernel=kernel,
             # gamma=gamma,
             **PCA_kwargs,
             # fit_inverse_transform=True
