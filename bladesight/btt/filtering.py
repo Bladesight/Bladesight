@@ -5,7 +5,7 @@ from scipy.signal import butter, filtfilt
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.pyplot as plt
 from scipy.linalg import hankel
-from sklearn.decomposition import PCA, FastICA, KernelPCA
+from sklearn.decomposition import PCA, FastICA, KernelPCA, SparsePCA
 from sklearn.preprocessing import StandardScaler
 
 from typing import List, Optional, Tuple, Callable
@@ -137,108 +137,124 @@ def gaussian_filter(
 def apply_PCA(
     hankel_matrix: np.ndarray,
     n_components: int,
+    PCA_mode: Optional[str] = "default",  # "default", "sparse", or "kernel"
     PCA_kwargs: Optional[dict] = {},
-    kernel: Optional[Callable] = None,
-    # gamma: float = 1.0,
     plot_components: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Apply either standard PCA or KernelPCA to the Hankel matrix and optionally reconstruct it.
-    If 'kernel' is None, standard PCA is used. Otherwise, KernelPCA is used with the given kernel.
+    Apply PCA to the Hankel matrix using one of three strategies based on PCA_mode:
+        - "default": Standard PCA.
+        - "sparse": Sparse PCA.
+        - "kernel": KernelPCA.
 
     Parameters
     ----------
     hankel_matrix : np.ndarray
-        The matrix to decompose (rows, columns).
+        The matrix to decompose.
     n_components : int
         The number of components to keep.
+    PCA_mode : str, optional
+        Which PCA mode to use: "default", "sparse", or "kernel". Default is "default".
     PCA_kwargs : Optional[dict], optional
-        Additional arguments to pass to either PCA (or kernel PCA, if a kernel is supplied). Default is an empty dictionary.
-    kernel : Optional[str], optional
-        Kernel type for KernelPCA (e.g., "rbf", "poly", "sigmoid"). If None, standard PCA is used.
+        Additional arguments to pass to the underlying PCA model.
     plot_components : bool, optional
-        If True, plots the component scores and cumulative score.
-
+        If True, plots the component scores and cumulative scores.
+    
     Returns
     -------
     principal_components : np.ndarray
         The transformed data (component scores).
     reconstructed_hankel : np.ndarray
-        The inverse-transformed matrix (if available).
+        The inverse-transformed (or approximately reconstructed) matrix.
     explained_variance_ratio : np.ndarray
-        Ratio of variances (PCA) or ratio of eigenvalues (KernelPCA).
+        Ratio of variances (for standard PCA and KernelPCA) or NaNs for SparsePCA.
     """
-    if kernel is None:
-        # Standard PCA path
-        pca_model = PCA(n_components=n_components, **PCA_kwargs)
-        principal_components = pca_model.fit_transform(hankel_matrix)
-        reconstructed_hankel = pca_model.inverse_transform(principal_components)
-        explained_variance_ratio = pca_model.explained_variance_ratio_
-
+    if PCA_mode == "default":
+        # Standard PCA
+        model = PCA(n_components=n_components, **PCA_kwargs)
+        principal_components = model.fit_transform(hankel_matrix)
+        reconstructed_hankel = model.inverse_transform(principal_components)
+        explained_variance_ratio = model.explained_variance_ratio_
         print(
             "Variance explained by PCA components:",
             explained_variance_ratio,
             "sum:",
-            sum(explained_variance_ratio),
+            np.sum(explained_variance_ratio),
         )
-    else:
-        # KernelPCA path
-        kpca = KernelPCA(
-            n_components=n_components,
-            kernel=kernel,
-            # gamma=gamma,
-            **PCA_kwargs,
-            # fit_inverse_transform=True
-        )
-        principal_components = kpca.fit_transform(hankel_matrix)
-        # Compute ratio of eigenvalues (KernelPCA doesn't have explained_variance_ratio_)
-        try:
-            lambdas = kpca.lambdas_
-            explained_variance_ratio = lambdas / np.sum(lambdas)
-        except AttributeError: # Some kernels don't have lambdas, therefore added this accept block
-            lambdas = kpca.eigenvalues_
-            explained_variance_ratio = lambdas / np.sum(lambdas)
+    elif PCA_mode == "sparse":
+        # Sparse PCA
+        model = SparsePCA(n_components=n_components, **PCA_kwargs)
+        principal_components = model.fit_transform(hankel_matrix)
+        # Approximate reconstruction via dot product
+        reconstructed_hankel = np.dot(principal_components, model.components_)
+        # Compute global explained variance (based on reconstruction error)
+        total_var = np.sum((hankel_matrix - np.mean(hankel_matrix, axis=0))**2)
+        reconstruction_error = np.sum((hankel_matrix - reconstructed_hankel)**2)
+        global_explained_variance = 1 - reconstruction_error / total_var
 
+        # Since SparsePCA components are not orthogonal,
+        # we approximate each component's contribution by performing SVD on the components matrix.
+        U, s, Vt = np.linalg.svd(model.components_, full_matrices=False)
+        # Distribute the global explained variance proportional to the squared singular values.
+        approx_variances = (s**2) / np.sum(s**2) * global_explained_variance
+        explained_variance_ratio = approx_variances
+        print("Sparse PCA applied. Global explained variance (approx):", global_explained_variance)
+        print("Approximated explained variance ratio for components:", explained_variance_ratio)
+    elif PCA_mode == "kernel":
+        # KernelPCA with inverse_transform enabled
+        model = KernelPCA(n_components=n_components, fit_inverse_transform=True, **PCA_kwargs)
+        principal_components = model.fit_transform(hankel_matrix)
         try:
-            reconstructed_hankel = kpca.inverse_transform(principal_components)
+            # Some KernelPCA versions provide eigenvalues as 'eigenvalues_'.
+            eigenvalues = model.eigenvalues_
         except AttributeError:
-            print("inverse_transform not supported for this kernel/config.")
+            eigenvalues = model.lambdas_
+        explained_variance_ratio = eigenvalues / np.sum(eigenvalues)
+        try:
+            reconstructed_hankel = model.inverse_transform(principal_components)
+        except AttributeError:
+            print("inverse_transform not supported for this kernel/configuration.")
             reconstructed_hankel = np.zeros_like(hankel_matrix)
-
         print(
-            f"Variance explained by KernelPCA (kernel={kernel}) components:",
+            f"Variance explained by KernelPCA components:",
             explained_variance_ratio,
             "sum:",
-            sum(explained_variance_ratio),
+            np.sum(explained_variance_ratio),
         )
-
-    # Optional plotting
+    else:
+        raise ValueError("PCA_mode must be 'default', 'sparse', or 'kernel'.")
+        
+    # Optional plotting of component scores
     if plot_components:
         plt.figure()
-        title_str = "PCA Component Scores" if kernel is None else f"KernelPCA ({kernel=}) Component Scores"
+        if PCA_mode == "default":
+            title_str = "PCA Component Scores"
+        elif PCA_mode == "sparse":
+            title_str = "Sparse PCA Component Scores"
+        else:
+            title_str = "KernelPCA Component Scores"
         plt.title(title_str)
         ax1 = plt.gca()
         (line1,) = ax1.plot(
             np.arange(1, n_components + 1),
-            explained_variance_ratio,
+            explained_variance_ratio if not np.isnan(explained_variance_ratio).all() 
+                else np.zeros(n_components),
             marker="o",
             linestyle="-",
-            label=f"Component Scores, sum = {np.round(sum(explained_variance_ratio), 2)}",
+            label=f"Component Scores, sum = {np.round(np.nansum(explained_variance_ratio), 2)}",
         )
         ax1.set_xlabel("Component Index")
         ax1.set_ylabel("Score")
-
         ax2 = ax1.twinx()
         (line2,) = ax2.plot(
             np.arange(1, n_components + 1),
-            np.cumsum(explained_variance_ratio),
+            np.cumsum(np.nan_to_num(explained_variance_ratio)),
             marker="x",
             linestyle="--",
             color="r",
             label="Cumulative Score",
         )
         ax2.set_ylabel("Cumulative Score")
-
         lines = [line1, line2]
         labels = [line.get_label() for line in lines]
         ax1.legend(lines, labels, loc="best")
