@@ -436,7 +436,7 @@ class ICA_scaler:
         self.scaledComponents = [rankedComps[i] * self.scores[i] / 100 for i in range(len(self.scores))]
         # print("self.scaledComponents:", self.scaledComponents)
 
-def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_components: int = 3, plot_components = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_components: int, plot_components: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Apply Independent Component Analysis (ICA) to a Hankel matrix and reconstruct it.
     
@@ -449,9 +449,8 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
         The standardized Hankel matrix of shape (rows, cols).
     n_components : int
         The number of independent components to extract from the matrix.
-    n_reconstruction_components : int, optional
+    n_reconstruction_components : int
         The number of components to use for reconstruction. Must be ≤ n_components.
-        Default is 3.
     plot_components : bool, optional
         Whether to generate a plot showing component scores and cumulative scores.
         Default is False.
