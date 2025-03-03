@@ -138,7 +138,7 @@ def apply_PCA(
     hankel_matrix: np.ndarray,
     n_components: int,
     PCA_kwargs: Optional[dict] = {},
-    kernel: Optional[str] = None,
+    kernel: Optional[Callable] = None,
     # gamma: float = 1.0,
     plot_components: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -192,8 +192,12 @@ def apply_PCA(
         )
         principal_components = kpca.fit_transform(hankel_matrix)
         # Compute ratio of eigenvalues (KernelPCA doesn't have explained_variance_ratio_)
-        lambdas = kpca.lambdas_
-        explained_variance_ratio = lambdas / np.sum(lambdas)
+        try:
+            lambdas = kpca.lambdas_
+            explained_variance_ratio = lambdas / np.sum(lambdas)
+        except AttributeError: # Some kernels don't have lambdas, therefore added this accept block
+            lambdas = kpca.eigenvalues_
+            explained_variance_ratio = lambdas / np.sum(lambdas)
 
         try:
             reconstructed_hankel = kpca.inverse_transform(principal_components)
