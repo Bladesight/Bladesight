@@ -197,7 +197,7 @@ def calculate_Q(
     -------
     Tuple[float, np.ndarray]
         Q : float
-            The binning quality factor.
+            The binning quality factor. Q is the sum of squared errors between the center of each bin and each AoA within it.
         bin_edges : np.ndarray
             Bin edges used in the Q calculation.
     """
