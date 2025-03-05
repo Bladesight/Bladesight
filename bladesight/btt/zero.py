@@ -16,22 +16,29 @@ def get_blade_tip_deflections_from_AoAs(
         4. Filters the tip deflections using a Butterworth filter.
         5. Calculates the peak-to-peak tip deflection.
 
-    Args:
-        df_rotor_blade_AoAs (pd.DataFrame): The DataFrame containing the AoAs of each 
-            probe. This is an item from the list returned by the 
-            function `get_rotor_blade_AoAs`.
-        blade_radius (float): The radius of the blade in microns.
-        poly_order (int, optional): The polynomial order to use for the detrending
-            algorithm . Defaults to 11.
-        filter_order (int, optional): The order of the butterworth filter. Defaults to 2.
-        filter_cutoff (float, optional): The butterworth filter cutoff 
-            frequency. Defaults to 0.3.
+    Parameters
+    ----------
+    df_rotor_blade_AoAs : pandas.DataFrame
+        DataFrame containing the AoA readings for each probe. This is an item from the list returned by the 
+        function `get_rotor_blade_AoAs`.
+    blade_radius : float
+        Radius of the blade in microns.
+    poly_order : int, optional
+        Polynomial order for detrending the tip deflections. Default is 11.
+    filter_order : int, optional
+        Order of the Butterworth filter. Default is 2.
+    filter_cutoff : float, optional
+        Cutoff frequency for the Butterworth filter. Default is 0.3.
 
-    Returns:
-        pd.DataFrame: The DataFrame containing the detrended and filtered 
-            tip deflections. This DataFrame also contains the peak-to-peak
-            tip deflection.
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame with the detrended and filtered blade tip deflections.
+        It includes columns with normalized AoAs, scaled deflections,
+        filtered deflections, and a "pk-pk" column representing the
+        peak-to-peak tip deflection.
     """
+    
     df = df_rotor_blade_AoAs.copy(deep=True)
     all_aoa_columns = [
         col_name 

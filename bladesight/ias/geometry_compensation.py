@@ -37,7 +37,7 @@ def perform_bayesian_geometry_compensation(
         the compensation must be performed.
     e : np.ndarray
         An initial estimate for the encoder geometry.  If left an empty
-         array, all sections are assumed equal.
+        array, all sections are assumed equal.
     beta : float   
         Precision of the likelihood function.
     sigma : float  
