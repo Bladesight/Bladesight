@@ -105,6 +105,10 @@ def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
     verbose: Optional[bool] = False,
 ) -> pd.DataFrame:
     """
+    *** FUNCTION STILL IN DEVELOPMENT. ***
+        - VISION: To have a function that you can perform filtering such as 
+        the PCA/ICA denoising on multiple signals at once which should produce more informative components.
+
     Detrends blade tip deflections from AoA data, then optionally applies a filter.
     The filter can operate in one of two modes:
 

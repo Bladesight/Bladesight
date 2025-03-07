@@ -1024,6 +1024,9 @@ def hankel_denoising_2D(
     target_signal_index: int = 0,
 ) -> np.ndarray:
     """
+    *** FUNCTION STILL IN DEVELOPMENT. ***
+        - VISION: To have a function that you can perform PCA/ICA on multiple signals at once which should produce more informative components.
+
     Denoise multiple signals using a Hankel transform and a decomposition method (e.g., PCA).
     Each row of 'signals' is treated as a separate 1D signal. After decomposition and reconstruction,
     only the denoised version of the target signal (specified by 'target_signal_index') is returned.
