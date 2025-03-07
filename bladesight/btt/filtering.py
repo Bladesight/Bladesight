@@ -202,7 +202,7 @@ def apply_PCA(
         print("Approximated explained variance ratio for components:", explained_variance_ratio)
     elif PCA_mode == "kernel":
         # KernelPCA with inverse_transform enabled
-        model = KernelPCA(n_components=n_components, fit_inverse_transform=True, **PCA_kwargs)
+        model = KernelPCA(n_components=n_components, **PCA_kwargs)
         principal_components = model.fit_transform(hankel_matrix)
         try:
             # Some KernelPCA versions provide eigenvalues as 'eigenvalues_'.
