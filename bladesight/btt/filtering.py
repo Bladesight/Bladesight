@@ -134,6 +134,7 @@ def gaussian_filter(
     """
     return gaussian_filter1d(deflection_series, sigma=sigma, order=order)
 
+
 def apply_PCA(
     hankel_matrix: np.ndarray,
     n_components: int,
@@ -159,7 +160,7 @@ def apply_PCA(
         Additional arguments to pass to the underlying PCA model.
     plot_components : bool, optional
         If True, plots the component scores and cumulative scores.
-    
+
     Returns
     -------
     principal_components : np.ndarray
@@ -188,8 +189,8 @@ def apply_PCA(
         # Approximate reconstruction via dot product
         reconstructed_hankel = np.dot(principal_components, model.components_)
         # Compute global explained variance (based on reconstruction error)
-        total_var = np.sum((hankel_matrix - np.mean(hankel_matrix, axis=0))**2)
-        reconstruction_error = np.sum((hankel_matrix - reconstructed_hankel)**2)
+        total_var = np.sum((hankel_matrix - np.mean(hankel_matrix, axis=0)) ** 2)
+        reconstruction_error = np.sum((hankel_matrix - reconstructed_hankel) ** 2)
         global_explained_variance = 1 - reconstruction_error / total_var
 
         # Since SparsePCA components are not orthogonal,
@@ -198,8 +199,14 @@ def apply_PCA(
         # Distribute the global explained variance proportional to the squared singular values.
         approx_variances = (s**2) / np.sum(s**2) * global_explained_variance
         explained_variance_ratio = approx_variances
-        print("Sparse PCA applied. Global explained variance (approx):", global_explained_variance)
-        print("Approximated explained variance ratio for components:", explained_variance_ratio)
+        print(
+            "Sparse PCA applied. Global explained variance (approx):",
+            global_explained_variance,
+        )
+        print(
+            "Approximated explained variance ratio for components:",
+            explained_variance_ratio,
+        )
     elif PCA_mode == "kernel":
         # KernelPCA with inverse_transform enabled
         model = KernelPCA(n_components=n_components, **PCA_kwargs)
@@ -223,7 +230,7 @@ def apply_PCA(
         )
     else:
         raise ValueError("PCA_mode must be 'default', 'sparse', or 'kernel'.")
-        
+
     # Optional plotting of component scores
     if plot_components:
         plt.figure()
@@ -237,8 +244,11 @@ def apply_PCA(
         ax1 = plt.gca()
         (line1,) = ax1.plot(
             np.arange(1, n_components + 1),
-            explained_variance_ratio if not np.isnan(explained_variance_ratio).all() 
-                else np.zeros(n_components),
+            (
+                explained_variance_ratio
+                if not np.isnan(explained_variance_ratio).all()
+                else np.zeros(n_components)
+            ),
             marker="o",
             linestyle="-",
             label=f"Component Scores, sum = {np.round(np.nansum(explained_variance_ratio), 2)}",
@@ -262,13 +272,14 @@ def apply_PCA(
 
     return principal_components, reconstructed_hankel, explained_variance_ratio
 
+
 class ICA_ranker:
     """
     Ranks independent components based on their similarity to the original signal.
-    
+
     This class takes independent components, the original signal, and a metric function,
     then computes scores for each component and ranks them in descending order of importance.
-    
+
     Parameters
     ----------
     components : np.ndarray
@@ -278,7 +289,7 @@ class ICA_ranker:
     metric : Callable[[np.ndarray, np.ndarray], float], optional
         Function that compares two signals and returns a similarity score.
         Default is innerProduct.
-        
+
     Attributes
     ----------
     components : np.ndarray
@@ -293,7 +304,7 @@ class ICA_ranker:
         The normalized scores (0-100) for each component, sorted in descending order.
     rankedComponents : np.ndarray
         The components sorted by their scores in descending order.
-        
+
     Notes
     -----
     The ranking process:
@@ -301,52 +312,61 @@ class ICA_ranker:
     2. Normalize the absolute metric values to sum to 1
     3. Convert to percentages (0-100)
     4. Sort components by their scores in descending order
-        
+
     References
     ----------
-    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
+    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal
             Latent Dimensional Identification: Latent Expansion and Latent Condensation",
             MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
     ..      Please see the following GitHub repository for the corresponding code: https://github.com/Greeen16/LS-PIE
     """
+
     @staticmethod
     def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
         """
         Compute inner product between two signals.
-        
+
         Parameters
         ----------
         x : np.ndarray
             First signal.
         y : np.ndarray
             Second signal.
-            
+
         Returns
         -------
         float
             Sum of the dot product between the two signals.
         """
         return np.sum(np.dot(y, x))
+
     @staticmethod
     def kurtosis(x: np.ndarray, y: np.ndarray) -> float:
         """
         Compute the difference in kurtosis between two signals.
-        
+
         Parameters
         ----------
         x : np.ndarray
             First signal.
         y : np.ndarray
             Second signal.
-            
+
         Returns
         -------
         float
             Sum of the difference in kurtosis between the two signals.
         """
-        return np.sum(scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y))# + np.sum(np.dot(y, x))
-    
-    def __init__(self, components: np.ndarray, signal: np.ndarray, metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct):
+        return np.sum(
+            scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y)
+        )  # + np.sum(np.dot(y, x))
+
+    def __init__(
+        self,
+        components: np.ndarray,
+        signal: np.ndarray,
+        metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct,
+    ):
         self.components = components
         self.signal = signal
         self.metric = metric
@@ -354,23 +374,24 @@ class ICA_ranker:
         # Collect the scores
         metrics = [metric(signal, component) for component in components]
         # print("metrics = ", metrics)
-        
+
         # Normalize and sort
         tot = np.sum([abs(met) for met in metrics])
         Metrics = np.array([abs(met) for met in metrics]) / tot
         sorts = Metrics.argsort()[::-1]
-        
+
         self.sorts = sorts
         self.scores = Metrics[sorts] * 100
         self.rankedComponents = np.array(components)[sorts]
 
+
 class ICA_scaler:
     """
     Scales independent components based on their importance to the original signal.
-    
-    This class ranks components using ICA_ranker, then scales each component 
+
+    This class ranks components using ICA_ranker, then scales each component
     by its normalized score.
-    
+
     Parameters
     ----------
     components : np.ndarray
@@ -380,7 +401,7 @@ class ICA_scaler:
     metric : Callable[[np.ndarray, np.ndarray], float], optional
         Function that compares two signals and returns a similarity score.
         Default is innerProduct.
-        
+
     Attributes
     ----------
     components : np.ndarray
@@ -394,58 +415,67 @@ class ICA_scaler:
     scaledComponents : list
         Components scaled by their scores, where each component is multiplied
         by its normalized score (score/100).
-        
+
     Notes
     -----
     The scaling process:
     1. Rank components using ICA_ranker
     2. Scale each ranked component by its normalized score (score/100)
-    
+
     References
     ----------
-    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal 
+    .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal
             Latent Dimensional Identification: Latent Expansion and Latent Condensation",
             MCA, vol. 29, no. 4, p. 65, Aug. 2024, doi: 10.3390/mca29040065.
     ..      Please see the following GitHub repository for the corresponding code: https://github.com/Greeen16/LS-PIE
     """
+
     @staticmethod
     def innerProduct(x: np.ndarray, y: np.ndarray) -> float:
         """
         Compute inner product between two signals.
-        
+
         Parameters
         ----------
         x : np.ndarray
             First signal.
         y : np.ndarray
             Second signal.
-            
+
         Returns
         -------
         float
             Sum of the dot product between the two signals.
         """
         return np.sum(np.dot(y, x))
+
     @staticmethod
     def kurtosis(x: np.ndarray, y: np.ndarray) -> float:
         """
         Compute the difference in kurtosis between two signals.
-        
+
         Parameters
         ----------
         x : np.ndarray
             First signal.
         y : np.ndarray
             Second signal.
-            
+
         Returns
         -------
         float
             Sum of the difference in kurtosis between the two signals.
         """
-        return np.sum(scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y))# + np.sum(np.dot(y, x))
-        
-    def __init__(self, components: np.ndarray, signal: np.ndarray, metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct):
+        return np.sum(
+            scipy.stats.kurtosis(x) - scipy.stats.kurtosis(y)
+        )  # + np.sum(np.dot(y, x))
+
+    def __init__(
+        self,
+        components: np.ndarray,
+        signal: np.ndarray,
+        metric: Callable[[np.ndarray, np.ndarray], float] = innerProduct,
+    ):
         self.components = components
         self.signal = signal
         self.metric = metric
@@ -453,16 +483,24 @@ class ICA_scaler:
         ranking = ICA_ranker(self.components, self.signal, self.metric)
         self.scores = ranking.scores
         rankedComps = ranking.rankedComponents
-        self.scaledComponents = [rankedComps[i] * self.scores[i] / 100 for i in range(len(self.scores))]
+        self.scaledComponents = [
+            rankedComps[i] * self.scores[i] / 100 for i in range(len(self.scores))
+        ]
         # print("self.scaledComponents:", self.scaledComponents)
 
-def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_components: int, plot_components: Optional[bool] = False) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+
+def apply_ICA(
+    hankel_matrix: np.ndarray,
+    n_components: int,
+    n_reconstruction_components: int,
+    plot_components: Optional[bool] = False,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Apply Independent Component Analysis (ICA) to a Hankel matrix and reconstruct it.
-    
+
     This function applies FastICA to extract independent components from the Hankel matrix,
     then ranks and scales these components to reconstruct a denoised version of the matrix.
-    
+
     Parameters
     ----------
     hankel_matrix : np.ndarray
@@ -474,7 +512,7 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
     plot_components : bool, optional
         Whether to generate a plot showing component scores and cumulative scores.
         Default is False.
-        
+
     Returns
     -------
     independent_components : np.ndarray
@@ -483,16 +521,16 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
         The reconstructed Hankel matrix using the top n_reconstruction_components.
     mixing_matrix : np.ndarray
         The mixing matrix from the FastICA algorithm.
-        
+
     Notes
     -----
     The reconstruction process:
     1. Apply FastICA to extract independent components
     2. Rank and scale components by importance using ICA_scaler
     3. Use the top n_reconstruction_components to reconstruct the Hankel matrix
-    4. The reconstructed matrix is calculated as: 
+    4. The reconstructed matrix is calculated as:
         scaled_components.T @ mixing_matrix.T[:n_reconstruction_components, :]
-    
+
     References
     ----------
     .. [1] J. Stevens, D. N. Wilke, and I. I. Setshedi, "Enhancing LS-PIE's Optimal
@@ -512,58 +550,88 @@ def apply_ICA(hankel_matrix: np.ndarray, n_components: int, n_reconstruction_com
     >>> h_size = 20
     >>> h_matrix = hankel(signal[:h_size], signal[h_size-1:])
     >>> # Apply ICA
-    >>> _, reconstructed, _ = apply_ICA(h_matrix, n_components=10, 
+    >>> _, reconstructed, _ = apply_ICA(h_matrix, n_components=10,
     ...                                n_reconstruction_components=3)
     >>> print(f"Original shape: {h_matrix.shape}, Reconstructed: {reconstructed.shape}")
     """
-    ica = FastICA(n_components=n_components, tol = 1E-6)#, whiten=True) # Use whiten=False as i think sklearn is pre-processing the data and that is effecting reconstruction performance 
+    ica = FastICA(
+        n_components=n_components, tol=1e-6
+    )  # , whiten=True) # Use whiten=False as i think sklearn is pre-processing the data and that is effecting reconstruction performance
     independent_components = ica.fit_transform(hankel_matrix).T
     # print("independent_components:", independent_components)
     # print("independent_components.shape:", independent_components.shape)
     mixing_matrix = ica.mixing_
     # print("Mixing matrix.shape:", mixing_matrix.shape)
-    
+
     # Rank and scale the components
     scaler_instance = ICA_scaler(independent_components, hankel_matrix)
     # print("scaler_instance.scaledComponents:", scaler_instance.scaledComponents)
     # scaled_components = np.array(scaler_instance.scaledComponents[:n_reconstruction_components])  # Us only the specified number of components
-    scaled_components = np.array(scaler_instance.scaledComponents[:n_reconstruction_components])  # Use only the specified number of components
+    scaled_components = np.array(
+        scaler_instance.scaledComponents[:n_reconstruction_components]
+    )  # Use only the specified number of components
     # print('scaled_components:', scaled_components)
     # print('scaled_components:', scaled_components.shape)
     if plot_components == True:
         plt.figure()
-        plt.title('ICA Component Scores')
+        plt.title("ICA Component Scores")
         # Plot component scores
         ax1 = plt.gca()
-        line1, = ax1.plot(np.arange(1, n_components + 1, 1), scaler_instance.scores, marker='o', linestyle='-', label=f'Component Scores, sum = {np.round(sum(scaler_instance.scores), 2)}')
-        line2, = ax1.plot(np.arange(1, n_reconstruction_components + 1, 1), scaler_instance.scores[:n_reconstruction_components], marker='.', linestyle='-', label=f'First {n_reconstruction_components} Components, sum = {np.round(sum(scaler_instance.scores[:n_reconstruction_components]), 2)}')
-        ax1.set_xlabel('Component Index')
-        ax1.set_ylabel('Score')
+        (line1,) = ax1.plot(
+            np.arange(1, n_components + 1, 1),
+            scaler_instance.scores,
+            marker="o",
+            linestyle="-",
+            label=f"Component Scores, sum = {np.round(sum(scaler_instance.scores), 2)}",
+        )
+        (line2,) = ax1.plot(
+            np.arange(1, n_reconstruction_components + 1, 1),
+            scaler_instance.scores[:n_reconstruction_components],
+            marker=".",
+            linestyle="-",
+            label=f"First {n_reconstruction_components} Components, sum = {np.round(sum(scaler_instance.scores[:n_reconstruction_components]), 2)}",
+        )
+        ax1.set_xlabel("Component Index")
+        ax1.set_ylabel("Score")
         # Create a second y-axis for cumulative scores
         ax2 = ax1.twinx()
-        line3, = ax2.plot(np.arange(1, n_components + 1, 1), np.cumsum(scaler_instance.scores), marker='x', linestyle='--', color='r', label='Cumulative Score')
-        ax2.set_ylabel('Cumulative Score')
+        (line3,) = ax2.plot(
+            np.arange(1, n_components + 1, 1),
+            np.cumsum(scaler_instance.scores),
+            marker="x",
+            linestyle="--",
+            color="r",
+            label="Cumulative Score",
+        )
+        ax2.set_ylabel("Cumulative Score")
         # Combine legends from both y-axes
         lines = [line1, line2, line3]
         labels = [line.get_label() for line in lines]
-        ax1.legend(lines, labels, loc='best')
+        ax1.legend(lines, labels, loc="best")
         plt.show()
 
-    reconstructed_hankel = np.dot(scaled_components.T, mixing_matrix.T[:n_reconstruction_components, :])
+    reconstructed_hankel = np.dot(
+        scaled_components.T, mixing_matrix.T[:n_reconstruction_components, :]
+    )
     # reconstructed_hankel = np.dot(scaled_components, mixing_matrix)#[:n_reconstruction_components, :])
-    
+
     return independent_components, reconstructed_hankel, mixing_matrix
+
 
 def hankel_denoising(
     signal: np.ndarray,
     n_components: int,
     hankel_size: int,
-    decomposition_function: Optional[Callable[
-        [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
-    ]] = apply_PCA,
+    decomposition_function: Optional[
+        Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]]
+    ] = apply_PCA,
     decomposition_function_kwargs: Optional[dict] = None,
-    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
-    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
     pre_filter_function: Optional[Callable] = None,
     pre_filter_kwargs: Optional[dict] = {},
 ) -> np.ndarray:
@@ -600,12 +668,12 @@ def hankel_denoising(
     --------
     >>> import numpy as np
     >>> from sklearn.preprocessing import StandardScaler
-    >>> 
+    >>>
     >>> def lowpass_filter(signal, Wn, order=5):
     ...     from scipy.signal import butter, filtfilt
     ...     b, a = butter(order, Wn, btype='low')
     ...     return filtfilt(b, a, signal)
-    >>> 
+    >>>
     >>> signal = np.random.randn(100)
     >>> denoised_signal = hankel_denoising(
     ...     signal,
@@ -620,21 +688,23 @@ def hankel_denoising(
     # Ensure the signal is a NumPy array
     signal = np.asarray(signal)
     original_signal = signal.copy()  # Keep original for alignment later
-    
+
     # Apply pre-filtering if specified
     if pre_filter_function is not None:
         if pre_filter_kwargs is None:
             pre_filter_kwargs = {}
         signal = pre_filter_function(signal, **pre_filter_kwargs)
-    
+
     # Standardizing the data before performing PCA or ICA
     if scaler_preprocessing_instance is not None:
-        signal = scaler_preprocessing_instance.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+        signal = scaler_preprocessing_instance.fit_transform(
+            signal.reshape(-1, 1)
+        ).reshape(-1)
 
     N = len(signal)
 
     # Create the Hankel matrix
-    hankel_matrix = hankel(signal[:hankel_size], signal[hankel_size - 1:])
+    hankel_matrix = hankel(signal[:hankel_size], signal[hankel_size - 1 :])
 
     # Standardize the Hankel matrix
     if scaler_hankel_instance is not None:
@@ -645,7 +715,7 @@ def hankel_denoising(
     # Apply the decomposition function (PCA or ICA)
     if decomposition_function_kwargs is None:
         decomposition_function_kwargs = {}
-    
+
     _, reconstructed_hankel, _ = decomposition_function(
         hankel_standardized, n_components, **decomposition_function_kwargs
     )
@@ -678,17 +748,24 @@ def hankel_denoising(
 
     return denoised_signal_aligned
 
+
 def hankel_denoising_robust(
     signal: np.ndarray,
     n_components: int,
     hankel_size: int,
-    decomposition_function: Optional[Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]]] = apply_PCA,
+    decomposition_function: Optional[
+        Callable[[np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]]
+    ] = apply_PCA,
     decomposition_function_kwargs: Optional[dict] = None,
-    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
-    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
     pre_filter_function: Optional[Callable] = None,
     pre_filter_kwargs: Optional[dict] = {},
-    handle_nans: str = 'impute'  # Options: 'impute', 'drop', 'zero'
+    handle_nans: str = "impute",  # Options: 'impute', 'drop', 'zero'
 ) -> np.ndarray:
     """
     A robust implementation of Hankel matrix-based signal denoising with extensive
@@ -696,7 +773,7 @@ def hankel_denoising_robust(
 
     This function extends the standard hankel_denoising approach with comprehensive
     error handling for NaN values, signal length issues, decomposition failures, and
-    other numerical instabilities that commonly occur when used within optimization 
+    other numerical instabilities that commonly occur when used within optimization
     routines.
 
     Parameters
@@ -719,7 +796,7 @@ def hankel_denoising_robust(
     decomposition_function_kwargs : dict, optional
         Additional arguments to pass to the decomposition function. Default is None.
     scaler_preprocessing_instance : StandardScaler, optional
-        StandardScaler instance for preprocessing the input signal before creating 
+        StandardScaler instance for preprocessing the input signal before creating
         the Hankel matrix. Default is a StandardScaler with mean centering and scaling.
         Set to None to skip preprocessing.
     scaler_hankel_instance : StandardScaler, optional
@@ -765,18 +842,18 @@ def hankel_denoising_robust(
     >>> import numpy as np
     >>> from scipy.signal import butter, filtfilt
     >>> from sklearn.preprocessing import StandardScaler
-    >>> 
+    >>>
     >>> # Create a noisy test signal with some NaN values
     >>> t = np.linspace(0, 10, 1000)
     >>> clean_signal = np.sin(t) + 0.5*np.sin(2.5*t)
     >>> noisy_signal = clean_signal + 0.2*np.random.randn(len(t))
     >>> noisy_signal[50:55] = np.nan  # Add some NaN values
-    >>> 
+    >>>
     >>> # Define a pre-filter function
     >>> def lowpass(signal, cutoff=0.1):
     ...     b, a = butter(3, cutoff, btype='low')
     ...     return filtfilt(b, a, signal)
-    >>> 
+    >>>
     >>> # Apply robust denoising with NaN handling
     >>> denoised = hankel_denoising_robust(
     ...     noisy_signal,
@@ -792,50 +869,62 @@ def hankel_denoising_robust(
     # Ensure the signal is a NumPy array
     signal = np.asarray(signal)
     original_signal = signal.copy()  # Keep original for alignment later
-    
+
     # ----------- VALIDATIONS AND PREPARATIONS -----------
-    
+
     # 1. Validate signal length vs hankel_size
     min_required_length = hankel_size + 1  # Need at least this many points
     if len(signal) < min_required_length:
-        print(f"Signal too short ({len(signal)}) for hankel_size {hankel_size}. Reducing hankel_size.")
+        print(
+            f"Signal too short ({len(signal)}) for hankel_size {hankel_size}. Reducing hankel_size."
+        )
         hankel_size = max(2, len(signal) // 2 - 1)
         print(f"New hankel_size: {hankel_size}")
-    
+
     # 2. Handle NaN/Inf values in the input signal
     nan_mask = np.isnan(signal) | np.isinf(signal)  # Check for both NaN and Inf
     if np.any(nan_mask):
         problem_count = np.sum(nan_mask)
-        print(f"Signal contains {problem_count} NaN/Inf values ({problem_count/len(signal)*100:.1f}%)")
-        
-        if handle_nans == 'impute':
+        print(
+            f"Signal contains {problem_count} NaN/Inf values ({problem_count/len(signal)*100:.1f}%)"
+        )
+
+        if handle_nans == "impute":
             # Use mean imputation for problematic values
             valid_values = signal[~nan_mask]
             if len(valid_values) > 0:
                 fill_value = np.mean(valid_values)
             else:
                 fill_value = 0.0
-            signal = np.nan_to_num(signal, nan=fill_value, posinf=fill_value, neginf=-fill_value)
-        elif handle_nans == 'zero':
+            signal = np.nan_to_num(
+                signal, nan=fill_value, posinf=fill_value, neginf=-fill_value
+            )
+        elif handle_nans == "zero":
             signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
-        elif handle_nans == 'drop':
+        elif handle_nans == "drop":
             valid_indices = ~nan_mask
             if sum(valid_indices) < min_required_length:
-                print(f"Too few valid values ({sum(valid_indices)}) for hankel_size {hankel_size}.")
+                print(
+                    f"Too few valid values ({sum(valid_indices)}) for hankel_size {hankel_size}."
+                )
                 # Fall back to imputation since we can't drop too many values
                 valid_values = signal[~nan_mask]
                 if len(valid_values) > 0:
                     fill_value = np.mean(valid_values)
                 else:
                     fill_value = 0.0
-                signal = np.nan_to_num(signal, nan=fill_value, posinf=fill_value, neginf=-fill_value)
+                signal = np.nan_to_num(
+                    signal, nan=fill_value, posinf=fill_value, neginf=-fill_value
+                )
             else:
                 signal = signal[valid_indices]
-                print(f"Signal length reduced to {len(signal)} after removing NaNs/Infs.")
+                print(
+                    f"Signal length reduced to {len(signal)} after removing NaNs/Infs."
+                )
                 # Adjust hankel_size if needed after dropping values
                 if len(signal) < hankel_size + 1:
                     hankel_size = max(2, len(signal) // 2 - 1)
-    
+
     # 3. Apply pre-filtering if specified
     if pre_filter_function is not None:
         if pre_filter_kwargs is None:
@@ -848,156 +937,189 @@ def hankel_denoising_robust(
                 signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
         except Exception as e:
             print(f"Pre-filtering failed: {str(e)}. Using unfiltered signal.")
-    
+
     # 4. Standardize the signal if requested
     if scaler_preprocessing_instance is not None:
         try:
             # Ensure no NaN/Inf values before scaling
             signal = np.nan_to_num(signal, nan=0.0, posinf=0.0, neginf=0.0)
-            signal = scaler_preprocessing_instance.fit_transform(signal.reshape(-1, 1)).reshape(-1)
+            signal = scaler_preprocessing_instance.fit_transform(
+                signal.reshape(-1, 1)
+            ).reshape(-1)
         except Exception as e:
             print(f"Standardization failed: {str(e)}, using original signal")
-    
+
     # ----------- HANKEL MATRIX CREATION -----------
-    
+
     # 5. Calculate valid Hankel matrix dimensions
     N = len(signal)
     n_cols = N - hankel_size + 1
-    
+
     # Double-check that we can actually create a valid Hankel matrix
     if n_cols <= 0:
-        print(f"Cannot create valid Hankel matrix: signal length {N}, hankel_size {hankel_size}")
+        print(
+            f"Cannot create valid Hankel matrix: signal length {N}, hankel_size {hankel_size}"
+        )
         # Return the best we can do - the input signal
         return original_signal
-    
+
     # Create the Hankel matrix with validated dimensions
     hankel_matrix = np.zeros((hankel_size, n_cols))
     for i in range(hankel_size):
-        hankel_matrix[i, :] = signal[i:i+n_cols]
-    
+        hankel_matrix[i, :] = signal[i : i + n_cols]
+
     # 6. Standardize the Hankel matrix if requested
     if scaler_hankel_instance is not None:
         try:
             # Ensure no NaN/Inf values before scaling
-            hankel_matrix = np.nan_to_num(hankel_matrix, nan=0.0, posinf=0.0, neginf=0.0)
+            hankel_matrix = np.nan_to_num(
+                hankel_matrix, nan=0.0, posinf=0.0, neginf=0.0
+            )
             hankel_standardized = scaler_hankel_instance.fit_transform(hankel_matrix)
         except Exception as e:
-            print(f"Hankel standardization failed: {str(e)}, using non-standardized matrix")
+            print(
+                f"Hankel standardization failed: {str(e)}, using non-standardized matrix"
+            )
             hankel_standardized = hankel_matrix
     else:
         hankel_standardized = hankel_matrix
-    
+
     # 7. Validate n_components before decomposition
     max_possible_components = min(hankel_standardized.shape)
     if n_components > max_possible_components:
         print(f"Reducing n_components from {n_components} to {max_possible_components}")
         n_components = max_possible_components
-    
+
     if n_components < 1:
         n_components = 1
-    
+
     # Ensure there are no NaN/Inf values in the standardized matrix
     if np.any(np.isnan(hankel_standardized)) or np.any(np.isinf(hankel_standardized)):
         print("NaN or Inf values detected in Hankel matrix, replacing with zeros")
-        hankel_standardized = np.nan_to_num(hankel_standardized, nan=0.0, posinf=0.0, neginf=0.0)
-    
+        hankel_standardized = np.nan_to_num(
+            hankel_standardized, nan=0.0, posinf=0.0, neginf=0.0
+        )
+
     # Check if values are too small (numerical stability)
     if np.abs(hankel_standardized).max() < 1e-10:
         print("Warning: Very small values in matrix. Adding small noise for stability.")
-        hankel_standardized = hankel_standardized + np.random.normal(0, 1e-10, hankel_standardized.shape)
-    
+        hankel_standardized = hankel_standardized + np.random.normal(
+            0, 1e-10, hankel_standardized.shape
+        )
+
     # ----------- DECOMPOSITION AND RECONSTRUCTION -----------
-    
+
     # 8. Apply decomposition to clean matrix
     if decomposition_function_kwargs is None:
         decomposition_function_kwargs = {}
-    
-    print(f"Hankel matrix shape: {hankel_standardized.shape}, n_components: {n_components}")
-    
+
+    print(
+        f"Hankel matrix shape: {hankel_standardized.shape}, n_components: {n_components}"
+    )
+
     try:
         # Attempt to apply the decomposition function
         _, reconstructed_hankel, _ = decomposition_function(
             hankel_standardized, n_components, **decomposition_function_kwargs
         )
-        
+
         # Verify the reconstruction worked and has no NaN/Inf values
-        if np.any(np.isnan(reconstructed_hankel)) or np.any(np.isinf(reconstructed_hankel)):
+        if np.any(np.isnan(reconstructed_hankel)) or np.any(
+            np.isinf(reconstructed_hankel)
+        ):
             print("Decomposition produced NaN/Inf values. Using fallback.")
             # Simple fallback: just keep the largest singular values/vectors
             # This is essentially what PCA does but we'll do it manually
             try:
                 U, s, Vt = np.linalg.svd(hankel_standardized, full_matrices=False)
-                reconstructed_hankel = np.dot(U[:, :n_components], np.dot(np.diag(s[:n_components]), Vt[:n_components, :]))
+                reconstructed_hankel = np.dot(
+                    U[:, :n_components],
+                    np.dot(np.diag(s[:n_components]), Vt[:n_components, :]),
+                )
             except Exception:
                 # If SVD fails too, just return the original matrix
                 print("SVD fallback failed. Using original matrix.")
                 reconstructed_hankel = hankel_standardized
-    
+
     except Exception as e:
         print(f"Decomposition failed: {str(e)}. Using fallback.")
         # Simple fallback: use original matrix if decomposition completely fails
         reconstructed_hankel = hankel_standardized
-    
+
     # 9. Inverse transform to original space if needed
     if scaler_hankel_instance is not None:
         try:
-            denoised_hankel = scaler_hankel_instance.inverse_transform(reconstructed_hankel)
+            denoised_hankel = scaler_hankel_instance.inverse_transform(
+                reconstructed_hankel
+            )
         except Exception as e:
-            print(f"Inverse standardization failed: {str(e)}, using non-transformed matrix")
+            print(
+                f"Inverse standardization failed: {str(e)}, using non-transformed matrix"
+            )
             denoised_hankel = reconstructed_hankel
     else:
         denoised_hankel = reconstructed_hankel
-    
+
     # Ensure no NaN/Inf in final Hankel matrix
     if np.any(np.isnan(denoised_hankel)) or np.any(np.isinf(denoised_hankel)):
         print("NaN or Inf values in denoised Hankel matrix. Replacing with zeros.")
-        denoised_hankel = np.nan_to_num(denoised_hankel, nan=0.0, posinf=0.0, neginf=0.0)
-    
+        denoised_hankel = np.nan_to_num(
+            denoised_hankel, nan=0.0, posinf=0.0, neginf=0.0
+        )
+
     # 10. Reconstruct by averaging anti-diagonals
     denoised_signal = np.zeros(N)
     counts = np.zeros(N)
-    
+
     # Use explicit averaging of anti-diagonals
     for i in range(hankel_size):
         for j in range(n_cols):
             idx = i + j
             denoised_signal[idx] += denoised_hankel[i, j]
             counts[idx] += 1
-    
+
     # Avoid division by zero
     counts[counts == 0] = 1
     denoised_signal = denoised_signal / counts
-    
+
     # 11. Align denoised signal with original signal
     if len(original_signal) > 0 and len(denoised_signal) > 0:
         # Make sure both signals have no NaNs for correlation
         orig_for_corr = np.nan_to_num(original_signal, nan=0.0, posinf=0.0, neginf=0.0)
-        denoised_for_corr = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
-        
+        denoised_for_corr = np.nan_to_num(
+            denoised_signal, nan=0.0, posinf=0.0, neginf=0.0
+        )
+
         # Compute cross-correlation for alignment
         try:
-            cross_correlation = np.correlate(orig_for_corr, denoised_for_corr, mode="full")
+            cross_correlation = np.correlate(
+                orig_for_corr, denoised_for_corr, mode="full"
+            )
             lag = np.argmax(cross_correlation) - (len(denoised_for_corr) - 1)
             denoised_signal = np.roll(denoised_signal, lag)
         except Exception as e:
             print(f"Signal alignment failed: {str(e)}")
-    
+
     # 12. Inverse transform the denoised signal if preprocessing scaling was used
     if scaler_preprocessing_instance is not None:
         try:
             # Ensure no NaN/Inf values before inverse transform
-            clean_denoised = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
+            clean_denoised = np.nan_to_num(
+                denoised_signal, nan=0.0, posinf=0.0, neginf=0.0
+            )
             denoised_signal = scaler_preprocessing_instance.inverse_transform(
                 clean_denoised.reshape(-1, 1)
             ).reshape(-1)
         except Exception as e:
             print(f"Signal inverse transform failed: {str(e)}")
-    
+
     # Final check for NaN/Inf values
     if np.any(np.isnan(denoised_signal)) or np.any(np.isinf(denoised_signal)):
         print("Final signal contains NaN/Inf values. Replacing with zeros.")
-        denoised_signal = np.nan_to_num(denoised_signal, nan=0.0, posinf=0.0, neginf=0.0)
-    
+        denoised_signal = np.nan_to_num(
+            denoised_signal, nan=0.0, posinf=0.0, neginf=0.0
+        )
+
     # 13. Final validation - match length to original signal
     if len(denoised_signal) != len(original_signal):
         if len(denoised_signal) < len(original_signal):
@@ -1006,8 +1128,8 @@ def hankel_denoising_robust(
             denoised_signal = np.concatenate((denoised_signal, padding))
         else:
             # Truncate
-            denoised_signal = denoised_signal[:len(original_signal)]
-    
+            denoised_signal = denoised_signal[: len(original_signal)]
+
     return denoised_signal
 
 
@@ -1019,8 +1141,12 @@ def hankel_denoising_2D(
         [np.ndarray, int], Tuple[np.ndarray, np.ndarray, np.ndarray]
     ],  # e.g., apply_PCA
     decomposition_function_kwargs: Optional[dict] = None,
-    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
-    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(with_mean=True, with_std=True),
+    scaler_preprocessing_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
+    scaler_hankel_instance: Optional[StandardScaler] = StandardScaler(
+        with_mean=True, with_std=True
+    ),
     target_signal_index: int = 0,
 ) -> np.ndarray:
     """
@@ -1085,7 +1211,7 @@ def hankel_denoising_2D(
     #         ).reshape(-1, n_samples)
     #     print("standardised signals.shape:", signals.shape)
     print("signals preprocessed.shape:", signals.shape)
-    
+
     # Build Hankel matrices for each signal and stack them vertically
     hankel_list = []
     print("hankel_size", hankel_size)
@@ -1094,12 +1220,12 @@ def hankel_denoising_2D(
         hankel_matrix = hankel(signals[i, :hankel_size], signals[i, hankel_size - 1 :])
         # hankel_matrix = hankel(signals[:hankel_size, i], signals[hankel_size - 1 :, i])
         hankel_list.append(hankel_matrix)
-    print('hankel_matrix.shape', hankel_matrix.shape)
+    print("hankel_matrix.shape", hankel_matrix.shape)
 
     # Stacked shape: (n_signals * hankel_size, n_cols)
     stacked_hankel = np.vstack(hankel_list)
-    print('stacked_hankel.shape:', stacked_hankel.shape)
-    
+    print("stacked_hankel.shape:", stacked_hankel.shape)
+
     # Optionally scale the stacked Hankel matrix
     if scaler_hankel_instance is not None:
         stacked_hankel = scaler_hankel_instance.fit_transform(stacked_hankel)
@@ -1132,10 +1258,12 @@ def hankel_denoising_2D(
         hmat = denoised_hankels[i]
         # Each step k is a diagonal in the reversed columns
         # Range ensures the correct length matches the original signal
-        dsig = np.array([
-            np.mean(np.diag(hmat[:, ::-1], k))
-            for k in range(-hankel_size + 1, n_samples - hankel_size + 1)
-        ])
+        dsig = np.array(
+            [
+                np.mean(np.diag(hmat[:, ::-1], k))
+                for k in range(-hankel_size + 1, n_samples - hankel_size + 1)
+            ]
+        )
         # Align with the original signal
         cross_correlation = np.correlate(signals[i, :], dsig, mode="full")
         lag = np.argmax(cross_correlation) - (len(dsig) - 1)
@@ -1153,9 +1281,11 @@ def hankel_denoising_2D(
         # We need a consistent inverse_transform, so re-fit each row individually
         # or store the fitted scalers earlier. Here, we assume all signals used the same scaler.
         # For more precise usage, you'd store a separate scaler per signal.
-        denoised_signals[target_signal_index] = scaler_preprocessing_instance.inverse_transform(
-            denoised_signals[target_signal_index].reshape(-1, 1)
-        ).ravel()
+        denoised_signals[target_signal_index] = (
+            scaler_preprocessing_instance.inverse_transform(
+                denoised_signals[target_signal_index].reshape(-1, 1)
+            ).ravel()
+        )
 
     # Return only the requested target signal
     return denoised_signals[target_signal_index]

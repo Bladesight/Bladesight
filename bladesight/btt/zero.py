@@ -4,10 +4,11 @@ from scipy.signal import butter, filtfilt
 
 from typing import Optional, Callable, Dict
 
+
 def get_blade_tip_deflections_from_AoAs(
-    df_rotor_blade_AoAs : pd.DataFrame,
-    blade_radius : float,
-    poly_order : Optional[int] = 11,
+    df_rotor_blade_AoAs: pd.DataFrame,
+    blade_radius: float,
+    poly_order: Optional[int] = 11,
     filter_function: Optional[Callable] = None,
     filter_kwargs: Optional[dict] = None,
     verbose: Optional[bool] = False,
@@ -20,21 +21,21 @@ def get_blade_tip_deflections_from_AoAs(
         5. Calculates the peak-to-peak tip deflection.
 
     Args:
-        df_rotor_blade_AoAs (pd.DataFrame): The DataFrame containing the AoAs of each 
-            probe. This is an item from the list returned by the 
+        df_rotor_blade_AoAs (pd.DataFrame): The DataFrame containing the AoAs of each
+            probe. This is an item from the list returned by the
             function `get_rotor_blade_AoAs`.
         blade_radius (float): The radius of the blade in microns.
         poly_order (int, optional): The polynomial order to use for the detrending
             algorithm . Defaults to 11.
-        filter_function (Optional[Callable], optional): 
-            The filter function to be applied to the tip deflections. If None, no filtering is applied. 
+        filter_function (Optional[Callable], optional):
+            The filter function to be applied to the tip deflections. If None, no filtering is applied.
             Note that the filter function needs to only return the filtered signal that is the same shape and analogous to the unfiltered signal.
         filter_kwargs : Optional[dict], default=None
             The arguments to be passed to the filter function. If None, no filtering filter arguments are applied and use None when you dont want to filter.
         verbose : Optional[bool], default=False
             A flag to enable verbose output.
     Returns:
-        pd.DataFrame: The DataFrame containing the detrended and filtered 
+        pd.DataFrame: The DataFrame containing the detrended and filtered
             tip deflections. This DataFrame also contains the peak-to-peak
             tip deflection.
 
@@ -69,28 +70,39 @@ def get_blade_tip_deflections_from_AoAs(
 
     df = df_rotor_blade_AoAs.copy(deep=True)
     all_aoa_columns = [
-        col_name 
-        for col_name 
-        in df.columns 
-        if col_name.startswith("AoA_p")
+        col_name for col_name in df.columns if col_name.startswith("AoA_p")
     ]
 
     for col in all_aoa_columns:
         df[col + "_norm"] = df[col].mean() - df[col]
         deflection_col_name = col.replace("AoA", "x")
         df[deflection_col_name] = blade_radius * df[col + "_norm"]
-        poly = np.polyfit(df['Omega'], df[deflection_col_name], poly_order)
-        df[deflection_col_name] = df[deflection_col_name] - np.polyval(poly, df['Omega'])
-        
-        if filter_function is not None and filter_kwargs is not None: # Filter tip deflections and denoted by columns with "_filt subfix"
-            df[deflection_col_name + '_filt'] = filter_function(df[deflection_col_name].values, **filter_kwargs)
-    
+        poly = np.polyfit(df["Omega"], df[deflection_col_name], poly_order)
+        df[deflection_col_name] = df[deflection_col_name] - np.polyval(
+            poly, df["Omega"]
+        )
+
+        if (
+            filter_function is not None and filter_kwargs is not None
+        ):  # Filter tip deflections and denoted by columns with "_filt subfix"
+            df[deflection_col_name + "_filt"] = filter_function(
+                df[deflection_col_name].values, **filter_kwargs
+            )
+
     if filter_function is not None and filter_kwargs is not None:
         x_matrix = df[[col for col in df.columns if col.endswith("_filt")]].to_numpy()
     else:
-        x_matrix = df[[col for col in df.columns if col.startswith('x_p') and not col.endswith('_filt')]].to_numpy()
-    
-    df["pk-pk"] = x_matrix.max(axis=1) - x_matrix.min(axis=1) # If a filter function is supplied, the pk-pk values will be calculated from the filtered deflections
+        x_matrix = df[
+            [
+                col
+                for col in df.columns
+                if col.startswith("x_p") and not col.endswith("_filt")
+            ]
+        ].to_numpy()
+
+    df["pk-pk"] = x_matrix.max(axis=1) - x_matrix.min(
+        axis=1
+    )  # If a filter function is supplied, the pk-pk values will be calculated from the filtered deflections
 
     return df
 
@@ -106,7 +118,7 @@ def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
 ) -> pd.DataFrame:
     """
     *** FUNCTION STILL IN DEVELOPMENT. ***
-        - VISION: To have a function that you can perform filtering such as 
+        - VISION: To have a function that you can perform filtering such as
         the PCA/ICA denoising on multiple signals at once which should produce more informative components.
 
     Detrends blade tip deflections from AoA data, then optionally applies a filter.
@@ -221,7 +233,9 @@ def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
         if apply_filter_to_all_columns_at_once == True:
             # ---- Multi-Column Mode ----
             # Stack columns => shape (n_rows, n_cols)
-            unfiltered_matrix = df[deflection_cols].to_numpy().reshape(len(deflection_cols), -1)
+            unfiltered_matrix = (
+                df[deflection_cols].to_numpy().reshape(len(deflection_cols), -1)
+            )
             # print("unfiltered_matrix.shape", unfiltered_matrix.shape)
             # filtered_matrix = filter_function(unfiltered_matrix, **filter_kwargs)
             # if filtered_matrix.shape != unfiltered_matrix.shape:
@@ -246,7 +260,11 @@ def get_blade_tip_deflections_from_AoAs_multi_col_filtering(
     df["pk-pk"] = x_matrix.max(axis=1) - x_matrix.min(axis=1)
 
     if verbose:
-        filter_mode = "all columns at once" if apply_filter_to_all_columns_at_once else "each column separately"
+        filter_mode = (
+            "all columns at once"
+            if apply_filter_to_all_columns_at_once
+            else "each column separately"
+        )
         print(f"Filtering mode: {filter_mode}")
         if filter_function is not None:
             print("Filtering was applied.")
