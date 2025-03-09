@@ -15,11 +15,12 @@ def perform_bayesian_geometry_compensation(
     beta: Optional[float] = 1.0e10,
     sigma: Optional[float] = 10,
 ) -> np.ndarray:
-    """Perform geometry compensation on an incremental shaft
-    encoder with N sections measured over M revolutions.
+    """
+    Perform geometry compensation on an incremental shaft encoder,
+    with N sections measured over M revolutions, using Bayesian regression.
 
-    An algorithm that performs shaft encoder geometry compensation for
-    arbitrary shaft speeds using Bayesian Geometry Compensation.
+    This algorithm compensates for geometric irregularities in incremental shaft encoders
+    under arbitrary shaft speed profiles by applying a Bayesian regression technique.
 
     Please reference the paper discussing the algorithm as
     described in the "References" section.
@@ -50,12 +51,12 @@ def perform_bayesian_geometry_compensation(
 
     Returns
     -------
-        np.ndarray
-            An array containing the circumferential distances of all N sections.
+    np.ndarray
+        Array containing the circumferential distances of all N sections, normalized
+        to sum to 2π radians.
 
     References
     ----------
-
     [1] D. H. Diamond, P. S. Heyns, and A. J. Oberholster, “Online Shaft Encoder Geometry
         Compensation for Arbitrary Shaft Speed Profiles Using Bayesian Regression,” Mechanical Systems
         and Signal Processing, vol. 81, pp. 402-418, Dec. 2016, doi: 10.1016/j.ymssp.2016.02.060.
@@ -132,8 +133,11 @@ def determine_mpr_speed_for_zero_crossings(
     beta: Optional[float] = 1.0e10,
     sigma: Optional[float] = 10,
 ) -> pl.DataFrame:
-    """This function is used to calibrate the encoder geometry and
-    calculate the shaft speeds of the encoder.
+    """
+    Calculate shaft speeds using zero crossing times after encoder geometry calibration.
+    
+    This function applies Bayesian geometry compensation to calibrate the encoder geometry
+    and then calculates instantaneous shaft speeds at each encoder section.
 
     Parameters
     ----------
