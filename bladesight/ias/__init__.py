@@ -20,16 +20,21 @@ def calculate_ias(
     M_recalibrate: float = 7.76,
     alignment_error_threshold_multiplier: float = 0.25,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Calculate the shaft speed and corresponding sections
-        of the MPR encoder.
+    """
+    Calculate instantaneous angular speed (IAS) using encoder geometry compensation.
+
+    This function processes time-of-arrival (TOA) data from an incremental shaft encoder,
+    calibrates the encoder geometry using Bayesian regression, and calculates instantaneous
+    angular speeds. It implements a complete workflow consisting of geometry calibration,
+    periodic recalibration, geometry pattern detection, and section alignment.
 
     Parameters
     ----------
     arr_toas :Union[np.ndarray, pd.DataFrame, pl.DataFrame]
-        The time of arrivals of the encoder. If a Pandas or Polars DataFrame is
+        Time-of-arrival measurements from the encoder. If a Pandas or Polars DataFrame is
         supplied, the first column will be converted to a numpy array.
     N : int
-        The number of sections in the encoder.
+        Number of sections in the encoder. This must match the physical encoder configuration.
     M : int
         The number of revolutions spanned by arr_toas. Defaults to 10.
     beta : float, optional
@@ -42,7 +47,7 @@ def calculate_ias(
         Defaults to 10.
     M_recalibrate : float, optional
         The number of revolutions after which the encoder
-        should be recalibrated. Defaults to 7.76.
+        should be recalibrated. Must be less than M. Default is 7.76 revolutions.
     alignment_error_threshold_multiplier : float, optional
         The multiplication factor to be multiplied with the absolute of
         the median of the alignment errors. Sometimes there is a clear
@@ -50,13 +55,61 @@ def calculate_ias(
         aligned. Often this is identified by long breaks in the time signal.
 
         Recommendation: set to 0.5 or 0.8 to prevent the algorithm
-        not aligning sections as the error is too high. Defaults to 0.25.
+        not aligning sections as the error is too high. 
+        Higher values (0.5-0.8) are more lenient for signals with gaps or noise,
+        while lower values are stricter. Default is 0.25.
 
     Returns
     -------
-        Union[pl.DataFrame, pd.DataFrame]
-            A DataFrame containing the shaft speeds of the encoder.
+    Union[pl.DataFrame, pd.DataFrame]
+        A DataFrame containing the shaft speeds of the encoder.
+        DataFrame containing detailed shaft speed and section information with columns:
+    - section_start_time: Start time of each encoder section
+    - section_end_time: End time of each encoder section
+    - section_distance: Calibrated angular distance of each section in radians
+    - Omega: Instantaneous angular velocity (rad/s) for each section
+    - n: Revolution counter
+    - section_start: Start angle of each section in radians
+    - section_end: End angle of each section in radians
+    
+    The output format (Polars or Pandas) is determined by the global preference
+    set with _get_dataframe_library_preference().
+
+    Raises
+    ------
+    ValueError
+        If M_recalibrate >= M, which would prevent proper recalibration.
+        
+    Notes
+    -----
+    This function combines multiple steps:
+    1. Encoder geometry calibration using Bayesian regression
+    2. Periodic recalibration across the dataset
+    3. Detection of the true encoder geometry pattern 
+    4. Alignment of each section to the detected pattern
+    5. Calculation of instantaneous angular speed
+    
+    Section alignment may fail for portions of the signal with significant 
+    noise or missing data. Such regions are filtered out in the final result.
+
+    See Also
+    --------
+    determine_mpr_shaft_speed : Used for calibration and speed calculation
+    get_mpr_geometry : Used to determine encoder geometry pattern
+    perform_alignment_err : Used to align sections with the encoder pattern
+
+    References
+    ----------
+    [1] D. H. Diamond, P. S. Heyns, and A. J. Oberholster, “Online Shaft Encoder Geometry
+        Compensation for Arbitrary Shaft Speed Profiles Using Bayesian Regression,” Mechanical Systems
+        and Signal Processing, vol. 81, pp. 402-418, Dec. 2016, doi: 10.1016/j.ymssp.2016.02.060.
+
+    Copyright (C) 2016 Dawie Diamond, dawie.diamond@yahoo.com
+
+    www.up.ac.za/caim
+    www.caimlabs.co.za
     """
+
     if M_recalibrate >= M:
         raise ValueError(
             "M_recalibrate must be less than M. Try using the default values first"
