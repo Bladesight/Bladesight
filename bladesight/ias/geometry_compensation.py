@@ -37,7 +37,7 @@ def perform_bayesian_geometry_compensation(
         The number of complete revolutions over which
         the compensation must be performed.
     e : np.ndarray
-        Initial estimate for the encoder geometry. If empty, all sections are 
+        Initial estimate for the encoder geometry. If empty, all sections are
         assumed equal (2π/N). Default is empty list.
     beta : float, optional
         Precision of the likelihood function.
@@ -134,7 +134,7 @@ def determine_mpr_speed_for_zero_crossings(
 ) -> pl.DataFrame:
     """
     Calculate shaft speeds using zero crossing times after encoder geometry calibration.
-    
+
     This function applies Bayesian geometry compensation to calibrate the encoder geometry
     and then calculates instantaneous shaft speeds at each encoder section.
 
@@ -160,13 +160,13 @@ def determine_mpr_speed_for_zero_crossings(
     pl.DataFrame
         DataFrame with columns:
         - section_start_time: Start time of each encoder section
-        - section_end_time: End time of each encoder section  
+        - section_end_time: End time of each encoder section
         - encoder_section_rad: Calibrated angular distance of each section in radians
     Raises
     ------
     ValueError
         If the length of arr_toas is not equal to N*M + 1.
-        
+
     See Also
     --------
     perform_bayesian_geometry_compensation : The underlying function used for geometry calibration.
@@ -200,9 +200,9 @@ def determine_mpr_shaft_speed(
 ) -> pl.DataFrame:
     """
     Calculate shaft speeds with periodic encoder geometry recalibration.
-    
+
     This function calibrates the encoder geometry across multiple segments of the signal
-    and calculates shaft speeds. It uses a sliding window approach with periodic 
+    and calculates shaft speeds. It uses a sliding window approach with periodic
     recalibration to account for any drift or changes in the system over time.
 
     Parameters
@@ -234,12 +234,12 @@ def determine_mpr_shaft_speed(
         - section_end_time: End time of each encoder section
         - section_distance: Median calibrated angular distance of each section in radians
         - Omega: Instantaneous angular velocity (rad/s) calculated for each section
-        
+
     Notes
     -----
     This function uses multiple calibration windows and takes the median of measurements
     for each section to improve robustness against noise and temporary variations.
-    
+
     See Also
     --------
     determine_mpr_speed_for_zero_crossings : Used for individual calibration windows.
@@ -294,12 +294,12 @@ def determine_mpr_shaft_speed(
 def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
     """
     Calculate the geometry of the MPR encoder by analyzing section patterns.
-    
+
     This function identifies unique encoder sections by analyzing multiple samples
-    of N consecutive sections. It aligns these samples based on notable features 
-    (like maximum deviation from median) to reconstruct the physical geometry of 
+    of N consecutive sections. It aligns these samples based on notable features
+    (like maximum deviation from median) to reconstruct the physical geometry of
     the encoder.
-    
+
     Parameters
     ----------
     df_mpr_speed : pl.DataFrame
@@ -323,7 +323,7 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
     The function samples multiple sequences of N consecutive sections and aligns them
     to identify the true encoder geometry. This handles variations by taking the median
     of multiple measurements for each section.
-    
+
     The returned geometry is normalized so that the full encoder spans exactly 2π radians.
     """
     n_samples_total = df_mpr_speed.height
@@ -410,7 +410,7 @@ def perform_alignment_err(
 ) -> np.ndarray:
     """
     Align encoder sections with a reference geometry and detect revolution starts.
-    
+
     This function identifies where new revolutions begin in the encoder signal by
     comparing segments of the sections array against a reference geometry. It calculates
     alignment errors and uses a threshold to determine valid alignments.
@@ -450,16 +450,16 @@ def perform_alignment_err(
         Array with the start angles for each section.
     arr_sections_end : np.ndarray
         Array with the end angles for each section.
-    
+
     Notes
     -----
     This function uses a sliding window approach to compare sequences of sections
     with the reference geometry. When a close match is found (error below threshold),
     it marks the start of a new revolution and assigns the correct angular positions.
-    
+
     For segments that don't align well (e.g., due to missing data or noise),
     the start/end values remain as -1.
-    
+
     This implementation is JIT-compiled with Numba for performance.
     """
     arr_errors = np.ones_like(arr_sections) * -1

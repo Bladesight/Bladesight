@@ -55,7 +55,7 @@ def calculate_ias(
         aligned. Often this is identified by long breaks in the time signal.
 
         Recommendation: set to 0.5 or 0.8 to prevent the algorithm
-        not aligning sections as the error is too high. 
+        not aligning sections as the error is too high.
         Higher values (0.5-0.8) are more lenient for signals with gaps or noise,
         while lower values are stricter. Default is 0.25.
 
@@ -64,14 +64,14 @@ def calculate_ias(
     Union[pl.DataFrame, pd.DataFrame]
         A DataFrame containing the shaft speeds of the encoder.
         DataFrame containing detailed shaft speed and section information with columns:
-    - section_start_time: Start time of each encoder section
-    - section_end_time: End time of each encoder section
-    - section_distance: Calibrated angular distance of each section in radians
-    - Omega: Instantaneous angular velocity (rad/s) for each section
-    - n: Revolution counter
-    - section_start: Start angle of each section in radians
-    - section_end: End angle of each section in radians
-    
+        - section_start_time: Start time of each encoder section
+        - section_end_time: End time of each encoder section
+        - section_distance: Calibrated angular distance of each section in radians
+        - Omega: Instantaneous angular velocity (rad/s) for each section
+        - n: Revolution counter
+        - section_start: Start angle of each section in radians
+        - section_end: End angle of each section in radians
+
     The output format (Polars or Pandas) is determined by the global preference
     set with _get_dataframe_library_preference().
 
@@ -79,17 +79,17 @@ def calculate_ias(
     ------
     ValueError
         If M_recalibrate >= M, which would prevent proper recalibration.
-        
+
     Notes
     -----
     This function combines multiple steps:
     1. Encoder geometry calibration using Bayesian regression
     2. Periodic recalibration across the dataset
-    3. Detection of the true encoder geometry pattern 
+    3. Detection of the true encoder geometry pattern
     4. Alignment of each section to the detected pattern
     5. Calculation of instantaneous angular speed
-    
-    Section alignment may fail for portions of the signal with significant 
+
+    Section alignment may fail for portions of the signal with significant
     noise or missing data. Such regions are filtered out in the final result.
 
     See Also
