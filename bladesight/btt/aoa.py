@@ -35,7 +35,7 @@ def transform_ToAs_to_AoAs(
     -------
     Union[pd.DataFrame, pl.DataFrame]
         DataFrame containing AoA values. Library depends on
-        user’s DataFrame preference (Pandas or Polars).
+        user's DataFrame preference (Pandas or Polars).
 
     Raises
     ------

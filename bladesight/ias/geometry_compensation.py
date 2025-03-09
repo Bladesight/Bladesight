@@ -4,7 +4,7 @@ from scipy.sparse import csr_matrix
 import polars as pl
 from tqdm import tqdm
 from numba import njit
-from typing import Union, List
+from typing import Union, List, Optional
 
 
 def perform_bayesian_geometry_compensation(
@@ -12,8 +12,8 @@ def perform_bayesian_geometry_compensation(
     N: int,
     M: int,
     e: Union[np.ndarray, List] = [],
-    beta: float = 10.0e10,  # I actually think paper says the default value for beta is 1E10 not 10E10
-    sigma: float = 0.01,
+    beta: Optional[float] = 1.0e10,
+    sigma: Optional[float] = 10,
 ) -> np.ndarray:
     """Perform geometry compensation on an incremental shaft
     encoder with N sections measured over M revolutions.
@@ -39,12 +39,14 @@ def perform_bayesian_geometry_compensation(
     e : np.ndarray
         An initial estimate for the encoder geometry.  If left an empty
         array, all sections are assumed equal.
-    beta : float
-        Precision of the likelihood function. 
+    beta : float, optional
+        Precision of the likelihood function.
         A larger value is attributed to the observed values being approximately noise free.
-    sigma : float
+        Defaults to 1.0e10.
+    sigma : float, optional
         Standard deviation of the prior probability.
         A larger value is attributed to little confidence in prior probabilities.
+        Defaults to 10.
 
     Returns
     -------
@@ -124,7 +126,11 @@ def perform_bayesian_geometry_compensation(
 
 
 def determine_mpr_speed_for_zero_crossings(
-    arr_toas: np.ndarray, N: int, M: int, beta=1e10, sigma=10
+    arr_toas: np.ndarray,
+    N: int,
+    M: int,
+    beta: Optional[float] = 1.0e10,
+    sigma: Optional[float] = 10,
 ) -> pl.DataFrame:
     """This function is used to calibrate the encoder geometry and
     calculate the shaft speeds of the encoder.
@@ -137,17 +143,19 @@ def determine_mpr_speed_for_zero_crossings(
         The number of sections in the encoder.
     M : int
         The number of revolutions spanned by arr_toas.
-    beta : (float, optional)
-        The beta value for the Bayesian Geometry Compensation. Defaults
-            to 1E10.
-    sigma : (float, optional)
-        The sigma value for the Bayesian Geometry Compensation. Defaults
-        to 10.
+    beta : float, optional
+        The beta value for the Bayesian Geometry Compensation, being the precision of the likelihood function.
+        A larger value is attributed to the observed values being approximately noise free.
+        Defaults to 1.0e10.
+    sigma : float, optional
+        The sigma value for the Bayesian Geometry Compensation, being the standard deviation of the prior probability.
+        A larger value is attributed to little confidence in prior probabilities.
+        Defaults to 10.
 
     Returns
     -------
-        pl.DataFrame
-            A DataFrame containing the shaft speeds of the encoder.
+    pl.DataFrame
+        A DataFrame containing the shaft speeds of the encoder.
     """
     if arr_toas.shape[0] != N * M + 1:
         raise ValueError("The length of arr_toas must be equal to N*M + 1")
@@ -172,35 +180,37 @@ def determine_mpr_shaft_speed(
     arr_toas: np.ndarray,
     N: int,
     M: int,
-    beta=1e10,
-    sigma=0.01,
-    M_recalibrate: int = 7.76,
+    beta: Optional[float] = 1.0e10,
+    sigma: Optional[float] = 10,
+    M_recalibrate: Optional[int] = 7.76,
 ) -> pl.DataFrame:
     """This function is used to calibrate the encoder geometry and
     calculate the shaft speeds of the encoder.
 
     Parameters
     ----------
-        arr_toas : np.ndarray
-            The time of arrivals of the encoder.
-        N : int
-            The number of sections in the encoder.
-        M : int
-            The number of revolutions spanned by arr_toas.
-        beta : float, optional
-            The beta value for the Bayesian Geometry Compensation. Defaults
-            to 1E10.
-        sigma : float, optional
-            The sigma value for the Bayesian Geometry Compensation. Defaults
-            to 0.01.
-        M_recalibrate : float, optional
-            The number of revolutions after which the encoder
-            should be recalibrated. Defaults to 7.76.
+    arr_toas : np.ndarray
+        The time of arrivals of the encoder.
+    N : int
+        The number of sections in the encoder.
+    M : int
+        The number of revolutions spanned by arr_toas.
+    beta : float, optional
+        The beta value for the Bayesian Geometry Compensation, being the precision of the likelihood function.
+        A larger value is attributed to the observed values being approximately noise free.
+        Defaults to 1.0e10.
+    sigma : float, optional
+        The sigma value for the Bayesian Geometry Compensation, being the standard deviation of the prior probability.
+        A larger value is attributed to little confidence in prior probabilities.
+        Defaults to 10.
+    M_recalibrate : float, optional
+        The number of revolutions after which the encoder
+        should be recalibrated. Defaults to 7.76.
 
     Returns
     -------
-        pl.DataFrame
-            A DataFrame containing the shaft speeds of the encoder.
+    pl.DataFrame
+        A DataFrame containing the shaft speeds of the encoder.
     """
     len_t = len(arr_toas)
     recalibrate_interval = int(M_recalibrate * N)
@@ -253,17 +263,17 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
 
     Parameters
     ----------
-        df_mpr_speed : pl.DataFrame
-            The DataFrame containing the blade AoAs. This is the
-            result from the determine_mpr_shaft_speed function.
-        N : int
-            The number of sections in the encoder.
+    df_mpr_speed : pl.DataFrame
+        The DataFrame containing the blade AoAs. This is the
+        result from the determine_mpr_shaft_speed function.
+    N : int
+        The number of sections in the encoder.
 
     Returns
     -------
-        pl.DataFrame
-            The DataFrame containing the geometry
-            of the MPR encoder.
+    pl.DataFrame
+        The DataFrame containing the geometry
+        of the MPR encoder.
     """
     n_samples_total = df_mpr_speed.height
     n_random_samples = min(int(n_samples_total / 10), 50)
