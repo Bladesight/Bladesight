@@ -28,18 +28,17 @@ def perform_bayesian_geometry_compensation(
     Parameters
     ----------
     t : np.ndarray
-        1D numpy array of zeros crossing times.  The first zero crossing
+        1D numpy array of zeros crossing times. The first zero crossing
         time indicates the start of the first section.  This array should therefore
         have exactly M*N + 1 elements.
-
     N : int
         The number of sections in the shaft encoder.
     M : int
         The number of complete revolutions over which
         the compensation must be performed.
     e : np.ndarray
-        An initial estimate for the encoder geometry.  If left an empty
-        array, all sections are assumed equal.
+        Initial estimate for the encoder geometry. If empty, all sections are 
+        assumed equal (2π/N). Default is empty list.
     beta : float, optional
         Precision of the likelihood function.
         A larger value is attributed to the observed values being approximately noise free.
@@ -142,7 +141,7 @@ def determine_mpr_speed_for_zero_crossings(
     Parameters
     ----------
     arr_toas : np.ndarray
-        The time of arrivals of the encoder.
+        Array of time-of-arrivals (zero crossings) from the encoder.
     N : int
         The number of sections in the encoder.
     M : int
@@ -159,7 +158,18 @@ def determine_mpr_speed_for_zero_crossings(
     Returns
     -------
     pl.DataFrame
-        A DataFrame containing the shaft speeds of the encoder.
+        DataFrame with columns:
+        - section_start_time: Start time of each encoder section
+        - section_end_time: End time of each encoder section  
+        - encoder_section_rad: Calibrated angular distance of each section in radians
+    Raises
+    ------
+    ValueError
+        If the length of arr_toas is not equal to N*M + 1.
+        
+    See Also
+    --------
+    perform_bayesian_geometry_compensation : The underlying function used for geometry calibration.
     """
     if arr_toas.shape[0] != N * M + 1:
         raise ValueError("The length of arr_toas must be equal to N*M + 1")
@@ -188,13 +198,17 @@ def determine_mpr_shaft_speed(
     sigma: Optional[float] = 10,
     M_recalibrate: Optional[int] = 7.76,
 ) -> pl.DataFrame:
-    """This function is used to calibrate the encoder geometry and
-    calculate the shaft speeds of the encoder.
+    """
+    Calculate shaft speeds with periodic encoder geometry recalibration.
+    
+    This function calibrates the encoder geometry across multiple segments of the signal
+    and calculates shaft speeds. It uses a sliding window approach with periodic 
+    recalibration to account for any drift or changes in the system over time.
 
     Parameters
     ----------
     arr_toas : np.ndarray
-        The time of arrivals of the encoder.
+        Array of time-of-arrivals (zero crossings) from the encoder.
     N : int
         The number of sections in the encoder.
     M : int
@@ -209,12 +223,27 @@ def determine_mpr_shaft_speed(
         Defaults to 10.
     M_recalibrate : float, optional
         The number of revolutions after which the encoder
-        should be recalibrated. Defaults to 7.76.
+        should be recalibrated. Defaults to 7.76 revolutions.
 
     Returns
     -------
     pl.DataFrame
         A DataFrame containing the shaft speeds of the encoder.
+        DataFrame with columns:
+        - section_start_time: Start time of each encoder section
+        - section_end_time: End time of each encoder section
+        - section_distance: Median calibrated angular distance of each section in radians
+        - Omega: Instantaneous angular velocity (rad/s) calculated for each section
+        
+    Notes
+    -----
+    This function uses multiple calibration windows and takes the median of measurements
+    for each section to improve robustness against noise and temporary variations.
+    
+    See Also
+    --------
+    determine_mpr_speed_for_zero_crossings : Used for individual calibration windows.
+    perform_bayesian_geometry_compensation : The underlying calibration algorithm.
     """
     len_t = len(arr_toas)
     recalibrate_interval = int(M_recalibrate * N)
@@ -263,8 +292,14 @@ def determine_mpr_shaft_speed(
 
 
 def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
-    """This function calculates the geometry of the MPR encoder.
-
+    """
+    Calculate the geometry of the MPR encoder by analyzing section patterns.
+    
+    This function identifies unique encoder sections by analyzing multiple samples
+    of N consecutive sections. It aligns these samples based on notable features 
+    (like maximum deviation from median) to reconstruct the physical geometry of 
+    the encoder.
+    
     Parameters
     ----------
     df_mpr_speed : pl.DataFrame
@@ -278,6 +313,18 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
     pl.DataFrame
         The DataFrame containing the geometry
         of the MPR encoder.
+        DataFrame with columns:
+        - section_start: Start angle of each section in radians
+        - section_end: End angle of each section in radians
+        - section_distance: Angular distance of each section in radians
+
+    Notes
+    -----
+    The function samples multiple sequences of N consecutive sections and aligns them
+    to identify the true encoder geometry. This handles variations by taking the median
+    of multiple measurements for each section.
+    
+    The returned geometry is normalized so that the full encoder spans exactly 2π radians.
     """
     n_samples_total = df_mpr_speed.height
     n_random_samples = min(int(n_samples_total / 10), 50)
@@ -361,41 +408,59 @@ def perform_alignment_err(
     arr_geometry_end: np.array,
     alignment_error_threshold_multiplier: float = 0.25,
 ) -> np.ndarray:
-    """Get an array of alignment errors between the MPR encoder
-        and the geometry.
+    """
+    Align encoder sections with a reference geometry and detect revolution starts.
+    
+    This function identifies where new revolutions begin in the encoder signal by
+    comparing segments of the sections array against a reference geometry. It calculates
+    alignment errors and uses a threshold to determine valid alignments.
 
-        This will be used to determine the best alignment between the
-        start of each revolution.
+    This will be used to determine the best alignment between the
+    start of each revolution.
 
     Parameters
     ----------
-        arr_sections : np.array
-            The MPR sections array. This is the
-            'section_distance' column from the determine_mpr_shaft_speed
-            function.
-        arr_geometry : np.array
-            The geometry array. This is the
-            'section_distance' column from the determine_geometry function.
+    arr_sections : np.array
+        The MPR sections array. This is the
+        'section_distance' column from the determine_mpr_shaft_speed
+        function.
+    arr_geometry : np.array
+        The geometry array. This is the
+        'section_distance' column from the determine_geometry function.
 
-        arr_geometry_start : np.array
-            The start of the geometry array.
+    arr_geometry_start : np.array
+        The start of the geometry array.
 
-        arr_geometry_end : np.array
-            The end of the geometry
+    arr_geometry_end : np.array
+        The end of the geometry
 
-        alignment_error_threshold_multiplier : float, optional
-            The multiplication factor to be multiplied with the absolute of
-            the median of the alignment errors. Sometimes there is a clear
-            issue in the alignment and not all sections in a signal are
-            aligned. Often this is identified by long breaks in the time signal.
-            Recommendation: set to 0.5 or 0.8 to prevent the algorithm not
-            aligning sections as the error is too high. Defaults to 0.25.
+    alignment_error_threshold_multiplier : float, optional
+        The multiplication factor to be multiplied with the absolute of
+        the median of the alignment errors. Sometimes there is a clear
+        issue in the alignment and not all sections in a signal are
+        aligned. Often this is identified by long breaks in the time signal.
+        Recommendation: set to 0.5 or 0.8 to prevent the algorithm not
+        aligning sections as the error is too high. Defaults to 0.25.
 
     Returns
     -------
-        np.ndarray
-            The error between the two arrays. Must have
-            the same shape as arr_sections.
+    arr_is_new_revo : np.ndarray
+            Binary array where 1 indicates the start of a new revolution.
+    arr_sections_start : np.ndarray
+        Array with the start angles for each section.
+    arr_sections_end : np.ndarray
+        Array with the end angles for each section.
+    
+    Notes
+    -----
+    This function uses a sliding window approach to compare sequences of sections
+    with the reference geometry. When a close match is found (error below threshold),
+    it marks the start of a new revolution and assigns the correct angular positions.
+    
+    For segments that don't align well (e.g., due to missing data or noise),
+    the start/end values remain as -1.
+    
+    This implementation is JIT-compiled with Numba for performance.
     """
     arr_errors = np.ones_like(arr_sections) * -1
     N = len(arr_geometry)
