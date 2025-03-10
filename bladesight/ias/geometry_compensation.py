@@ -255,7 +255,7 @@ def determine_mpr_shaft_speed(
             break
         df_cal = determine_mpr_speed_for_zero_crossings(
             arr_toas[i_start:i_end], N=N, M=M, beta=beta, sigma=sigma
-        )
+        )  # Shape = (N*M, 3)
         for row_cal in df_cal.iter_rows(named=True):
             key = (row_cal["section_start_time"], row_cal["section_end_time"])
             if key in section_measurements:
@@ -318,6 +318,8 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
         - section_end: End angle of each section in radians
         - section_distance: Angular distance of each section in radians
 
+    The length of the output array is equal to the number of sections in the encoder (N).
+
     Notes
     -----
     The function samples multiple sequences of N consecutive sections and aligns them
@@ -335,13 +337,14 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
     df_encoder_order = None
     for n, start in enumerate(random_alignment_start_points[:, 0]):
         df_one_section = (
-            df_mpr_speed[start : start + N]
-            .select("section_distance") # Extract just the section_distance column
+            df_mpr_speed[start : start + N].select(
+                "section_distance"
+            )  # Extract just the section_distance column
             # Add a column for the absolute deviation from median
             # This helps identify distinctive sections that have unusual widths
             .with_columns(
                 [
-                    pl.col("section_distance"), # Keep the original column
+                    pl.col("section_distance"),  # Keep the original column
                     (pl.col("section_distance") - pl.col("section_distance").median())
                     .abs()
                     .alias("max_abs_section"),
@@ -354,10 +357,12 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
                     pl.when(
                         pl.col("max_abs_section") == pl.col("max_abs_section").max()
                     )
-                    .then(pl.lit(1)) # Mark sections with max deviation
+                    .then(pl.lit(1))  # Mark sections with max deviation
                     .otherwise(pl.lit(None))
                     .alias("is_max_asb_section")
-                    .fill_null(strategy="forward")  # Fill forward to keep non-null values
+                    .fill_null(
+                        strategy="forward"
+                    )  # Fill forward to keep non-null values
                 ]
             )
             # Create a section number that starts from the reference point
@@ -373,36 +378,46 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
                     % N
                 ).alias("section_no")
             )
-        ).sort("section_no") # Sort by the aligned section number
+        ).sort(
+            "section_no"
+        )  # Sort by the aligned section number
 
-        if df_encoder_order is None:
+        # Store the section distances in the results DataFrame
+        # Each sample becomes a new column named "section_distance_{n}"
+        if df_encoder_order is None:  # First sample initializes the DataFrame
             df_encoder_order = df_one_section.select(
                 pl.col("section_distance").alias(f"section_distance_{n}")
             )
-        else:
+        else:  # Subsequent samples are added as new columns
             df_encoder_order = df_encoder_order.hstack(
                 df_one_section.select(
                     pl.col("section_distance").alias(f"section_distance_{n}")
                 )
             )
+
+    # Create the final geometry DataFrame by taking the median across all samples
     df_geometry = (
-        pl.DataFrame(
+        pl.DataFrame(  # Start with median section distances across all samples
             {"section_distance": np.median(df_encoder_order.to_numpy(), axis=1)}
         )
-        .with_columns(
+        .with_columns(  # Calculate cumulative sum to get end position of each section
             pl.col("section_distance").cum_sum().alias("section_end"),
         )
-        .with_columns(
+        .with_columns(  # Normalize to ensure total angle is exactly 2π radians
             ((pl.col("section_end") / pl.col("section_end").max()) * (2 * np.pi)).alias(
                 "section_end"
             )
         )
-        .with_columns(
+        .with_columns(  # Calculate start position as (end position - section width)
             (pl.col("section_end") - pl.col("section_distance")).alias("section_start")
         )
-        .select("section_start", "section_end", "section_distance")
+        .select(
+            "section_start", "section_end", "section_distance"
+        )  # Select only the relevant columns in proper order
     )
-    df_geometry[0, "section_start"] = 0
+    df_geometry[0, "section_start"] = (
+        0  # Set the first section's start angle to 0 (beginning of the revolution)
+    )
     return df_geometry
 
 
@@ -432,14 +447,13 @@ def perform_alignment_err(
         function.
     arr_geometry : np.array
         The geometry array. This is the
-        'section_distance' column from the determine_geometry function.
-
+        'section_distance' column from the get_mpr_geometry function.
     arr_geometry_start : np.array
-        The start of the geometry array.
-
+        The start of the geometry array. This is the
+        'section_start' column from the get_mpr_geometry function.
     arr_geometry_end : np.array
-        The end of the geometry
-
+        The end of the geometry. This is the
+        'section_end' column from the get_mpr_geometry function.
     alignment_error_threshold_multiplier : float, optional
         The multiplication factor to be multiplied with the absolute of
         the median of the alignment errors. Sometimes there is a clear
@@ -470,15 +484,33 @@ def perform_alignment_err(
     """
     arr_errors = np.ones_like(arr_sections) * -1
     N = len(arr_geometry)
+
+    # First pass: Calculate alignment errors for each potential revolution start point
+    # For each position in the signal, calculate how well N consecutive sections
+    # match the reference geometry pattern
     for i in np.arange(arr_sections.shape[0] - N):
         arr_errors[i] = np.sum(np.abs(arr_sections[i : i + N] - arr_geometry))
+
+    # Initialize output arrays:
+    # - arr_is_new_revo: Binary flags for revolution start points (1 = start of revolution)
+    # - arr_sections_start/end: Angular positions (radians) for each section
+    #   Initially set to -1 (invalid/unaligned)
     arr_err_threshold = np.median(arr_errors) * alignment_error_threshold_multiplier
     arr_is_new_revo = np.zeros_like(arr_sections, dtype=np.int8)
     arr_sections_start = np.ones_like(arr_sections) * -1
     arr_sections_end = np.ones_like(arr_sections) * -1
+
+    # Second pass: Mark revolution starts and assign angular positions
+    # where good alignments were found
     for i in np.arange(arr_sections.shape[0] - N):
-        if arr_errors[i] < arr_err_threshold and arr_errors[i] != -1:
+        if (
+            arr_errors[i] < arr_err_threshold and arr_errors[i] != -1
+        ):  # Check if this position has an error below threshold and has been calculated
             arr_is_new_revo[i] = 1
-            arr_sections_start[i : i + N] = arr_geometry_start
-            arr_sections_end[i : i + N] = arr_geometry_end
+            arr_sections_start[i : i + N] = (
+                arr_geometry_start  # Assign the correct angular positions to N consecutive sections based on the reference geometry pattern
+            )
+            arr_sections_end[i : i + N] = (
+                arr_geometry_end  # Assign the correct angular positions to N consecutive sections based on the reference geometry pattern
+            )
     return arr_is_new_revo, arr_sections_start, arr_sections_end
