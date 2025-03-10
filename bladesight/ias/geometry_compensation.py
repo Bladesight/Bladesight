@@ -336,26 +336,32 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
     for n, start in enumerate(random_alignment_start_points[:, 0]):
         df_one_section = (
             df_mpr_speed[start : start + N]
-            .select("section_distance")
+            .select("section_distance") # Extract just the section_distance column
+            # Add a column for the absolute deviation from median
+            # This helps identify distinctive sections that have unusual widths
             .with_columns(
                 [
-                    pl.col("section_distance"),
+                    pl.col("section_distance"), # Keep the original column
                     (pl.col("section_distance") - pl.col("section_distance").median())
                     .abs()
                     .alias("max_abs_section"),
                 ]
             )
+            # Mark the section with maximum deviation as a reference point (value=1)
+            # This creates a landmark to align different samples
             .with_columns(
                 [
                     pl.when(
                         pl.col("max_abs_section") == pl.col("max_abs_section").max()
                     )
-                    .then(pl.lit(1))
+                    .then(pl.lit(1)) # Mark sections with max deviation
                     .otherwise(pl.lit(None))
                     .alias("is_max_asb_section")
-                    .fill_null(strategy="forward")
+                    .fill_null(strategy="forward")  # Fill forward to keep non-null values
                 ]
             )
+            # Create a section number that starts from the reference point
+            # This ensures all samples are aligned with the same section as 0
             .with_columns(
                 (
                     (
@@ -367,7 +373,7 @@ def get_mpr_geometry(df_mpr_speed: pl.DataFrame, N: int) -> pl.DataFrame:
                     % N
                 ).alias("section_no")
             )
-        ).sort("section_no")
+        ).sort("section_no") # Sort by the aligned section number
 
         if df_encoder_order is None:
             df_encoder_order = df_one_section.select(
