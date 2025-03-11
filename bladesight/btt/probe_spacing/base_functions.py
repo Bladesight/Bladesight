@@ -77,7 +77,6 @@ def calculate_condition_number(probe_spacing : np.ndarray, EO : float):
     
     for i_probe, probe_location in enumerate(probe_spacing):
         # print('np.sin(EO * probe_location)', np.sin(EO * probe_location))
-
         Phi[i_probe, 0] = np.sin(EO * probe_location)
         Phi[i_probe, 1] = np.cos(EO * probe_location)
 
