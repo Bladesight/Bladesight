@@ -95,10 +95,6 @@ def objective_function(
 
     return cost
 
-import numpy as np
-from typing import List, Tuple
-from scipy.optimize import NonlinearConstraint, LinearConstraint
-
 def probe_position_constraints(
     x: np.ndarray,
     forbidden_intervals: List[Tuple[float, float]],
