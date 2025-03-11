@@ -3,10 +3,10 @@ name = "bladesight"
 version = "0.17.0"
 description = "Bladesight provides comprehensive tools for introductory Blade Tip Timing analysis."
 readme = "README.md"
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10,<3.13"
 dependencies = [
     "duckdb>=1.0.0",
-    "numba>=0.57.0",
+    "numba (>=0.61.0,<0.62.0)",
     "pandas>=1.5.1",
     "polars>=0.19.2",
     "pyarrow>=17.0.0",
@@ -15,6 +15,7 @@ dependencies = [
     "tqdm>=4.65.0",
     "typing-extensions>=4.12.2",
     "yaspin>=3.0.1",
+    "numpy (>=1.24,<2.2)",
 ]
 authors = [
     { name = "Dawie Diamond", email = "dawie.diamond@bladesight.com" },
@@ -28,7 +29,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
+    #"Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12"
