@@ -6,143 +6,17 @@ Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111
 The notation in this module follows the one used in the reference [1].
 """
 import numpy as np
+import pandas as pd
+from scipy.optimize import differential_evolution
 from typing import List, Dict
 
 
 from .sdof import get_phi
 
-# # ------------------ Tradidional Single-parameter Method ------------------ # - i realised after typing this that this is just the existing SDoF method
-# def get_H(
-#         omega : np.ndarray,
-#         omega_n : float, 
-#         zeta: float,
-#         delta_st: float
-#     ) -> np.ndarray:
-#     """
-#     This function returns the vibration amplitude of 
-#     the blade vibration.
-    
-#     x(ω) = 	δ_st / sqrt( (1 - r**2)**2 + (2*ζ*r)**2)
-
-#     where:
-
-#     r = ω/ω_0
-
-#     Parameters
-#     ----------
-#     omega : np.ndarray
-#         The excitation frequencies in rad/s.
-#     omega_n : float
-#         The natural frequency of the blade in rad/s.
-#     zeta : float
-#         The damping ratio of the blade vibration (dimensionless).
-#     delta_st : float
-#         The static deflection of the blade (typically in µm).
-
-#     Returns
-#     -------
-#     np.ndarray
-#         The vibration amplitude of the blade corresponding to each frequency in `omega`
-#         (in the same units as `delta_st`).
-
-#     Notes
-#     -----
-#     In reference [1], the amplitude term A_s is equivalent to the static deflection δ_st used here.
-    
-#     References
-#     ----------
-#     [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
-#         Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
-#     """
-#     r = omega / omega_n
-#     return (
-#         delta_st 
-#         / np.sqrt(
-#             (1 - r**2)**2 
-#             + (2*zeta*r)**2
-#         )
-#     )
-
-# def predict_sdof_single_probe(
-#     omega_n : float,
-#     zeta : float,
-#     delta_st : float,
-#     EO : int,
-#     theta_sensor : float,
-#     arr_omega : np.ndarray
-# ) -> np.ndarray:
-#     """
-#     Predict blade tip deflections for a single probe using a single-degree-of-freedom (SDOF) model.
-
-#     This function calculates the predicted tip deflection of a blade based on an SDOF model 
-#     using a single probe measurement. The model utilizes the vibration amplitude computed 
-#     by `get_H` and the phase angle computed by `get_phi` for excitation frequencies scaled 
-#     by the engine order (EO). An alternative formulation is then applied involving an 
-#     initial excitation phase (phi_0), assumed to be defined elsewhere in the code.
-
-#     The predicted tip deflection is computed via:
-    
-#         r = arr_omega / omega_n
-#         numerator = (1 - r**2) * cos(EO*theta_sensor + phi_0) + (2*zeta*r) * sin(EO*theta_sensor + phi_0)
-#         denominator = (1 - r**2)**2 + (2*zeta*r)**2
-#         predicted_tip_deflections = delta_st * (numerator / denominator)
-
-#     Here, phi_0 is the initial phase of the excitation force.
-
-#     Parameters
-#     ----------
-#     omega_n : float
-#         Natural frequency of the blade in rad/s.
-#     zeta : float
-#         Damping ratio of the blade vibration (dimensionless).
-#     delta_st : float
-#         Static deflection of the blade (typically in µm).
-#     EO : int
-#         Engine order used to scale the excitation frequencies.
-#     theta_sensor : float
-#         Sensor angle in radians, representing the absolute circumferential position.
-#     arr_omega : np.ndarray
-#         Array of excitation frequencies in rad/s.
-
-#     Returns
-#     -------
-#     np.ndarray
-#         The predicted blade tip deflection values (in the same units as `delta_st`) 
-#         corresponding to each frequency in `arr_omega`.
-
-#     References
-#     ----------
-#     [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
-#         Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
-
-#     Notes
-#     -----
-#     - The functions `get_H` and `get_phi` are used to compute the amplitude and phase, 
-#     respectively, for the scaled excitation frequencies (arr_omega * EO).
-#     - The variable `phi_0` must be defined in an outer scope; it represents the initial 
-#     phase of the excitation force.
-#     - It is assumed that the variable `omega` in the model formulation is equivalent 
-#     to `arr_omega`.
-#     """
-#     # X = get_H(arr_omega*EO, omega_n, zeta, delta_st)
-#     # phi = get_phi(arr_omega*EO, omega_n, zeta)
-#     # predicted_tip_deflections = X * np.cos(theta_sensor * EO - phi)
-
-#     r = omega / omega_n
-
-#     numerator_term1 = (1 - r**2) * np.cos(EO*theta_sensor + phi_0) # phi_0 is the initial phase of the excitation force
-#     numerator_term2 = (2*zeta*r) * np.sin(EO*theta_sensor + phi_0) # phi_0 is the initial phase of the excitation force
-
-#     numerator = numerator_term1 + numerator_term2
-#     denominator = (1 - r**2)**2 + (2*zeta*r)**2
-
-#     predicted_tip_deflections = delta_st * numerator/denominator
-
-#     return predicted_tip_deflections
-
-
 # ------------------ Frequency Sweep Parameter Method ------------------ #
-def get_eta(EO: int, Q: float, a: float, f_n: float) -> float:
+def get_eta(EO: int, Q: float, a: float, 
+            #f_n: float,
+            Omega_n:float) -> float:
     """
     Compute the non-dimensional frequency sweep parameter η.
 
@@ -156,34 +30,36 @@ def get_eta(EO: int, Q: float, a: float, f_n: float) -> float:
     Q : float
         Quality factor (dimensionless).
     a : float
-        A scaling parameter (units dependent on application).
-    f_n : float
-        Natural frequency (in Hz or consistent units).
+        Frequency sweep rate (acceleration of rotating speed).
+    # f_n : float
+    #     Natural frequency (in Hz or consistent units).
+    Omega_n : float
+        The rotating speed at resonance (in rad/s).
 
     Returns
     -------
     float
-        The computed non-dimensional parameter η.
+        The computed non-dimensional Frequency sweep parameter η.
 
     References
     ----------
     [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
         Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
     """
-    return EO*((Q**2) * a)/(60*f_n**2)
-
+    # return EO*((Q**2) * a)/(60*(f_n**2))
+    return ((Q**2) * a)/(60*EO*(Omega_n**2)) # Equation 11 in Reference [1], NOT using f_n as its just an extra parameter to pass in unnecessarily
 
 def get_A(eta: float) -> float:
     """
     Compute the fraction of the peak amplitude factor, A, based on the non-dimensional parameter η.
 
     Equation (13) in Reference [1]:
-        A = 1 - exp(-2.86 * η^(-0.455))
+        A(η) = 1 - exp(-2.86 * η^(-0.455))
 
     Parameters
     ----------
     eta : float
-        The non-dimensional parameter η.
+        The non-dimensional frequency parameter η.
 
     Returns
     -------
@@ -206,12 +82,12 @@ def get_f(eta: float) -> float:
     Compute the normalised frequency error, f, based on the non-dimensional parameter η.
 
     Equation (13) in Reference [1]:
-        f = 0.518 * η^(0.576)
+        f(η) = 0.518 * η^(0.576)
 
     Parameters
     ----------
     eta : float
-        The non-dimensional parameter η.
+        The non-dimensional frequency parameter η.
 
     Returns
     -------
@@ -234,14 +110,14 @@ def get_zeta(eta: float) -> float:
     Compute the fraction of damping ratio, ζ, based on the non-dimensional parameter η.
 
     Equation (14) in Reference [1]:
-        ζ = 1 / A
+        ζ(η) = 1 / A
 
     where A is computed by `get_A(eta)`.
 
     Parameters
     ----------
     eta : float
-        The non-dimensional parameter η.
+        The non-dimensional frequency parameter η.
 
     Returns
     -------
@@ -255,40 +131,361 @@ def get_zeta(eta: float) -> float:
     """
     return 1/get_A(eta) # Equation 14 in Reference [1]
 
+# def get_Q(eta: float) -> float:
+#     """
+#     Compute the quality factor, Q, based on the non-dimensional parameter η.
+
+#     Section 3.2 in Reference [1]:
+#         Q = 1/(2*ζ)
+
+#     Parameters
+#     ----------
+#     eta : float
+#         The non-dimensional frequency parameter η.
+
+#     Returns
+#     -------
+#     float
+#         The quality factor Q.
+
+#     References
+#     ----------
+#     [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
+#         Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
+#     """
+    return 1/(2*get_zeta(eta))
+
+def get_frequency_sweep_rate_a(speed_at_start: float, speed_at_end: float, time_at_start: float, time_at_end: float) -> float:
+    """
+    Compute the frequency sweep rate, a, based on the start and end speeds and times.
+
+    Parameters:
+    -----------
+    speed_at_start : float
+        The rotating speed at the start of the frequency sweep (in rad/s).
+    speed_at_end : float
+        The rotating speed at the end of the frequency sweep (in rad/s).
+    time_at_start : float
+        The time at the start of the frequency sweep (in seconds).
+    time_at_end : float
+        The time at the end of the frequency sweep (in seconds).
+
+    Returns:
+    --------
+    float
+        The frequency sweep rate, a (in rad/s^2).
+
+    Notes:
+    ------
+    In Section 3.2 of Reference [1], the frequency sweep rate should be smaller than 216*(f_n**2)*ζ**2.
+    """
+    return (speed_at_end - speed_at_start) / (time_at_end - time_at_start)
 
 def predict_sdof_samples_sweep(
-    omega_n : float,
-    zeta : float,
-    delta_st : float,
     EO : int,
     theta_sensor : float,
     phi_0 : float,
-    arr_omega : np.ndarray
-) -> np.ndarray:
-    
-    # X = get_X(arr_omega*EO, omega_n, zeta, delta_st)  
-    # phi = get_phi(arr_omega*EO, omega_n, zeta)
-    # predicted_tip_deflections = X * np.cos(theta_sensor * EO - phi + phi_0)
+    # Reference [1] parameters:
+    Q: float,
+    # a: float,
+    # f_n: float,
+    A_max: float,
+    C: float,
 
-    eta = get_eta(EO = EO, Q = Q, a = a, f_n = f_n)
+    Omega_arr: np.ndarray,
+    time_arr: np.ndarray,
+    Omega_n: float,
+    verbose: bool = False
+) -> np.ndarray:
+    """
+    Predict blade tip deflections using a frequency sweep parameter method based on a
+    Single Degree-of-Freedom (SDoF) model.
+
+    This function implements a modified SDoF model that incorporates the frequency sweep 
+    effects described in reference [1]. In this formulation, several intermediate parameters 
+    are computed:
+    
+    - The non-dimensional parameter η is computed using `get_eta`.
+    - The amplitude factor A, frequency factor f, and revised damping ratio ζ are then derived 
+    from η using `get_A`, `get_f`, and `get_zeta`, respectively.
+    - The predicted tip deflection is then computed via a formulation involving:
+    
+        numerator_term1 = A * A_max
+        numerator_term2 = v * cos(EO * theta_sensor + phi_0) + sin(EO * theta_sensor + phi_0)
+
+        v = Q/ζ * [ (1 - ((Omega/(f/Q + 1)) * Omega_n)**2) / (((Omega/(f/Q + 1)) * Omega_n)**2) ]
+
+        denominator_term1 = Omega / ((f/Q + 1) * Omega_n)
+        denominator_term2 = (v**2 + 1)
+
+        predicted_tip_deflections = (numerator_term1 / denominator_term1) * (numerator_term2 / denominator_term2) + C
+
+    Parameters
+    ----------
+    EO : int
+        The engine order used for scaling the excitation frequency.
+    theta_sensor : float
+        The sensor angle in radians (absolute circumferential position of the probe).
+    phi_0 : float
+        The initial phase of the excitation force in radians.
+
+    # omega_n : float
+    #     The natural frequency of the blade (in rad/s).
+    # zeta : float
+    #     The initial damping ratio (dimensionless). Note that this is overwritten by the 
+    #     revised damping ratio computed from η.
+    # delta_st : float
+    #     The static deflection of the blade (typically in µm).
+    
+    Reference [1] parameters:
+    Q : float
+        Quality factor (dimensionless).
+    a : float
+        Frequency sweep rate (acceleration of rotating speed).
+    # f_n : float
+    #     Natural frequency (in Hz or consistent units).
+    A_max : float
+        Resonant maximum amplitude of the blade vibration.
+    C : float
+        Constant vibration offset term used when calculating the predicted tip deflections.
+    
+    Omega_arr : np.ndarray
+        Array of excitation frequencies (in rad/s).
+    Omega_n : float
+        The rotating speed at resonance (in rad/s).
+
+
+    Returns
+    -------
+    np.ndarray
+        The predicted tip deflection values (in the same units as delta_st) for each 
+        excitation frequency in `arr_omega`.
+
+    References
+    ----------
+    [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
+        Measurement, vol. 201, p. 111681, Sep. 2022, doi:10.1016/j.measurement.2022.111681.
+
+    Notes
+    -----
+    - This formulation is based on the frequency sweep parameter method incorporating frequency-dependent 
+    loss mechanisms.
+    """
+    a = get_frequency_sweep_rate_a(
+                                speed_at_start = Omega_arr[0], speed_at_end = Omega_arr[-1], 
+                                time_at_start = time_arr[0], time_at_end = time_arr[-1]
+                                )
+    if verbose == True:
+        print(f"Frequency sweep rate, a: {a} (Rad/s)/s = {a*60/(2*np.pi)} (RPM/s)")
+
+    eta = get_eta(
+                EO = EO, Q = Q, a = a, 
+                #   f_n = f_n,
+                Omega_n = Omega_n
+                )
+    
     A = get_A(eta=eta)
     f = get_f(eta=eta)
     zeta = get_zeta(eta=eta)
 
-    numerator_term1 = A * A_max
-    numerator_term2 = v*np.cos(EO*theta_sensor + phi_0) + np.sin(EO*theta_sensor + phi_0)
-    
-    v = Q/zeta * (
-                (1 - ((speed/(f/Q + 1))*speed_n)**2)/
-                (((speed/(f/Q + 1))*speed_n)**2)
+    v = (Q/zeta) * ( # Defined just under Equation (16) in Reference [1]
+                (1 - ((Omega_arr/((f/Q + 1)*Omega_n))**2))/
+                (Omega_arr/((f/Q + 1)*Omega_n))
                 )
 
-
-
-    denominator_term1 = speed/((f/Q + 1)*speed_n) # Not sure if its .../((f/Q + 1)*speed_n) or if its .../(f/Q + 1)*speed_n
+    numerator_term1 = A * A_max
+    numerator_term2 = v*np.cos(EO*theta_sensor + phi_0) + np.sin(EO*theta_sensor + phi_0) # Not sure if the EO should be calculated to be an array of length Omega_arr?
+    
+    denominator_term1 = Omega_arr/((f/Q + 1)*Omega_n) # Not sure if its .../((f/Q + 1)*speed_n) or if its .../(f/Q + 1)*speed_n
     denominator_term2 = (v**2 + 1)
 
     predicted_tip_deflections = (numerator_term1/denominator_term1) * (numerator_term2/denominator_term2) + C
     
-    
     return predicted_tip_deflections
+
+def SDoF_loss_multiple_probes_sweep(
+    model_params : np.ndarray,
+    tip_deflections_set : List[np.ndarray],
+    arr_omega : np.ndarray, 
+    EO : int, 
+    theta_sensor_set : List[float],
+
+    # Reference [1] parameters:
+    Q: float,
+    a: float,
+    f_n: float,
+    A_max: float,
+    C: float,
+
+    amplitude_scaling_factor : float = 1
+
+    
+    ) -> np.ndarray:
+    """ This function fits the SDoF parameters to 
+        multiple probes' data.
+
+    Args:
+        model_params (np.ndarray): The SDoF fit method's model parameters. It
+            includes a list of the following parameters:
+            
+            omega_n (float): The natural frequency of the SDoF system.
+            ln_zeta (float): The damping ratio of the SDoF system.
+            delta_st (float): The static deflection of the SDoF system.
+            phi_0 (float): The phase offset of the SDoF system.
+            And then the z_median and z_max for each probe.
+                z_median (float): The amplitude offset at the 
+                    median shaft speed.
+                z_max (float): The maximum amplitude offset.
+
+        tip_deflections_set (List[np.ndarray]): The tip deflection data for each probe.
+        arr_omega (np.ndarray): The angular velocity of the rotor corresponding
+            to the tip deflection data.
+        EO (int): The EO of vibration you want to fit.
+        theta_sensor_set (List[float]): Each sensor's angular position 
+            relative to the start of the revolution.
+        amplitude_scaling_factor (float, optional): A scaling factor to
+            weight the measured tip deflections. Defaults to 1. Use this value
+            to reward solutions that better capture the full amplitude of the
+            tip deflections.
+
+    Returns:
+        np.ndarray: The sum of squared error between 
+            the tip deflection data of each probe and
+            the predicted tip deflections.
+    """
+    # omega_n, ln_zeta, delta_st, phi_0, *correction_factors = model_params
+
+
+    # EO, theta_sensor, phi_0, Q, a, f_n, A_max, C, speed, speed_n = model_params
+    EO, theta_sensor, phi_0, Q, a, f_n, A_max, C = model_params
+
+
+
+    zeta = np.exp(ln_zeta)
+    error = 0
+    for i_probe, arr_tip_deflections in enumerate(tip_deflections_set):    
+        theta_sensor = theta_sensor_set[i_probe]
+        predicted_tip_deflections = predict_sdof_samples_sweep(
+            # omega_n, zeta, delta_st, EO, theta_sensor, phi_0, arr_omega
+            EO = EO,
+            theta_sensor = theta_sensor,
+            phi_0 = phi_0,
+            Q = Q,
+            a = a,
+            f_n = f_n,
+            A_max = A_max,
+            C = C,
+            speed = arr_omega,
+            Omega_n = omega_n
+            )   
+
+        z_median = correction_factors[i_probe*2]
+        z_max = correction_factors[i_probe*2+1]
+        arr_tip_deflection_corrections = predict_sdof_samples_sweep(
+            arr_omega, z_median, z_max
+        )
+        arr_tip_deflections_corrected = (
+            arr_tip_deflections
+            + arr_tip_deflection_corrections
+        )
+        error += np.sum(
+            np.abs(arr_tip_deflections_corrected)**amplitude_scaling_factor
+            *(
+                arr_tip_deflections_corrected
+                - predicted_tip_deflections
+            )**2
+        )
+    return error
+
+
+# def perform_SDoF_fit(
+#     df_blade : pd.DataFrame,
+#     n_start : int,
+#     n_end : int,
+#     EOs : List[int] = np.arange(1, 50),
+#     # delta_st_max : int = 10,
+#     verbose : bool = False,
+#     probe_column_label_suffix : str = "_filt"
+# ) -> Dict[str, float]:
+#     """This function receives a blade tip deflection DataFrame, and returns 
+#     the SDoF fit model parameters after fitting.
+
+#     Args:
+#         df_blade (pd.DataFrame): The blade tip deflection DataFrame.
+#         n_start (int): The starting revolution number of the resonance 
+#             you want to fit.
+#         n_end (int): The ending revolution number of the resonance 
+#             you want to fit.
+#         EOs (List[int], optional): The list of EOs to search for. Defaults 
+#             to np.arange(1, 20).
+#         delta_st_max (int, optional): The maximum static deflection within our optimization 
+#             bounds. Defaults to 10.
+#         verbose (bool, optional): Whether to print the progress. Defaults to False.
+
+#     Returns:
+#         Dict[str, float]: The fitted model parameters.
+#     """
+#     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
+#     measured_tip_deflection_signals = [
+#         col 
+#         for col in df_resonance_window
+#         if col.endswith(probe_column_label_suffix)
+#     ]
+#     PROBE_COUNT = len(measured_tip_deflection_signals)
+#     eo_solutions = []
+#     for EO in EOs:
+#         if verbose:
+#             print("NOW SOLVING FOR EO = ", EO, " of ", EOs)
+#         omega_n_min = df_resonance_window["Omega"].min() * EO
+#         omega_n_max = df_resonance_window["Omega"].max() * EO
+#         ln_zeta_min = np.log(0.0001)
+#         ln_zeta_max = np.log(0.3)
+#         delta_st_min = 0
+#         phi_0_min = 0
+#         phi_0_max = 2*np.pi
+#         bounds = [
+#             (omega_n_min, omega_n_max),
+#             (ln_zeta_min, ln_zeta_max),
+#             (delta_st_min, delta_st_max),
+#             (phi_0_min, phi_0_max),
+#         ]
+#         tip_deflections_set = []
+#         theta_sensor_set = []
+#         for i_probe in range(PROBE_COUNT):
+#             z_max = df_resonance_window[f"x_p{i_probe+1}"+probe_column_label_suffix].abs().max()
+#             z_min = -z_max
+#             bounds.extend(
+#                 [
+#                     (z_min, z_max),
+#                     (z_min, z_max)
+#                 ]
+#             )
+#             tip_deflections_set.append(
+#                 df_resonance_window[f"x_p{i_probe+1}"+probe_column_label_suffix].values
+#             )
+#             theta_sensor_set.append(
+#                 df_resonance_window[f"AoA_p{i_probe+1}"].median()
+#             )
+#         multiple_probes_solution = differential_evolution(
+#             func = SDoF_loss_multiple_probes,
+#             bounds=bounds,
+#             args=(
+#                 tip_deflections_set,
+#                 df_resonance_window['Omega'].values,
+#                 EO,
+#                 theta_sensor_set,
+#                 2
+#             ),
+#             seed=42
+#         )
+#         eo_solutions.append(multiple_probes_solution)
+#     best_EO_arg = np.argmin([solution.fun for solution in eo_solutions])
+#     best_EO = EOs[best_EO_arg]
+#     best_solution = eo_solutions[best_EO_arg]
+#     return {
+#         "omega_n" : best_solution.x[0] / (2*np.pi),
+#         "zeta" : np.exp(best_solution.x[1]),
+#         "delta_st" : best_solution.x[2],
+#         "phi_0" : best_solution.x[3],
+#         "EO" : best_EO,
+#     }
