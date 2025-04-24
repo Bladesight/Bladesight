@@ -4,6 +4,11 @@ This module contains the functions proposed by:
 Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
 
 The notation in this module follows the one used in the reference [1].
+
+Please also see the bladesight dataset linked below for varying ramp rates that was conducted before finding Reference [1]:
+
+https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/
+
 """
 import numpy as np
 import pandas as pd
@@ -153,7 +158,7 @@ def get_zeta(eta: float) -> float:
 #     [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
 #         Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
 #     """
-    return 1/(2*get_zeta(eta))
+#     return 1/(2*get_zeta(eta))
 
 def get_frequency_sweep_rate_a(speed_at_start: float, speed_at_end: float, time_at_start: float, time_at_end: float) -> float:
     """
@@ -175,9 +180,14 @@ def get_frequency_sweep_rate_a(speed_at_start: float, speed_at_end: float, time_
     float
         The frequency sweep rate, a (in rad/s^2).
 
+    References
+    ----------
+    [1] F. Zhi et al., "Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate",
+        Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
+
     Notes:
     ------
-    In Section 3.2 of Reference [1], the frequency sweep rate should be smaller than 216*(f_n**2)*ζ**2.
+    In Section 3.2 of Reference [1], the frequency sweep rate should be smaller than 216*(f_n**2)*ζ**2.    
     """
     return (speed_at_end - speed_at_start) / (time_at_end - time_at_start)
 
@@ -191,10 +201,12 @@ def predict_sdof_samples_sweep(
     # f_n: float,
     A_max: float,
     C: float,
+    Omega_n: float, # Moved Omega_n up here so it can be optimised
+
 
     Omega_arr: np.ndarray,
     time_arr: np.ndarray,
-    Omega_n: float,
+    
     verbose: bool = False
 ) -> np.ndarray:
     """
@@ -213,7 +225,7 @@ def predict_sdof_samples_sweep(
         numerator_term1 = A * A_max
         numerator_term2 = v * cos(EO * theta_sensor + phi_0) + sin(EO * theta_sensor + phi_0)
 
-        v = Q/ζ * [ (1 - ((Omega/(f/Q + 1)) * Omega_n)**2) / (((Omega/(f/Q + 1)) * Omega_n)**2) ]
+        v = Q/ζ * [ (1 - ((Omega/(f/Q + 1)) * Omega_n)**2) / (((Omega/(f/Q + 1)) * Omega_n)**2) ], defined below Equation (16) in Reference [1]
 
         denominator_term1 = Omega / ((f/Q + 1) * Omega_n)
         denominator_term2 = (v**2 + 1)
@@ -287,16 +299,38 @@ def predict_sdof_samples_sweep(
     A = get_A(eta=eta)
     f = get_f(eta=eta)
     zeta = get_zeta(eta=eta)
+    # zeta = 1/(2*Q)
 
-    v = (Q/zeta) * ( # Defined just under Equation (16) in Reference [1]
-                (1 - ((Omega_arr/((f/Q + 1)*Omega_n))**2))/
+    # v = (Q/zeta) * ( # Option 1
+    #                     # Defined just under Equation (16) in Reference [1]
+    #             (
+    #                 1 - (
+    #                     (Omega_arr/(f/Q + 1)*Omega_n)**2
+    #                     )
+    #             )
+    #             /
+    #             (Omega_arr/(f/Q + 1)*Omega_n)
+    #             )
+    v = (Q/zeta) * ( # Option 2
+                        # Defined just under Equation (16) in Reference [1]
+                # (1 - ((Omega_arr/((f/Q + 1)*Omega_n))**2))/
+                # (Omega_arr/((f/Q + 1)*Omega_n))
+                (
+                    1 - (
+                        (Omega_arr/((f/Q + 1)*Omega_n))**2
+                        )
+                )
+                /
                 (Omega_arr/((f/Q + 1)*Omega_n))
                 )
 
     numerator_term1 = A * A_max
     numerator_term2 = v*np.cos(EO*theta_sensor + phi_0) + np.sin(EO*theta_sensor + phi_0) # Not sure if the EO should be calculated to be an array of length Omega_arr?
     
-    denominator_term1 = Omega_arr/((f/Q + 1)*Omega_n) # Not sure if its .../((f/Q + 1)*speed_n) or if its .../(f/Q + 1)*speed_n
+    # denominator_term1 = Omega_arr/(f/Q + 1)*Omega_n #Option 1
+    #                                                 # Not sure if its .../((f/Q + 1)*speed_n) or if its .../(f/Q + 1)*speed_n
+    denominator_term1 = Omega_arr/( # Option 2
+                                    (f/Q + 1)*Omega_n) # Not sure if its .../((f/Q + 1)*speed_n) or if its .../(f/Q + 1)*speed_n
     denominator_term2 = (v**2 + 1)
 
     predicted_tip_deflections = (numerator_term1/denominator_term1) * (numerator_term2/denominator_term2) + C
@@ -306,20 +340,18 @@ def predict_sdof_samples_sweep(
 def SDoF_loss_multiple_probes_sweep(
     model_params : np.ndarray,
     tip_deflections_set : List[np.ndarray],
-    arr_omega : np.ndarray, 
     EO : int, 
     theta_sensor_set : List[float],
 
-    # Reference [1] parameters:
-    Q: float,
-    a: float,
-    f_n: float,
-    A_max: float,
-    C: float,
+    # Variables to calculate the frequency sweep rate, a:
+    Omega_arr: np.ndarray,
+    time_arr: np.ndarray,
 
-    amplitude_scaling_factor : float = 1
+    # Omega_n: float, # now optimising for Omega_n so its included in model_params
 
-    
+    amplitude_scaling_factor : float = 1,
+    verbose: bool = False
+
     ) -> np.ndarray:
     """ This function fits the SDoF parameters to 
         multiple probes' data.
@@ -357,11 +389,16 @@ def SDoF_loss_multiple_probes_sweep(
 
 
     # EO, theta_sensor, phi_0, Q, a, f_n, A_max, C, speed, speed_n = model_params
-    EO, theta_sensor, phi_0, Q, a, f_n, A_max, C = model_params
+    # EO, theta_sensor, phi_0, Q, a, f_n, A_max, C = model_params
+    # a = get_frequency_sweep_rate_a(
+    #                             speed_at_start = Omega_arr[0], speed_at_end = Omega_arr[-1],
+    #                             time_at_start = time_arr[0], time_at_end = time_arr[-1]
+    #                             )
+    phi_0, Q, A_max, C, Omega_n = model_params
+
+    # zeta = np.exp(ln_zeta)
 
 
-
-    zeta = np.exp(ln_zeta)
     error = 0
     for i_probe, arr_tip_deflections in enumerate(tip_deflections_set):    
         theta_sensor = theta_sensor_set[i_probe]
@@ -371,27 +408,33 @@ def SDoF_loss_multiple_probes_sweep(
             theta_sensor = theta_sensor,
             phi_0 = phi_0,
             Q = Q,
-            a = a,
-            f_n = f_n,
+            # a = a,
+            # f_n = f_n,
             A_max = A_max,
             C = C,
-            speed = arr_omega,
-            Omega_n = omega_n
+            Omega_arr = Omega_arr,
+            time_arr = time_arr,
+
+            Omega_n = Omega_n, # now optimising for Omega_n
+
+            # verbose = verbose
             )   
 
-        z_median = correction_factors[i_probe*2]
-        z_max = correction_factors[i_probe*2+1]
-        arr_tip_deflection_corrections = predict_sdof_samples_sweep(
-            arr_omega, z_median, z_max
-        )
-        arr_tip_deflections_corrected = (
-            arr_tip_deflections
-            + arr_tip_deflection_corrections
-        )
+        # z_median = correction_factors[i_probe*2]
+        # z_max = correction_factors[i_probe*2+1]
+        # arr_tip_deflection_corrections = predict_sdof_samples_sweep(
+        #     arr_omega, z_median, z_max
+        # )
+        # arr_tip_deflections_corrected = (
+        #     arr_tip_deflections
+        #     + arr_tip_deflection_corrections
+        # )
+
+        # arr_tip_deflection = predicted_tip_deflections
         error += np.sum(
-            np.abs(arr_tip_deflections_corrected)**amplitude_scaling_factor
+            np.abs(arr_tip_deflections)**amplitude_scaling_factor
             *(
-                arr_tip_deflections_corrected
+                arr_tip_deflections
                 - predicted_tip_deflections
             )**2
         )
