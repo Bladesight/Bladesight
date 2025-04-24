@@ -235,20 +235,12 @@ def predict_sdof_samples_sweep(
     Parameters
     ----------
     EO : int
-        The engine order used for scaling the excitation frequency.
+        Engine order.
     theta_sensor : float
         The sensor angle in radians (absolute circumferential position of the probe).
     phi_0 : float
         The initial phase of the excitation force in radians.
 
-    # omega_n : float
-    #     The natural frequency of the blade (in rad/s).
-    # zeta : float
-    #     The initial damping ratio (dimensionless). Note that this is overwritten by the 
-    #     revised damping ratio computed from η.
-    # delta_st : float
-    #     The static deflection of the blade (typically in µm).
-    
     Reference [1] parameters:
     Q : float
         Quality factor (dimensionless).
@@ -260,17 +252,20 @@ def predict_sdof_samples_sweep(
         Resonant maximum amplitude of the blade vibration.
     C : float
         Constant vibration offset term used when calculating the predicted tip deflections.
-    
-    Omega_arr : np.ndarray
-        Array of excitation frequencies (in rad/s).
     Omega_n : float
         The rotating speed at resonance (in rad/s).
+    Omega_arr : np.ndarray
+        Array of excitation frequencies (in rad/s).
+    time_arr : np.ndarray
+        Array of corresponding times (s).
+    verbose : bool, optional
+        If True, prints intermediate sweep rate. Defaults to False.
 
 
     Returns
     -------
     np.ndarray
-        The predicted tip deflection values (in the same units as delta_st) for each 
+        The predicted tip deflection values (in the same units as A_max) for each 
         excitation frequency in `arr_omega`.
 
     References
@@ -353,37 +348,49 @@ def SDoF_loss_multiple_probes_sweep(
     verbose: bool = False
 
     ) -> np.ndarray:
-    """ This function fits the SDoF parameters to 
-        multiple probes' data.
+    """ 
+    Loss function for fitting SDoF sweep model to multiple probes.
 
-    Args:
-        model_params (np.ndarray): The SDoF fit method's model parameters. It
-            includes a list of the following parameters:
-            
-            omega_n (float): The natural frequency of the SDoF system.
-            ln_zeta (float): The damping ratio of the SDoF system.
-            delta_st (float): The static deflection of the SDoF system.
-            phi_0 (float): The phase offset of the SDoF system.
-            And then the z_median and z_max for each probe.
-                z_median (float): The amplitude offset at the 
-                    median shaft speed.
-                z_max (float): The maximum amplitude offset.
+    This function fits the SDoF parameters to multiple probes' data.
 
-        tip_deflections_set (List[np.ndarray]): The tip deflection data for each probe.
-        arr_omega (np.ndarray): The angular velocity of the rotor corresponding
-            to the tip deflection data.
-        EO (int): The EO of vibration you want to fit.
-        theta_sensor_set (List[float]): Each sensor's angular position 
-            relative to the start of the revolution.
-        amplitude_scaling_factor (float, optional): A scaling factor to
-            weight the measured tip deflections. Defaults to 1. Use this value
-            to reward solutions that better capture the full amplitude of the
-            tip deflections.
+    Parameters
+    ----------
+    model_params : np.ndarray
+        An array of the following model parameters: [phi_0, Q, A_max, C, Omega_n] where
+        - phi_0 : float
+            Initial phase of the excitation force (rad).
+        - Q : float
+            Quality factor (dimensionless).
+        - A_max : float
+            Resonant maximum amplitude of the blade vibration.
+        - C : float
+            Constant vibration offset term used when calculating the predicted tip deflections.
+        - Omega_n : float
+            The rotating speed at resonance (in rad/s).
+    tip_deflections_set : list of np.ndarray
+        Measured tip deflections for each probe.
+    EO : int
+        Engine order.
+    theta_sensor_set : list of float
+        Sensor angles (rad) for each probe.
+    Omega_arr : np.ndarray
+        Excitation speeds (rad/s).
+    time_arr : np.ndarray
+        Corresponding times (s).
+    amplitude_scaling_factor : float, optional
+        Exponent weight for measured amplitudes. Default is 1.
+    verbose : bool, optional
+        If True, prints progress for each probe.
 
-    Returns:
-        np.ndarray: The sum of squared error between 
-            the tip deflection data of each probe and
-            the predicted tip deflections.
+    Returns
+    -------
+    float
+        Total loss (sum of weighted squared errors).
+
+    References
+    ----------
+    [1] F. Zhi et al., `Error Revising of Blade Tip-Timing Parameter Identification Caused by Frequency Sweep Rate`,
+    Measurement, vol. 201, p. 111681, Sep. 2022, doi: 10.1016/j.measurement.2022.111681.
     """
     # omega_n, ln_zeta, delta_st, phi_0, *correction_factors = model_params
 
