@@ -282,6 +282,14 @@ def predict_sdof_samples_sweep(
                                 speed_at_start = Omega_arr[0], speed_at_end = Omega_arr[-1], 
                                 time_at_start = time_arr[0], time_at_end = time_arr[-1]
                                 )
+    
+    if a == 0:
+        raise ValueError("Frequency sweep rate is zero. Please check the input data for valid speed and time values.")
+
+    if a < 0:
+        a = abs(a) # Ensure a is positive for the calculations
+        print("Warning: Frequency sweep rate is negative. Taking the absolute value of the frequency sweep rate to avoid potential issues with calculating the frequency sweep parameter η.")
+
     if verbose == True:
         print(f"Frequency sweep rate, a: {a} (Rad/s)/s = {a*60/(2*np.pi)} (RPM/s)")
 
