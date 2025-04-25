@@ -39,7 +39,7 @@ def get_eta(EO: int, Q: float, a: float,
     # f_n : float
     #     Natural frequency (in Hz or consistent units).
     Omega_n : float
-        The rotating speed at resonance (in rad/s).
+        The rotating speed at resonance (in radians/second).
 
     Returns
     -------
@@ -167,9 +167,9 @@ def get_frequency_sweep_rate_a(speed_at_start: float, speed_at_end: float, time_
     Parameters:
     -----------
     speed_at_start : float
-        The rotating speed at the start of the frequency sweep (in rad/s).
+        The rotating speed at the start of the frequency sweep (in radians/second).
     speed_at_end : float
-        The rotating speed at the end of the frequency sweep (in rad/s).
+        The rotating speed at the end of the frequency sweep (in radians/second).
     time_at_start : float
         The time at the start of the frequency sweep (in seconds).
     time_at_end : float
@@ -178,7 +178,7 @@ def get_frequency_sweep_rate_a(speed_at_start: float, speed_at_end: float, time_
     Returns:
     --------
     float
-        The frequency sweep rate, a (in rad/s^2).
+        The frequency sweep rate, a (in radians/second^2).
 
     References
     ----------
@@ -253,11 +253,11 @@ def predict_sdof_samples_sweep(
     C : float
         Constant vibration offset term used when calculating the predicted tip deflections.
     Omega_n : float
-        The rotating speed at resonance (in rad/s).
+        The rotating speed at resonance (in radians/second).
     Omega_arr : np.ndarray
-        Array of excitation frequencies (in rad/s).
+        Array of excitation frequencies (in radians/second).
     time_arr : np.ndarray
-        Array of corresponding times (s).
+        Array of corresponding times (seconds).
     verbose : bool, optional
         If True, prints intermediate sweep rate. Defaults to False.
 
@@ -374,7 +374,7 @@ def SDoF_loss_multiple_probes_sweep(
         - C : float
             Constant vibration offset term used when calculating the predicted tip deflections.
         - Omega_n : float
-            The rotating speed at resonance (in rad/s).
+            The rotating speed at resonance (in radians/second).
     tip_deflections_set : list of np.ndarray
         Measured tip deflections for each probe.
     EO : int
@@ -382,9 +382,9 @@ def SDoF_loss_multiple_probes_sweep(
     theta_sensor_set : list of float
         Sensor angles (rad) for each probe.
     Omega_arr : np.ndarray
-        Excitation speeds (rad/s).
+        Excitation speeds (radians/second).
     time_arr : np.ndarray
-        Corresponding times (s).
+        Corresponding times (seconds).
     amplitude_scaling_factor : float, optional
         Exponent weight for measured amplitudes. Default is 1.
     verbose : bool, optional
