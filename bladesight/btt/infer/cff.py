@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from typing import List, Dict, Union
+from tqdm.auto import tqdm
 
 def cff_method_single_revolution(
     df_blade : pd.DataFrame,
@@ -172,7 +173,8 @@ def perform_CFF_fit(
     EO_solutions = []
     EO_errors = {}
     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
-    for EO in EOs:
+    # for EO in EOs:
+    for EO in tqdm(EOs, desc="Processing EOs"):
         df_cff_params = cff_method_multiple_revolutions(
             df_resonance_window,
             theta_sensor_set,

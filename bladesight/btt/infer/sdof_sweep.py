@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import differential_evolution
 from typing import List, Dict, Optional
+from tqdm.auto import tqdm
 
 
 from .sdof import get_phi
@@ -556,7 +557,8 @@ def perform_SDoF_sweep_fit(
     PROBE_COUNT = len(measured_tip_deflection_signals)
     EO_solutions = []
     EO_errors = {}  # collect each EO's loss
-    for EO in EOs:
+    # for EO in EOs:
+    for EO in tqdm(EOs, desc="Processing EOs"):
         if verbose:
             print("NOW SOLVING FOR EO = ", EO, " of ", EOs)
         

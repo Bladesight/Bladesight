@@ -4,6 +4,8 @@ from typing import List, Dict, Optional
 
 from scipy.optimize import differential_evolution
 
+from tqdm.auto import tqdm
+
 def get_X(
         omega : np.ndarray,
         omega_n : float, 
@@ -258,7 +260,8 @@ def perform_SDoF_fit(
     PROBE_COUNT = len(measured_tip_deflection_signals)
     EO_solutions = []
     EO_errors = {}  # collect each EO's loss
-    for EO in EOs:
+    # for EO in EOs:
+    for EO in tqdm(EOs, desc="Processing EOs"):
         if verbose:
             print("NOW SOLVING FOR EO = ", EO, " of ", EOs)
         
