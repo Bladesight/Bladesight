@@ -581,14 +581,6 @@ def perform_SDoF_sweep_fit(
         tip_deflections_set = []
         theta_sensor_set = []
         for i_probe in range(PROBE_COUNT):
-            z_max = df_resonance_window[f"x_p{i_probe+1}"+signal_suffix].abs().max()
-            z_min = -z_max
-            bounds.extend(
-                [
-                    (z_min, z_max),
-                    (z_min, z_max)
-                ]
-            )
             tip_deflections_set.append(
                 df_resonance_window[f"x_p{i_probe+1}"+signal_suffix].values
             )
