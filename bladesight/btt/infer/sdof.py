@@ -196,7 +196,7 @@ def perform_SDoF_fit(
     n_end : int,
     EOs : Optional[List[int]] = np.arange(1, 20),
     omega_n_bounds : Optional[List[float]] = [None, None],
-    zeta_bounds : Optional[List[float]] = [0.0001, 0.3],
+    ln_zeta_bounds : Optional[List[float]] = [np.log(0.0001), np.log(0.3)],
     delta_st_bounds : Optional[List[float]] = [0, 10],
     phi_0_bounds : Optional[List[float]] = [0, 2*np.pi],
     signal_suffix : Optional[str] = "_filt" ,
@@ -271,7 +271,7 @@ def perform_SDoF_fit(
 
         bounds = [
             (omega_n_bounds[0], omega_n_bounds[1]),
-            (zeta_bounds[0], zeta_bounds[1]),
+            (ln_zeta_bounds[0], ln_zeta_bounds[1]),
             (delta_st_bounds[0], delta_st_bounds[1]),
             (phi_0_bounds[0], phi_0_bounds[1]),
         ]
