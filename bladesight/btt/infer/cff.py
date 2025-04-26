@@ -132,22 +132,31 @@ def perform_CFF_fit(
     EOs : List[int] = np.arange(1, 20),
     extra_revolutions : int = 1
 ) -> Dict[str, Union[pd.DataFrame, int]]:
-    """ This function performs the CFF method fit for a resonance. The function
-    iterates over EOs and selects the EO that gives the lowest sum of squared
-    errors between the measured and predicted tip deflections.
-
-    Args:
-        df_blade (pd.DataFrame): The dataframe containing the tip deflections.
-        n_start (int): The start revolution number.
-        n_end (int): The end revolution number.
-        EOs (List[int], optional): The EOs to consider for this resonance. Defaults 
-            to np.arange(1, 20).
-        extra_revolutions (int, optional): How many extra revolutions to use for 
-            the fit. Defaults to 1.
-
-    Returns:
-        Dict[str, Union[pd.DataFrame, int]]: A dictionary containing the CFF 
-            parameters and the selected EO.
+    """
+    Perform the Circumferential Fourier Fit (CFF) method to find the best Engine Order (EO)
+    between n_start and n_end revolutions. The function iterates over EOs and selects
+    the EO that gives the lowest sum of squared errors between the measured and
+    predicted tip deflections.
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        DataFrame containing tip deflections and revolution numbers.
+    n_start : int
+        Start revolution index.
+    n_end : int
+        End revolution index.
+    EOs : List[int], optional
+        List of potential EOs to evaluate, by default np.arange(1, 20).
+    extra_revolutions : int, optional
+        Number of extra revolutions to use for the fit, by default 1.
+    Returns
+    -------
+    Dict[str, Union[pd.DataFrame, int]]
+        Dictionary with two keys:
+        - "df_cff_params": pd.DataFrame containing the fitted CFF parameters
+        and predicted tip deflections for the selected EO.
+        - "EO_best": Engine order with minimum error.
+        - "EO_errors": Dictionary of errors for each engine order.
     """
     PROBE_COUNT = len(
         [
@@ -160,7 +169,8 @@ def perform_CFF_fit(
         df_blade[f"AoA_p{i_probe + 1}"].median()
         for i_probe in range(PROBE_COUNT)
     ]
-    errors = []
+    EO_solutions = []
+    EO_errors = {}
     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
     for EO in EOs:
         df_cff_params = cff_method_multiple_revolutions(
@@ -177,15 +187,19 @@ def perform_CFF_fit(
                     - df_resonance_window[f"x_p{i_probe+1}_filt"].values
                 )**2
             )
-        errors.append(error)
-    EO = EOs[np.argmin(errors)]
+        EO_solutions.append(error)
+        EO_errors[f"EO{EO}"] = error
+
+    # Select the best EO
+    best_EO = EOs[np.argmin(EO_solutions)]
     df_cff_params = cff_method_multiple_revolutions(
         df_resonance_window,
         theta_sensor_set,
-        EO,
+        best_EO,
         extra_revolutions
     )
     return {
         "df_cff_params" : df_cff_params,
-        "EO" : EO
+        "EO_best" : best_EO,
+        "EO_errors" : EO_errors        
     }

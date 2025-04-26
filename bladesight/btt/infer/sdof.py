@@ -245,7 +245,8 @@ def perform_SDoF_fit(
         - "zeta": Damping ratio.
         - "delta_st": Static deflection.
         - "phi_0": Phase offset in radians.
-        - "EO": Engine order with minimum error.
+        - "EO_best": Engine order with minimum error.
+        - "EO_errors": Dictionary of errors for each engine order.
     """
     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
     measured_tip_deflection_signals = [
@@ -255,6 +256,7 @@ def perform_SDoF_fit(
     ]
     PROBE_COUNT = len(measured_tip_deflection_signals)
     EO_solutions = []
+    EO_errors = {}  # collect each EO's loss
     for EO in EOs:
         if verbose:
             print("NOW SOLVING FOR EO = ", EO, " of ", EOs)
@@ -302,6 +304,7 @@ def perform_SDoF_fit(
             **differential_evolution_optimiser_kwargs
         )
         EO_solutions.append(multiple_probes_solution)
+        EO_errors[f"EO{EO}"] = multiple_probes_solution.fun
     
     # Select the best EO
     best_EO_arg = np.argmin([solution.fun for solution in EO_solutions])
@@ -312,5 +315,6 @@ def perform_SDoF_fit(
         "zeta" : np.exp(best_solution.x[1]),
         "delta_st" : best_solution.x[2],
         "phi_0" : best_solution.x[3],
-        "EO" : best_EO,
+        "EO_best" : best_EO,
+        "EO_errors" : EO_errors,
     }
