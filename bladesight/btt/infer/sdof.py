@@ -252,7 +252,8 @@ def perform_SDoF_fit(
     measured_tip_deflection_signals = [
         col 
         for col in df_resonance_window
-        if col.endswith("_filt")
+        # if col.endswith("_filt")
+        if col.startswith("x_p") and col.endswith(signal_suffix)
     ]
     PROBE_COUNT = len(measured_tip_deflection_signals)
     EO_solutions = []
@@ -264,9 +265,9 @@ def perform_SDoF_fit(
         if omega_n_bounds.__contains__(None):
             omega_n_bounds[0] = df_resonance_window["Omega"].min() * EO
             omega_n_bounds[1] = df_resonance_window["Omega"].max() * EO
-        if omega_n_bounds.__contains__(None) == False:
-            omega_n_bounds[0] = omega_n_bounds[0]
-            omega_n_bounds[1] = omega_n_bounds[1]
+        # if omega_n_bounds.__contains__(None) == False:
+        #     omega_n_bounds[0] = omega_n_bounds[0]
+        #     omega_n_bounds[1] = omega_n_bounds[1]
 
         bounds = [
             (omega_n_bounds[0], omega_n_bounds[1]),

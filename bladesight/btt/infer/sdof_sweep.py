@@ -550,7 +550,8 @@ def perform_SDoF_sweep_fit(
     measured_tip_deflection_signals = [
         col 
         for col in df_resonance_window
-        if col.endswith("_filt")
+        # if col.endswith("_filt")
+        if col.startswith("x_p") and col.endswith(signal_suffix)
     ]
     PROBE_COUNT = len(measured_tip_deflection_signals)
     EO_solutions = []
@@ -562,9 +563,9 @@ def perform_SDoF_sweep_fit(
         if speed_at_resonance_bounds.__contains__(None):
             speed_at_resonance_bounds[0] = df_resonance_window["Omega"].min()
             speed_at_resonance_bounds[1] = df_resonance_window["Omega"].max()
-        if speed_at_resonance_bounds.__contains__(None) == False:
-            speed_at_resonance_bounds[0] = speed_at_resonance_bounds[0]
-            speed_at_resonance_bounds[1] = speed_at_resonance_bounds[1]
+        # if speed_at_resonance_bounds.__contains__(None) == False:
+        #     speed_at_resonance_bounds[0] = speed_at_resonance_bounds[0]
+        #     speed_at_resonance_bounds[1] = speed_at_resonance_bounds[1]
 
         bounds = [
             # (omega_n_bounds[0], omega_n_bounds[1]),
