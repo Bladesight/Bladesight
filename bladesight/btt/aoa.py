@@ -303,9 +303,10 @@ def transform_prox_AoAs_to_blade_AoAs(
         else:
             df_bin = duckdb.execute(query).pl()
         blade_dfs.append(df_bin)
-        blade_median_AoAs.append(
-            duckdb.execute("SELECT AoA.MEDIAN() as median FROM df_bin").fetchone()[0]
-        )
+        med = duckdb.execute("SELECT AoA.MEDIAN() as median FROM df_bin").fetchone()[0]
+        blade_median_AoAs.append(med if med is not None else np.inf)
+    # before sorting, force to float array so no None remains
+    blade_median_AoAs = np.array(blade_median_AoAs, dtype=float)
 
     blade_order = np.argsort(blade_median_AoAs)
     blade_dfs = [blade_dfs[i] for i in blade_order]
