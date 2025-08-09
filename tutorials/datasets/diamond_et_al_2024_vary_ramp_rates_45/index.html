@@ -1,0 +1,2244 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains the setup and method used to collect the Diamond et. al. 2024 dataset 45 degree dataset.">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Diamond et al 2024 ramp rates at 45 degrees - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20640%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.0.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M576%2048c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4L413.5%2077.5%20234.1%2017.6c-8.1-2.7-16.8-2.1-24.4%201.7l-128%2064C70.8%2088.8%2064%2099.9%2064%20112v352c0%2011.1%205.7%2021.4%2015.2%2027.2s21.2%206.4%2031.1%201.4l116.1-58.1%20173.3%2057.8c-4.3-6.4-8.5-13.1-12.6-19.9-11-18.3-21.9-39.3-30-61.8l-101.2-33.7V92.4l128%2042.7v99.3c31-35.8%2077-58.4%20128-58.4%2022.6%200%2044.2%204.4%2064%2012.5zM392%20341.9c0%2068.9%2064.1%20150.4%2098.6%20189.3%2011.6%2013%2031.3%2013%2042.9%200%2034.5-38.9%2098.6-120.4%2098.6-189.3%200-65.1-53.7-117.9-120-117.9S392%20276.8%20392%20341.9%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-6B961HRVZP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Dataset - Diamond et al. 2024 Varying Ramp Rates" />
+<meta property="og:description" content="This chapter explains the setup and method used to collect the Diamond et. al. 2024 dataset 45 degree dataset." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttdatasets_diamond_et_al_2024_varying_ramp_rates/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Dataset - Diamond et al. 2024 Varying Ramp Rates"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source.png"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttdatasets_diamond_et_al_2024_varying_ramp_rates/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains the setup and method used to collect the Diamond et. al. 2024 dataset 45 degree dataset."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diamond-et-al-2024-ramp-rates-at-45-degrees" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Diamond et al 2024 ramp rates at 45 degrees
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../intro_to_btt/ch1/" class="md-tabs__link">
+          
+  
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="." class="md-tabs__link">
+          
+  
+  
+  Datasets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/dataset_handler/" class="md-tabs__link">
+          
+  
+  
+  User Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Determine classes -->
+
+
+  
+
+
+
+<!-- Navigation -->
+<nav
+  class="md-nav md-nav--primary md-nav--lifted"
+  aria-label="Navigation"
+  data-md-level="0"
+>
+
+  <!-- Site title -->
+  <label class="md-nav__title" for="__drawer">
+    <a
+      href="../../.."
+      title="Bladesight Learning Centre"
+      class="md-nav__button md-logo"
+      aria-label="Bladesight Learning Centre"
+      data-md-component="logo"
+    >
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+
+  <!-- Repository information -->
+  
+
+  <!-- Navigation list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Blade Tip Timing's fundamental principle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Time of Arrival (ToA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Angle of Arrival (AoA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Allocating AoAs to blades
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Working with multiple probes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Data Zeroing and Filtering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Synchronous Vibration and Sampling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    8. Single Degree of Freedom (SDoF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/ch9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    9. Circumferential Fourier Fit (CFF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro_to_btt/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Afterword
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Datasets
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Datasets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Varying ramp rates with 45 degree pipe
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/dataset_handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dataset handler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    btt
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            btt
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/btt/triggering_criteria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Triggering criteria
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+  <br/>
+  <br/>
+  <br/>
+  <a
+    href="https://www.bladesight.com/"
+    target="_blank"
+    style="text-align: -webkit-center;"
+  >
+    <img src="https://intro-to-btt-using-python-assets.s3.amazonaws.com/kraken1.jpeg" 
+    alt="Kraken" 
+    style="width: 120px; display: flex; padding: 2px 0px; justify-content: center; align-items: center; border: 2px;">
+    <p><strong>Unleash the Kraken🐙</strong></p>
+    </a>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#why-did-we-conduct-these-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why did we conduct these tests?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#experimental-setup-and-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      Experimental setup and method
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Experimental setup and method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rotor-motor-and-blade-excitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rotor, motor, and blade excitation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sensors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-acquisition-and-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data acquisition and control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data acquisition and control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kraken-x4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kraken X4
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hbk-quantum" class="md-nav__link">
+    <span class="md-ellipsis">
+      HBK Quantum
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oros-or35" class="md-nav__link">
+    <span class="md-ellipsis">
+      OROS OR35
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coco-80x-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      CoCo-80x analyzer
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#experimental-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      Experimental method
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-triggering-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Triggering levels
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strain-gauge-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strain gauge data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dataset-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataset usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataset usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#duckdb-or-pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      DuckDB or Pandas?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download the dataset
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-analyses" class="md-nav__link">
+    <span class="md-ellipsis">
+      Full analyses 👇
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Full analyses 👇">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opr-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      OPR encoder
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mpr-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      MPR encoder
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+      
+        <span class="md-tag">BTT</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Blade Tip Timing</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Mechanical Vibration</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">NSMS</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Non Intrusive Stress Measurement</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Turbine blade</span>
+      
+    
+  </nav>
+
+
+
+<h1 id="diamond-et-al-2024-ramp-rates-at-45-degrees">Diamond et al 2024 ramp rates at 45 degrees</h1>
+<h2 id="why-did-we-conduct-these-tests">Why did we conduct these tests?</h2>
+<p>It's always felt like there's a stone lodged under my heel when fitting curves to transient synchronous resonances. The resonant frequencies recovered by curve fitting algorithms have always struck me as imprecise. A prime example of this is when you measure the resonant frequency during a run-up vs the same frequency during a run-down. Logic dictates that such frequencies should be the same. </p>
+<p>I've found they are never the same.</p>
+<p>To investigate this, we set about to conduct measurements where we varied the ramp rate of run ups and run-downs.</p>
+<p>Unfortunately, about a fortnight prior to completing our first draft, I found a paper by (Zhi et al., 2022)<sup id="fnref:zhi2022error"><a class="footnote-ref" href="#fn:zhi2022error">1</a></sup> that investigated this phenomenon. It could be that most BTT practitioners know about this. But I doubt it. </p>
+<p>I believe most people subscribe to the classical view that synchronous resonances are integrally proportional to the shaft speed. <em>This is not the case</em>. I still want to publish on this work, but we'll need more tests. </p>
+<p>I've decided to publish the dataset to Bladesight under the Creative Commons license. </p>
+<p>I hope you find it useful. There's a lot of data here.</p>
+<h2 id="experimental-setup-and-method">Experimental setup and method</h2>
+<p>The main purpose of these tests are to investigate if the commonly held synchronous vibration relationship, given below,</p>
+<div class="arithmatex">\[\begin{equation}
+f = \Omega EO
+\end{equation}\]</div>
+<p>holds true for different ramp rates.</p>
+<p>The BTT test bench at the University of Pretoria's Sasol laboratory was used for this investigation.</p>
+<h3 id="rotor-motor-and-blade-excitation">Rotor, motor, and blade excitation</h3>
+<p>The test bench consists of a five blade blisk. The blades of the blisk have an outer radius of 164 mm. These blades
+are rectangular, thereby allowing us to study pure bending modes. The motor is controlled with an analogue signal that varies between 0 - 10 Volts, corresponding to the minimum and maximum speed, respectively. </p>
+<p>The maximum speed of the rotor is approximately 1450 RPM. Compressed air was used to excite the blades. The pipe, presented in <a href="#figure_01">Figure 1</a>, was placed at approximately a 45 &deg; angle with respect to the blades. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The choice of 45 degrees was in truth accidental. Prior to positioning the pipe at a 45 &deg; angle it was placed at close to a 90 &deg; angle. I hypothesized that, because the air was directed perpendicular to the blade's chord, the largest tip deflections would be observed. </p>
+<p>After an entire day of testing, we conducted a single test with the pipe at a 45 &deg; angle. The tip deflections were significantly larger than those observed at 90 &deg;. It was like finding out there's another 5 km left after running a marathon. </p>
+<p>We repeated all the tests at 45 &deg;, yielding the present dataset.</p>
+</div>
+<p>The rotor blades’ first three natural frequencies at rest are approximately 125 Hz, 512 Hz, 723 Hz.</p>
+<figure>
+<p><img alt="Experimental setup" src="fig_1_experimental_setup.png" width="500" />
+    <figcaption><strong><a name='figure_01'>Figure 1</a></strong>: The experimental setup at the University of Pretoria's Sasol Laboratory.
+    </figcaption></p>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We had every intent to return to the test bench in pursuit of better photos. </p>
+<p>We never did. We apologize for this.</p>
+</div>
+<h3 id="sensors">Sensors</h3>
+<p>Three <a href='https://catalogue.meggittsensing.com/shop/sensors-and-signal-conditioners/proximity-probes/tq401-proximity-sensor/' target='_blank'> MEGGIT TQ401 eddy current proximity probes</a> were used. Two were used as proximity probes and one as an OPR sensor. </p>
+<p>Aditionally, an Optel Thevon 152G8 optical fibre sensor was installed in conjunction with a zebra-tape to serve as a Multiple Pulses per Revolution (MPR) shaft encoder.</p>
+<p>We instrumented one blade with a strain gauge at its root. The strain gauge was attached so as to be sensitive to bending.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The probes are installed 20.1 &deg; apart. The strain gauge'd blade is the <em>last blade</em> to arrive at the OPR sensor.</p>
+</div>
+<h3 id="data-acquisition-and-control">Data acquisition and control</h3>
+<p>In addition to understanding the effects of ramp rates and directions on blade vibration, we also included new/unproven sensors and Data Acquisition Systems (DAQs). Ultimately, four different DAQs and control systems were used.</p>
+<p>The four DAQs and control systems are shown in <a href="#figure_02">Figure 2</a> below.</p>
+<figure>
+<p><img alt="Four DAQs" src="4_daqs.png" width="800" />
+    <figcaption><strong><a name='figure_02'>Figure 2</a></strong>: The four DAQs and control systems used in the tests. 
+    </figcaption></p>
+</figure>
+<h4 id="kraken-x4">Kraken X4</h4>
+<p>My under-development BTT DAQ, the <a href='https://www.bladesight.com' target='_blank'>Bladesight Kraken X4 🐙 </a>, was used to acquire the Time-of-Arrivals (ToAs) from the TQ401 eddy current sensors. </p>
+<p>Why did we use the Kraken? </p>
+<ul>
+<li>Because it's mine and it makes me happy.</li>
+<li>It has the ability to condition a -24 V to 0 V signal to a -1 to 1 V signal, thereby enabling digitization.</li>
+<li>It has the ability to trigger at <em><strong>multiple thresholds</strong></em> per pulse, not just one threshold.</li>
+<li>It digitizes the incoming signals at 125 MHz, much faster than the other systems in our lab.</li>
+</ul>
+<h4 id="hbk-quantum">HBK Quantum</h4>
+<p>An HBK Quantum (MX410) was used to excite and measure the strain gauge. Excitation and communication to and from the strain gauge ocurred through a slip ring.</p>
+<h4 id="oros-or35">OROS OR35</h4>
+<p>An OROS OR35 DAQ was used to measure the Multiple Per Revolution (MPR), strain gauge, and three other inductive probes (TURCK BI10U-M18-AP6X). </p>
+<p>The OROS' sampling rate was set to 25.6 kHz.</p>
+<h4 id="coco-80x-analyzer">CoCo-80x analyzer</h4>
+<p>The motor was controlled using the output from a CoCo-80x analyzer. We could set different ramp rates using this system.</p>
+<h2 id="experimental-method">Experimental method</h2>
+<p>We define a ramp rate as the time taken to move from 0 RPM to 1450 RPM. The ramp rates for the tests were as follows: 30s, 40s, 50s, 60s, 70s, 80s, 90s, 100s, 110s, 120s. </p>
+<p>For each test, acquisition was performed for at least 4 cycles. Giving 4 run-ups and run-downs per test.</p>
+<p><a href="#figure_03">Figure 3</a> below exhibits the first cycle of each test case.</p>
+<figure>
+<p><img alt="Ramp rates" src="fig_2_ramp_rates.jpeg" width="800" />
+    <figcaption><strong><a name='figure_03'>Figure 3</a></strong>: The ramp rates of each test case.
+    </figcaption></p>
+</figure>
+<h2 id="multiple-triggering-levels">Multiple Triggering levels</h2>
+<p>I've always thought it nonsensical to pick only one threshold level per channel. Some blades are longer than others. It makes sense that you should use different triggering levels for different blades.</p>
+<p>The Kraken X4 was programmed to trigger at 4 different levels on both the rising and falling slopes. The four levels were -0.3, -0.2, 0.1 and 0.3 V. These voltage levels are only approximate, because the Kraken conditions the signals prior to acquisition, and each signal can be conditioned differently to yield the best pulse.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The voltage levels may be approximate, but you can bank on one thing: The triggering thresholds on the rising and falling slopes are identical.</p>
+</div>
+<p>We therefore have 8 different ToA types per channel. Some channels do not have all 8 ToAs, depending on each blade's distance from each sensor. If the 8 triggering levels are displayed for each channel, it reveals something of the pulse shape, as indicated in <a href="#figure_04">Figure 4</a> below.  </p>
+<figure>
+<p><img alt="Triggering levels" src="fig_different_triggering_levels.png" width="800" />
+    <figcaption><strong><a name='figure_04'>Figure 4</a></strong>: The ramp rates of each test case.
+    </figcaption></p>
+</figure>
+<p>I believe having multiple triggering levels can be used for new kinds of analyses. This is a topic for another day.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We did not extract multiple triggering levels for the signals acquired with the OROS.</p>
+</div>
+<h2 id="strain-gauge-data">Strain gauge data</h2>
+<p>The strain gauge signals are genuinely beautiful - as you will see.</p>
+<p>We endeavored to calibrate the strain gauge after the tests. As things go, we put this off, and at some stage Murphy intervened by damaging the  strain gauge's attachment to the blade.</p>
+<p>There is no calibration data that we can use to convert the strain gauge data to tip displacement. This is a pity. We will have to make do with the raw strain gauge data.</p>
+<p>Fortunately, it is still a most rich dataset. The strain gauge values are in units of millivolts.</p>
+<h2 id="dataset-usage">Dataset usage</h2>
+<p>If you have not installed Bladesight, please follow the instructions in the <a href='https://docs.bladesight.com/tutorials/intro_to_btt/ch2/' target='_blank'>the BTT tutorial</a>.</p>
+<h3 id="duckdb-or-pandas">DuckDB or Pandas?</h3>
+<p>You can now use DuckDB SQL to query your datasets. Why would you want to do this? Because you can be more deliberate with which data you materialize into memory. Memory is a precious resource.</p>
+<h3 id="download-the-dataset">Download the dataset</h3>
+<p>You can download the dataset using the below code. Note that the database is ~290 Mb in size, so it may take a while to download.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_1_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">If you use this dataset in published work, please use the below citation:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="go">Diamond, D.H (2024) Dataset - Diamond et al 2024 ramp rates at 45 degrees. https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="go">Link to paper: https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="go">DOI: None</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="go">Dataset(C:\Users\Dawie Diamond\.bladesight\data\diamond_et_al\2024_ramp_rates_45_deg.db),</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="go">Tables: </span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="go">[</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="go">  &#39;table/sg_100_s&#39;,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="go">  &#39;table/sg_110_s&#39;,</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="go">  &#39;table/sg_120_s&#39;,</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="go">  &#39;table/sg_30_s&#39;,</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="go">  &#39;table/sg_40_s&#39;,</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="go">  &#39;table/sg_50_s&#39;,</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="go">  &#39;table/sg_60_s&#39;,</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="go">  &#39;table/sg_70_s&#39;,</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="go">  &#39;table/sg_80_s&#39;,</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="go">  &#39;table/sg_90_s&#39;,</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="go">  &#39;table/toas_100_s&#39;,</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="go">  &#39;table/toas_110_s&#39;,</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="go">  &#39;table/toas_120_s&#39;,</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="go">  &#39;table/toas_30_s&#39;,</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="go">  &#39;table/toas_40_s&#39;,</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="go">  &#39;table/toas_50_s&#39;,</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="go">  &#39;table/toas_60_s&#39;,</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="go">  &#39;table/toas_70_s&#39;,</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="go">  &#39;table/toas_80_s&#39;,</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="go">  &#39;table/toas_90_s&#39;,</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="go">]</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;DESCRIBE TABLES&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Output:
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">If you use this dataset in published work, please use the below citation:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="go">Diamond, D.H (2024) Dataset - Diamond et al 2024 ramp rates at 45 degrees. https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="go">Link to paper: https://docs.bladesight.com/tutorials/datasets/diamond_et_al_2024_vary_ramp_rates_45/</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="go">DOI: None</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="go">Dataset(C:\Users\Dawie Diamond\.bladesight\data\diamond_et_al\2024_ramp_rates_45_deg.db),</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="go">          name</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="go">0     metadata</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="go">1     sg_100_s</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="go">2     sg_110_s</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="go">3     sg_120_s</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="go">4      sg_30_s</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="go">5      sg_40_s</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="go">6      sg_50_s</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="go">7      sg_60_s</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="go">8      sg_70_s</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="go">9      sg_80_s</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="go">10     sg_90_s</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="go">11  toas_100_s</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="go">12  toas_110_s</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="go">13  toas_120_s</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="go">14   toas_30_s</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="go">15   toas_40_s</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="go">16   toas_50_s</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="go">17   toas_60_s</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="go">18   toas_70_s</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="go">19   toas_80_s</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="go">20   toas_90_s</span>
+</span></code></pre></div></p>
+</div>
+</div>
+</div>
+<h2 id="tables">Tables</h2>
+<p>As you can see above, there are many tables in the dataset. The different tables contain the ToAs and strain gauge data for the different ramp rates.</p>
+<p>The tables containing the toas are:</p>
+<ul>
+<li><code>toas_30_s</code></li>
+<li><code>toas_40_s</code></li>
+<li><code>toas_50_s</code></li>
+<li><code>toas_60_s</code></li>
+<li><code>toas_70_s</code></li>
+<li><code>toas_80_s</code></li>
+<li><code>toas_90_s</code></li>
+<li><code>toas_100_s</code></li>
+<li><code>toas_110_s</code></li>
+<li><code>toas_120_s</code></li>
+</ul>
+<p>Let's take a look at the first 10 rows of the <code>toas_30_s</code> table:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_2_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;toas_30_s&quot;</span><span class="p">]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">      channel        toa  voltage  is_rising</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="go">0  Kraken OPR  10.170276     -0.3       True</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="go">1  Kraken OPR  10.170459     -0.2       True</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="go">2  Kraken OPR  10.170639      0.1       True</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="go">3  Kraken OPR  10.170820      0.3       True</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="go">4  Kraken OPR  10.179263      0.3      False</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="go">5  Kraken OPR  10.179440      0.1      False</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="go">6  Kraken OPR  10.179612     -0.2      False</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="go">7  Kraken OPR  10.179777     -0.3      False</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="go">8  Kraken OPR  10.269662     -0.3       True</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="go">9  Kraken OPR  10.269845     -0.2       True</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM toas_30_s LIMIT 10&quot;</span><span class="p">)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">      channel        toa  voltage  is_rising</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="go">0  Kraken OPR  10.170276     -0.3       True</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="go">1  Kraken OPR  10.170459     -0.2       True</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="go">2  Kraken OPR  10.170639      0.1       True</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="go">3  Kraken OPR  10.170820      0.3       True</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="go">4  Kraken OPR  10.179263      0.3      False</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="go">5  Kraken OPR  10.179440      0.1      False</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="go">6  Kraken OPR  10.179612     -0.2      False</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="go">7  Kraken OPR  10.179777     -0.3      False</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="go">8  Kraken OPR  10.269662     -0.3       True</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="go">9  Kraken OPR  10.269845     -0.2       True</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>The <code>toa</code>, <code>voltage</code> and <code>is_rising</code> columns are self-explanatory. The <code>channel</code> column contains the acquisition channel. The following channels exist:</p>
+<ul>
+<li><code>Kraken OPR</code> : The OPR sensor as measured by the Kraken X4.</li>
+<li><code>OROS OPR</code>: The OPR sensor as measured by the OROS OR35. Only one threshold level, on the rising edge at 0V was extracted.</li>
+<li><code>OROS MPR</code>: The MPR sensor as measured by the OROS OR35. Only one threshold level, on the rising edge at 2.5V was extracted.</li>
+<li><code>Kraken Probe 1</code>: The first proximity probe as measured by the Kraken X4.</li>
+<li><code>Kraken Probe 2</code>: The second proximity probe as measured by the Kraken X4.</li>
+<li><code>OROS IP Probe 1</code>: The first TURCK BI10U-M18-AP6X inductive proximity probe as measured by the OROS OR35.</li>
+<li><code>OROS IP Probe 2</code>: The second inductive proximity probe as measured by the OROS OR35.</li>
+<li><code>OROS IP Probe 3</code>: The third inductive proximity probe as measured by the OROS OR35.</li>
+</ul>
+<p>The tables containing the strain gauge data are:</p>
+<ul>
+<li><code>sg_30_s</code></li>
+<li><code>sg_40_s</code></li>
+<li><code>sg_50_s</code></li>
+<li><code>sg_60_s</code></li>
+<li><code>sg_70_s</code></li>
+<li><code>sg_80_s</code></li>
+<li><code>sg_90_s</code></li>
+<li><code>sg_100_s</code></li>
+<li><code>sg_110_s</code></li>
+<li><code>sg_120_s</code></li>
+</ul>
+<p>Let's consider the first 10 rows of the <code>sg_30_s</code> table:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_3_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;table/sg_30_s&quot;</span><span class="p">]</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">  voltage</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">0    -1.28</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="go">1    -1.31</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="go">2    -1.17</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="go">3    -0.85</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="go">4    -0.90</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="go">5    -0.93</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="go">6    -0.98</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="go">7    -0.93</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="go">8    -0.89</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="go">9    -0.89</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM sg_30_s LIMIT 10&quot;</span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="go">  voltage</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="go">0    -1.28</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="go">1    -1.31</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="go">2    -1.17</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="go">3    -0.85</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="go">4    -0.90</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="go">5    -0.93</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="go">6    -0.98</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="go">7    -0.93</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="go">8    -0.89</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="go">9    -0.89</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>You will note that there is no time column in the strain gauge data. You need to create your own time column. Here's an example of how you can do this:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_4_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;table/sg_30_s&quot;</span><span class="p">]</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">df_toas_30_s</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="p">)))</span> <span class="o">*</span> <span class="mi">1</span><span class="o">/</span><span class="mf">25.6e3</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="go">  voltage         t</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="go">0    -1.28  0.000000</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="go">1    -1.31  0.000039</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="go">2    -1.17  0.000078</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="go">3    -0.85  0.000117</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="go">4    -0.90  0.000156</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="go">5    -0.93  0.000195</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="go">6    -0.98  0.000234</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="go">7    -0.93  0.000273</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="go">8    -0.89  0.000313</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="go">9    -0.89  0.000352</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">df_toas_30_s</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="sd">  SELECT</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="sd">    (row_number() OVER () -  1)*(1/25.6e3) as t,</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="sd">    voltage,</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="sd">  FROM </span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="sd">    sg_30_s</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="sd">  LIMIT 10</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="p">)</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_toas_30_s</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Output:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="go">          t  voltage</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="go">0  0.000000    -1.28</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="go">1  0.000039    -1.31</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="go">2  0.000078    -1.17</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="go">3  0.000117    -0.85</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="go">4  0.000156    -0.90</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="go">5  0.000195    -0.93</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="go">6  0.000234    -0.98</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="go">7  0.000273    -0.93</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="go">8  0.000313    -0.89</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="go">9  0.000352    -0.89</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="full-analyses">Full analyses 👇</h2>
+<h3 id="opr-encoder">OPR encoder</h3>
+<p>Here's some code to get you started with this dataset using the OPR encoder.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_5_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span> <span class="c1">#(1)!</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.btt</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rotor_blade_AoAs</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken OPR&quot;</span> <span class="p">,</span><span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(2)!</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 1&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(3)!</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 2&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(4)!</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">TEST_CASE_NAME</span> <span class="o">=</span> <span class="s1">&#39;toas_30_s&#39;</span> <span class="c1">#(5)!</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">R</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">probe_spacing</span> <span class="o">=</span> <span class="mi">164_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">20.1</span> <span class="c1">#(6)!</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span> <span class="c1">#(7)!</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">df_toas</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;table/</span><span class="si">{</span><span class="n">TEST_CASE_NAME</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="c1">#(8)!</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="n">blades_AoAs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>    <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @TACHO_CHANNEL) &amp; (voltage == @TACHO_VOLTAGE) &amp; (is_rising == @TACHO_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">],</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>    <span class="p">[</span>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>        <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @PROBE1_CHANNEL) &amp; (voltage == @PROBE1_VOLTAGE) &amp; (is_rising == @PROBE1_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">],</span>
+</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>        <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @PROBE2_CHANNEL) &amp; (voltage == @PROBE2_VOLTAGE) &amp; (is_rising == @PROBE2_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">]</span>
+</span><span id="__span-16-21"><a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>    <span class="p">],</span>
+</span><span id="__span-16-22"><a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>    <span class="n">probe_spacings</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="n">probe_spacing</span><span class="p">]),</span>
+</span><span id="__span-16-23"><a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>    <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+</span><span id="__span-16-24"><a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>    <span class="n">is_mpr</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-16-25"><a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="p">)</span><span class="c1">#(9)!</span>
+</span><span id="__span-16-26"><a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>
+</span><span id="__span-16-27"><a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a><span class="n">df_blade_sg</span> <span class="o">=</span> <span class="n">blades_AoAs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="c1">#(10)!</span>
+</span><span id="__span-16-28"><a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span><span class="c1">#(11)!</span>
+</span><span id="__span-16-29"><a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-16-30"><a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>
+</span><span id="__span-16-31"><a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="p">[[{</span><span class="s2">&quot;secondary_y&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]])</span> <span class="c1">#(12)!</span>
+</span><span id="__span-16-32"><a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>
+</span><span id="__span-16-33"><a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-16-34"><a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-16-35"><a id="__codelineno-16-35" name="__codelineno-16-35" href="#__codelineno-16-35"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p1&quot;</span><span class="p">],</span>
+</span><span id="__span-16-36"><a id="__codelineno-16-36" name="__codelineno-16-36" href="#__codelineno-16-36"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span>
+</span><span id="__span-16-37"><a id="__codelineno-16-37" name="__codelineno-16-37" href="#__codelineno-16-37"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-16-38"><a id="__codelineno-16-38" name="__codelineno-16-38" href="#__codelineno-16-38"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 1 deflection&quot;</span>
+</span><span id="__span-16-39"><a id="__codelineno-16-39" name="__codelineno-16-39" href="#__codelineno-16-39"></a>    <span class="p">),</span>
+</span><span id="__span-16-40"><a id="__codelineno-16-40" name="__codelineno-16-40" href="#__codelineno-16-40"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-16-41"><a id="__codelineno-16-41" name="__codelineno-16-41" href="#__codelineno-16-41"></a><span class="p">)</span>
+</span><span id="__span-16-42"><a id="__codelineno-16-42" name="__codelineno-16-42" href="#__codelineno-16-42"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-16-43"><a id="__codelineno-16-43" name="__codelineno-16-43" href="#__codelineno-16-43"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-16-44"><a id="__codelineno-16-44" name="__codelineno-16-44" href="#__codelineno-16-44"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p2&quot;</span><span class="p">],</span>
+</span><span id="__span-16-45"><a id="__codelineno-16-45" name="__codelineno-16-45" href="#__codelineno-16-45"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x2&quot;</span><span class="p">],</span>
+</span><span id="__span-16-46"><a id="__codelineno-16-46" name="__codelineno-16-46" href="#__codelineno-16-46"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-16-47"><a id="__codelineno-16-47" name="__codelineno-16-47" href="#__codelineno-16-47"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 2 deflection&quot;</span>
+</span><span id="__span-16-48"><a id="__codelineno-16-48" name="__codelineno-16-48" href="#__codelineno-16-48"></a>    <span class="p">),</span>
+</span><span id="__span-16-49"><a id="__codelineno-16-49" name="__codelineno-16-49" href="#__codelineno-16-49"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-16-50"><a id="__codelineno-16-50" name="__codelineno-16-50" href="#__codelineno-16-50"></a><span class="p">)</span>
+</span><span id="__span-16-51"><a id="__codelineno-16-51" name="__codelineno-16-51" href="#__codelineno-16-51"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-16-52"><a id="__codelineno-16-52" name="__codelineno-16-52" href="#__codelineno-16-52"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-16-53"><a id="__codelineno-16-53" name="__codelineno-16-53" href="#__codelineno-16-53"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;n_start_time&quot;</span><span class="p">],</span>
+</span><span id="__span-16-54"><a id="__codelineno-16-54" name="__codelineno-16-54" href="#__codelineno-16-54"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span>
+</span><span id="__span-16-55"><a id="__codelineno-16-55" name="__codelineno-16-55" href="#__codelineno-16-55"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-16-56"><a id="__codelineno-16-56" name="__codelineno-16-56" href="#__codelineno-16-56"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Shaft speed [RPM]&quot;</span>
+</span><span id="__span-16-57"><a id="__codelineno-16-57" name="__codelineno-16-57" href="#__codelineno-16-57"></a>    <span class="p">),</span>
+</span><span id="__span-16-58"><a id="__codelineno-16-58" name="__codelineno-16-58" href="#__codelineno-16-58"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-16-59"><a id="__codelineno-16-59" name="__codelineno-16-59" href="#__codelineno-16-59"></a><span class="p">)</span>
+</span><span id="__span-16-60"><a id="__codelineno-16-60" name="__codelineno-16-60" href="#__codelineno-16-60"></a>
+</span><span id="__span-16-61"><a id="__codelineno-16-61" name="__codelineno-16-61" href="#__codelineno-16-61"></a><span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+</span><span id="__span-16-62"><a id="__codelineno-16-62" name="__codelineno-16-62" href="#__codelineno-16-62"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Blade 5 deflection for the first cycle on the 30s ramp rate test case&quot;</span><span class="p">,</span>
+</span><span id="__span-16-63"><a id="__codelineno-16-63" name="__codelineno-16-63" href="#__codelineno-16-63"></a>    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span>
+</span><span id="__span-16-64"><a id="__codelineno-16-64" name="__codelineno-16-64" href="#__codelineno-16-64"></a>    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;x [μm]&quot;</span>
+</span><span id="__span-16-65"><a id="__codelineno-16-65" name="__codelineno-16-65" href="#__codelineno-16-65"></a><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>Import the necessary libraries.</li>
+<li>Take the OPR from the Kraken at 0.1V on the rising edge.</li>
+<li>Take the first Probe from the Kraken at 0.1V on the rising edge.</li>
+<li>Take second Probe from the Kraken at 0.1V on the rising edge.</li>
+<li>The 30s ramp test case.</li>
+<li>The blade radius, number of blades and probe spacing.</li>
+<li>Load the dataset.</li>
+<li>Load the ToAs for the 30s ramp test case.</li>
+<li>Get the rotor blade AoAs.</li>
+<li>Get the strain gauge data for the last blade.</li>
+<li>Calculate the deflection.</li>
+<li>Create the plot.</li>
+</ol>
+<p>Output:</p>
+<p><figure markdown>
+  <img alt="OPR Pandas only" src="opr_full_pandas_only.png" width="800" />
+    <figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The first cycle of the 30s ramp rate test case.
+    </figcaption>
+</figure></p>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span> <span class="c1">#(1)!</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.btt</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rotor_blade_AoAs</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken OPR&quot;</span> <span class="p">,</span><span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(2)!</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 1&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(3)!</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 2&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(4)!</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="n">TEST_CASE_NAME</span> <span class="o">=</span> <span class="s1">&#39;toas_30_s&#39;</span> <span class="c1">#(5)!</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">R</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">probe_spacing</span> <span class="o">=</span> <span class="mi">164_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">20.1</span> <span class="c1">#(6)!</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span> <span class="c1">#(7)!</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="n">duckdb_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="s2">SELECT </span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="s2">    toa</span>
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="s2">FROM </span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="s2">    </span><span class="si">{0}</span>
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="s2">WHERE</span>
+</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="s2">    channel = &#39;</span><span class="si">{1}</span><span class="s2">&#39; AND voltage = </span><span class="si">{2}</span><span class="s2"> AND is_rising = </span><span class="si">{3}</span>
+</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="s2">&quot;&quot;&quot;</span> <span class="c1">#(8)!</span>
+</span><span id="__span-17-22"><a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="n">blades_AoAs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-17-23"><a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>    <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span><span class="p">)),</span>
+</span><span id="__span-17-24"><a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>    <span class="p">[</span>
+</span><span id="__span-17-25"><a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>        <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span><span class="p">)),</span>
+</span><span id="__span-17-26"><a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>        <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span><span class="p">))</span>
+</span><span id="__span-17-27"><a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a>    <span class="p">],</span>
+</span><span id="__span-17-28"><a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a>    <span class="n">probe_spacings</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="n">probe_spacing</span><span class="p">]),</span>
+</span><span id="__span-17-29"><a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a>    <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+</span><span id="__span-17-30"><a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a>    <span class="n">is_mpr</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-17-31"><a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a><span class="p">)</span> <span class="c1">#(9)!</span>
+</span><span id="__span-17-32"><a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a>
+</span><span id="__span-17-33"><a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a><span class="n">df_blade_sg</span> <span class="o">=</span> <span class="n">blades_AoAs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#(10)!</span>
+</span><span id="__span-17-34"><a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span> <span class="c1">#(11)!</span>
+</span><span id="__span-17-35"><a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-17-36"><a id="__codelineno-17-36" name="__codelineno-17-36" href="#__codelineno-17-36"></a>
+</span><span id="__span-17-37"><a id="__codelineno-17-37" name="__codelineno-17-37" href="#__codelineno-17-37"></a><span class="c1"># Start a two y axis plot</span>
+</span><span id="__span-17-38"><a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="p">[[{</span><span class="s2">&quot;secondary_y&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]])</span> <span class="c1">#(12)!</span>
+</span><span id="__span-17-39"><a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a>
+</span><span id="__span-17-40"><a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-17-41"><a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-17-42"><a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p1&quot;</span><span class="p">],</span>
+</span><span id="__span-17-43"><a id="__codelineno-17-43" name="__codelineno-17-43" href="#__codelineno-17-43"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span>
+</span><span id="__span-17-44"><a id="__codelineno-17-44" name="__codelineno-17-44" href="#__codelineno-17-44"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-17-45"><a id="__codelineno-17-45" name="__codelineno-17-45" href="#__codelineno-17-45"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 1 deflection&quot;</span>
+</span><span id="__span-17-46"><a id="__codelineno-17-46" name="__codelineno-17-46" href="#__codelineno-17-46"></a>    <span class="p">),</span>
+</span><span id="__span-17-47"><a id="__codelineno-17-47" name="__codelineno-17-47" href="#__codelineno-17-47"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-17-48"><a id="__codelineno-17-48" name="__codelineno-17-48" href="#__codelineno-17-48"></a><span class="p">)</span>
+</span><span id="__span-17-49"><a id="__codelineno-17-49" name="__codelineno-17-49" href="#__codelineno-17-49"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-17-50"><a id="__codelineno-17-50" name="__codelineno-17-50" href="#__codelineno-17-50"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-17-51"><a id="__codelineno-17-51" name="__codelineno-17-51" href="#__codelineno-17-51"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p2&quot;</span><span class="p">],</span>
+</span><span id="__span-17-52"><a id="__codelineno-17-52" name="__codelineno-17-52" href="#__codelineno-17-52"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x2&quot;</span><span class="p">],</span>
+</span><span id="__span-17-53"><a id="__codelineno-17-53" name="__codelineno-17-53" href="#__codelineno-17-53"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-17-54"><a id="__codelineno-17-54" name="__codelineno-17-54" href="#__codelineno-17-54"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 2 deflection&quot;</span>
+</span><span id="__span-17-55"><a id="__codelineno-17-55" name="__codelineno-17-55" href="#__codelineno-17-55"></a>    <span class="p">),</span>
+</span><span id="__span-17-56"><a id="__codelineno-17-56" name="__codelineno-17-56" href="#__codelineno-17-56"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-17-57"><a id="__codelineno-17-57" name="__codelineno-17-57" href="#__codelineno-17-57"></a><span class="p">)</span>
+</span><span id="__span-17-58"><a id="__codelineno-17-58" name="__codelineno-17-58" href="#__codelineno-17-58"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-17-59"><a id="__codelineno-17-59" name="__codelineno-17-59" href="#__codelineno-17-59"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-17-60"><a id="__codelineno-17-60" name="__codelineno-17-60" href="#__codelineno-17-60"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;n_start_time&quot;</span><span class="p">],</span>
+</span><span id="__span-17-61"><a id="__codelineno-17-61" name="__codelineno-17-61" href="#__codelineno-17-61"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span>
+</span><span id="__span-17-62"><a id="__codelineno-17-62" name="__codelineno-17-62" href="#__codelineno-17-62"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-17-63"><a id="__codelineno-17-63" name="__codelineno-17-63" href="#__codelineno-17-63"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Shaft speed [RPM]&quot;</span>
+</span><span id="__span-17-64"><a id="__codelineno-17-64" name="__codelineno-17-64" href="#__codelineno-17-64"></a>    <span class="p">),</span>
+</span><span id="__span-17-65"><a id="__codelineno-17-65" name="__codelineno-17-65" href="#__codelineno-17-65"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-17-66"><a id="__codelineno-17-66" name="__codelineno-17-66" href="#__codelineno-17-66"></a><span class="p">)</span>
+</span><span id="__span-17-67"><a id="__codelineno-17-67" name="__codelineno-17-67" href="#__codelineno-17-67"></a>
+</span><span id="__span-17-68"><a id="__codelineno-17-68" name="__codelineno-17-68" href="#__codelineno-17-68"></a><span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+</span><span id="__span-17-69"><a id="__codelineno-17-69" name="__codelineno-17-69" href="#__codelineno-17-69"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Blade 5 deflection for the first cycle on the 30s ramp rate test case&quot;</span><span class="p">,</span>
+</span><span id="__span-17-70"><a id="__codelineno-17-70" name="__codelineno-17-70" href="#__codelineno-17-70"></a>    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span>
+</span><span id="__span-17-71"><a id="__codelineno-17-71" name="__codelineno-17-71" href="#__codelineno-17-71"></a>    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;x [μm]&quot;</span><span class="p">,</span>
+</span><span id="__span-17-72"><a id="__codelineno-17-72" name="__codelineno-17-72" href="#__codelineno-17-72"></a>    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span><span class="p">,</span>
+</span><span id="__span-17-73"><a id="__codelineno-17-73" name="__codelineno-17-73" href="#__codelineno-17-73"></a>    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-17-74"><a id="__codelineno-17-74" name="__codelineno-17-74" href="#__codelineno-17-74"></a>    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-17-75"><a id="__codelineno-17-75" name="__codelineno-17-75" href="#__codelineno-17-75"></a><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>Import the necessary libraries.</li>
+<li>Take the OPR from the Kraken at 0.1V on the rising edge.</li>
+<li>Take the first Probe from the Kraken at 0.1V on the rising edge.</li>
+<li>Take second Probe from the Kraken at 0.1V on the rising edge.</li>
+<li>The 30s ramp test case.</li>
+<li>The blade radius, number of blades and probe spacing.</li>
+<li>Load the dataset.</li>
+<li>Define a formattable DuckDB query.</li>
+<li>Get the rotor blade AoAs.</li>
+<li>Get the strain gauge data for the last blade.</li>
+<li>Calculate the deflection.</li>
+<li>Create the plot.</li>
+</ol>
+<p>Output:</p>
+<p><figure markdown>
+  <img alt="OPR Pandas only" src="opr_full_duckdb.png" width="800" />
+    <figcaption><strong><a name='figure_06'>Figure 6</a></strong>: The first cycle of the 30s ramp rate test case.
+    </figcaption>
+</figure></p>
+</div>
+</div>
+</div>
+<h3 id="mpr-encoder">MPR encoder</h3>
+<p>Only the OROS was used to capture the MPR data. The MPR data is stored in the 'OROS MPR' channel.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.922 0h2.623v18.104h-2.623zm-4.126 12.94h2.623v2.57h-2.623zm0-7.037h2.623v5.446h-2.623zm0 11.197h2.623v5.446h-2.623zM4.456 5.896h2.622V24H4.455zm4.213 2.559h2.623v2.57H8.67zm0 4.151h2.623v5.447H8.67zm0-11.187h2.623v5.446H8.67Z"/></svg></span> Pandas only</label><label for="__tabbed_6_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0M9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97m6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351z"/></svg></span> I like DuckDB as well</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.btt</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rotor_blade_AoAs</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.ias</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_ias</span> <span class="c1">#(1)!</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span> <span class="o">=</span> <span class="s2">&quot;OROS MPR&quot;</span> <span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(2)!</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 1&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 2&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="n">TEST_CASE_NAME</span> <span class="o">=</span> <span class="s1">&#39;toas_30_s&#39;</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="n">R</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">probe_spacing</span> <span class="o">=</span> <span class="mi">164_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">20.1</span>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span>
+</span><span id="__span-18-15"><a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="n">df_toas</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;table/</span><span class="si">{</span><span class="n">TEST_CASE_NAME</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+</span><span id="__span-18-16"><a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>
+</span><span id="__span-18-17"><a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="n">blades_AoAs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-18-18"><a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>    <span class="n">calculate_ias</span><span class="p">(</span><span class="c1">#(3)!</span>
+</span><span id="__span-18-19"><a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>        <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @TACHO_CHANNEL) &amp; (voltage == @TACHO_VOLTAGE) &amp; (is_rising == @TACHO_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">],</span>
+</span><span id="__span-18-20"><a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>        <span class="mi">80</span>
+</span><span id="__span-18-21"><a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>    <span class="p">),</span>
+</span><span id="__span-18-22"><a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>    <span class="p">[</span>
+</span><span id="__span-18-23"><a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>        <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @PROBE1_CHANNEL) &amp; (voltage == @PROBE1_VOLTAGE) &amp; (is_rising == @PROBE1_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">],</span>
+</span><span id="__span-18-24"><a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>        <span class="n">df_toas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;(channel == @PROBE2_CHANNEL) &amp; (voltage == @PROBE2_VOLTAGE) &amp; (is_rising == @PROBE2_RISING)&quot;</span><span class="p">)[</span><span class="s1">&#39;toa&#39;</span><span class="p">]</span>
+</span><span id="__span-18-25"><a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>    <span class="p">],</span>
+</span><span id="__span-18-26"><a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>    <span class="n">probe_spacings</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="n">probe_spacing</span><span class="p">]),</span>
+</span><span id="__span-18-27"><a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a>    <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+</span><span id="__span-18-28"><a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>    <span class="n">is_mpr</span><span class="o">=</span><span class="kc">True</span> <span class="c1">#(4)!</span>
+</span><span id="__span-18-29"><a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a><span class="p">)</span>
+</span><span id="__span-18-30"><a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a>
+</span><span id="__span-18-31"><a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a><span class="n">df_blade_sg</span> <span class="o">=</span> <span class="n">blades_AoAs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#(5)!</span>
+</span><span id="__span-18-32"><a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-18-33"><a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-18-34"><a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a>
+</span><span id="__span-18-35"><a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a><span class="c1"># Start a two y axis plot</span>
+</span><span id="__span-18-36"><a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="p">[[{</span><span class="s2">&quot;secondary_y&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]])</span>
+</span><span id="__span-18-37"><a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a>
+</span><span id="__span-18-38"><a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-18-39"><a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-18-40"><a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p1&quot;</span><span class="p">],</span>
+</span><span id="__span-18-41"><a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span>
+</span><span id="__span-18-42"><a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-18-43"><a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 1 deflection&quot;</span>
+</span><span id="__span-18-44"><a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a>    <span class="p">),</span>
+</span><span id="__span-18-45"><a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-18-46"><a id="__codelineno-18-46" name="__codelineno-18-46" href="#__codelineno-18-46"></a><span class="p">)</span>
+</span><span id="__span-18-47"><a id="__codelineno-18-47" name="__codelineno-18-47" href="#__codelineno-18-47"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-18-48"><a id="__codelineno-18-48" name="__codelineno-18-48" href="#__codelineno-18-48"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-18-49"><a id="__codelineno-18-49" name="__codelineno-18-49" href="#__codelineno-18-49"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p2&quot;</span><span class="p">],</span>
+</span><span id="__span-18-50"><a id="__codelineno-18-50" name="__codelineno-18-50" href="#__codelineno-18-50"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x2&quot;</span><span class="p">],</span>
+</span><span id="__span-18-51"><a id="__codelineno-18-51" name="__codelineno-18-51" href="#__codelineno-18-51"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-18-52"><a id="__codelineno-18-52" name="__codelineno-18-52" href="#__codelineno-18-52"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 2 deflection&quot;</span>
+</span><span id="__span-18-53"><a id="__codelineno-18-53" name="__codelineno-18-53" href="#__codelineno-18-53"></a>    <span class="p">),</span>
+</span><span id="__span-18-54"><a id="__codelineno-18-54" name="__codelineno-18-54" href="#__codelineno-18-54"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-18-55"><a id="__codelineno-18-55" name="__codelineno-18-55" href="#__codelineno-18-55"></a><span class="p">)</span>
+</span><span id="__span-18-56"><a id="__codelineno-18-56" name="__codelineno-18-56" href="#__codelineno-18-56"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-18-57"><a id="__codelineno-18-57" name="__codelineno-18-57" href="#__codelineno-18-57"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-18-58"><a id="__codelineno-18-58" name="__codelineno-18-58" href="#__codelineno-18-58"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;section_start_time&quot;</span><span class="p">],</span>
+</span><span id="__span-18-59"><a id="__codelineno-18-59" name="__codelineno-18-59" href="#__codelineno-18-59"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span>
+</span><span id="__span-18-60"><a id="__codelineno-18-60" name="__codelineno-18-60" href="#__codelineno-18-60"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-18-61"><a id="__codelineno-18-61" name="__codelineno-18-61" href="#__codelineno-18-61"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Shaft speed [RPM]&quot;</span>
+</span><span id="__span-18-62"><a id="__codelineno-18-62" name="__codelineno-18-62" href="#__codelineno-18-62"></a>    <span class="p">),</span>
+</span><span id="__span-18-63"><a id="__codelineno-18-63" name="__codelineno-18-63" href="#__codelineno-18-63"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-18-64"><a id="__codelineno-18-64" name="__codelineno-18-64" href="#__codelineno-18-64"></a><span class="p">)</span>
+</span><span id="__span-18-65"><a id="__codelineno-18-65" name="__codelineno-18-65" href="#__codelineno-18-65"></a>
+</span><span id="__span-18-66"><a id="__codelineno-18-66" name="__codelineno-18-66" href="#__codelineno-18-66"></a><span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+</span><span id="__span-18-67"><a id="__codelineno-18-67" name="__codelineno-18-67" href="#__codelineno-18-67"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Blade 5 deflection for the first cycle on the 30s ramp rate test case&quot;</span><span class="p">,</span>
+</span><span id="__span-18-68"><a id="__codelineno-18-68" name="__codelineno-18-68" href="#__codelineno-18-68"></a>    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span>
+</span><span id="__span-18-69"><a id="__codelineno-18-69" name="__codelineno-18-69" href="#__codelineno-18-69"></a>    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;x [μm]&quot;</span><span class="p">,</span>
+</span><span id="__span-18-70"><a id="__codelineno-18-70" name="__codelineno-18-70" href="#__codelineno-18-70"></a>    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span><span class="p">,</span>
+</span><span id="__span-18-71"><a id="__codelineno-18-71" name="__codelineno-18-71" href="#__codelineno-18-71"></a>    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-18-72"><a id="__codelineno-18-72" name="__codelineno-18-72" href="#__codelineno-18-72"></a>    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-18-73"><a id="__codelineno-18-73" name="__codelineno-18-73" href="#__codelineno-18-73"></a><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>Note that we import the <code>calculate_ias</code> function.</li>
+<li>Take the MPR from the OROS at 2.5V on the rising edge.</li>
+<li>Calculate the IAS.</li>
+<li>Set the <code>is_mpr</code> parameter to <code>True</code>.</li>
+<li>The MPR <code>calculate_ias</code> function aligns the MPR so that the largest (or smallest) section is always the start of the revolution. As it happens, our strain gauge data is now the 4th element in the <code>blades_AoAs</code> list. How do I know this? I just flipped through the blades until I found the blade with the same ToAs as the OPR case.</li>
+</ol>
+<p>Output:</p>
+<p><figure markdown>
+  <img alt="MPR Pandas only" src="mpr_full_pandas_only.png" width="800" />
+    <figcaption><strong><a name='figure_07'>Figure 7</a></strong>: The first cycle of the 30s ramp rate test case using the MPR encoder.
+    </figcaption>
+</figure></p>
+</div>
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.btt</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rotor_blade_AoAs</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">plotly.subplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_subplots</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.ias</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_ias</span> <span class="c1">#(1)!</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span> <span class="o">=</span> <span class="s2">&quot;OROS MPR&quot;</span> <span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="kc">True</span> <span class="c1">#(2)!</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 1&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span> <span class="o">=</span> <span class="s2">&quot;Kraken Probe 2&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="kc">True</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="n">TEST_CASE_NAME</span> <span class="o">=</span> <span class="s1">&#39;toas_30_s&#39;</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">R</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">probe_spacing</span> <span class="o">=</span> <span class="mi">164_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">20.1</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/diamond_et_al/2024_ramp_rates_45_deg&quot;</span><span class="p">]</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="n">duckdb_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="s2">SELECT </span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="s2">    toa</span>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="s2">FROM </span>
+</span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="s2">    </span><span class="si">{0}</span>
+</span><span id="__span-19-21"><a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="s2">WHERE</span>
+</span><span id="__span-19-22"><a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="s2">    channel = &#39;</span><span class="si">{1}</span><span class="s2">&#39; AND voltage = </span><span class="si">{2}</span><span class="s2"> AND is_rising = </span><span class="si">{3}</span>
+</span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-19-24"><a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="n">blades_AoAs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-19-25"><a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>    <span class="n">calculate_ias</span><span class="p">(</span> <span class="c1">#(3)!</span>
+</span><span id="__span-19-26"><a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a>        <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span><span class="p">)),</span>
+</span><span id="__span-19-27"><a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>        <span class="mi">80</span>
+</span><span id="__span-19-28"><a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a>    <span class="p">),</span>
+</span><span id="__span-19-29"><a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a>    <span class="p">[</span>
+</span><span id="__span-19-30"><a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a>        <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">PROBE1_CHANNEL</span><span class="p">,</span> <span class="n">PROBE1_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE1_RISING</span><span class="p">)),</span>
+</span><span id="__span-19-31"><a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a>        <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">PROBE2_CHANNEL</span><span class="p">,</span> <span class="n">PROBE2_VOLTAGE</span><span class="p">,</span> <span class="n">PROBE2_RISING</span><span class="p">))</span>
+</span><span id="__span-19-32"><a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a>    <span class="p">],</span>
+</span><span id="__span-19-33"><a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a>    <span class="n">probe_spacings</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="n">probe_spacing</span><span class="p">]),</span>
+</span><span id="__span-19-34"><a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a>    <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+</span><span id="__span-19-35"><a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a>    <span class="n">is_mpr</span><span class="o">=</span><span class="kc">True</span> <span class="c1">#(4)!</span>
+</span><span id="__span-19-36"><a id="__codelineno-19-36" name="__codelineno-19-36" href="#__codelineno-19-36"></a><span class="p">)</span>
+</span><span id="__span-19-37"><a id="__codelineno-19-37" name="__codelineno-19-37" href="#__codelineno-19-37"></a>
+</span><span id="__span-19-38"><a id="__codelineno-19-38" name="__codelineno-19-38" href="#__codelineno-19-38"></a><span class="n">df_blade_sg</span> <span class="o">=</span> <span class="n">blades_AoAs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#(5)!</span>
+</span><span id="__span-19-39"><a id="__codelineno-19-39" name="__codelineno-19-39" href="#__codelineno-19-39"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-19-40"><a id="__codelineno-19-40" name="__codelineno-19-40" href="#__codelineno-19-40"></a><span class="n">df_blade_sg</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_blade_sg</span><span class="p">[</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span> <span class="o">*</span> <span class="n">R</span>
+</span><span id="__span-19-41"><a id="__codelineno-19-41" name="__codelineno-19-41" href="#__codelineno-19-41"></a>
+</span><span id="__span-19-42"><a id="__codelineno-19-42" name="__codelineno-19-42" href="#__codelineno-19-42"></a><span class="c1"># Start a two y axis plot</span>
+</span><span id="__span-19-43"><a id="__codelineno-19-43" name="__codelineno-19-43" href="#__codelineno-19-43"></a><span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">specs</span><span class="o">=</span><span class="p">[[{</span><span class="s2">&quot;secondary_y&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}]])</span>
+</span><span id="__span-19-44"><a id="__codelineno-19-44" name="__codelineno-19-44" href="#__codelineno-19-44"></a>
+</span><span id="__span-19-45"><a id="__codelineno-19-45" name="__codelineno-19-45" href="#__codelineno-19-45"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-19-46"><a id="__codelineno-19-46" name="__codelineno-19-46" href="#__codelineno-19-46"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-19-47"><a id="__codelineno-19-47" name="__codelineno-19-47" href="#__codelineno-19-47"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p1&quot;</span><span class="p">],</span>
+</span><span id="__span-19-48"><a id="__codelineno-19-48" name="__codelineno-19-48" href="#__codelineno-19-48"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span>
+</span><span id="__span-19-49"><a id="__codelineno-19-49" name="__codelineno-19-49" href="#__codelineno-19-49"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-19-50"><a id="__codelineno-19-50" name="__codelineno-19-50" href="#__codelineno-19-50"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 1 deflection&quot;</span>
+</span><span id="__span-19-51"><a id="__codelineno-19-51" name="__codelineno-19-51" href="#__codelineno-19-51"></a>    <span class="p">),</span>
+</span><span id="__span-19-52"><a id="__codelineno-19-52" name="__codelineno-19-52" href="#__codelineno-19-52"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-19-53"><a id="__codelineno-19-53" name="__codelineno-19-53" href="#__codelineno-19-53"></a><span class="p">)</span>
+</span><span id="__span-19-54"><a id="__codelineno-19-54" name="__codelineno-19-54" href="#__codelineno-19-54"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-19-55"><a id="__codelineno-19-55" name="__codelineno-19-55" href="#__codelineno-19-55"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-19-56"><a id="__codelineno-19-56" name="__codelineno-19-56" href="#__codelineno-19-56"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;ToA_p2&quot;</span><span class="p">],</span>
+</span><span id="__span-19-57"><a id="__codelineno-19-57" name="__codelineno-19-57" href="#__codelineno-19-57"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;x2&quot;</span><span class="p">],</span>
+</span><span id="__span-19-58"><a id="__codelineno-19-58" name="__codelineno-19-58" href="#__codelineno-19-58"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-19-59"><a id="__codelineno-19-59" name="__codelineno-19-59" href="#__codelineno-19-59"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Blade 5 Probe 2 deflection&quot;</span>
+</span><span id="__span-19-60"><a id="__codelineno-19-60" name="__codelineno-19-60" href="#__codelineno-19-60"></a>    <span class="p">),</span>
+</span><span id="__span-19-61"><a id="__codelineno-19-61" name="__codelineno-19-61" href="#__codelineno-19-61"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">False</span>
+</span><span id="__span-19-62"><a id="__codelineno-19-62" name="__codelineno-19-62" href="#__codelineno-19-62"></a><span class="p">)</span>
+</span><span id="__span-19-63"><a id="__codelineno-19-63" name="__codelineno-19-63" href="#__codelineno-19-63"></a><span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+</span><span id="__span-19-64"><a id="__codelineno-19-64" name="__codelineno-19-64" href="#__codelineno-19-64"></a>    <span class="n">go</span><span class="o">.</span><span class="n">Scattergl</span><span class="p">(</span>
+</span><span id="__span-19-65"><a id="__codelineno-19-65" name="__codelineno-19-65" href="#__codelineno-19-65"></a>        <span class="n">x</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;section_start_time&quot;</span><span class="p">],</span>
+</span><span id="__span-19-66"><a id="__codelineno-19-66" name="__codelineno-19-66" href="#__codelineno-19-66"></a>        <span class="n">y</span><span class="o">=</span><span class="n">df_blade_sg</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;ToA_p1 &gt; 15 and ToA_p1 &lt; 41 &quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span>
+</span><span id="__span-19-67"><a id="__codelineno-19-67" name="__codelineno-19-67" href="#__codelineno-19-67"></a>        <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+</span><span id="__span-19-68"><a id="__codelineno-19-68" name="__codelineno-19-68" href="#__codelineno-19-68"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Shaft speed [RPM]&quot;</span>
+</span><span id="__span-19-69"><a id="__codelineno-19-69" name="__codelineno-19-69" href="#__codelineno-19-69"></a>    <span class="p">),</span>
+</span><span id="__span-19-70"><a id="__codelineno-19-70" name="__codelineno-19-70" href="#__codelineno-19-70"></a>    <span class="n">secondary_y</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-19-71"><a id="__codelineno-19-71" name="__codelineno-19-71" href="#__codelineno-19-71"></a><span class="p">)</span>
+</span><span id="__span-19-72"><a id="__codelineno-19-72" name="__codelineno-19-72" href="#__codelineno-19-72"></a>
+</span><span id="__span-19-73"><a id="__codelineno-19-73" name="__codelineno-19-73" href="#__codelineno-19-73"></a><span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+</span><span id="__span-19-74"><a id="__codelineno-19-74" name="__codelineno-19-74" href="#__codelineno-19-74"></a>    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Blade 5 deflection for the first cycle on the 30s ramp rate test case&quot;</span><span class="p">,</span>
+</span><span id="__span-19-75"><a id="__codelineno-19-75" name="__codelineno-19-75" href="#__codelineno-19-75"></a>    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">,</span>
+</span><span id="__span-19-76"><a id="__codelineno-19-76" name="__codelineno-19-76" href="#__codelineno-19-76"></a>    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;x [μm]&quot;</span><span class="p">,</span>
+</span><span id="__span-19-77"><a id="__codelineno-19-77" name="__codelineno-19-77" href="#__codelineno-19-77"></a>    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span><span class="p">,</span>
+</span><span id="__span-19-78"><a id="__codelineno-19-78" name="__codelineno-19-78" href="#__codelineno-19-78"></a>    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-19-79"><a id="__codelineno-19-79" name="__codelineno-19-79" href="#__codelineno-19-79"></a>    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;rgb(217, 217, 217)&#39;</span><span class="p">,</span> <span class="n">gridwidth</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span><span id="__span-19-80"><a id="__codelineno-19-80" name="__codelineno-19-80" href="#__codelineno-19-80"></a><span class="p">)</span>
+</span></code></pre></div>
+<ol>
+<li>Note that we import the <code>calculate_ias</code> function.</li>
+<li>Take the MPR from the OROS at 2.5V on the rising edge.</li>
+<li>Calculate the IAS.</li>
+<li>Set the <code>is_mpr</code> parameter to <code>True</code>.</li>
+<li>The MPR <code>calculate_ias</code> function aligns the MPR so that the largest (or smallest) section is always the start of the revolution. As it happens, our strain gauge data is now the 4th element in the <code>blades_AoAs</code> list. How do I know this? I just flipped through the blades until I found the blade with the same ToAs as the OPR case.</li>
+</ol>
+<p>Output:</p>
+<p><figure markdown>
+  <img alt="MPR Duckdb only" src="mpr_full_duckdb.png" width="800" />
+    <figcaption><strong><a name='figure_08'>Figure 8</a></strong>: The first cycle of the 30s ramp rate test case using the MPR encoder.
+    </figcaption>
+</figure></p>
+</div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The <code>calculate_ias</code> function is used to calculate the IAS from the MPR data. You can save the result of this calculation for posterity like so:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;ias_30_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">calculate_ias</span><span class="p">(</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    <span class="n">ds</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">duckdb_query</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">TEST_CASE_NAME</span><span class="p">,</span> <span class="n">TACHO_CHANNEL</span><span class="p">,</span> <span class="n">TACHO_VOLTAGE</span><span class="p">,</span> <span class="n">TACHO_RISING</span><span class="p">)),</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="mi">80</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Then simply query the <code>ias_30_s</code> table to get the IAS data.</p>
+</div>
+<h2 id="conclusion">Conclusion</h2>
+<p>I hope you have fun. I believe there are many unexplored avenues in this dataset.</p>
+<p>If you have any questions or need help with the dataset, please feel free to reach out to me at dawie.diamond@bladesight.com . Also, if you find any bugs in the library, please reach out to me 🙏.</p>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>A big thanks to the University of Pretoria for providing the test bench and the laboratory space to conduct these tests.</p>
+<div style='display:flex;flex-direction:column'>
+            <span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-03-12</span>
+    <div style='display:flex;flex-direction:row'>
+      <div>
+          <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+              <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="border-radius: 100%;width: 4.0rem;">
+          </a>
+      </div>
+      <div style='margin-left:2rem'>
+          <p>
+              <strong>Dawie Diamond</strong>
+
+          </p>
+      </div>
+    </div>
+
+    <div style='display:flex;flex-direction:row'>
+    <div>
+        <a target="_blank" href="https://www.linkedin.com/in/justin-s-507338116/" class="" title="Justin Smith" style="border-radius:100%;"> 
+            <img src="https://lh3.googleusercontent.com/a-/ALV-UjXWpiVzpdjYOvSQxPJMjYoqfg8a6oXzxJ9rGWJC0m8TCNFkksin=s80-p-k-rw-no" alt="Justin Smith" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Justin Smith</strong>
+        </p>
+    </div>
+  </div>
+
+    <div style='display:flex;flex-direction:row'>
+    <div>
+        <a target="_blank" href="https://www.linkedin.com/in/alex-brocco-70218b25b/" class="" title="Alex Brocco" style="border-radius:100%;"> 
+            <img src="https://media.licdn.com/dms/image/v2/D4D03AQEc5OipnVK2WA/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1671464693722?e=1736380800&v=beta&t=zGoAdMPrFQSvHHNkexkjZvDX1tkzgX2vDljTj0k0gc8" alt="Alex Brocco" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Alex Brocco</strong>
+        </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:zhi2022error">
+<p>Zhi, F., Duan, F., Liu, M., Niu, G., Jiao, J., Deng, Z., Jiang, J., Fu, X., 2022. Error revising of blade tip-timing parameter identification caused by frequency sweep rate. Measurement 201, 111681.&#160;<a class="footnote-backref" href="#fnref:zhi2022error" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M0 32v448h448V32zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9m-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="../../../javascripts/reviews.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>

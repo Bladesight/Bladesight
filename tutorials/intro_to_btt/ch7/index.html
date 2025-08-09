@@ -1,0 +1,2733 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains the physics behind rotor blade vibration and how we sample it.">
+      
+      
+      
+      
+        <link rel="prev" href="../ch6/">
+      
+      
+        <link rel="next" href="../ch8/">
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>7. Synchronous Vibration and Sampling - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20640%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.0.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M576%2048c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4L413.5%2077.5%20234.1%2017.6c-8.1-2.7-16.8-2.1-24.4%201.7l-128%2064C70.8%2088.8%2064%2099.9%2064%20112v352c0%2011.1%205.7%2021.4%2015.2%2027.2s21.2%206.4%2031.1%201.4l116.1-58.1%20173.3%2057.8c-4.3-6.4-8.5-13.1-12.6-19.9-11-18.3-21.9-39.3-30-61.8l-101.2-33.7V92.4l128%2042.7v99.3c31-35.8%2077-58.4%20128-58.4%2022.6%200%2044.2%204.4%2064%2012.5zM392%20341.9c0%2068.9%2064.1%20150.4%2098.6%20189.3%2011.6%2013%2031.3%2013%2042.9%200%2034.5-38.9%2098.6-120.4%2098.6-189.3%200-65.1-53.7-117.9-120-117.9S392%20276.8%20392%20341.9%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-6B961HRVZP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Intro to BTT Ch7 - Synchronous Vibration and Sampling" />
+<meta property="og:description" content="This chapter explains the physics behind rotor blade vibration and how we sample it." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch7.gif" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttch7/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Intro to BTT Ch7 - Synchronous Vibration and Sampling"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch7.gif"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttch7/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains the physics behind rotor blade vibration and how we sample it."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#synchronous-vibration-and-sampling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              7. Synchronous Vibration and Sampling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ch1/" class="md-tabs__link">
+          
+  
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-tabs__link">
+          
+  
+  
+  Datasets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/dataset_handler/" class="md-tabs__link">
+          
+  
+  
+  User Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Determine classes -->
+
+
+  
+
+
+
+<!-- Navigation -->
+<nav
+  class="md-nav md-nav--primary md-nav--lifted"
+  aria-label="Navigation"
+  data-md-level="0"
+>
+
+  <!-- Site title -->
+  <label class="md-nav__title" for="__drawer">
+    <a
+      href="../../.."
+      title="Bladesight Learning Centre"
+      class="md-nav__button md-logo"
+      aria-label="Bladesight Learning Centre"
+      data-md-component="logo"
+    >
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+
+  <!-- Repository information -->
+  
+
+  <!-- Navigation list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Blade Tip Timing's fundamental principle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Time of Arrival (ToA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Angle of Arrival (AoA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Allocating AoAs to blades
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Working with multiple probes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Data Zeroing and Filtering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    7. Synchronous Vibration and Sampling
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Synchronous Vibration and Sampling
+    
+  </span>
+  
+
+      </a>
+      
+        
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#two-kinds-of-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Two kinds of vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synchronous-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Synchronous vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#at-which-frequency-are-blades-excited" class="md-nav__link">
+    <span class="md-ellipsis">
+      At which frequency are blades excited?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-forcing-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      A simple forcing function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#campbell-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Campbell diagram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-vibration-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      A simple vibration model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sampling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#substitute-angle-for-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      Substitute angle for time
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aliasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Aliasing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    8. Single Degree of Freedom (SDoF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    9. Circumferential Fourier Fit (CFF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Afterword
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Datasets
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Datasets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Varying ramp rates with 45 degree pipe
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/dataset_handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dataset handler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    btt
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            btt
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/btt/triggering_criteria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Triggering criteria
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+  <br/>
+  <br/>
+  <br/>
+  <a
+    href="https://www.bladesight.com/"
+    target="_blank"
+    style="text-align: -webkit-center;"
+  >
+    <img src="https://intro-to-btt-using-python-assets.s3.amazonaws.com/kraken1.jpeg" 
+    alt="Kraken" 
+    style="width: 120px; display: flex; padding: 2px 0px; justify-content: center; align-items: center; border: 2px;">
+    <p><strong>Unleash the Kraken🐙</strong></p>
+    </a>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#two-kinds-of-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Two kinds of vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synchronous-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Synchronous vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#at-which-frequency-are-blades-excited" class="md-nav__link">
+    <span class="md-ellipsis">
+      At which frequency are blades excited?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-forcing-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      A simple forcing function
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#campbell-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      Campbell diagram
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-simple-vibration-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      A simple vibration model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sampling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#substitute-angle-for-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      Substitute angle for time
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aliasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Aliasing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+      
+        <span class="md-tag">BTT</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Blade Tip Timing</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Mechanical Vibration</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">NSMS</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Non Intrusive Stress Measurement</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Time of Arrival</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Turbine blade</span>
+      
+    
+  </nav>
+
+
+
+<details class="abstract">
+<summary>You are here</summary>
+<p><figure markdown>
+<img alt="BTT Tutorial Roadmap" src="BTT_Tutorial_Outline_Ch7.svg" width="500" />
+</figure></p>
+</details>
+<style>
+    :root {
+    --md-tooltip-width: 600px;
+    }
+
+    .blog-timestamp-span {
+        display : flex; 
+    }
+
+    .blog-timestamp-span > svg {
+        margin-right: 5px;
+    }
+
+</style>
+
+<h1 id="synchronous-vibration-and-sampling">Synchronous Vibration and Sampling</h1>
+<p>The previous chapters presented new signal processing steps along our journey to infer blade vibration, frequency, and phase from raw timestamps. In this chapter, we slow down a bit. </p>
+<p>Blades do not simply vibrate for no reason. Something causes it. </p>
+<p>In this chapter, we discuss <em>why blades are vibrating</em> instead of <em>how to process the signals</em>. This chapter will help us understand what the results mean.</p>
+<p>We delve into the fundamentals of Single Degree of Freedom (SDoF) vibration. Most graduate students would have already encountered SDoF vibration in their studies. We, however, explain it through the lens of BTT. Hopefully, spending time on the fundamentals through a different lens will help you understand the subject better.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand how obstructions in the flow path causes synchronous vibration.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that synchronous vibration occurs at an integer multiple of the shaft speed. This integer multiple is called the Engine Order (EO). </p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand what a Campbell diagram is and how we can use it to guess the mode associated with a resonance event we measured.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that we can use a Single Degree of Freedom (SDoF) oscillator to model a blade's vibration.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand how BTT systems sample the blade's vibration waveform.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand why synchronous vibration data is more difficult to process than asynchronous vibration data.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that BTT signals are generally aliased.</p>
+</div>
+<h2 id="two-kinds-of-vibration">Two kinds of vibration</h2>
+<p>This chapter focuses on a kind of vibration called <em>synchronous vibration</em>. We will, however, briefly categorize the two kinds of vibration here.</p>
+<p>Here's a high-level overview of the two kinds of vibration:</p>
+<ol>
+<li>
+<p>Obstruction-driven vibration, or <em>synchronous</em> vibration.</p>
+</li>
+<li>
+<p>Fluid-structure interaction-driven, or <em>asynchronous</em> vibration.</p>
+</li>
+</ol>
+<p><a href="#figure_01">Figure 1</a> below illustrates the respective driving mechanisms of two kinds of vibration.</p>
+<figure>
+<p><img alt="Two kinds of vibration" src="Ch7_why_vibrate.svg" width="700" />
+  </p>
+<figcaption><strong><a name='figure_01'>Figure 1</a></strong>: The two kinds of driving mechanisms causing blade vibration. In A) the flow path is obstructed by struts, causing synchronous vibration. In B) the blade is vibrating in response to the fluid, and the fluid's pressure is oscillating because of the blade's vibration.
+  </figcaption>
+</figure>
+<p>In <a href="#figure_01">Figure 1</a> A) there are 5 struts in the flow path upstream from the rotor. The struts obstruct the fluid, causing pressure fluctuations downstream. These pressure fluctuations occur <em>once per revolution for each obstruction</em>. This statement is so important, I've put it in a box 👇.</p>
+<div class="admonition success">
+<p class="admonition-title">Obstruction-driven fluctuations cause synchronous vibration</p>
+<p>The pressure fluctuations caused by obstructions occur once per revolution for each obstruction. If there are 5 obstructions, the pressure fluctuations occur 5 times per revolution. It is not possible to have 4.5 pressure fluctuations per revolution, just like you cannot have 2.4 children. </p>
+<p>This kind of vibration is therefore called "synchronous vibration", because it occurs at an integer multiple of the shaft speed. This integer multiple is called the Engine Order (EO).</p>
+</div>
+<p>In <a href="#figure_01">Figure 1</a> B) a blade's airfoil is shown as the fluid passes. On one of the fluid lines, I've added a conceptual spring and damper. It is supposed to convey the idea that the blade is vibrating because of the fluid, and the fluid is vibrating because of the structure. These two systems feed off one another, and can result in significant vibration. This kind of vibration is called "asynchronous vibration", because it does not occur at an integer multiple of the shaft speed, it is dependant on the fluid and the blade's structural properties.</p>
+<div class="admonition warning">
+<p class="admonition-title">Asynchronous vibration is not well understood... by me</p>
+<p>Please do not take my explanation above as authoritative. I am not an expert in fluid-structure interaction, Computational Fluid Dynamics (CFD), or flutter. BTT is concerned with measuring the vibrations, regardless of what caused them. </p>
+<p>I did request a review by a subject matter expert. The expert contributed that flutter could be caused by blade stall and shock interactions. It seems, however, as if the jury is still out on whether blade stall can cause flutter.  </p>
+<p>If you are an expert in this field and you would like to contribute to this tutorial, please get in touch.😀</p>
+<p>PS. Obviously, I do not believe there is anything close to a linear relationship between the blade's vibration and the fluid's pressure.</p>
+</div>
+<p>This chapter focuses on synchronous vibration because it is more difficult to measure than asynchronous vibration. We'll explain why this is the case later in the chapter.</p>
+<p>For now, let's focus on synchronous vibration.</p>
+<h2 id="synchronous-vibration">Synchronous vibration</h2>
+<p>Synchronous vibration is defined as vibration occurring at an <em>integer multiple</em> of the shaft speed. This integer multiple is called the Engine Order (EO). </p>
+<p>The relationship between the excitation frequency and the shaft speed is given below:</p>
+<div class="arithmatex">\[
+f = \Omega \cdot EO
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_01'>Equation 1</a></strong></figcaption>
+</figure>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(f\)</span></td>
+<td style="text-align: left;">Excitation frequency experienced by a blade [rad/s]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\Omega\)</span></td>
+<td style="text-align: left;">Shaft speed [rad/s]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(EO\)</span></td>
+<td style="text-align: left;">Engine Order</td>
+</tr>
+</tbody>
+</table>
+<p>The domains of the variables are:</p>
+<div class="arithmatex">\[
+\begin{align}
+f &amp;\gt 0 \\
+\Omega &amp; \gt 0 \\
+EO &amp; \in [1,2,3...] \\
+\end{align}
+\]</div>
+</details>
+<p>Synchronous vibration can therefore only take on a discrete set of values. If, for instance, the rotor speed is 3000 RPM (50 Hz), the possible excitation frequencies are:</p>
+<figure>
+<figcaption><strong><a name='table_01'>Table 1</a></strong></figcaption>
+</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">EO</th>
+<th style="text-align: center;"><span class="arithmatex">\(f\)</span> [Hz]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">50</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">150</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">200</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">250</td>
+</tr>
+<tr>
+<td style="text-align: center;">...</td>
+<td style="text-align: center;">...</td>
+</tr>
+</tbody>
+</table>
+<p>Asynchronous vibration occurs when there is a non-integer relationship between the shaft speed and the excitation frequency. We typically do not express asynchronous vibration as a non-integer EO, but would simply report the natural frequency without relation to the shaft speed. </p>
+<h2 id="at-which-frequency-are-blades-excited">At which frequency are blades excited?</h2>
+<p>A popular textbook (Rao, 1991)<sup id="fnref:rao1991turbomachine"><a class="footnote-ref" href="#fn:rao1991turbomachine">1</a></sup> on rotor blade vibration offers one explanation. It is said that the main source of dangerous excitations are the stator vanes. Though the premise is sound, lets conduct a thought experiment to weigh the theory.</p>
+<p>The number of stator vanes multiplied by the shaft speed gives us the excitation frequency, also called the Nozzle Passing Frequency (NPF). The presence of stator vanes definitely cause obstruction-driven vibration, but does it actually cause damage? Damage can only accrue if a blade is responding at one of its natural frequencies.</p>
+<details class="info">
+<summary>Why can damage only occur when blades are in resonance?</summary>
+<p>In short, if a blade's design allows for fatigue damage to accumulate in normal operating conditions, I do not want to be in the room when that blade goes into resonance. It is a bad design. The engineers that design blades know what they are doing, and they design blades to be safe.</p>
+</details>
+<p>Structures theoretically have an infinite number of natural frequencies. However, the first natural frequencies typically have the least damping associated with them, and the highest frequency response function (FRF) amplitudes. It is a generally accepted practice to disregard all modes except the first few when modal analysis is performed. The first few modes are therefore the most likely to cause damage.</p>
+<p>Let's consider a rotor with 80 blades, and half the amount of stator blades, 45. The rotor runs at 3000 RPM. The NPF is therefore:</p>
+<div class="arithmatex">\[
+NPF = \frac{3000}{60} \times 45 \approx 2250 \text{ Hz}
+\]</div>
+<p>Even though this is a thought experiment and we don't have real natural frequencies to compare the NPF to, 2250 Hz is a suspiciously high frequency to be among the first few modes. This is well above the typical range within which the lower natural frequencies of large blades occur. In my work, I'm interested in natural frequencies well below 2000 Hz. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Blade natural frequencies are not usually made public by blade manufacturers. No doubt there are exceptions to the 2000 Hz cutoff used above. In my experience, however, this is a good rule of thumb. The first natural frequency of rotor blades generally occur far below 2250 Hz.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">What is the highest frequency you can measure with BTT?</p>
+<p>BTT signals are inherently aliased. You'll read about this later in the chapter. If you are designing an experimental setup and would like to calculate the positions for your probes, you can check out my paper about it (Diamond and Stephan Heyns, 2018)<sup id="fnref:diamond2018novel"><a class="footnote-ref" href="#fn:diamond2018novel">2</a></sup>. This space seems to have received attention recently. Here's a link to the Google Scholar page of citing articles to my paper: <a href="https://scholar.google.com/scholar?cites=10600910125193632917&as_sdt=2005&sciodt=0,5&hl=en" target="_blank">Google Scholar</a>.</p>
+</div>
+<p>The vibrations caused by the stator vanes are therefore not the culprit.</p>
+<p>How, then, does damaging vibration arise?</p>
+<details class="warning">
+<summary>Do your own research</summary>
+<p>I have said here that Nozzle Passing Frequencies (NPF) are not the main culprits for blade vibration. This is my take on it, based on my experience and understanding of vibration.</p>
+<p>There are, however, papers and sources claiming the opposite. A recent example that claims NPF is - in fact - a key concern, is Chapter 7 of the book "Forsthoffer's Proven Guidelines for Rotating Machinery Excellence" (Forsthoffer, 2021)<sup id="fnref:forsthoffer2021forsthoffer"><a class="footnote-ref" href="#fn:forsthoffer2021forsthoffer">3</a></sup>. Another recent source does, however, share my sentiment that non NPF-related phenomena are the main culprits (Tanuma, 2022)<sup id="fnref:tanuma2022advances"><a class="footnote-ref" href="#fn:tanuma2022advances">4</a></sup>. </p>
+<p>The statements attributed to these books can be found here: <a href="https://www.sciencedirect.com/topics/engineering/campbell-diagram" target="_blank">Science Direct: Campbell Diagram</a>.</p>
+<p>Please do your own research and come to your own conclusions. If you have a different take on this, please get in touch. I would love to include your take on this tutorial.</p>
+</details>
+<h2 id="a-simple-forcing-function">A simple forcing function</h2>
+<p>The aerodynamic behavior inside a turbomachine is a complex discipline. We will not attempt to explain how specific aerodynamic flow patterns arise. Instead, we rather discuss why it does not take much to cause excitations at the lowest EOs.</p>
+<p>Let's suppose we have a turbomachine afflicted with a <em>single discontinuity</em> in the working fluid's flow path upstream of the blades. The discontinuity could be a supporting structural element, such as a strut. The discontinuity will cause a <em>pressure fluctuation</em> downstream of it. As the blades rotate, they pass through this pressure fluctuation <strong>once every revolution</strong>. This, in turn, causes a force to be exerted on the blade <strong>once every revolution</strong>.</p>
+<p>Let's model this forcing function as a <em>unit impulse</em> when the blade is in the path of the discontinuity, and zero otherwise. We'll assume the downstream effects of the discontinuity occur between <span class="arithmatex">\(\frac{2 \pi}{10}\)</span> and <span class="arithmatex">\(\frac{3 \pi}{10}\)</span> radians. The forcing function can be expressed as:</p>
+<div class="arithmatex">\[
+f(\theta) = \begin{cases}
+1 &amp; \text{if }  \frac{2 \pi}{10} \lt \theta \leq \frac{3 \pi}{10} \\
+0 &amp; \textrm{else} \\
+\end{cases}
+\]</div>
+<p>We plot the forcing function experienced by each blade over multiple shaft revolutions in <a href="#figure_02">Figure 2</a> below.</p>
+<script src="once_per_revolution_force_edt.js" > </script>
+<div>
+    <div>
+        <canvas id="once_per_revolution_force_edt"'></canvas>
+    </div>
+    <script>
+        async function render_chart_once_per_revolution_force_edt() {
+            const ctx = document.getElementById('once_per_revolution_force_edt');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_once_per_revolution_force_edt = new Chart(ctx, window.once_per_revolution_force);
+            window.fig_blade_once_per_revolution_force_edt_reset = function resetZoomFig1() {
+                    window.fig_once_per_revolution_force_edt.resetZoom();
+                }
+            }
+        render_chart_once_per_revolution_force_edt();
+    </script>
+    <a onclick="window.fig_blade_once_per_revolution_force_edt_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_02'>Figure 2</a></strong>: The forcing function caused by an idealized discontinuity in the flow path.</figcaption>
+</figcaption>
+</figure>
+<p>The forcing function is clearly periodic. A brief force is experienced by each blade once per revolution.</p>
+<p>To understand which frequencies are excited by this forcing function, we plot the magnitudes of the first few positive Fourier coefficients in <a href="#figure_03">Figure 3</a> below:</p>
+<script src="fft_once_per_revolution_force_edt.js" > </script>
+<div>
+    <div>
+        <canvas id="fft_once_per_revolution_force_edt"'></canvas>
+    </div>
+    <script>
+        async function render_chart_fft_once_per_revolution_force_edt() {
+            const ctx = document.getElementById('fft_once_per_revolution_force_edt');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_fft_once_per_revolution_force_edt = new Chart(ctx, window.fft_once_per_revolution_force);
+            window.fig_blade_fft_once_per_revolution_force_edt_reset = function resetZoomFig2() {
+                    window.fig_fft_once_per_revolution_force_edt.resetZoom();
+                }
+            }
+        render_chart_fft_once_per_revolution_force_edt();
+    </script>
+    <a onclick="window.fig_blade_fft_once_per_revolution_force_edt_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_03'>Figure 3</a></strong>:  The magnitudes of the first few positive Fourier coefficients of the forcing function.
+  </figcaption>
+</figure>
+<p>The frequency domain representation of the forcing function 👆 shows that, although the force occurs once per revolution, all EOs are excited by it.</p>
+<div class="admonition tip">
+<p class="admonition-title">Why does the frequency domain look like this?</p>
+<p>When I first saw this result, it was completely counter intuitive. Why should a once per revolution disturbance excite all EOs? </p>
+<p>The answer is the forcing function is not a simple sinusoid. The fourier transform stipulates you can represent any time-domain signal as the sum of infinite sinusoidal terms. Our forcing function is therefore made up of an infinite number of sinusoids. It happens to be the case for periodic signals that each sinusoid at an integer multiple of the shaft speed is significant, and the other ones are not.</p>
+<p>I intended to derive this result analytically, but time caught me. If you can derive this result analytically, please get in touch. I would love to include your derivation here.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Energy of the excitation and damping ratios</p>
+<p>The energy of the excitation diminishes as the EO increases. This is one reason why the first few EOs are the most likely to cause damage. Another reason is because higher modes usually have larger damping ratios. This means they are less likely to cause damage than the lower modes.</p>
+</div>
+<p>This explains why a simple discontinuity in the flow path can excite the first few EOs of vibration. Obviously, the forcing function inside a turbomachine is not as simple as the one we've modeled above. But the principle remains the same. A non-sinusoidal periodic forcing function will excite some or all of the low EOs.</p>
+<div class="admonition note">
+<p class="admonition-title">Discontinuities can be anything</p>
+<p>We intuitively understand struts or stator vanes count as discontinuities. In fact, there are many possible discontinuities in a turbomachine. A nonconcentric casing might be a discontinuity. A noncircular inlet might introduce a discontinuity.</p>
+<p>I believe, given the breadth of possible obstructions, there will always be at least a single once per revolution excitation source in a turbomachine. </p>
+<p>This is an inkling I have, not a conclusion based on evidence. 😁</p>
+</div>
+<h2 id="campbell-diagram">Campbell diagram</h2>
+<p>Synchronous vibration can only occur when the excitation frequency coincides with a blade natural frequency. It is straightforward to calculate the shaft speed that will cause excitation at a natural frequency. We simply substitute the EOs we expect may occur into <a href="#equation_01">Equation 1</a> and solve for <span class="arithmatex">\(\Omega\)</span>. </p>
+<p>If, for instance, a blade has a natural frequency of 120 Hz, we can calculate the shaft speeds at which the blade will be excited in <a href="#equation_02">Equation 2</a> below:</p>
+<div class="arithmatex">\[
+\begin{align}
+\Omega_{EO=2} &amp;= \frac{120}{2} = 60 \text{Hz or 3600 RPM }\\
+\Omega_{EO=3} &amp;= \frac{120}{3} = 40 \text{Hz or 2400 RPM }\\
+\Omega_{EO=4} &amp;= \frac{120}{4} = 30 \text{Hz or 1800 RPM }\\
+\dots &amp;
+\end{align}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_02'>Equation 2</a></strong></figcaption>
+</figure>
+<p>Is it really so simple? Alas, the physics throws another curveball at us here. </p>
+<p>Rotating objects experience centrifugal force. The centrifugal force experienced by a rotor blade acts radially from the center of the shaft toward the tip of the blade.</p>
+<p>This force causes the stiffness of the blade to increase, a phenomenon known as <em>centrifugal stiffening</em>. Elevated stiffness leads to increased natural frequencies. The natural frequencies of the blades are therefore not constant, but generally increase as the rotor speeds up.</p>
+<p>We need to take this effect into account when we calculate the possible resonance shaft speeds. The Campbell diagram is a handy tool to visually solve the problem. A Campbell diagram contains the natural frequencies of the blades as a function of rotor speed. The excitation frequencies for each EO are also plotted. </p>
+<p>An illustrative Campbell diagram for a rotor blade's first three natural frequencies are displayed in <a href="#figure_04">Figure 4</a> below.</p>
+<script src="campbell_diagram.js" > </script>
+<div>
+    <div>
+        <canvas id="campbell_diagram"'></canvas>
+    </div>
+    <script>
+        async function render_chart_campbell_diagram() {
+            const ctx = document.getElementById('campbell_diagram');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_campbell_diagram = new Chart(ctx, window.campbell_diagram);
+            window.fig_blade_campbell_diagram_reset = function resetZoomFig3() {
+                    window.fig_campbell_diagram.resetZoom();
+                }
+            }
+        render_chart_campbell_diagram();
+    </script>
+    <a onclick="window.fig_blade_campbell_diagram_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_04'>Figure 4</a></strong>:  An illustrative Campbell diagram for a fictional rotor blade's first three natural frequencies.
+  </figcaption>
+</figure>
+<p><a href="#figure_04">Figure 4</a> above illustrates the Campbell diagram's central concepts. The three mode lines indicate three natural frequencies as they change with rotor speed. The dotted lines indicate the excitation frequency associated with each EO of interest. You'll notice the EO lines are perfectly straight. This is because the EO is directly proportional to the rotor speed.</p>
+<p>Dark star-shaped markers on <a href="#figure_04">Figure 4</a> represent shaft speeds where one of the blade's natural frequencies coincide with an EO excitation frequency. Synchronous vibration can only occur at these discrete shaft speeds. We'll call these shaft speeds <em>resonance speeds</em>. </p>
+<div class="admonition note">
+<p class="admonition-title">FEM and Campbell diagrams</p>
+<p>The variation of natural frequencies with rotor speed is usually known from Finite Element Analysis (FEA) of the blades. It is almost inconceivable for a commercial rotor blade manufacturer to design a blade without also producing a Campbell diagram. </p>
+<p>In the rare case where you don't have access to one, you'll have to infer the natural frequencies algorithmically. Many methods have been proposed to do this. They are all outside the scope of this tutorial.</p>
+</div>
+<h2 id="a-simple-vibration-model">A simple vibration model</h2>
+<p>The simplest, and often completely sufficient, way of expressing a rotor blade's vibration is to assume the blade is a damped single degree of freedom oscillator under harmonic excitation. The equation of motion for such a system is:</p>
+<div class="arithmatex">\[
+m \ddot{x} + c \dot{x} + k x = F_0 \cdot \cos(\omega t)\\
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_03'>Equation 3</a></strong></figcaption>
+</figure>
+<p>Now we divide by <span class="arithmatex">\(m\)</span>. This yields a new equation of motion:</p>
+<div class="arithmatex">\[
+\ddot{x} + 2 \zeta \omega_n \dot{x} + \omega_n^2 x = f_0 \cdot \cos(\omega t) \\
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_04'>Equation 4</a></strong></figcaption>
+</figure>
+<p>where</p>
+<div class="arithmatex">\[
+\omega_n = \sqrt{\frac{k}{m}}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_05'>Equation 5</a></strong></figcaption>
+</figure>
+<p>and </p>
+<div class="arithmatex">\[
+\zeta = \frac{c}{2 \sqrt{k \cdot m}} \\
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_06'>Equation 6</a></strong></figcaption>
+</figure>
+<p>and</p>
+<div class="arithmatex">\[
+f_0 = \frac{F_0}{m}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_07'>Equation 7</a></strong></figcaption>
+</figure>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: center;">Meaning</th>
+<th style="text-align: center;">SI Unit</th>
+<th style="text-align: center;">Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(m\)</span></td>
+<td style="text-align: center;">Mass of the single degree of freedom system</td>
+<td style="text-align: center;">kg</td>
+<td style="text-align: center;"><span class="arithmatex">\(m \gt 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(c\)</span></td>
+<td style="text-align: center;">Damping coefficient</td>
+<td style="text-align: center;"><span class="arithmatex">\(\frac{Ns}{m}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(c \geq 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(k\)</span></td>
+<td style="text-align: center;">Stiffness</td>
+<td style="text-align: center;"><span class="arithmatex">\(\frac{N}{m}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(k \gt 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(F_0\)</span></td>
+<td style="text-align: center;">Amplitude of the excitation force</td>
+<td style="text-align: center;"><span class="arithmatex">\(N\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(F_0 \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\omega\)</span></td>
+<td style="text-align: center;">Excitation frequency</td>
+<td style="text-align: center;">rad/s</td>
+<td style="text-align: center;"><span class="arithmatex">\(\omega \gt 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(x\)</span></td>
+<td style="text-align: center;">Tip Displacement</td>
+<td style="text-align: center;"><span class="arithmatex">\(m\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(x \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\zeta\)</span></td>
+<td style="text-align: center;">Damping ratio</td>
+<td style="text-align: center;"><span class="arithmatex">\(\sqrt{\frac{ N }{ m \cdot kg } } s\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\zeta \geq 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\omega_n\)</span></td>
+<td style="text-align: center;">Natural frequency</td>
+<td style="text-align: center;">rad/s</td>
+<td style="text-align: center;"><span class="arithmatex">\(\omega_n \gt 0\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>This equation is a second order ordinary differential equation. A derivation of the solution can be found in Rao's (Rao, 2003)<sup id="fnref:rao2003vibrations"><a class="footnote-ref" href="#fn:rao2003vibrations">5</a></sup> excellent text book on mechanical vibrations (Chapter 3). </p>
+<p>The solution is: </p>
+<div class="arithmatex">\[
+x(t) = X(\omega) \cos (\omega t - \phi(\omega))
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_08'>Equation 8</a></strong></figcaption>
+</figure>
+<p>where</p>
+<div class="arithmatex">\[
+\frac{X(\omega)}{\delta_{\text{st}}} = \frac{1}{ \sqrt{ (1 - r^2)^2 + (2 \zeta r)^2 } } 
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_09'>Equation 9</a></strong></figcaption>
+</figure>
+<p>and</p>
+<div class="arithmatex">\[
+\phi(\omega) = \arctan \left( \frac{2 \zeta r}{1 - r^2} \right)
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_10'>Equation 10</a></strong></figcaption>
+</figure>
+<p>and</p>
+<div class="arithmatex">\[
+r = \frac{\omega}{\omega_n}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_11'>Equation 11</a></strong></figcaption>
+</figure>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: center;">Meaning</th>
+<th style="text-align: center;">SI Unit</th>
+<th style="text-align: center;">Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\delta_{\text{st}}\)</span></td>
+<td style="text-align: center;">Deflection under the static force <span class="arithmatex">\(F_0\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(m\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\delta_{\text{st}} \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(r\)</span></td>
+<td style="text-align: center;">Excitation frequency ratio</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;"><span class="arithmatex">\(r \gt 0\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>Each blade will have different values for <span class="arithmatex">\(\omega_n\)</span>, <span class="arithmatex">\(\delta_{\text{st}}\)</span>, and <span class="arithmatex">\(\zeta\)</span>. These values determine the vibration response of the blade. Intuition about the solution can be gained by fixing <span class="arithmatex">\(\omega_n=125\)</span> Hz and <span class="arithmatex">\(\delta_{\text{st}} = 1\)</span>. We can plot the solution for different values of <span class="arithmatex">\(\zeta\)</span> and <span class="arithmatex">\(\omega\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Natural frequency unit</p>
+<p>Normally, the unit you use for natural frequency (Hz or rad/s) depends on where you want to use it. Here, however, the natural frequency gets absorbed into the excitation frequency ratio, <span class="arithmatex">\(r\)</span>. It therefore does not matter which unit you use here. We'll use Hz for convenience.</p>
+</div>
+<p>The <em>slider</em> below 👇 allows you to change the value of <span class="arithmatex">\(\zeta\)</span>. The resulting vibration amplitude and phase as a function of excitation frequency are plotted in <a href="#figure_04">Figure 4</a> below.</p>
+<div>
+    <div>
+        <div>
+            <div class="slidecontainer" >
+                <input 
+                    type="range" 
+                    width="100%" 
+                    min="0.01" 
+                    max="0.3"
+                    step="0.002" 
+                    value="0.1"
+                    style="width:100%" 
+                    id="zeta_slider"
+                >
+                <p>Current ζ: <strong><span id="current_zeta"></span> </strong></p>
+            </div>
+            <div>
+                <span><strong>A)</strong></span>
+                <canvas height=100 id="vibration_amplitude"></canvas>
+                <span><strong>B)</strong></span>
+                <canvas height=100 id="vibration_phase"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        function makeArr(startValue, stopValue, cardinality) {
+            var arr = [];
+            var step = (stopValue - startValue) / (cardinality - 1);
+            for (var i = 0; i < cardinality; i++) {
+                arr.push(startValue + (step * i));
+            }
+            return arr;
+        }
+        function calculate_sdof_oscillator_params_from_omegas(zeta, omegas) {
+            // This function calculates the following two parameters
+            // of an SDoF oscillator:
+            // X(ω) and φ(ω)
+            // where the oscillator is given by x(t) = X(ω) * sin(ω * t + φ(ω)
+            // and the natural frequency of the system us 125 Hz
+            var Xs = [];
+            var phis = []
+            for (omega of omegas) {
+                var r = omega / 125;
+                var X = (
+                    1 
+                    / Math.sqrt(
+                        (1 - r**2)**2
+                        + (2*zeta*r)**2
+                    )
+                )
+                var phi = Math.atan2(
+                    (2*zeta*r) 
+                    ,(1 - r**2)
+                )
+                Xs.push(X);
+                phis.push(phi);
+            }
+            return [Xs, phis];
+        }
+
+        async function render_vibration_model() {
+            var ctx_vibration_amplitude = document.getElementById('vibration_amplitude').getContext('2d');
+            var ctx_vibration_phase = document.getElementById('vibration_phase').getContext('2d');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx_vibration_amplitude.height = 400;
+                ctx_vibration_phase.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+        const ZETAS = makeArr(0.01, 0.5);
+        const OMEGAS = makeArr(100, 150, 3*50 + 1);
+
+        var vibration_amplitude = new Chart(ctx_vibration_amplitude, {
+            type: 'line',
+            data : {
+                labels: OMEGAS,
+                datasets: [{
+                    pointStyle: false,
+                    type: "line",
+                    label: 'X(ω)',
+                    data: [{}],
+                    borderColor: 'rgba(255, 99, 132)',
+                    borderWidth: 3,
+                    fill: false,
+                }]
+            },
+            options:{
+                plugins :{
+
+                },
+                scales: {
+                    y: {// Label this axis as "Real Tip Vibration"
+                        title: {
+                            display: true,
+                            text: ['X(ω)'],
+                            font: {
+                                size: 20,
+                            }
+                        },
+                        min:0,
+                        max : 50
+                    },
+                    x : {
+                        title : {
+                            display : true,
+                            text : "ω [Hz]",
+                            font : {
+                                size : 20
+                            }
+                        },
+                        "ticks": {
+                            callback : (value, index, values) => {
+                                var current_value = OMEGAS[value]; 
+                                // If current value is within 0.00001 of an integer, return it
+                                if (Math.abs(current_value - Math.round(current_value)) < 0.0001) {
+                                    return current_value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var vibration_phase = new Chart(ctx_vibration_phase, {
+            type: 'line',
+            data : {
+                labels: OMEGAS,
+                datasets: [{
+                    pointStyle: false,
+                    type: "line",
+                    label: 'φ(ω)',
+                    data: [{}],
+                    borderColor: 'rgba(255, 99, 132)',
+                    borderWidth: 3,
+                    fill: false,
+                }]
+            },
+            options:{
+                plugins :{
+
+                },
+                scales: {
+                    y: {// Label this axis as "Real Tip Vibration"
+                        title: {
+                            display: true,
+                            text: ['φ(ω) [rad]'],
+                            font: {
+                                size: 20,
+                            }
+                        },
+                        min:0,
+                        max : Math.PI*1.1
+                    },
+                    x : {
+                        title : {
+                            display : true,
+                            text : "ω [Hz]",
+                            font : {
+                                size : 20
+                            }
+                        },
+                        "ticks": {
+                            callback : (value, index, values) => {
+                                var current_value = OMEGAS[value]; 
+                                // If current value is within 0.00001 of an integer, return it
+                                if (Math.abs(current_value - Math.round(current_value)) < 0.0001) {
+                                    return current_value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        var zeta_slider = document.getElementById("zeta_slider");
+        zeta_slider.oninput = function() {
+            // Calculate X and phi
+            var [Xs, phis] = calculate_sdof_oscillator_params_from_omegas(this.value, OMEGAS);
+            // Update the chart
+            vibration_amplitude.data.datasets[0].data = Xs;
+            vibration_phase.data.datasets[0].data = phis;
+            vibration_amplitude.update();
+            vibration_phase.update();
+            document.getElementById("current_zeta").innerHTML = this.value;
+        }
+        // Trigger a change event to initialize the chart
+        zeta_slider.value = 0.1;
+        zeta_slider.oninput();
+        }
+    render_vibration_model()
+    </script>
+</div>
+<figure>
+<figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The amplitude and phase of a single degree of freedom oscillator as a function of excitation frequency. We've fixed the natural frequency to 125 Hz and the static deflection to 1.
+  </figcaption>
+</figure>
+<p>Two observations from <a href="#figure_05">Figure 5</a> are highlighted below:</p>
+<ul>
+<li>Larger damping ratios lead to smaller amplitudes.</li>
+<li>The phase of the vibration <em>always shifts</em> by <span class="arithmatex">\(\pi\)</span> radians as the resonance is traversed. This is a fundamental law of vibration. The rate at which this shift occurs  is controlled by the damping ratio. The larger the damping ratio, the slower the phase shift.</li>
+</ul>
+<h2 id="sampling">Sampling</h2>
+<p>We now have a mathematical expression that describes the shape of a blade tip's vibration response. Theoretically, we can use the expression to calculate the tip deflection at <em>any point in time</em>. However, <em>we cannot measure</em> the tip deflection at any point in time. We can only measure the tip deflection each time a blade passes a probe. </p>
+<p>In other words, despite the fact that the blade's vibration response is continuous, we only get <em>one sample of the continuous waveform</em> each time a blade passes a probe.</p>
+<p>To illustrate this concept, we've simulated the vibration response of a blade and <em>artificially placed three proximity probes</em> into a "casing". The <em>slider</em> below 👇 allows you to change the shaft speed, and observe <em>both</em> the continuous vibration response in <a href="#figure_06">Figure 6</a> <strong>A)</strong> <em>and</em> the samples taken by our BTT system in <a href="#figure_06">Figure 6</a> <strong>B)</strong>.</p>
+<div>
+    <div>
+        <div>
+            <div class="slidecontainer" >
+                <input 
+                    type="range" 
+                    width="100%" 
+                    min="1150" 
+                    max="1350"
+                    step="1" 
+                    value="1150" 
+                    style="width:100%" 
+                    id="speed_slider"
+                >
+                <p>Current shaft speed: <strong><span id="shaft_speed"></span> RPM</strong></p>
+            </div>
+            <div>
+                <span><strong>A)</strong></span>
+                <canvas height=100 id="sinusoid_chart"></canvas>
+                <span><strong>B)</strong></span>
+                <canvas height=100 id="sampled_chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function makeArr(startValue, stopValue, cardinality) {
+            var arr = [];
+            var step = (stopValue - startValue) / (cardinality - 1);
+            for (var i = 0; i < cardinality; i++) {
+                arr.push(startValue + (step * i));
+            }
+            return arr;
+        }
+        function calculate_sdof_oscillator_params(zeta, EO, Omega) {
+            // This function calculates the following two parameters
+            // of an SDoF oscillator:
+            // X(ω) and φ(ω)
+            // where the oscillator is given by x(t) = X(ω) * sin(ω * t + φ(ω))
+            // and the natural frequency of the system us 125 Hz
+            var r = (EO * Omega) / (125 * 2 * Math.PI);
+            var X = (
+                1 
+                / Math.sqrt(
+                    (1 - r**2)**2
+                    + (2*zeta*r)**2
+                )
+            )
+            var phi = Math.atan2(
+                (2*zeta*r) 
+                ,(1 - r**2)
+            )
+            return {"X":X, "phi":phi};
+        }
+        function rpm_to_rad_p_sec(rpm){
+            return rpm / 60 * Math.PI * 2;
+        }
+        function make_sinusoid_vs_angle(EO, Omega, zeta, angles) {
+            /* This function creates a sinusoid with frequency
+                f = Omega * EO and phase Phi. 
+
+            Args:
+                EO (int): The Engine Order of vibration.
+                Omega (float): The shaft speed in rad/s.
+                zeta (float): The damping ratio of the system.
+                angles (array): The angles at which the sinusoid
+                    should be evaluated
+
+            Returns:
+                array: An array of objects with the following
+                    structure:
+                    {
+                        x: angle,
+                        y: sin(EO * Omega * angle + phi)
+                    }
+            */
+            var data = []
+            var sdof_params = calculate_sdof_oscillator_params(zeta, EO, Omega);
+            for (var i = 0; i < angles.length; i++) {
+                data.push({
+                    x : angles[i],
+                    y : sdof_params["X"] * Math.sin(EO * 2 * Math.PI * angles[i]/360 - sdof_params["phi"])
+                });
+            }
+            return data;
+        }
+        function make_sinusoid_vs_omega(EO, omegas, zeta, angle) {
+            /* This function creates a sinusoid with frequency
+                f = Omega * EO and phase Phi. 
+
+            Args:
+                EO (int): The Engine Order of vibration.
+                omegas (array[float]): The shaft speeds in RPM.
+                zeta (float): The damping ratio of the system.
+                angle (float): The angle at which the sinusoid
+                    should be evaluated
+
+            Returns:
+                array: An array of objects with the following
+                    structure:
+                    {
+                        x: shaft speed,
+                        y: sin(EO * Omega * angle + phi)
+                    }
+            */
+            var data = []
+            for (var i = 0; i < omegas.length; i++) {
+                var sdof_params = calculate_sdof_oscillator_params(
+                    zeta, 
+                    EO, 
+                    rpm_to_rad_p_sec(omegas[i])
+                );
+                data.push({
+                    x : omegas[i],
+                    y : sdof_params["X"] * Math.sin(EO * 2 * Math.PI * angle/360 - sdof_params["phi"])
+                });
+            }
+            return data;
+        }
+
+
+        async function render_sampling_illustration() {
+            var ctx_sinusoid = document.getElementById('sinusoid_chart').getContext('2d');
+            var ctx_sampled = document.getElementById('sampled_chart').getContext('2d');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx_sinusoid.height = 400;
+                ctx_sampled.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            const SINUSOID_X = makeArr(0, 360, 361);
+            const PROBE_ANGLES = [45, 145, 275];
+            const SENSOR_WIDTH = 15;
+            var SINUSOIDAL_CHART_ANNOTATIONS = {};
+            const PROBE_COLORS = [
+                "rgba(255, 99, 132)",
+                "rgba(54, 162, 235)",
+                "rgba(255, 206, 86)",
+            ]
+            for (var i = 0; i < PROBE_ANGLES.length; i++) {
+                SINUSOIDAL_CHART_ANNOTATIONS["probe_" + i] = {
+                    type: 'box',
+                    xMin: PROBE_ANGLES[i]-SENSOR_WIDTH,
+                    xMax: PROBE_ANGLES[i]+SENSOR_WIDTH,
+                    yMin: 55,
+                    yMax: 73,
+                    backgroundColor: 'yellow',
+                    borderWidth: 2,
+                    borderColor: PROBE_COLORS[i],
+                    label: {
+                        display: true,
+                        content: "P" + (i + 1)
+                    },
+                    borderRadius : {
+                        bottomLeft : 14,
+                        bottomRight : 14,
+                    }
+                }
+                SINUSOIDAL_CHART_ANNOTATIONS["probe_" + i + "line"] = {
+                    type: 'line',
+                    yMin: -50,
+                    yMax: 55,
+                    xMin: PROBE_ANGLES[i],
+                    xMax: PROBE_ANGLES[i],
+                    borderColor: 'black',
+                    borderWidth: 5,
+                    borderDash: [5, 5],
+                    borderColor: PROBE_COLORS[i],
+                    borderRadius : 5,
+                }
+            }
+            var sinusoidal_chart = new Chart(ctx_sinusoid, {
+                type: 'line',
+                data : {
+                    labels: SINUSOID_X,
+                    datasets: [{
+                        pointStyle: false,
+                        type: "line",
+                        label: 'Tip vibration',
+                        data: [{}],
+                        borderColor: 'rgba(255, 99, 132)',
+                        borderWidth: 1,
+                        fill: false,
+                    }]
+                },
+                options:{
+                    plugins :{
+                        annotation : {
+                            annotations : SINUSOIDAL_CHART_ANNOTATIONS
+                        }
+                    },
+                    scales: {
+                        y: {// Label this axis as "Real Tip Vibration"
+                            title: {
+                                display: true,
+                                text: ["True tip"," vibration"],
+                                font: {
+                                    size: 20,
+                                }
+                            },
+                            min:-50,
+                            max : 75
+                        },
+                        x : {
+                            title : {
+                                display : true,
+                                text : "Angle [deg]",
+                                font : {
+                                    size : 20
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            var PROBE_FRF_DATASETS = [];
+            const ZETA = 0.01;
+            const EO = 6;
+            const SHAFT_SPEEDS = makeArr(1150, 1350, 201);
+            for (var i = 0; i < PROBE_ANGLES.length; i++) {
+                PROBE_FRF_DATASETS.push({
+                    pointStyle: false,
+                    type: "line",
+                    label: 'P' + (i + 1),
+                    data: make_sinusoid_vs_omega(EO, SHAFT_SPEEDS, ZETA, PROBE_ANGLES[i]),
+                    borderWidth: 1,
+                    fill: false,
+                    borderColor: PROBE_COLORS[i],
+                })
+            }
+            var PROBE_FRF_CURRENT_SAMPLE = {}
+            for (var i = 0; i < PROBE_ANGLES.length; i++) {
+                PROBE_FRF_CURRENT_SAMPLE['probe_' + i + "_current_sample" ] = {
+                    type: 'point',
+                    xValue: 0,
+                    yValue: 0,
+                    backgroundColor: PROBE_COLORS[i],
+                    radius : 7
+                }
+            }
+            var sampled_chart = new Chart(ctx_sampled, {
+                type: 'line',
+                data : {
+                    labels: SHAFT_SPEEDS,
+                    datasets: PROBE_FRF_DATASETS,
+                },
+                options : {
+                        plugins : {
+                            annotation : {
+                                annotations : PROBE_FRF_CURRENT_SAMPLE
+                        }
+                    },
+                    scales : {
+                        y : {
+                            title : {
+                                display : true,
+                                text : ["Sampled tip"," vibration"],
+                                font : {
+                                    size : 20
+                                }
+                            }
+                        },
+                        x : {
+                            title : {
+                                display : true,
+                                text : "Shaft speed [RPM]",
+                                font : {
+                                    size : 20
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            var speed_slider = document.getElementById("speed_slider");
+            speed_slider.oninput = function() {
+                // Calculate main sinusoid
+                sinusoid = make_sinusoid_vs_angle(EO, rpm_to_rad_p_sec(this.value), ZETA, SINUSOID_X);
+                sinusoidal_chart.data.datasets[0].data = sinusoid;
+                // Calculate probe sampling
+                probe_samples = make_sinusoid_vs_angle(EO, rpm_to_rad_p_sec(this.value), ZETA, PROBE_ANGLES);
+                //console.log(sinusoidal_chart)
+                let index_no = this.value - 1150;
+                for (var i = 0; i < probe_samples.length; i++) {
+                    sinusoidal_chart.options.plugins.annotation.annotations["probe_" + i + "line"]["yMin"] = probe_samples[i]["y"];
+                    sampled_chart.options.plugins.annotation.annotations["probe_" + i + "_current_sample"]["yValue"] = probe_samples[i]["y"];
+                    sampled_chart.options.plugins.annotation.annotations["probe_" + i + "_current_sample"]["xValue"] = index_no;
+                }
+                sampled_chart.update();
+                sinusoidal_chart.update();
+                document.getElementById("shaft_speed").innerHTML = this.value;
+            }
+            // Trigger a change event to initialize the chart
+            speed_slider.value = 1150;
+            speed_slider.oninput();
+        }
+    render_sampling_illustration()
+    </script>
+
+</div>
+<figure>
+<figcaption><strong><a name='figure_06'>Figure 6</a></strong>: A) A blade's continuous vibration response as a function of the blade's angular position. B) The samples taken by our BTT system as a function of shaft speed. The shaft speed can be controlled by the slider. If you're uncomfortable because we've expressed the continuous vibration vs angle instead of time, just keep reading.
+  </figcaption>
+</figure>
+<details class="info">
+<summary>Simulation parameters</summary>
+<ul>
+<li><span class="arithmatex">\(\omega_n = 125\)</span></li>
+<li><span class="arithmatex">\(\delta_{\text{st}}\)</span> = 1</li>
+<li><span class="arithmatex">\(\Omega \in [1150, 1350]\)</span> RPM</li>
+<li><span class="arithmatex">\(EO = 6\)</span> </li>
+<li><span class="arithmatex">\(\zeta = 0.01\)</span></li>
+<li><span class="arithmatex">\(\text{Sensor locations} = [45, 145, 275]\)</span> deg</li>
+</ul>
+</details>
+<p>In <a href="#figure_06">Figure 6</a> above, the continuous tip deflection is presented in <strong>A)</strong>. We've also <em>placed</em> three proximity probes, prefixed by P, in the <em>casing</em> above the signal. Each proximity probe will <em>sample</em> the continuous waveform at the value corresponding to the vertical dotted line that stretches from the probe to the waveform. As you move the slider, you'll notice the continuous waveform changes in both amplitude and phase. You'll also notice the values sampled by each probe change.</p>
+<p>In <a href="#figure_06">Figure 6</a> <strong>B)</strong>, the sampled values of the BTT system as a function of the entire shaft speed range are plotted. The instantaneous samples for the shaft speed as it is currently set is indicated by large markers on <strong>B</strong>. The corresponding samples are indicated on <strong>A)</strong> at the ends of the vertical dotted lines.</p>
+<p>We cannot stress the implication of this figure enough, we're therefore going to use a fancy box 👇 to highlight it.</p>
+<div class="admonition info">
+<p class="admonition-title">Continuous vs Sample signals</p>
+<p>We <strong>are not</strong> measuring the continuous signal shown in <a href="#figure_06">Figure 6</a> <strong>A)</strong> above. We <strong>only measure</strong> the sampled values for each probe as indicated in <strong>B</strong>).</p>
+<p>The task of BTT frequency inference is to <em><strong>infer the continuous waveform from the samples</strong></em>.</p>
+</div>
+<h2 id="substitute-angle-for-time">Substitute angle for time</h2>
+<p>Back in <a href="#equation_04">Equation 4</a>, we expressed the tip deflection as a function of time: <span class="arithmatex">\(x(t)\)</span>. In <a href="#figure_06">Figure 6</a>, however, we plotted the tip deflection as a function of angle. Why the apparent conflict?</p>
+<p>This is because we can substitute time for angle in our equations.</p>
+<p>In reality the tip deflection <em>does</em> vary with time, but it is a faux dependance. To show why, the definition of synchronous vibration is repeated below:</p>
+<div class="arithmatex">\[
+\omega = \Omega \cdot EO
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_12'>Equation 12</a></strong></figcaption>
+</figure>
+<p>recall the shaft speed, <span class="arithmatex">\(\Omega\)</span>, can be expressed as the distance traveled by the rotor from the start of a revolution until it reaches a sensor's position, <span class="arithmatex">\(\theta_s\)</span>:</p>
+<div class="arithmatex">\[
+\Omega = \frac{\theta_s}{t}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_13'>Equation 13</a></strong></figcaption>
+</figure>
+<p>We can substitute this into  <a href="equation_12">Equation 12</a> above to get:</p>
+<div class="arithmatex">\[
+\omega = \frac{\theta_s}{t} \cdot EO
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_14'>Equation 14</a></strong></figcaption>
+</figure>
+<p>Finally, we substitute the above equation into <a href="equation_08">Equation 8</a> to get:</p>
+<p><span id='eq_final_sdof_eq'></span></p>
+<div class="arithmatex">\[\begin{align}
+x(t) &amp;= X(\omega) \cos \left( \omega \cdot t - \phi(\omega) \right) \\
+x(t) &amp;= X(\omega) \cos \left( \frac{\theta_s}{t} \cdot EO \cdot t - \phi(\omega) \right) \\
+&amp;= X(\omega) \cos \left( \theta_s \cdot EO - \phi(\omega) \right)
+\end{align}\]</div>
+<figure>
+<figcaption><strong><a name='equation_15'>Equation 15</a></strong></figcaption>
+</figure>
+<p>The tip deflection is only dependant on the EO, the location of the sensor, and the shaft speed (since <span class="arithmatex">\(\omega=\Omega \cdot EO\)</span>). The tip deflection is therefore <em>not</em> dependant on time.</p>
+<p>The implications of this are profound. Normally in vibration measurement, the longer you measure something, the more information you get. Our equations reveal, however, if you keep the shaft speed constant and you measure the tip deflections for all eternity, you will measure the exact same deflections over and over again. You effectively only have as many unique samples as there are sensors. </p>
+<div class="admonition note">
+<p class="admonition-title">This is why synchronous vibration is more difficult to measure than asynchronous vibration.</p>
+<p>Recall we said at the beginning of the chapter that synchronous vibration is more difficult to measure than asynchronous vibration? This is the reason why. </p>
+<p>The continuous waveform will be sampled at approximately the same points over and over again. This makes it difficult to infer the continuous waveform from the samples. Asynchronous vibration, on the other hand, is not dependant on the shaft speed. The continuous waveform will be sampled at different points each revolution. This makes it easier to infer the continuous waveform from the samples.</p>
+</div>
+<h2 id="aliasing">Aliasing</h2>
+<p>It is often pointed out that BTT signals are aliased. This means BTT systems sample at a rate below the Nyquist frequency of the blade response. </p>
+<p>The Nyquist frequency is double the natural frequency we want to measure:</p>
+<div class="arithmatex">\[
+\begin{align}
+f_{s,N} &amp;= \omega_n \cdot 2\\
+&amp;= 125 \cdot 2\\
+&amp;= 250 Hz
+\end{align}
+\]</div>
+<figure>
+<figcaption><strong><a name='equation_16'>Equation 16</a></strong></figcaption>
+</figure>
+<p>We can calculate our BTT system's sampling rate at the EO 6 resonance speed of 1250 RPM:</p>
+<div class="arithmatex">\[
+\begin{align}
+f_s &amp;= \Omega \cdot S\\
+&amp;= \frac{\omega}{EO} \cdot S\\
+&amp;= \frac{1250}{60} \cdot 3\\
+&amp;= 62.5\\
+\end{align}
+\]</div>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: center;">Meaning</th>
+<th style="text-align: center;">SI Unit</th>
+<th style="text-align: center;">Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(f_{s,N}\)</span></td>
+<td style="text-align: center;">Nyquist frequency</td>
+<td style="text-align: center;"><span class="arithmatex">\(Hz\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(f_{sN} \gt 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(f_s\)</span></td>
+<td style="text-align: center;">Sampling frequency</td>
+<td style="text-align: center;"><span class="arithmatex">\(Hz\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(f_s \gt 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\Omega\)</span></td>
+<td style="text-align: center;">Shaft speed</td>
+<td style="text-align: center;"><span class="arithmatex">\(Hz\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\Omega \gt 0\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>We only measure 62.5 samples per second, whereas the required rate is 250 samples per second. This is why BTT signals are said to be aliased.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the above method provides intuition, I do not believe it is a mathematically sound deduction. We normally associate aliasing and the Nyquist frequency with signals that can be transformed using the Discrete Fourier Transform (DFT) . One requirement of the DFT is the samples must be equidistant along the discretization axis, like time or angle. BTT sensors are generally not equally far apart from one another. Even if you attempted to install them equidistantly, manufacturing errors would render the samples non-equidistant.</p>
+<p>You can read about this in more detail in (VanderPlas, 2018)<sup id="fnref:vanderplas2018understanding"><a class="footnote-ref" href="#fn:vanderplas2018understanding">6</a></sup>.</p>
+</div>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this chapter, we've spent some time to understand the fundamentals behind synchronous vibration. We've shown that BTT systems sample a continuous vibration waveform, and we need to infer the true vibration behavior from these samples.   </p>
+<p>The final two chapter describe two ways of completing our promised journey. The two remaining chapters describe different ways to infer vibration frequency, amplitude, and phase from the samples:</p>
+<ul>
+<li>Ch8: The Single Degree of Freedom (SDoF) fit method, and</li>
+<li>Ch9: The Circumferential Fourier Fit (CFF) method;</li>
+</ul>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand how obstructions in the flow path causes synchronous vibration.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that synchronous vibration occurs at an integer multiple of the shaft speed. This integer multiple is called the Engine Order (EO). </p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand what a Campbell diagram is and how we can use it to guess the mode associated with a resonance event we measured.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that we can use a Single Degree of Freedom (SDoF) oscillator to model a blade's vibration.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand how BTT systems sample the blade's vibration waveform.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand why synchronous vibration data is more difficult to process than asynchronous vibration data.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that BTT signals are generally aliased.</p>
+</div>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback. </p>
+<div style='display:flex'>
+    <div>
+        <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+            <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Dawie Diamond</strong>
+        </p>
+
+        <p>
+            <span class="md-icon blog-timestamp-span" title="Created"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>2024-03-12</span>
+
+            <span class="md-icon blog-timestamp-span" title="Last update"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>2024-08-25
+            </span>
+        </p>
+    </div>
+</div>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:rao1991turbomachine">
+<p>Rao, J., 1991. Turbomachine blade vibration. New Age International.&#160;<a class="footnote-backref" href="#fnref:rao1991turbomachine" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:diamond2018novel">
+<p>Diamond, D.H., Stephan Heyns, P., 2018. A novel method for the design of proximity sensor configuration for rotor blade tip timing. Journal of Vibration and Acoustics 140, 061003.&#160;<a class="footnote-backref" href="#fnref:diamond2018novel" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:forsthoffer2021forsthoffer">
+<p>Forsthoffer, W.E., 2021. Forsthoffer's proven guidelines for rotating machinery excellence. Butterworth-Heinemann.&#160;<a class="footnote-backref" href="#fnref:forsthoffer2021forsthoffer" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:tanuma2022advances">
+<p>Tanuma, T., 2022. Advances in steam turbines for modern power plants. Woodhead Publishing.&#160;<a class="footnote-backref" href="#fnref:tanuma2022advances" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:rao2003vibrations">
+<p>Rao, S., 2003. Machanical vibrations. Pearson Education India.&#160;<a class="footnote-backref" href="#fnref:rao2003vibrations" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:vanderplas2018understanding">
+<p>VanderPlas, J.T., 2018. Understanding the lomb--scargle periodogram. The Astrophysical Journal Supplement Series 236, 16.&#160;<a class="footnote-backref" href="#fnref:vanderplas2018understanding" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../ch6/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 6. Data Zeroing and Filtering">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                6. Data Zeroing and Filtering
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ch8/" class="md-footer__link md-footer__link--next" aria-label="Next: 8. Single Degree of Freedom (SDoF) Method">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                8. Single Degree of Freedom (SDoF) Method
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M0 32v448h448V32zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9m-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="../../../javascripts/reviews.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>

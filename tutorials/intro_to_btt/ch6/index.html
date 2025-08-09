@@ -1,0 +1,2404 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains how to zero and filter, and scale the rotor blade AoA values.">
+      
+      
+      
+      
+        <link rel="prev" href="../ch5/">
+      
+      
+        <link rel="next" href="../ch7/">
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>6. Data Zeroing and Filtering - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20640%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.0.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M576%2048c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4L413.5%2077.5%20234.1%2017.6c-8.1-2.7-16.8-2.1-24.4%201.7l-128%2064C70.8%2088.8%2064%2099.9%2064%20112v352c0%2011.1%205.7%2021.4%2015.2%2027.2s21.2%206.4%2031.1%201.4l116.1-58.1%20173.3%2057.8c-4.3-6.4-8.5-13.1-12.6-19.9-11-18.3-21.9-39.3-30-61.8l-101.2-33.7V92.4l128%2042.7v99.3c31-35.8%2077-58.4%20128-58.4%2022.6%200%2044.2%204.4%2064%2012.5zM392%20341.9c0%2068.9%2064.1%20150.4%2098.6%20189.3%2011.6%2013%2031.3%2013%2042.9%200%2034.5-38.9%2098.6-120.4%2098.6-189.3%200-65.1-53.7-117.9-120-117.9S392%20276.8%20392%20341.9%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-6B961HRVZP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Intro to BTT Ch6 - Data Zeroing and Filtering of Tip Deflections" />
+<meta property="og:description" content="This chapter explains how to zero and filter, and scale the rotor blade AoA values." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch6.gif" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttch6/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Intro to BTT Ch6 - Data Zeroing and Filtering of Tip Deflections"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch6.gif"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttch6/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains how to zero and filter, and scale the rotor blade AoA values."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tip-deflections-zeroing-and-filtering" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6. Data Zeroing and Filtering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ch1/" class="md-tabs__link">
+          
+  
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-tabs__link">
+          
+  
+  
+  Datasets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/dataset_handler/" class="md-tabs__link">
+          
+  
+  
+  User Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Determine classes -->
+
+
+  
+
+
+
+<!-- Navigation -->
+<nav
+  class="md-nav md-nav--primary md-nav--lifted"
+  aria-label="Navigation"
+  data-md-level="0"
+>
+
+  <!-- Site title -->
+  <label class="md-nav__title" for="__drawer">
+    <a
+      href="../../.."
+      title="Bladesight Learning Centre"
+      class="md-nav__button md-logo"
+      aria-label="Bladesight Learning Centre"
+      data-md-component="logo"
+    >
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+
+  <!-- Repository information -->
+  
+
+  <!-- Navigation list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Blade Tip Timing's fundamental principle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Time of Arrival (ToA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Angle of Arrival (AoA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Allocating AoAs to blades
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Working with multiple probes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    6. Data Zeroing and Filtering
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Data Zeroing and Filtering
+    
+  </span>
+  
+
+      </a>
+      
+        
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zeroing-the-aoas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zeroing the AoAs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zeroing the AoAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normalization-and-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalization and scaling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#piecewise-linear-detrending" class="md-nav__link">
+    <span class="md-ellipsis">
+      Piecewise linear detrending
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-domain-polynomial-detrending" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order domain polynomial detrending
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#butterworth-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Butterworth filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gaussian filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filter comparison
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peak-to-peak-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Peak-to-Peak vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coding-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coding exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coding exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-aoa-to-tip-deflection-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AoA to Tip Deflection algorithm
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Synchronous Vibration and Sampling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    8. Single Degree of Freedom (SDoF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    9. Circumferential Fourier Fit (CFF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Afterword
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Datasets
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Datasets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Varying ramp rates with 45 degree pipe
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/dataset_handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dataset handler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    btt
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            btt
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/btt/triggering_criteria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Triggering criteria
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+  <br/>
+  <br/>
+  <br/>
+  <a
+    href="https://www.bladesight.com/"
+    target="_blank"
+    style="text-align: -webkit-center;"
+  >
+    <img src="https://intro-to-btt-using-python-assets.s3.amazonaws.com/kraken1.jpeg" 
+    alt="Kraken" 
+    style="width: 120px; display: flex; padding: 2px 0px; justify-content: center; align-items: center; border: 2px;">
+    <p><strong>Unleash the Kraken🐙</strong></p>
+    </a>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zeroing-the-aoas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zeroing the AoAs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zeroing the AoAs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normalization-and-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Normalization and scaling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#piecewise-linear-detrending" class="md-nav__link">
+    <span class="md-ellipsis">
+      Piecewise linear detrending
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#order-domain-polynomial-detrending" class="md-nav__link">
+    <span class="md-ellipsis">
+      Order domain polynomial detrending
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#butterworth-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Butterworth filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gaussian-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gaussian filter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filter comparison
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peak-to-peak-vibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Peak-to-Peak vibration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coding-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coding exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coding exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-aoa-to-tip-deflection-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AoA to Tip Deflection algorithm
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+      
+        <span class="md-tag">BTT</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Blade Tip Timing</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Mechanical Vibration</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">NSMS</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Non Intrusive Stress Measurement</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Time of Arrival</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Turbine blade</span>
+      
+    
+  </nav>
+
+
+
+<details class="abstract">
+<summary>You are here</summary>
+<p><figure markdown>
+<img alt="BTT Tutorial Roadmap" src="BTT_Tutorial_Outline_Ch6.svg" width="500" />
+</figure></p>
+</details>
+<style>
+:root {
+  --md-tooltip-width: 600px;
+}
+</style>
+
+<h1 id="tip-deflections-zeroing-and-filtering">Tip Deflections Zeroing and Filtering</h1>
+<p>At the end of the last chapter, we managed to combine data from multiple proximity sensors. We arrived at a place where we had one DataFrame containing the AoAs for a single blade. We are now more than halfway through our journey. In order to reach our promised goal of inferring blade vibration characteristics, we now convert these AoAs into tip deflections. The process entails: </p>
+<ol>
+<li>Zeroing the AoAs to remove the static part of the signal.</li>
+<li>Scaling the AoAs by the rotor's radius, thereby yielding the tip deflection in units of microns.</li>
+<li>Filtering the tip deflections to remove high frequency noise.</li>
+</ol>
+<p>In this chapter, we explore multiple techniques to perform this transformation. You may ultimately use only one approach. Rest assured you'll find some application for the other ones in future, even if its unrelated to BTT.</p>
+<figure>
+<p><img alt="Filter Intro Gif" src="intro_gif.gif" />
+  </p>
+<figcaption><a id='figure_01'><strong>Figure 1:</strong></a>
+    An animation showing the effect of applying a Butterworth filter to normalized tip deflections. 
+  </figcaption>
+</figure>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that AoAs are offset by a constant value. This offset is unrelated to the blade's vibration. </p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that the normalized AoAs can be multiplied by the rotor radius to obtain tip deflections.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that the tip deflection signal may contain non-vibration related components that are proportional to the shaft speed.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that a low pass filter can be used to smooth the tip deflections. </p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that the peak-to-peak vibration can be used to identify resonance events.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Write a single function that zeroes, scales and filters the rotor blade AoAs.</p>
+</div>
+<h2 id="following-along">Following along</h2>
+<p>The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_06_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.</p>
+<p>You can open a Google Colab session of the worksheet here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_06_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.</p>
+<p>You need to use one of these Python versions:
+<img src="https://img.shields.io/badge/python-3.9-blue.svg">
+<img src="https://img.shields.io/badge/python-3.10-blue.svg">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg"></p>
+<h2 id="zeroing-the-aoas">Zeroing the AoAs</h2>
+<p>Let's load a new dataset into memory. The dataset was acquired from the same rotor as used in the previous chapters. The dataset has measurements from three eddy current probes for a run-up and run-down of the rotor:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span>
+<span class="normal"><a href="#__codelineno-0-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datasets</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/intro_to_btt/intro_to_btt_ch06&quot;</span><span class="p">]</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">df_opr_zero_crossings</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/opr_zero_crossings&#39;</span><span class="p">]</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">df_prox_1</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_1_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">df_prox_2</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_2_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="n">df_prox_3</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_3_toas&#39;</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+<p>I've included the functions we've created in the previous chapter into the <code>bladesight</code> module. Specifically, the <code>get_rotor_blade_AoAs</code> function from the previous chapter's coding exercises have been added to the <code>btt</code> module. It can now be used as a single entrypoint to convert the OPR zero-crossing times and the proximity probe ToAs into rotor blade AoA DataFrames.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">bladesight.btt</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rotor_blade_AoAs</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="c1">#(1)!</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">blade_AoAs</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="n">df_opr_zero_crossings</span><span class="p">,</span> 
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="p">[</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a>        <span class="n">df_prox_1</span><span class="p">,</span> 
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a>        <span class="n">df_prox_2</span><span class="p">,</span> 
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a>        <span class="n">df_prox_3</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a>    <span class="p">],</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a>    <span class="n">probe_spacings</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">]),</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a>    <span class="n">B</span><span class="o">=</span><span class="mi">5</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>
+<p>We import the list annotation. The <code>get_rotor_blade_AoAs</code> function returns a list of DataFrames. Each DataFrame contains the AoAs for a single blade. </p>
+<p>Why did I not return one big DataFrame instead? Because we want to analyze each blade individually. We may want to compare the vibration of different blades. It's easier to achieve if the DataFrames are separate.</p>
+</li>
+</ol>
+<p>In the code above we've stipulated that probe 2 is 10 degrees from probe 1. Probe 3 is 20 degrees from probe 1. We also stipulate there are 5 blades. The function returns a list of DataFrames, one for each blade. The top of the first DataFrame is shown in <a href="#table_01">Table 1</a> below:</p>
+<figure>
+<figcaption><a id='table_01'><strong>Table 1:</strong></a> The first 5 rows of rotor blade 1's AoA DataFrame. </figcaption>
+</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">n_start_time</th>
+<th style="text-align: right;">n_end_time</th>
+<th style="text-align: right;">Omega</th>
+<th style="text-align: right;">ToA_p1</th>
+<th style="text-align: right;">AoA_p1</th>
+<th style="text-align: right;">ToA_p2</th>
+<th style="text-align: right;">AoA_p2</th>
+<th style="text-align: right;">ToA_p3</th>
+<th style="text-align: right;">AoA_p3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.202061</td>
+<td style="text-align: right;">0.460325</td>
+<td style="text-align: right;">24.3286</td>
+<td style="text-align: right;">0.205687</td>
+<td style="text-align: right;">0.0882288</td>
+<td style="text-align: right;">0.212988</td>
+<td style="text-align: right;">0.265845</td>
+<td style="text-align: right;">0.220066</td>
+<td style="text-align: right;">0.438032</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.460325</td>
+<td style="text-align: right;">0.716163</td>
+<td style="text-align: right;">24.5592</td>
+<td style="text-align: right;">0.463899</td>
+<td style="text-align: right;">0.087785</td>
+<td style="text-align: right;">0.471097</td>
+<td style="text-align: right;">0.264557</td>
+<td style="text-align: right;">0.478046</td>
+<td style="text-align: right;">0.435233</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.716163</td>
+<td style="text-align: right;">0.967917</td>
+<td style="text-align: right;">24.9576</td>
+<td style="text-align: right;">0.719673</td>
+<td style="text-align: right;">0.0876073</td>
+<td style="text-align: right;">0.726748</td>
+<td style="text-align: right;">0.264189</td>
+<td style="text-align: right;">0.733604</td>
+<td style="text-align: right;">0.435293</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.967917</td>
+<td style="text-align: right;">1.21753</td>
+<td style="text-align: right;">25.1716</td>
+<td style="text-align: right;">0.971393</td>
+<td style="text-align: right;">0.0874948</td>
+<td style="text-align: right;">0.978406</td>
+<td style="text-align: right;">0.26402</td>
+<td style="text-align: right;">0.98519</td>
+<td style="text-align: right;">0.434798</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.21753</td>
+<td style="text-align: right;">1.46356</td>
+<td style="text-align: right;">25.5385</td>
+<td style="text-align: right;">1.22097</td>
+<td style="text-align: right;">0.0877474</td>
+<td style="text-align: right;">1.2279</td>
+<td style="text-align: right;">0.264713</td>
+<td style="text-align: right;">1.23458</td>
+<td style="text-align: right;">0.435487</td>
+</tr>
+</tbody>
+</table>
+<p>The AoAs for each probe are plotted against the revolution number in <a href="#figure_02">Figure 2</a> below.</p>
+<script src="blade_1_aoas_raw.js" > </script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_aoas_raw"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_aoas_raw() {
+            const ctx = document.getElementById('ch06_blade_1_aoas_raw');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_aoas_raw = new Chart(ctx, window.blade_1_aoas_raw);
+            window.fig_blade_1_aoas_raw_reset = function resetZoomFig1() {
+                    window.fig_blade_1_aoas_raw.resetZoom();
+                }
+            }
+        render_chart_blade_1_aoas_raw();
+    </script>
+    <a onclick="window.fig_blade_1_aoas_raw_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_02'>Figure 2</a></strong>: The AoAs for the first blade. Each probe's AoAs are offset by a constant value. We say the AoAs are <strong>not zeroed</strong>. The shaft speed is also indicated on a second y-axis.</figcaption>
+</figcaption>
+</figure>
+<p>In <a href="#figure_02">Figure 2</a> above, there are three seemingly horizontal lines that represent the AoAs for the blade at probes one, two and three respectively. Each line has a constant AoA offset. This constant is the average distance traveled by the shaft from the start of each revolution until the blade reaches the probe. </p>
+<p>This constant offset is unrelated to the deflection of the blade. We therefore say the values in <a href="#figure_02">Figure 2</a> are <em>not zeroed</em>. We need to remove the static part of the signal before we can proceed with the analysis.</p>
+<h3 id="normalization-and-scaling">Normalization and scaling</h3>
+<p>One of the simplest ways to remove the static part of the signal is to subtract the mean of the AoA column from each AoA value. We can use the code below to achieve this.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p1&quot;</span><span class="p">]</span> 
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p2&quot;</span><span class="p">]</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p3&quot;</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The normalized AoA column can now be <em>scaled</em> with the rotor radius to calculate the tip deflection. </p>
+<p>Recall that the distance traveled along an arc is given by the formula:</p>
+<div class="arithmatex">\[\begin{equation}
+x = R \cdot \theta
+\end{equation}\]</div>
+<p>The code below shows how to do this:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">R</span> <span class="o">=</span> <span class="mi">162000</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p1&quot;</span><span class="p">]</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p2&quot;</span><span class="p">]</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p3&quot;</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The engineering drawing for the blisk used in these measurements is presented in <a href="#figure_03">Figure 3</a> below.</p>
+<figure>
+<p><img alt="Order in which the blades arrive at each probe" src="Blisk_drawing.png" />
+  </p>
+<figcaption><a id='figure_03'><strong>Figure 3:</strong></a>
+    An engineering drawing of the blisk used in these measurements. The blisk's diameter is 324 mm. The radius is therefore 162 mm.
+  </figcaption>
+</figure>
+<p>The rotor's radius is 162mm, or 162000 <span class="arithmatex">\(\mu\)</span>m. I like to express tip deflection in microns. This is a personal preference. </p>
+<p>The resulting tip deflections are presented in <a href="#figure_04">Figure 4</a> below.</p>
+<script src="blade_1_x_normalized.js" > </script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_normalized"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_normalized() {
+            const ctx = document.getElementById('ch06_blade_1_x_normalized');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_normalized = new Chart(ctx, window.blade_1_x_normalized);
+            window.fig_blade_1_x_normalized_reset = function resetZoomFig2() {
+                    window.fig_blade_1_x_normalized.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_normalized();
+    </script>
+    <a onclick="window.fig_blade_1_x_normalized_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_04'>Figure 4</a></strong>: The normalized tip deflections for the first blade. There are distinct areas where the blade vibration suddenly change, as indicated by callout <strong>A</strong>. This is a typical example of a resonance event. We've also added, as indicated by callout <strong>B</strong>, dotted lines that serve as "breakpoints" for our detrending algorithm (we're going to discuss detrending next). The shaft speed is indicated on a second y-axis. 
+  </figcaption>
+</figure>
+<p>In <a href="#figure_04">Figure 4</a> above, the tip deflections no longer have a constant offset. All the tip deflection values are between +-1000 µm. The tip deflections change suddenly at multiple locations. Whether the change in tip deflection is positive or negative depends on the probe's location and the vibration frequency and phase.</p>
+<p>One such location is indicated by callout <em>A</em>. We refer to these events as <em>resonance events</em>. Drag across the plot to zoom into the resonance event. Each probe's tip deflections have different shapes at the resonance. This is counter-intuitive, because the blade's vibrational state can surely not change much within a single shaft revolution. This behavior is because of <em>aliasing</em>. But we're getting ahead of ourselves. We'll discuss aliasing in the next chapter. For now, you just need to understand that the tip deflections measured at different probes have different shapes, and that there exists a perfectly sensible explanation for this.</p>
+<div class="admonition note">
+<p class="admonition-title">Are the tip deflections safe?</p>
+<p>The tip deflections in <a href="#figure_04">Figure 4</a> above are within the safe limits for this particular blade. You need to perform a FEA to determine the safe limits for your blade.</p>
+</div>
+<h3 id="piecewise-linear-detrending">Piecewise linear detrending</h3>
+<p>We have done well to remove the static offset from each probe's signal. Unfortunately, some static effects that have nothing to do with tip deflection are still present in the signal. </p>
+<p>From <a href="#figure_04">Figure 4</a> it seems as though the tip deflections change proportionally to the shaft speed. It is unlikely this change is related to tip deflection. Shaft speed related shifts can occur for many reasons. In this case, the proportional change in tip deflection is due to the fact that the eddy current probes used here have a limited bandwidth. The amplitude of the pulses (as discussed in Chapter 2) therefore become smaller as the shaft speed increases. This causes the ToAs to be triggered later. This later triggering manifests itself as apparent tip deflection changes.</p>
+<p>Let's remove this proportional change with a <em>detrending</em> algorithm.</p>
+<p>A detrending algorithm is a simple algorithm that removes a static trend from a signal. The Python library <code>scipy</code> has a built-in detrending algorithm.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">detrend</span>
+</span></code></pre></div></td></tr></table></div>
+<p>This function fits and subtracts a linear curve from the signal. A linear curve, though, is not what we need. In <a href="#figure_04">Figure 4</a> above, there are multiple regions with different linear trends. This is especially true the moment the shaft speed reverses around revolution 1436. Linear trend changes are observed in other regions as well.</p>
+<p>Fortunately, the detrending algorithm allows us to specify <em>breakpoints</em> where the linear trend changes. From <a href="#figure_04">Figure 4</a> above, I've eyeballed the breakpoints between linear sections at shaft revolutions 217, 1128, 1436, 1784, and 2670. The breakpoints are indicated by the dotted lines in <a href="#figure_04">Figure 4</a> above (one breakpoint is indicated by callout B). </p>
+<p>The detrending algorithm can be applied for all three probes with the code below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">bps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">217</span><span class="p">,</span> <span class="mi">1128</span><span class="p">,</span> <span class="mi">1436</span><span class="p">,</span> <span class="mi">1784</span><span class="p">,</span> <span class="mi">2670</span><span class="p">])</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detrend</span><span class="p">(</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a>    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">],</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a>    <span class="n">bp</span><span class="o">=</span><span class="n">bps</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="p">)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detrend</span><span class="p">(</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a>    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">],</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a>    <span class="n">bp</span><span class="o">=</span><span class="n">bps</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="p">)</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detrend</span><span class="p">(</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a>    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">],</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a>    <span class="n">bp</span><span class="o">=</span><span class="n">bps</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The detrended tip deflections are shown in <a href="#figure_05">Figure 5</a> below.</p>
+<script src="blade_1_x_detrended.js" > </script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_detrended"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_detrended() {
+            const ctx = document.getElementById('ch06_blade_1_x_detrended');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_detrended = new Chart(ctx, window.blade_1_x_detrended);
+            window.fig_blade_1_x_detrended_reset = function resetZoomFig3() {
+                    window.fig_blade_1_x_detrended.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_detrended();
+    </script>
+    <a onclick="window.fig_blade_1_x_detrended_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_05'>Figure 5</a></strong>: The detrended tip deflections for the first blade. The tip deflections are now centered around zero for the duration of the measurement.
+  </figcaption>
+</figure>
+<p>Thats much better <img alt="👏" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f44f.svg" title=":clap:" />! The tip deflections from each probe are now centered around zero. We can now trust that the tip deflection variations are caused by blade vibration.</p>
+<p>This approach gives us great control over the zeroing process. It would, however, be better to automatically remove these trends.</p>
+<h3 id="order-domain-polynomial-detrending">Order domain polynomial detrending</h3>
+<p>We can gain some intuition about removing shaft speed related effects with a scatterplot of tip deflection vs shaft speed. The scatterplot is presented in <a href="#figure_06">Figure 6</a> below.</p>
+<script src="blade_1_x_vs_RPM.js" > </script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_vs_RPM"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_vs_RPM() {
+            const ctx = document.getElementById('ch06_blade_1_x_vs_RPM');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_vs_RPM = new Chart(ctx, window.blade_1_x_vs_RPM);
+            window.fig_blade_1_x_vs_RPM_reset = function resetZoomFig4() {
+                    window.fig_blade_1_x_vs_RPM.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_vs_RPM();
+    </script>
+    <a onclick="window.fig_blade_1_x_vs_RPM_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_06'>Figure 6</a></strong>: The tip deflections have been plotted vs shaft speed for each probe. The tip deflections seem to decrease proportionally as shaft speed increases. We can fit a high order polynomial to each signal. This polynomial can be subtracted from the tip deflections to remove shaft speed related effects.
+  </figcaption>
+</figure>
+<p>From <a href="#figure_06">Figure 6</a> above, the tip deflections for probes 2 and 3 seem to decrease, on average, as the shaft speed increases. Probe 1's tip deflections exhibit a smaller correlation. The resonance events within these signals seem to be short lived as a function of shaft speed. </p>
+<p>This allows us to fit a high-order polynomial to the tip deflections vs shaft speed. The polynomial represents the shaft speed related effects in the tip deflections. By subtracting the evaluated polynomial from each signal, we end up with a signal that only contains the tip's dynamic vibration.</p>
+<p>The polynomial can be fit with the code below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p1&quot;</span><span class="p">]</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p2&quot;</span><span class="p">]</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;AoA_norm_p3&quot;</span><span class="p">]</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="n">poly_order</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1">#(1)!</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x_p1&#39;</span><span class="p">],</span> <span class="n">poly_order</span><span class="p">)</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x_p2&#39;</span><span class="p">],</span> <span class="n">poly_order</span><span class="p">)</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="n">p3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x_p3&#39;</span><span class="p">],</span> <span class="n">poly_order</span><span class="p">)</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">])</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">])</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">])</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>Here, I've selected a polynomial order of 11. This was the first value I tried. You may need to experiment with different polynomial orders to find the best one for your case. Maybe you could write an algorithm that automatically determines this polynomial order. If you do, please let me know <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f604.svg" title=":smile:" />.</li>
+</ol>
+<p>The detrended tip deflections are presented in <a href="#figure_07">Figure 7</a> below.</p>
+<script src="blade_1_x_poly_normalised.js" ></script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_poly_normalised"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_poly_normalised() {
+            const ctx = document.getElementById('ch06_blade_1_x_poly_normalised');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_poly_normalised = new Chart(ctx, window.blade_1_x_poly_normalised);
+            window.fig_blade_1_x_poly_normalised_reset = function resetZoomFig5() {
+                    window.fig_blade_1_x_poly_normalised.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_poly_normalised();
+    </script>
+    <a onclick="window.fig_blade_1_x_poly_normalised_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_07'>Figure 7</a></strong>: The detrended tip deflections for the first blade after zeroing with an order domain polynomial. The tip deflections are now centered around zero for the duration of the measurement.
+  </figcaption>
+</figure>
+<p>Great <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f604.svg" title=":smile:" />! We've managed to remove the static, non-vibration related part of the signal. We can now move on to the next step of the analysis, filtering.</p>
+<div class="admonition note">
+<p class="admonition-title">Poorly conditioned polynomial fit</p>
+<p>When you use polynomial detrending, you may receive a <code>Polyfit may be poorly conditioned</code> warning. This happens for one of three reasons:</p>
+<ol>
+<li>The polynomial order is too high. You can reduce the polynomial order to remove the warning.</li>
+<li>The shaft speed is constant. This means there is no shaft speed variety to fit against. You should choose an order of 0 or 1 for constant speed cases.</li>
+<li>Your data is wrong. If the data passed to the algorithm is spurious or incorrect, the algorithm will still attempt to fit a polynomial to it. This will result in a poorly conditioned fit. You should check your data for errors.</li>
+</ol>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Zeroing can be achieved in many different ways. I've presented you with one simple method to get you going. It is, however, a discipline on its own. Maybe you can come up with different ways of zeroing the signal. If you do, please let me know <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f604.svg" title=":smile:" />.</p>
+</div>
+<h2 id="filtering">Filtering</h2>
+<p>We've now removed the static part of the signal. We have, essentially, implemented a high-pass filter on our signals. We still have high frequency noise in our signals. We can remove this noise with a low-pass filter. </p>
+<p>Once again, the <code>scipy</code> package in Python comes to the rescue. There are multiple filters in the <code>scipy.signal</code> module. We demonstrate two methods here:</p>
+<ol>
+<li>A Butterworth filter.</li>
+<li>A Gaussian filter.</li>
+</ol>
+<h3 id="butterworth-filter">Butterworth filter</h3>
+<p>A Butterworth filter is a low-pass filter. It is often implemented in analogue systems, but we can implement it digitally with the <code>scipy.signal.butter</code> function. The code below shows how to implement a Butterworth filter.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span>
+<span class="normal"><a href="#__codelineno-7-6">6</a></span>
+<span class="normal"><a href="#__codelineno-7-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">butter</span><span class="p">,</span> <span class="n">filtfilt</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="n">butterworth_filter</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span> <span class="c1">#(1)!</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1_filt_butter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="o">*</span><span class="n">butterworth_filter</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">])</span> <span class="c1">#(2)!</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2_filt_butter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="o">*</span><span class="n">butterworth_filter</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">])</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3_filt_butter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="o">*</span><span class="n">butterworth_filter</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">])</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The <code>butter</code> function is responsible for <em>designing</em> the filter. The order parameter, <code>N</code>, and the cutoff frequency <code>Wn</code>, can be adjusted. Each different combination of the two results in a different frequency response. I will not discuss filter design in this tutorial. Primarily because I am not an expert in filter design. The important parameter here is the cutoff frequency <code>Wn</code>. The larger this value, the more high frequency components will be permitted to stay. In our case, the faster our resonances occur, the higher we want this cutoff. I think 0.3 is a good initial value to use.</li>
+<li>The <code>filtfilt</code> function <em>applies</em> the filter. The first argument is the filter coefficients, and the second argument is the signal to filter. The <code>filtfilt</code> function is a forward-backward filter. This means it applies the filter twice, once forward, and once backward. This is done to remove phase shifts caused by the filter. The result is a filtered signal, but it has the same phase as the original signal.</li>
+</ol>
+<p>The butterworth filter is simple to implement. It works well for most cases.</p>
+<h3 id="gaussian-filter">Gaussian filter</h3>
+<p>A Gaussian filter is a low-pass filter often used in image processing. It is implemented below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">gaussian_filter1d</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1_filt_gaussian&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter1d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p1&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">#(1)!</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2_filt_gaussian&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter1d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p2&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3_filt_gaussian&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter1d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;x_p3&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>The <code>gaussian_filter1d</code> takes as its first argument the signal to filter, and as its second argument the standard deviation of the Gaussian filter. The larger the standard deviation, the smoother the signal will be. A standard deviation of 1 means the Gaussian kernel has a standard deviation of <em>1 shaft revolution</em>. You need to experiment with different values to determine what works best for your case.</li>
+</ol>
+<h3 id="filter-comparison">Filter comparison</h3>
+<p>We show the effects of both filters in <a href="#figure_08">Figure 8</a> below.</p>
+<script src="blade_1_x_filtered.js" ></script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_filtered"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_filtered() {
+            const ctx = document.getElementById('ch06_blade_1_x_filtered');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_filtered = new Chart(ctx, window.blade_1_x_filtered);
+            window.fig_blade_1_x_filtered_reset = function resetZoomFig6() {
+                    window.fig_blade_1_x_filtered.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_filtered();
+    </script>
+    <a onclick="window.fig_blade_1_x_filtered_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_08'>Figure 8</a></strong>: The filtered tip deflections for the first blade arriving at the first probe. By zooming into the signal, it becomes clear that both the Butterworth and Gaussian filters have a similar effect. The Gaussian filter leaves slightly more noise in the signal, but it is not significant. Both leave the signal significantly smoother than the raw signal.
+  </figcaption>
+</figure>
+<p>From <a href="#figure_08">Figure 8</a> above, the Gaussian filter and the Butterworth filter performs well. The Gaussian filter leaves a bit more high frequency noise. That should not bother us.</p>
+<details class="note">
+<summary>When would which method perform better?</summary>
+<p>To be honest, I have no idea. I've used both filters in the past, and I've never noticed a significant difference between the two. I've used the Butterworth filter more often, because in my experience, the people who use Butterworth filters have moustaches. Engineers with moustaches built the modern world.</p>
+</details>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is not mandatory to remove the noise in the signal for frequency analysis. Some algorithms, such as the ones we'll cover in subsequent chapters, work better with the noise removed. There are, however, algorithms that are robust against noise. It is therefore a good idea to keep the raw signal around for later analysis if need be.</p>
+</div>
+<h2 id="peak-to-peak-vibration">Peak-to-Peak vibration</h2>
+<p>A well established concept in vibration analysis is the peak-to-peak vibration. It is simply the difference between the maximum and minimum values of a signal within a certain timeframe. The peak-to-peak vibration gives us a nice tool to combine the tip deflections from each probe into a single value. </p>
+<p>The peak-to-peak vibration for each blade is the difference between the minimum value and the maximum value inside each revolution. </p>
+<p>We can achieve this with the code below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">x_matrix</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a>    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;x_p1_filt_butter&quot;</span><span class="p">,</span> <span class="s2">&quot;x_p2_filt_butter&quot;</span><span class="p">,</span> <span class="s2">&quot;x_p3_filt_butter&quot;</span><span class="p">]]</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="n">df</span><span class="p">[</span><span class="s2">&quot;pk-pk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_matrix</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">x_matrix</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The peak-to-peak vibration for the first blade is presented in <a href="#figure_09">Figure 9</a> below.</p>
+<script src="blade_1_x_pk_pk.js" ></script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_pk_pk"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_pk_pk() {
+            const ctx = document.getElementById('ch06_blade_1_x_pk_pk');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_pk_pk = new Chart(ctx, window.blade_1_x_pk_pk);
+            window.fig_blade_1_x_pk_pk_reset = function resetZoomFig7() {
+                    window.fig_blade_1_x_pk_pk.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_pk_pk();
+    </script>
+    <a onclick="window.fig_blade_1_x_pk_pk_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_09'>Figure 9</a></strong>: The peak-to-peak vibration for the first blade. We now have a single indicator that represents the vibration from all the proximity probes for a blade. It is much easier to identify resonance zones with this indicator than with multiple probe signals.
+  </figcaption>
+</figure>
+<p>In <a href="#figure_09">Figure 9</a> above, the peak-to-peak vibration is an indicator that represents the maximum range between the tip deflections within every revolution. It is simpler to identify resonance events with this signal than with multiple probe signals.</p>
+<p>In most of our plots, we've also included the shaft speed on a secondary y-axis. You may have noticed there is a symmetry to the resonances in <a href="#figure_09">Figure 9</a> above. This symmetry occurs because we measured on a run-up and run-down, and the vibration is synchronous. We'll delve into synchronous vibration in the next chapter. For now, you only have to understand a blade will experience resonance at a particular shaft speed. Whether we traverse this shaft speed on the run-up or run-down is irrelevant. </p>
+<p>We can use this concept with a scatterplot of the peak-to-peak values vs the shaft speed in <a href="#figure_10">Figure 10</a> below.</p>
+<script src="blade_1_x_pk_pk_vs_shaft_speed.js" ></script>
+<div>
+    <div>
+        <canvas id="ch06_blade_1_x_pk_pk_vs_shaft_speed"'></canvas>
+    </div>
+    <script>
+        async function render_chart_blade_1_x_pk_pk_vs_shaft_speed() {
+            const ctx = document.getElementById('ch06_blade_1_x_pk_pk_vs_shaft_speed');
+            // If this is a mobile device, set the canvas height to 400
+            if (window.innerWidth < 500) {
+                ctx.height = 400;
+            }
+            while (typeof Chart == "undefined") {
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+            window.fig_blade_1_x_pk_pk_vs_shaft_speed = new Chart(ctx, window.blade_1_x_pk_pk_vs_shaft_speed);
+            window.fig_blade_1_x_pk_pk_vs_shaft_speed_reset = function resetZoomFig8() {
+                    window.fig_blade_1_x_pk_pk_vs_shaft_speed.resetZoom();
+                }
+            }
+        render_chart_blade_1_x_pk_pk_vs_shaft_speed();
+    </script>
+    <a onclick="window.fig_blade_1_x_pk_pk_vs_shaft_speed_reset()" class='md-button'>Reset Zoom</a>
+</div>
+<figure>
+<figcaption><strong><a name='figure_10'>Figure 10</a></strong>: The peak-to-peak vibration for the first blade vs shaft speed. This makes it easier to identify resonances. We've marked resonances with arrows (as indicated in callout A) at 572, 622, 672, 934, 1078, and 1248 RPM.
+  </figcaption>
+</figure>
+<p>The order domain scatterplot, shown in <a href="#figure_10">Figure 10</a> above, beautifully reveal resonance events. These events occur on both the run-up and the run-down. We've indicated the resonance events with arrows in <a href="#figure_10">Figure 10</a> above. </p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Please note the peak-to-peak vibration is <em>not the same</em> as the vibration amplitude. It is a quick and dirty way to visually spot resonances with the aliased tip deflections. It is not a replacement for a proper frequency inference.</p>
+</div>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this chapter, we converted raw AoAs to tip deflections. The tip deflection values represent the dynamic vibration of the blade. All the static components have been removed. We've also used the peak-to-peak vibration to identify resonance events.</p>
+<p>In the next chapter, we will delve into the concept of synchronous vibration and sampling.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that AoAs are offset by a constant value. This offset is unrelated to the blade's vibration. </p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that the normalized AoAs can be multiplied by the rotor radius to obtain tip deflections.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that the tip deflection signal may contain non-vibration related components that are proportional to the shaft speed.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that a low pass filter can be used to smooth the tip deflections. </p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that the peak-to-peak vibration can be used to identify resonance events.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Write a single function that zeroes, scales and filters the rotor blade AoAs.</p>
+</div>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.</p>
+<div style='display:flex'>
+    <div>
+        <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+            <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Dawie Diamond</strong>
+        </p>
+        <p>
+            2024-03-05
+        </p>
+    </div>
+</div>
+
+<h2 id="coding-exercises">Coding exercises</h2>
+<h3 id="1-aoa-to-tip-deflection-algorithm">1. AoA to Tip Deflection algorithm</h3>
+<p>We've performed several steps in this chapter to zero and filter a signal. We want to combine these steps into a single function that scales, zeroes and filters a signal.</p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9zm3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1zM7 2v3h3v2H7v3H5V7H2V5h3V2z"/></svg></span> Write a function called <code>get_blade_tip_deflections_from_AoAs</code>, accepting these arguments:</p>
+<ol>
+<li>A DataFrame that contains the raw AoA values of a rotor blade. This is a DataFrame from the output of the <code>get_rotor_blade_AoAs</code> function.</li>
+<li>A polynomial order to use for detrending.</li>
+<li>A cutoff frequency to use for the butterworth filter.</li>
+</ol>
+<p>and returns a new DataFrame with the zeroed and filtered tip deflections. Also include the peak-to-peak vibration levels.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before revealing the solution)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span>
+<span class="normal"><a href="#__codelineno-10-23">23</a></span>
+<span class="normal"><a href="#__codelineno-10-24">24</a></span>
+<span class="normal"><a href="#__codelineno-10-25">25</a></span>
+<span class="normal"><a href="#__codelineno-10-26">26</a></span>
+<span class="normal"><a href="#__codelineno-10-27">27</a></span>
+<span class="normal"><a href="#__codelineno-10-28">28</a></span>
+<span class="normal"><a href="#__codelineno-10-29">29</a></span>
+<span class="normal"><a href="#__codelineno-10-30">30</a></span>
+<span class="normal"><a href="#__codelineno-10-31">31</a></span>
+<span class="normal"><a href="#__codelineno-10-32">32</a></span>
+<span class="normal"><a href="#__codelineno-10-33">33</a></span>
+<span class="normal"><a href="#__codelineno-10-34">34</a></span>
+<span class="normal"><a href="#__codelineno-10-35">35</a></span>
+<span class="normal"><a href="#__codelineno-10-36">36</a></span>
+<span class="normal"><a href="#__codelineno-10-37">37</a></span>
+<span class="normal"><a href="#__codelineno-10-38">38</a></span>
+<span class="normal"><a href="#__codelineno-10-39">39</a></span>
+<span class="normal"><a href="#__codelineno-10-40">40</a></span>
+<span class="normal"><a href="#__codelineno-10-41">41</a></span>
+<span class="normal"><a href="#__codelineno-10-42">42</a></span>
+<span class="normal"><a href="#__codelineno-10-43">43</a></span>
+<span class="normal"><a href="#__codelineno-10-44">44</a></span>
+<span class="normal"><a href="#__codelineno-10-45">45</a></span>
+<span class="normal"><a href="#__codelineno-10-46">46</a></span>
+<span class="normal"><a href="#__codelineno-10-47">47</a></span>
+<span class="normal"><a href="#__codelineno-10-48">48</a></span>
+<span class="normal"><a href="#__codelineno-10-49">49</a></span>
+<span class="normal"><a href="#__codelineno-10-50">50</a></span>
+<span class="normal"><a href="#__codelineno-10-51">51</a></span>
+<span class="normal"><a href="#__codelineno-10-52">52</a></span>
+<span class="normal"><a href="#__codelineno-10-53">53</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_blade_tip_deflections_from_AoAs</span><span class="p">(</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">df_rotor_blade_AoAs</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="n">blade_radius</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="n">poly_order</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">11</span><span class="p">,</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a>    <span class="n">filter_order</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a>    <span class="n">filter_cutoff</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;This function performs the following operations:</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="sd">        1. Normalizes the AoAs of each probe.</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="sd">        2. Scales the AoAs to tip deflections.</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="sd">        3. Detrends the tip deflections with a polynomial fit.</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="sd">        4. Filters the tip deflections with a Butterworth filter.</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="sd">        5. Calculates the peak-to-peak tip deflection.</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14"></a>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="sd">    Args:</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="sd">        df_rotor_blade_AoAs (pd.DataFrame): The DataFrame containing the </span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="sd">            AoAs of each probe. This is an item from the list </span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="sd">            returned by the function `get_rotor_blade_AoAs`.</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="sd">        blade_radius (float): The radius of the blade in microns.</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="sd">        poly_order (int, optional): The polynomial order to use for the detrending</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="sd">            algorithm . Defaults to 11.</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22"></a><span class="sd">        filter_order (int, optional): The order of the butterworth filter. Defaults to 2.</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="sd">        filter_cutoff (float, optional): The butterworth filter cutoff </span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24"></a><span class="sd">            frequency. Defaults to 0.3.</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25"></a>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26"></a><span class="sd">    Returns:</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27"></a><span class="sd">        pd.DataFrame: The DataFrame containing the detrended and filtered tip deflections.</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28"></a><span class="sd">            This dataframe also contains the peak-to-peak tip deflection.</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30"></a>    <span class="n">df</span> <span class="o">=</span> <span class="n">df_rotor_blade_AoAs</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31"></a>    <span class="n">all_aoa_columns</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32"></a>        <span class="n">col_name</span> 
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33"></a>        <span class="k">for</span> <span class="n">col_name</span> 
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34"></a>        <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> 
+</span><span id="__span-10-35"><a id="__codelineno-10-35" name="__codelineno-10-35"></a>        <span class="k">if</span> <span class="n">col_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;AoA_p&quot;</span><span class="p">)</span>
+</span><span id="__span-10-36"><a id="__codelineno-10-36" name="__codelineno-10-36"></a>    <span class="p">]</span>
+</span><span id="__span-10-37"><a id="__codelineno-10-37" name="__codelineno-10-37"></a>    <span class="n">butterworth_filter</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">filter_order</span><span class="p">,</span> <span class="n">Wn</span><span class="o">=</span><span class="n">filter_cutoff</span><span class="p">)</span>
+</span><span id="__span-10-38"><a id="__codelineno-10-38" name="__codelineno-10-38"></a>    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">all_aoa_columns</span><span class="p">:</span>
+</span><span id="__span-10-39"><a id="__codelineno-10-39" name="__codelineno-10-39"></a>        <span class="n">df</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="s2">&quot;_norm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+</span><span id="__span-10-40"><a id="__codelineno-10-40" name="__codelineno-10-40"></a>        <span class="n">deflection_col_name</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;AoA&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+</span><span id="__span-10-41"><a id="__codelineno-10-41" name="__codelineno-10-41"></a>        <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">blade_radius</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="s2">&quot;_norm&quot;</span><span class="p">]</span>
+</span><span id="__span-10-42"><a id="__codelineno-10-42" name="__codelineno-10-42"></a>        <span class="n">poly</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span><span class="p">],</span> <span class="n">poly_order</span><span class="p">)</span>
+</span><span id="__span-10-43"><a id="__codelineno-10-43" name="__codelineno-10-43"></a>        <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-10-44"><a id="__codelineno-10-44" name="__codelineno-10-44"></a>            <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span><span class="p">]</span> 
+</span><span id="__span-10-45"><a id="__codelineno-10-45" name="__codelineno-10-45"></a>            <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">polyval</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Omega&#39;</span><span class="p">])</span>
+</span><span id="__span-10-46"><a id="__codelineno-10-46" name="__codelineno-10-46"></a>        <span class="p">)</span>
+</span><span id="__span-10-47"><a id="__codelineno-10-47" name="__codelineno-10-47"></a>        <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span> <span class="o">+</span> <span class="s1">&#39;_filt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span>
+</span><span id="__span-10-48"><a id="__codelineno-10-48" name="__codelineno-10-48"></a>            <span class="o">*</span><span class="n">butterworth_filter</span><span class="p">,</span>
+</span><span id="__span-10-49"><a id="__codelineno-10-49" name="__codelineno-10-49"></a>            <span class="n">df</span><span class="p">[</span><span class="n">deflection_col_name</span><span class="p">]</span>
+</span><span id="__span-10-50"><a id="__codelineno-10-50" name="__codelineno-10-50"></a>        <span class="p">)</span>
+</span><span id="__span-10-51"><a id="__codelineno-10-51" name="__codelineno-10-51"></a>    <span class="n">x_matrix</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_filt&quot;</span><span class="p">)]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</span><span id="__span-10-52"><a id="__codelineno-10-52" name="__codelineno-10-52"></a>    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pk-pk&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_matrix</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">x_matrix</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-10-53"><a id="__codelineno-10-53" name="__codelineno-10-53"></a>    <span class="k">return</span> <span class="n">df</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Usage example:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
+<span class="normal"><a href="#__codelineno-11-2">2</a></span>
+<span class="normal"><a href="#__codelineno-11-3">3</a></span>
+<span class="normal"><a href="#__codelineno-11-4">4</a></span>
+<span class="normal"><a href="#__codelineno-11-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_filtered</span> <span class="o">=</span> <span class="n">get_blade_tip_deflections_from_AoAs</span><span class="p">(</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a>    <span class="n">df</span><span class="p">,</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a>    <span class="n">R</span><span class="o">=</span><span class="mi">162000</span><span class="p">,</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>    <span class="n">poly_order</span><span class="o">=</span><span class="mi">10</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../ch5/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 5. Working with multiple probes">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                5. Working with multiple probes
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ch7/" class="md-footer__link md-footer__link--next" aria-label="Next: 7. Synchronous Vibration and Sampling">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                7. Synchronous Vibration and Sampling
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M0 32v448h448V32zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9m-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="../../../javascripts/reviews.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>

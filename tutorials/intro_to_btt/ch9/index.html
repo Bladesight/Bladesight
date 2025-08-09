@@ -1,0 +1,2601 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This chapter explains how we can use the Circumferential Fourier Fit method to estimate the vibration parameters of a rotor blade from BTT data.">
+      
+      
+      
+      
+        <link rel="prev" href="../ch8/">
+      
+      
+        <link rel="next" href="../afterword/">
+      
+      
+      <link rel="icon" href="../../../images/fab.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>9. Circumferential Fourier Fit (CFF) Method - Bladesight Learning Centre</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20640%20512%22%3E%3C%21--%21%20Font%20Awesome%20Free%207.0.0%20by%20%40fontawesome%20-%20https%3A//fontawesome.com%20License%20-%20https%3A//fontawesome.com/license/free%20%28Icons%3A%20CC%20BY%204.0%2C%20Fonts%3A%20SIL%20OFL%201.1%2C%20Code%3A%20MIT%20License%29%20Copyright%202025%20Fonticons%2C%20Inc.--%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M576%2048c0-11.1-5.7-21.4-15.2-27.2s-21.2-6.4-31.1-1.4L413.5%2077.5%20234.1%2017.6c-8.1-2.7-16.8-2.1-24.4%201.7l-128%2064C70.8%2088.8%2064%2099.9%2064%20112v352c0%2011.1%205.7%2021.4%2015.2%2027.2s21.2%206.4%2031.1%201.4l116.1-58.1%20173.3%2057.8c-4.3-6.4-8.5-13.1-12.6-19.9-11-18.3-21.9-39.3-30-61.8l-101.2-33.7V92.4l128%2042.7v99.3c31-35.8%2077-58.4%20128-58.4%2022.6%200%2044.2%204.4%2064%2012.5zM392%20341.9c0%2068.9%2064.1%20150.4%2098.6%20189.3%2011.6%2013%2031.3%2013%2042.9%200%2034.5-38.9%2098.6-120.4%2098.6-189.3%200-65.1-53.7-117.9-120-117.9S392%20276.8%20392%20341.9%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Literata:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Literata";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-6B961HRVZP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-6B961HRVZP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-6B961HRVZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+    
+
+<meta name="keywords" content="Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Turbine blade,Mechanical Vibration">
+
+
+<meta property="og:title" content="Intro to BTT Ch9 - Circumferential Fourier Fit Method" />
+<meta property="og:description" content="This chapter explains how we can use the Circumferential Fourier Fit method to estimate the vibration parameters of a rotor blade from BTT data." />
+<meta property="og:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch9.gif" />
+<meta property="og:url" content="https://docs.bladesight.com/intro-to-bttch9/" />
+<meta property="og:image:height" content="1362" />
+<meta property="og:image:width" content="1970" />
+
+
+<meta name="twitter:site" content="@bladesight" />
+<meta name="twitter:creator" content="@dawiediamond" />
+
+<meta name="twitter:title" content="Intro to BTT Ch9 - Circumferential Fourier Fit Method"/>
+<meta name="twitter:image" content="https://intro-to-btt-using-python-assets.s3.amazonaws.com/social_card_source_ch9.gif"/>
+<meta name="twitter:url" content="https://docs.bladesight.com/intro-to-bttch9/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="This chapter explains how we can use the Circumferential Fourier Fit method to estimate the vibration parameters of a rotor blade from BTT data."/>
+
+
+<meta name="robots" content="index, follow, Blade Tip Timing, BTT, Non Intrusive Stress Measurement, NSMS, Time of Arrival, Turbine blade,Mechanical Vibration" />
+  
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#circumferential-fourier-fit-cff-method" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Bladesight Learning Centre" class="md-header__button md-logo" aria-label="Bladesight Learning Centre" data-md-component="logo">
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bladesight Learning Centre
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              9. Circumferential Fourier Fit (CFF) Method
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="bladesight" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Bladesight Learning Centre
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../ch1/" class="md-tabs__link">
+          
+  
+  
+  Introduction to Blade Tip Timing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-tabs__link">
+          
+  
+  
+  Datasets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/dataset_handler/" class="md-tabs__link">
+          
+  
+  
+  User Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <!--
+  Copyright (c) 2016-2024 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Determine classes -->
+
+
+  
+
+
+
+<!-- Navigation -->
+<nav
+  class="md-nav md-nav--primary md-nav--lifted"
+  aria-label="Navigation"
+  data-md-level="0"
+>
+
+  <!-- Site title -->
+  <label class="md-nav__title" for="__drawer">
+    <a
+      href="../../.."
+      title="Bladesight Learning Centre"
+      class="md-nav__button md-logo"
+      aria-label="Bladesight Learning Centre"
+      data-md-component="logo"
+    >
+      
+  <img src="../../../assets/horizontal_white.png" alt="logo">
+
+    </a>
+    Bladesight Learning Centre
+  </label>
+
+  <!-- Repository information -->
+  
+
+  <!-- Navigation list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bladesight Learning Centre
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Introduction to Blade Tip Timing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Introduction to Blade Tip Timing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Blade Tip Timing's fundamental principle
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    2. Time of Arrival (ToA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    3. Angle of Arrival (AoA)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    4. Allocating AoAs to blades
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    5. Working with multiple probes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    6. Data Zeroing and Filtering
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    7. Synchronous Vibration and Sampling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    8. Single Degree of Freedom (SDoF) Method
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    9. Circumferential Fourier Fit (CFF) Method
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    9. Circumferential Fourier Fit (CFF) Method
+    
+  </span>
+  
+
+      </a>
+      
+        
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#derivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Derivation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-revolution-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Single Revolution Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estimate-the-eo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estimate the EO
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coding-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coding exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coding exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-multiple-revolution-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Multiple Revolution Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-writing-a-function-we-can-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Writing a function we can use
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Afterword
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Datasets
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Datasets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/diamond_et_al_2024_vary_ramp_rates_45" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    1. Varying ramp rates with 45 degree pipe
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            User Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/dataset_handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dataset handler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    btt
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            btt
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/btt/triggering_criteria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Triggering criteria
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+  <br/>
+  <br/>
+  <br/>
+  <a
+    href="https://www.bladesight.com/"
+    target="_blank"
+    style="text-align: -webkit-center;"
+  >
+    <img src="https://intro-to-btt-using-python-assets.s3.amazonaws.com/kraken1.jpeg" 
+    alt="Kraken" 
+    style="width: 120px; display: flex; padding: 2px 0px; justify-content: center; align-items: center; border: 2px;">
+    <p><strong>Unleash the Kraken🐙</strong></p>
+    </a>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+  
+  <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+    
+    
+    
+      
+    
+    
+<div id="mc_embed_shell">
+    <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+      #mc_embed_signup{background:#fff; false;clear:left; font:14px Helvetica,Arial,sans-serif; width: 200px;}
+      /* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.
+         We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<!-- <div id="mc_embed_signup">
+  <form action="https://bladesight.us8.list-manage.com/subscribe/post?u=d61691d2e27bf9fdb772ac2d6&amp;id=5c2250604e&amp;f_id=006109e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" style="margin:0px 0px 0px 1rem;">
+      <div id="mc_embed_signup_scroll"><h4>Subscribe to Bladesight's newsletter👇</h4>
+          <div class="mc-field-group"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""><span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span></div>
+      <div id="mce-responses" class="clear foot">
+          <div class="response" id="mce-error-response" style="display: none;"></div>
+          <div class="response" id="mce-success-response" style="display: none;"></div>
+      </div>
+  <div aria-hidden="true" style="position: absolute; left: -5000px;">
+      /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+      <input type="text" name="b_d61691d2e27bf9fdb772ac2d6_5c2250604e" tabindex="-1" value="">
+  </div>
+      <div class="optionalParent">
+          <div class="clear foot">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="button" value="Subscribe">
+          </div>
+      </div>
+  </div>
+</form>
+</div> -->
+
+<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script><script type="text/javascript">(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script></div>
+
+      <label class="md-nav__title" for="__toc">
+        <span class="md-nav__icon md-icon"></span>
+        Table of contents
+      </label>
+      <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+        
+          <li class="md-nav__item">
+  <a href="#derivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Derivation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#following-along" class="md-nav__link">
+    <span class="md-ellipsis">
+      Following along
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#single-revolution-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      Single Revolution Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estimate-the-eo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estimate the EO
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acknowledgements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coding-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coding exercises
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Coding exercises">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-multiple-revolution-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Multiple Revolution Case
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-writing-a-function-we-can-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Writing a function we can use
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    
+  </nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+      
+        <span class="md-tag">BTT</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Blade Tip Timing</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Mechanical Vibration</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">NSMS</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Non Intrusive Stress Measurement</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Time of Arrival</span>
+      
+    
+      
+      
+      
+        <span class="md-tag">Turbine blade</span>
+      
+    
+  </nav>
+
+
+
+<details class="abstract">
+<summary>You are here</summary>
+<p><figure markdown>
+<img alt="BTT Tutorial Roadmap" src="BTT_Tutorial_Outline_Ch7.svg" width="500" />
+</figure></p>
+</details>
+<h1 id="circumferential-fourier-fit-cff-method">Circumferential Fourier Fit (CFF) Method</h1>
+<p>At the start of the tutorial, I promised you would learn how to infer blade frequency, amplitude, and phase from raw time stamps. In the previous chapter, we used the SDoF fit method to achieve this goal. The SDoF fit method is <em>physics-based</em>: it is derived from the Equations of Motion (EoM) of a harmonic oscillator. </p>
+<p>Let's solve the problem again, but from a different angle. It's often a good idea to use two different techniques to reach the same destination. This solidifies our understanding of the problem and the solution.</p>
+<p>The SDoF fit method, however powerful it may be, has a dark side: it is slow. </p>
+<p>It takes ~8 seconds to solve the equations for a single resonance. This might not seem like much, but when we have many blades and resonances to analyze, it becomes impractically slow. </p>
+<p>For real time analysis, we need a faster way to estimate the vibration parameters. That's where the Circumferential Fourier Fit (CFF) method comes in. The CFF method is a phenomenological model. A phenomenological model is only concerned with fitting the measured data well, not with being consistent with the underlying physics. We use phenomenological models all the time. The entire discipline of Machine Learning(ML) is built around them.</p>
+<p>In its most basic form, it fits a sinusoidal function to the measured data with three coefficients: <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span>. The CFF method was first named as such, to my best knowledge, in (Joung et al., 2006)<sup id="fnref:joung2006analysis"><a class="footnote-ref" href="#fn:joung2006analysis">1</a></sup>.</p>
+<figure>
+<p><img alt="CFF Fit intro gif" src="intro_gif.gif" />
+  </p>
+<figcaption><a id='figure_01'><strong>Figure 1:</strong></a>
+    An animation of how the CFF method fits one sinusoid to each revolution's data.
+  </figcaption>
+</figure>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Understand that the CFF method is a phenomenological model that fits a sinusoidal function to each revolution of the blade vibration.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Construct the CFF equations.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Compare results from the CFF and SDoF fit methods.</p>
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 2v14H5V5z"/></svg></span> Evaluate several candidate EOs to identify the most likely EO.</p>
+</div>
+<h2 id="derivation">Derivation</h2>
+<p>The CFF method and the SDoF method share a common trait. Both assume the blade tip exhibits sinusoidal vibration. The CFF method, however, completely ignores the modal properties, <span class="arithmatex">\(\omega_n\)</span>, <span class="arithmatex">\(\delta_{\text{st}}\)</span>, <span class="arithmatex">\(\zeta\)</span>, and <span class="arithmatex">\(\phi_0\)</span>. </p>
+<p>The CFF method calculates the vibration amplitude and phase directly for <em>each shaft revolution</em>. This results in linear equations, instead of the highly non-linear equations we had with the SDoF fit method.</p>
+<p>The tip vibration <em>within every shaft revolution</em> is expressed as follows:</p>
+<p><span id="eq_cff_fundamental_equation_blade_vibration"></span></p>
+<div class="arithmatex">\[\begin{equation}
+x(\theta_s) = A \sin(\theta_s \cdot EO) + B \cos(\theta_s \cdot EO) + C
+\end{equation}\]</div>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(x(\theta_s)\)</span></td>
+<td style="text-align: center;">The tip deflection at the sensor located at <span class="arithmatex">\(\theta_s\)</span></td>
+<td style="text-align: center;">µm</td>
+<td style="text-align: center;"><span class="arithmatex">\(x(\theta_s) \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\theta_s\)</span></td>
+<td style="text-align: center;">The angular position of sensor <span class="arithmatex">\(s\)</span></td>
+<td style="text-align: center;">rad</td>
+<td style="text-align: center;"><span class="arithmatex">\(0 \leq \theta_s \leq 2\pi\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(A\)</span></td>
+<td style="text-align: center;">The amplitude of the sine term</td>
+<td style="text-align: center;">µm</td>
+<td style="text-align: center;"><span class="arithmatex">\(A \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(B\)</span></td>
+<td style="text-align: center;">The amplitude of the cosine term</td>
+<td style="text-align: center;">µm</td>
+<td style="text-align: center;"><span class="arithmatex">\(B \in \mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(C\)</span></td>
+<td style="text-align: center;">The offset of the tip deflection</td>
+<td style="text-align: center;">µm</td>
+<td style="text-align: center;"><span class="arithmatex">\(C \in \mathbb{R}\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>We can write <a href="#eq_cff_fundamental_equation_blade_vibration">Equation 1</a> for each sensor. This leads to a system of equations:</p>
+<p><span id="eq_cff_system_of_equations"></span></p>
+<div class="arithmatex">\[\begin{align}
+x(\theta_1) &amp;= A \sin(\theta_1 \cdot EO) + B \cos(\theta_1 \cdot EO) + C \\
+x(\theta_2) &amp;= A \sin(\theta_2 \cdot EO) + B \cos(\theta_2 \cdot EO) + C \\
+&amp;\vdots \\
+x(\theta_n) &amp;= A \sin(\theta_n \cdot EO) + B \cos(\theta_n \cdot EO) + C
+\end{align}\]</div>
+<p><span class="arithmatex">\(\theta_1\)</span> represents the position of probe 1, <span class="arithmatex">\(\theta_2\)</span> represents the position of probe 2, and so on. The variable <span class="arithmatex">\(n\)</span> represents the number of probes.</p>
+<p>This system can be written in matrix form as follows:</p>
+<p><span id="eq_cff_matrix_form"></span></p>
+<div class="arithmatex">\[\begin{equation}
+\begin{bmatrix}
+x(\theta_1) \\
+x(\theta_2) \\
+\vdots \\
+x(\theta_n)
+\end{bmatrix}
+=
+\begin{bmatrix}
+\sin(\theta_1 \cdot EO) &amp; \cos(\theta_1 \cdot EO) &amp; 1 \\
+\sin(\theta_2 \cdot EO) &amp; \cos(\theta_2 \cdot EO) &amp; 1 \\
+\vdots &amp; \vdots &amp; \vdots \\
+\sin(\theta_n \cdot EO) &amp; \cos(\theta_n \cdot EO) &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+A \\
+B \\
+C
+\end{bmatrix}
+\end{equation}\]</div>
+<p>We finally represent the system in a more compact form:</p>
+<p><span id="eq_cff_compact_form"></span></p>
+<div class="arithmatex">\[\begin{equation}
+\mathbf{x} = \mathbf{A} \mathbf{b}
+\end{equation}\]</div>
+<details class="info">
+<summary>Symbols</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Symbol</th>
+<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{x}\)</span></td>
+<td style="text-align: center;">The vector of tip deflections at each sensor</td>
+<td style="text-align: center;">mm</td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{x} \in \mathbb{R}^n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{A}\)</span></td>
+<td style="text-align: center;">The matrix of the sine and cosine terms</td>
+<td style="text-align: center;">mm</td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{A} \in \mathbb{R}^{n \times 3}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{b}\)</span></td>
+<td style="text-align: center;">The vector of the vibration parameters</td>
+<td style="text-align: center;">mm</td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbf{b} \in \mathbb{R}^3\)</span></td>
+</tr>
+</tbody>
+</table>
+</details>
+<p>We have now rephrased the problem as a linear algebra problem where we want to solve for <span class="arithmatex">\(\mathbf{b}\)</span>. </p>
+<p>Once solved, we can calculate the amplitude and phase of the vibration within each revolution using:</p>
+<p><span id="eq_cff_amplitude"></span></p>
+<div class="arithmatex">\[\begin{equation}
+X = \sqrt{A^2 + B^2}
+\end{equation}\]</div>
+<p><span id="eq_cff_phase"></span></p>
+<div class="arithmatex">\[\begin{equation}
+\phi = \arctan \left( \frac{A}{B} \right)
+\end{equation}\]</div>
+<p>The phase and amplitude can now be used to calculate the tip deflections:</p>
+<p><span id="eq_cff_sinusoid"></span></p>
+<div class="arithmatex">\[\begin{equation}
+x(\theta_s) = X \cos(\theta_s \cdot EO - \phi) + C
+\end{equation}\]</div>
+<p>The above equation has exactly the same form as the SDoF fit method, only with a constant amplitude and phase within each revolution. </p>
+<details class="note">
+<summary>SDoF fit equations</summary>
+<p>For comparison, here are the SDoF fit equations again:</p>
+<div class="arithmatex">\[\begin{equation}
+x(t) = X(\omega) \cos \left( \theta_s \cdot EO - \phi(\omega) \right)
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+X(\omega) = \frac{\delta_{\text{st}}}{ \sqrt{ (1 - r^2)^2 + (2 \zeta r)^2 } }\\
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+\phi(\omega) = \arctan \left( \frac{2 \zeta r}{1 - r^2} \right)\\
+\end{equation}\]</div>
+<div class="arithmatex">\[\begin{equation}
+r = \frac{\omega}{\omega_n}
+\end{equation}\]</div>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>SI Unit</th>
+<th>Domain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(x(t)\)</span></td>
+<td>Tip deflection</td>
+<td><span class="arithmatex">\(\mu m\)</span></td>
+<td><span class="arithmatex">\(\mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(X(\omega)\)</span></td>
+<td>Vibration amplitude</td>
+<td><span class="arithmatex">\(\mu m\)</span></td>
+<td><span class="arithmatex">\(\mathbb{R}+\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\delta_{\text{st}}\)</span></td>
+<td>Static deflection</td>
+<td><span class="arithmatex">\(\mu m\)</span></td>
+<td><span class="arithmatex">\(\mathbb{R}+\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\zeta\)</span></td>
+<td>Damping ratio</td>
+<td>-</td>
+<td><span class="arithmatex">\([0,1)\)</span> for underdamped systems</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\omega_n\)</span></td>
+<td>Natural frequency</td>
+<td><span class="arithmatex">\(rad/s\)</span> or Hz</td>
+<td><span class="arithmatex">\(\mathbb{R}+\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\theta_s\)</span></td>
+<td>Sensor position</td>
+<td><span class="arithmatex">\(rad\)</span></td>
+<td><span class="arithmatex">\([0, 2\pi]\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\phi(\omega)\)</span></td>
+<td>Phase angle</td>
+<td><span class="arithmatex">\(rad\)</span></td>
+<td><span class="arithmatex">\(\mathbb{R}\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\omega\)</span></td>
+<td>Excitation frequency</td>
+<td><span class="arithmatex">\(rad/s\)</span> or Hz</td>
+<td><span class="arithmatex">\(\mathbb{R}+\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(EO\)</span></td>
+<td>Engine Order</td>
+<td>-</td>
+<td><span class="arithmatex">\(\mathbb{Z}+\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>What's the difference between Equation 10 and Equation 11? </p>
+<p>The substantial difference between them is the SDoF fit method's <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(\phi\)</span> is a function of the excitation frequency, <span class="arithmatex">\(\omega\)</span>. The CFF method's <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(\phi\)</span> are constant scalar variables within each revolution.</p>
+</details>
+<div class="admonition tip">
+<p class="admonition-title">Amplitude offset</p>
+<p>The amplitude offset term, <span class="arithmatex">\(C\)</span>, is generally kept as a part of the CFF model parameters. This stands in contrast to the SDoF fit method, where the correction factors are subtracted from the measured tip deflections before fitting the model.</p>
+</div>
+<h2 id="following-along">Following along</h2>
+<p>The worksheet for this chapter can be downloaded here <a href="https://github.com/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_09_worksheet.ipynb" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="Open In Github"/></a>.</p>
+<p>You can open a Google Colab session of the worksheet here: <a href="https://colab.research.google.com/github/Bladesight/bladesight-worksheets/blob/master/intro_to_btt/ch_09_worksheet.ipynb" target="_blank"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.</p>
+<p>You need to use one of the following Python versions to run the worksheet:
+<img src="https://img.shields.io/badge/python-3.9-blue.svg">
+<img src="https://img.shields.io/badge/python-3.10-blue.svg">
+<img src="https://img.shields.io/badge/python-3.11-blue.svg"></p>
+<h2 id="getting-the-dataset">Getting the dataset</h2>
+<p>To see the CFF method in action, we will use the same dataset as used in the previous chapter. This way, we can compare the results from the CFF and SDoF fit methods. The dataset contains blade tip displacements measured by four sensors for a run-up and a run-down.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">Datasets</span><span class="p">[</span><span class="s2">&quot;data/intro_to_btt/intro_to_btt_ch05&quot;</span><span class="p">]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="n">df_opr_zero_crossings</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/opr_zero_crossings&#39;</span><span class="p">]</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">df_prox_1</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_1_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">df_prox_2</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_2_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">df_prox_3</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_3_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">df_prox_4</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;table/prox_4_toas&#39;</span><span class="p">]</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="n">BLADE_COUNT</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">RADIUS</span> <span class="o">=</span> <span class="mi">164000</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="n">rotor_blade_AoA_dfs</span> <span class="o">=</span> <span class="n">get_rotor_blade_AoAs</span><span class="p">(</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>    <span class="n">df_opr_zero_crossings</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>    <span class="p">[</span><span class="n">df_prox_1</span><span class="p">,</span> <span class="n">df_prox_2</span><span class="p">,</span> <span class="n">df_prox_3</span><span class="p">,</span> <span class="n">df_prox_4</span><span class="p">],</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>    <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">19.34</span><span class="p">,</span> <span class="mf">19.34</span><span class="p">,</span> <span class="mf">19.34</span><span class="p">]))),</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>    <span class="n">BLADE_COUNT</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="p">)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="n">tip_deflection_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">for</span> <span class="n">df_AoAs</span> <span class="ow">in</span> <span class="n">rotor_blade_AoA_dfs</span><span class="p">:</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="n">df_tip_deflections</span> <span class="o">=</span> <span class="n">get_blade_tip_deflections_from_AoAs</span><span class="p">(</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>        <span class="n">df_AoAs</span><span class="p">,</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>        <span class="n">RADIUS</span><span class="p">,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>        <span class="mi">11</span><span class="p">,</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>        <span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>        <span class="mf">0.5</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="p">)</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="n">tip_deflection_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_tip_deflections</span><span class="p">)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="n">df_resonance_window</span> <span class="o">=</span> <span class="n">tip_deflection_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;n &gt;= 500 and n &lt;= 600&quot;</span><span class="p">)</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="n">EO</span> <span class="o">=</span> <span class="mi">8</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="single-revolution-case">Single Revolution Case</h2>
+<p>The simplest implementation of the CFF method is given below:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span>
+<span class="normal"><a href="#__codelineno-1-33">33</a></span>
+<span class="normal"><a href="#__codelineno-1-34">34</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">cff_method_single_revolution</span><span class="p">(</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="n">df_blade</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a>    <span class="n">theta_sensor_set</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="n">EO</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="n">signal_suffix</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_filt&quot;</span> <span class="c1">#(1)!</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span> <span class="c1">#(2)!</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a>    <span class="n">PROBE_COUNT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta_sensor_set</span><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a>    <span class="n">tip_deflection_signals</span> <span class="o">=</span> <span class="p">[</span><span class="c1">#(3)!</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a>        <span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}{</span><span class="n">signal_suffix</span><span class="si">}</span><span class="s2">&quot;</span> 
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a>    <span class="p">]</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a>    <span class="n">theta_sensors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta_sensor_set</span><span class="p">)</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a>    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">PROBE_COUNT</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span><span class="c1">#(4)!</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a>    <span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_sensors</span> <span class="o">*</span> <span class="n">EO</span><span class="p">)</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a>    <span class="n">A</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_sensors</span> <span class="o">*</span> <span class="n">EO</span><span class="p">)</span><span class="c1">#(5)!</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a>    <span class="n">A_pinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="c1">#(6)!</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a>    <span class="n">B</span> <span class="o">=</span> <span class="n">A_pinv</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a>        <span class="n">df_blade</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">tip_deflection_signals</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a>    <span class="p">)</span> <span class="c1">#(7)!</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a>    <span class="n">df_cff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">])</span> <span class="c1">#(8)!</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">],</span> <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">])</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_blade</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25"></a>    <span class="n">df_predicted_targets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26"></a>        <span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> 
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27"></a>        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28"></a>            <span class="n">col</span> <span class="o">+</span> <span class="s2">&quot;_pred&quot;</span> 
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29"></a>            <span class="k">for</span> <span class="n">col</span> 
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30"></a>            <span class="ow">in</span> <span class="n">tip_deflection_signals</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31"></a>        <span class="p">]</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32"></a>    <span class="p">)</span> <span class="c1">#(9)!</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33"></a>    <span class="n">df_cff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_cff</span><span class="p">,</span> <span class="n">df_predicted_targets</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34"></a>    <span class="k">return</span> <span class="n">df_cff</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>Here, we specify the suffix of the tip deflection signals. We'll leave this as the default <code>"_filt"</code> most of the time. We may, however, set this to <code>""</code> in order to fit the CFF method on the unfiltered tip deflections.</li>
+<li>
+<p>This function fits the CFF method for a resonance. The model parameters, <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span> are solved for each revolution of data.</p>
+<p>Args:</p>
+<div class="language-text highlight"><pre><span></span><code>df_blade (pd.DataFrame): The dataframe containing the tip deflections.
+
+theta_sensor_set (List[float]): The sensor angles.
+
+EO (int): The Engine Order.
+
+signal_suffix (str, optional): The suffix of the tip deflection 
+    signals. Defaults to &quot;_filt&quot;.
+</code></pre></div>
+<p>Returns:</p>
+<div class="language-text highlight"><pre><span></span><code>pd.DataFrame: A DataFrame containing the CFF parameters for 
+    each shaft revolution.
+</code></pre></div>
+</li>
+<li>
+<p>We identify the names of the columns containing the tip deflections. This list is also used to determine how many probes were used for the present dataset.</p>
+</li>
+<li>We initialize the matrix <span class="arithmatex">\(\mathbf{A}\)</span>, which contain each sensor's sine, cosine and constant term coefficients. We initialize it as a <code>PROBE_COUNT X 3</code> matrix of ones, since the constant term is one everywhere, and the other two columns will be assigned new values.</li>
+<li>We calculate and assign the sine and cosine coefficients for each sensor.</li>
+<li>Here, we calculate the pseudo inverse of <code>A</code>. The pseudo inverse is a matrix that, when multiplied with <code>A</code>, results in the identity matrix. We only do this once, since the matrix <code>A</code> is constant for each revolution.</li>
+<li>This line is the reason why the CFF method is so fast. Because our <code>A</code> matrix is constant for each revolution, we can simply multiply its pseudo-inverse with the transpose of the observed tip deflections. This results in the CFF parameters for each revolution.</li>
+<li>From here to the end, its all cosmetic. We create a dataframe containing the CFF parameters, the amplitude, phase, and the shaft revolution number.</li>
+<li>We calculate the predicted tip deflections with the CFF parameters. This is for convenience so we don't need to recalculate it later to check our fits.</li>
+</ol>
+<p>Here we implement the method:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="o">%%</span><span class="n">timeit</span> <span class="c1">#(1)!</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">PROBE_COUNT</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">df_cff_params</span> <span class="o">=</span> <span class="n">cff_method_single_revolution</span><span class="p">(</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a>    <span class="n">df_resonance_window</span><span class="p">,</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a>    <span class="p">[</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a>        <span class="n">df_resonance_window</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="c1">#(2)!</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a>    <span class="p">],</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a>    <span class="n">EO</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>We use the <code>%%timeit</code> magic command to measure the execution time of the cell. This only works when you're in a Jupyter Notebook</li>
+<li>We use the median of the raw AoA values for the sensor location.</li>
+</ol>
+<p>The <code>%%timeit</code> command is something specific to Jupyter notebooks. It causes Python to run the entire cell multiple times. The mean execution time is reported after the final iteration. This is useful for benchmarking code. This call runs for a total of... 3 ms! Contrast this to the SDoF fit method, which took approximately 8 seconds. The CFF method is therefore  ~2666 times faster than the SDoF fit method. This is a massive speed up ⏩!</p>
+<p>Faster speed is awesome, but is it accurate? Here's the predicted tip deflections vs the actual tip deflections:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Probe 1 fit</label><label for="__tabbed_1_2">Probe 2 fit</label><label for="__tabbed_1_3">Probe 3 fit</label><label for="__tabbed_1_4">Probe 4 fit</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_probe_1"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_probe_1_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_probe_2"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_probe_2_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_probe_3"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_probe_3_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_probe_4"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_probe_4_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+</div>
+</div>
+<script src="c09_cff_simple_probe_1.js" > </script>
+<script src="c09_cff_simple_probe_2.js" > </script>
+<script src="c09_cff_simple_probe_3.js" > </script>
+<script src="c09_cff_simple_probe_4.js" > </script>
+<script>
+    async function render_chart_c09_simple_cff() {
+        const ctx_1 = document.getElementById('c09_cff_simple_probe_1');
+        const ctx_2 = document.getElementById('c09_cff_simple_probe_2');
+        const ctx_3 = document.getElementById('c09_cff_simple_probe_3');
+        const ctx_4 = document.getElementById('c09_cff_simple_probe_4');
+
+        // If this is a mobile device, set the canvas height to 400
+        if (window.innerWidth < 500) {
+            ctx_1.height = 400;
+            ctx_2.height = 400;
+            ctx_3.height = 400;
+            ctx_4.height = 400;
+        }
+        while (typeof Chart == "undefined") {
+            await new Promise(r => setTimeout(r, 1000));
+        }
+        Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+        window.fig_c09_cff_simple_probe_1 = new Chart(ctx_1, window.c09_cff_simple_probe_1);
+        window.fig_c09_cff_simple_probe_1_reset = function resetZoomCFF_SimpleFig1() {
+                window.fig_c09_cff_simple_probe_1.resetZoom();
+        }
+        window.fig_c09_cff_simple_probe_2 = new Chart(ctx_2, window.c09_cff_simple_probe_2);
+        window.fig_c09_cff_simple_probe_2_reset = function resetZoomCFF_SimpleFig2() {
+                window.fig_c09_cff_simple_probe_2.resetZoom();
+        }
+        window.fig_c09_cff_simple_probe_3 = new Chart(ctx_3, window.c09_cff_simple_probe_3);
+        window.fig_c09_cff_simple_probe_3_reset = function resetZoomCFF_SimpleFig3() {
+                window.fig_c09_cff_simple_probe_3.resetZoom();
+        }
+        window.fig_c09_cff_simple_probe_4 = new Chart(ctx_4, window.c09_cff_simple_probe_4);
+        window.fig_c09_cff_simple_probe_4_reset = function resetZoomCFF_SimpleFig4() {
+                window.fig_c09_cff_simple_probe_4.resetZoom();
+        }
+    }
+    render_chart_c09_simple_cff();
+</script>
+
+<figure>
+<figcaption>
+        <strong><a name='figure_02'>Figure 2</a></strong>: The CFF predicted tip deflections vs the actual tip deflections for each probe. The CFF method is able to fit the tip deflections very well.
+  </figcaption>
+</figure>
+<p>Wow 👏! The CFF predicted values and the measured values are almost on top of one another. </p>
+<p>Contrast this with the SDoF method where we didn't get such a good fit. What do we conclude from this? Is the CFF method better than the SDoF fit method?</p>
+<p>I don't think so. We have to remember the CFF method is phenomenological. It needs to fit 3 parameters to 4 measured values in each revolution. The odds are therefore stacked in its favor to fit the data well. In fact, the CFF method even fits the data well near the start of the resonance, where we mostly have noise. This should make us uneasy. If our model accurately reproduces noise, it means we are overfitting.</p>
+<p>Now for the big question: what is our natural frequency? The simple answer is we don't have one! The CFF method is not concerned with the underlying physics, so it doesn't have a natural frequency. We can, however, assume that the shaft speed where the amplitude reaches its peak is where the natural frequency is exactly excited.</p>
+<p>Let's compare the CFF amplitude and phase to the SDoF fit amplitude and phase for the same resonance:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Amplitude</label><label for="__tabbed_2_2">Phase</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_amp"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_amp_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+<div class="tabbed-block">
+<p><div>
+    <div>
+        <canvas id="c09_cff_simple_phase"></canvas>
+    </div>
+    <a onclick="window.fig_c09_cff_simple_phase_reset()" class='md-button'>Reset Zoom</a>
+</div></p>
+</div>
+</div>
+</div>
+<script src="c09_cff_simple_amp.js" > </script>
+<script src="c09_cff_simple_phase.js" > </script>
+<script>
+    async function render_chart_c09_simple_cff_amp_phase() {
+        const ctx_amp = document.getElementById('c09_cff_simple_amp');
+        const ctx_phase = document.getElementById('c09_cff_simple_phase');
+
+        // If this is a mobile device, set the canvas height to 400
+        if (window.innerWidth < 500) {
+            ctx_amp.height = 400;
+            ctx_phase.height = 400;
+        }
+        while (typeof Chart == "undefined") {
+            await new Promise(r => setTimeout(r, 1000));
+        }
+        Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+        window.fig_c09_cff_simple_amp = new Chart(ctx_amp, window.c09_cff_simple_amp);
+        window.fig_c09_cff_simple_amp_reset = function resetZoomCFF_SimpleFigAmp() {
+                window.fig_c09_cff_simple_amp.resetZoom();
+        }
+        window.fig_c09_cff_simple_phase = new Chart(ctx_phase, window.c09_cff_simple_phase);
+        window.fig_c09_cff_simple_phase_reset = function resetZoomCFF_SimpleFigPhase() {
+                window.fig_c09_cff_simple_phase.resetZoom();
+        }
+    }
+    render_chart_c09_simple_cff_amp_phase();
+</script>
+
+<figure>
+<figcaption>
+        <strong><a name='figure_03'>Figure 3</a></strong>: The CFF method amplitude and phase vs the SDoF fit amplitude and phase for the same resonance. The maximum amplitude between the two methods differ by approximately 200 μm. The phase, at least in the resonance region, is basically identical.
+  </figcaption>
+</figure>
+<p>From <a href="#figure_03">Figure 3</a> above, the maximum amplitude of the CFF method occurs at revolution number 568. We can use the rotor speed in this resonance, multiplied by the EO, to get the CFF natural frequency:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">omega_n_568</span> <span class="o">=</span> <span class="n">df_resonance_window</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;n == 568&quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">EO</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">omega_n_567</span> <span class="o">=</span> <span class="n">df_resonance_window</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;n == 567&quot;</span><span class="p">)[</span><span class="s2">&quot;Omega&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">EO</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CFF omega_n @ n=568: </span><span class="si">{:.3f}</span><span class="s2"> Hz&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">omega_n_568</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CFF omega_n @ n=567: </span><span class="si">{:.3f}</span><span class="s2"> Hz&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">omega_n_567</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SDoF omega_n       : </span><span class="si">{:.3f}</span><span class="s2"> Hz&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SDoF_params</span><span class="p">[</span><span class="s2">&quot;omega_n&quot;</span><span class="p">]))</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="go">CFF omega_n @ n=568: 126.565 Hz</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="go">CFF omega_n @ n=567: 126.273 Hz</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="go">SDoF omega_n       : 126.270 Hz</span>
+</span></code></pre></div>
+<p>The CFF natural frequency at revolution 568 is 0.3 Hz higher than the SDoF natural frequency. This is a difference of 0.2%. I believe it is a small difference. The two methods seem to point to the same underlying physics. We also used the shaft speed at the previous revolution, n=567, to calculate the natural frequency. Now, the natural frequency is almost identical to the SDoF natural frequency.</p>
+<p>The CFF method's maximum amplitude is approximately 200 μm lower than the SDoF method's maximum amplitude. This difference is large, approximately 28%. It is possible the SDoF fit method may be overestimating the amplitude. If you did the coding exercise in the previous chapter, you would have implemented an SDoF fit method that rewards the ability to capture larger amplitudes.</p>
+<p>The phase plot suggests the two methods produce similar phase shifts where the amplitudes are largest. The CFF method produces larger phase shifts outside the resonance region.</p>
+<p>Which one of the two is more accurate? I don't know. More effort needs to be put in to compensate for the zeroing artifacts in the CFF method. The only real way to judge which one is better is to have calibrated strain gauge data available. This falls outside the scope of the present tutorial.</p>
+<h2 id="estimate-the-eo">Estimate the EO</h2>
+<p>The CFF method can fit the data well... as long as the correct EO is known beforehand. But what if we are not sure about the EO? How can we find out which one is the best for our data?</p>
+<p>We can repeat what we did in the previous chapter. We can try different EO values and calculate the sum of squared errors between the predicted and the measured tip deflections. The lower the error, the better the fit. So, we search for the EO that results in the lowest error value. That is likely to be the correct one for our data.</p>
+<p>The below code performs this calculation:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span>
+<span class="normal"><a href="#__codelineno-5-19">19</a></span>
+<span class="normal"><a href="#__codelineno-5-20">20</a></span>
+<span class="normal"><a href="#__codelineno-5-21">21</a></span>
+<span class="normal"><a href="#__codelineno-5-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">PROBE_COUNT</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="n">EOs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="k">for</span> <span class="n">EO</span> <span class="ow">in</span> <span class="n">EOs</span><span class="p">:</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a>    <span class="n">df_cff_params</span> <span class="o">=</span> <span class="n">cff_method_single_revolution</span><span class="p">(</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a>        <span class="n">df_resonance_window</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a>        <span class="p">[</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a>            <span class="n">df_resonance_window</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a>            <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a>        <span class="p">],</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a>        <span class="n">EO</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12"></a>    <span class="p">)</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13"></a>    <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14"></a>    <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">):</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15"></a>        <span class="n">error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16"></a>            <span class="p">(</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17"></a>                <span class="n">df_cff_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">_filt_pred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> 
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18"></a>                <span class="o">-</span> <span class="n">df_resonance_window</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">_filt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19"></a>            <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20"></a>        <span class="p">)</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21"></a>    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Most likely EO:&quot;</span><span class="p">,</span> <span class="n">EOs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)])</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">Most likely EO: 8</span>
+</span></code></pre></div>
+<p>The error values are plotted in <a href="#figure_04">Figure 4</a> below.</p>
+<div>
+    <div>
+        <canvas id="c09_resonance_1_EO_selection"></canvas>
+    </div>
+    <a onclick="window.fig_c09_resonance_1_EO_selection_reset()" class='md-button'>Reset Zoom</a>
+</div>
+
+<script src="c09_resonance_1_EO_selection.js" > </script>
+<script>
+    async function render_chart_c09_resonance_1_EO_selection() {
+        const ctx = document.getElementById('c09_resonance_1_EO_selection');
+        // If this is a mobile device, set the canvas height to 400
+        if (window.innerWidth < 500) {
+            ctx.height = 400;
+        }
+        while (typeof Chart == "undefined") {
+            await new Promise(r => setTimeout(r, 1000));
+        }
+        Chart.defaults.font.family = "Literata, -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif";
+        window.fig_c09_resonance_1_EO_selection = new Chart(ctx, window.c09_resonance_1_EO_selection);
+        window.fig_c09_resonance_1_EO_selection_reset = function resetZoomCFF_SimpleFig1() {
+                window.fig_c09_resonance_1_EO_selection.resetZoom();
+        }
+    }
+    render_chart_c09_resonance_1_EO_selection();
+</script>
+<figure>
+<figcaption>
+        <strong><a name='figure_04'>Figure 4</a></strong>: The sum of squared errors between the predicted and measured tip deflections for each EO. EO=8 results in the lowest sum of squared error value.
+  </figcaption>
+</figure>
+<p>From <a href="#figure_04">Figure 4</a> above, the EO with the lowest error value is 8. This is the correct value. You may need to zoom in a bit, since the error values for EOs 8 - 11 are close to one another.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this chapter, we have shown how to apply the CFF method to a resonance event. The CFF method is a powerful tool to fit the blade tip deflection data with high accuracy. The CFF method can also be used to estimate the natural frequency and EO of vibration.</p>
+<p>The main benefit of the CFF method is its speed. The CFF method is, in its rawest form, approximately 2666 times faster than the SDoF fit method. You should therefore be able to use it in real-time.</p>
+<div class="admonition question">
+<p class="admonition-title">Outcomes</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Understand that the CFF method is a phenomenological model that fits a sinusoidal function to each revolution of the blade vibration.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Construct the CFF equations.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Compare results from the CFF and SDoF fit methods.</p>
+<p><span class="twemoji checkbox-success heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-5-5 1.41-1.42L10 14.17l7.59-7.59L19 8m0-5H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Evaluate several candidate EOs to identify the most likely EO.</p>
+</div>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Thanks to <a href="https://www.linkedin.com/in/justin-s-507338116/" target="_blank">Justin Smith</a> and <a href="https://www.linkedin.com/in/alex-brocco-70218b25b/" target="_blank">Alex Brocco</a> for reviewing this chapter and providing feedback.</p>
+<div style='display:flex'>
+    <div>
+        <a target="_blank" href="https://www.bladesight.com" class="" title="Dawie Diamond" style="border-radius:100%;"> 
+            <img src="https://github.com/Bladesight.png?size=300" alt="Dawie Diamond" style="
+            border-radius: 100%;
+            width: 4.0rem;
+        ">
+        </a>
+    </div>
+    <div style='margin-left:2rem'>
+        <p>
+            <strong>Dawie Diamond</strong>
+        </p>
+        <p>
+            2024-03-26
+        </p>
+    </div>
+</div>
+
+<h2 id="coding-exercises">Coding exercises</h2>
+<h3 id="1-multiple-revolution-case">1. Multiple Revolution Case</h3>
+<p>Solving the CFF parameters on a per revolution basis is great, but it may be prone to noise and outliers. In our example above, we have 3 unknown parameters and only 4 measurements. The system may be overdetermined, but we'd ideally like to have even more measurements to increase robustness to noise.</p>
+<p>We can change the problem to allow the parameters <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span> are fit across <em>multiple revolutions</em>. This should increase the robustness of the fit.</p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9zm3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1zM7 2v3h3v2H7v3H5V7H2V5h3V2z"/></svg></span> Write a new function, <code>cff_method_multiple_revolutions</code> that receives the following arguments:</p>
+<ol>
+<li><code>df_blade</code> : The DataFrame containing the tip deflections. </li>
+<li><code>theta_sensor_set</code> : The sensor angles.</li>
+<li><code>EO</code> : The Engine Order.</li>
+<li><code>extra_revolutions</code> : The number of revolutions before and after each "center" revolution to fit.</li>
+<li><code>signal_suffix</code> (str, optional): The suffix of the tip deflection signals. Defaults to "_filt". </li>
+</ol>
+<p>The function should fit the CFF parameters over <code>1 + 2*extra_revolutions</code> consecutive revolutions. In other words, we should still receive one CFF set of parameters per revolution, but the values of <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span>, and <span class="arithmatex">\(C\)</span> should be fit over 1 + 2*extra_revolutions revolutions.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before revealing the solution)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span>
+<span class="normal"><a href="#__codelineno-7-23">23</a></span>
+<span class="normal"><a href="#__codelineno-7-24">24</a></span>
+<span class="normal"><a href="#__codelineno-7-25">25</a></span>
+<span class="normal"><a href="#__codelineno-7-26">26</a></span>
+<span class="normal"><a href="#__codelineno-7-27">27</a></span>
+<span class="normal"><a href="#__codelineno-7-28">28</a></span>
+<span class="normal"><a href="#__codelineno-7-29">29</a></span>
+<span class="normal"><a href="#__codelineno-7-30">30</a></span>
+<span class="normal"><a href="#__codelineno-7-31">31</a></span>
+<span class="normal"><a href="#__codelineno-7-32">32</a></span>
+<span class="normal"><a href="#__codelineno-7-33">33</a></span>
+<span class="normal"><a href="#__codelineno-7-34">34</a></span>
+<span class="normal"><a href="#__codelineno-7-35">35</a></span>
+<span class="normal"><a href="#__codelineno-7-36">36</a></span>
+<span class="normal"><a href="#__codelineno-7-37">37</a></span>
+<span class="normal"><a href="#__codelineno-7-38">38</a></span>
+<span class="normal"><a href="#__codelineno-7-39">39</a></span>
+<span class="normal"><a href="#__codelineno-7-40">40</a></span>
+<span class="normal"><a href="#__codelineno-7-41">41</a></span>
+<span class="normal"><a href="#__codelineno-7-42">42</a></span>
+<span class="normal"><a href="#__codelineno-7-43">43</a></span>
+<span class="normal"><a href="#__codelineno-7-44">44</a></span>
+<span class="normal"><a href="#__codelineno-7-45">45</a></span>
+<span class="normal"><a href="#__codelineno-7-46">46</a></span>
+<span class="normal"><a href="#__codelineno-7-47">47</a></span>
+<span class="normal"><a href="#__codelineno-7-48">48</a></span>
+<span class="normal"><a href="#__codelineno-7-49">49</a></span>
+<span class="normal"><a href="#__codelineno-7-50">50</a></span>
+<span class="normal"><a href="#__codelineno-7-51">51</a></span>
+<span class="normal"><a href="#__codelineno-7-52">52</a></span>
+<span class="normal"><a href="#__codelineno-7-53">53</a></span>
+<span class="normal"><a href="#__codelineno-7-54">54</a></span>
+<span class="normal"><a href="#__codelineno-7-55">55</a></span>
+<span class="normal"><a href="#__codelineno-7-56">56</a></span>
+<span class="normal"><a href="#__codelineno-7-57">57</a></span>
+<span class="normal"><a href="#__codelineno-7-58">58</a></span>
+<span class="normal"><a href="#__codelineno-7-59">59</a></span>
+<span class="normal"><a href="#__codelineno-7-60">60</a></span>
+<span class="normal"><a href="#__codelineno-7-61">61</a></span>
+<span class="normal"><a href="#__codelineno-7-62">62</a></span>
+<span class="normal"><a href="#__codelineno-7-63">63</a></span>
+<span class="normal"><a href="#__codelineno-7-64">64</a></span>
+<span class="normal"><a href="#__codelineno-7-65">65</a></span>
+<span class="normal"><a href="#__codelineno-7-66">66</a></span>
+<span class="normal"><a href="#__codelineno-7-67">67</a></span>
+<span class="normal"><a href="#__codelineno-7-68">68</a></span>
+<span class="normal"><a href="#__codelineno-7-69">69</a></span>
+<span class="normal"><a href="#__codelineno-7-70">70</a></span>
+<span class="normal"><a href="#__codelineno-7-71">71</a></span>
+<span class="normal"><a href="#__codelineno-7-72">72</a></span>
+<span class="normal"><a href="#__codelineno-7-73">73</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">cff_method_multiple_revolutions</span><span class="p">(</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="n">df_blade</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a>    <span class="n">theta_sensor_set</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>    <span class="n">EO</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a>    <span class="n">extra_revolutions</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a>    <span class="n">signal_suffix</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_filt&quot;</span> 
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; This function fits the CFF method for a resonance by</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="sd">    using multiple revolutions of data for each set of CFF parameters.</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="sd">    Args:</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="sd">        df_blade (pd.DataFrame): The dataframe containing the tip deflections.</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="sd">        theta_sensor_set (List[float]): The sensor angles.</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="sd">        EO (int): The Engine Order.</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="sd">        extra_revolutions (int): The number of revolutions to use for the fit.</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="sd">        signal_suffix (str, optional): The suffix of the tip deflection </span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="sd">            signals. Defaults to &quot;_filt&quot;.</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18"></a>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="sd">    Returns:</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="sd">        pd.DataFrame: A DataFrame containing the CFF parameters for </span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21"></a><span class="sd">            each shaft revolution.</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23"></a>    <span class="n">PROBE_COUNT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta_sensor_set</span><span class="p">)</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24"></a>    <span class="n">tip_deflection_signals</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25"></a>        <span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}{</span><span class="n">signal_suffix</span><span class="si">}</span><span class="s2">&quot;</span> 
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27"></a>    <span class="p">]</span>
+</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28"></a>    <span class="n">theta_sensors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta_sensor_set</span><span class="p">)</span>
+</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29"></a>
+</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30"></a>    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">PROBE_COUNT</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">extra_revolutions</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+</span><span id="__span-7-31"><a id="__codelineno-7-31" name="__codelineno-7-31"></a>    <span class="n">arr_multiple_thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+</span><span id="__span-7-32"><a id="__codelineno-7-32" name="__codelineno-7-32"></a>        <span class="nb">list</span><span class="p">(</span><span class="n">theta_sensors</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">extra_revolutions</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-7-33"><a id="__codelineno-7-33" name="__codelineno-7-33"></a>    <span class="p">)</span>
+</span><span id="__span-7-34"><a id="__codelineno-7-34" name="__codelineno-7-34"></a>    <span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">arr_multiple_thetas</span> <span class="o">*</span> <span class="n">EO</span><span class="p">)</span>
+</span><span id="__span-7-35"><a id="__codelineno-7-35" name="__codelineno-7-35"></a>    <span class="n">A</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">arr_multiple_thetas</span> <span class="o">*</span> <span class="n">EO</span><span class="p">)</span>
+</span><span id="__span-7-36"><a id="__codelineno-7-36" name="__codelineno-7-36"></a>    <span class="n">A_pinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</span><span id="__span-7-37"><a id="__codelineno-7-37" name="__codelineno-7-37"></a>    <span class="n">new_obs_rows</span> <span class="o">=</span> <span class="n">df_blade</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">extra_revolutions</span>
+</span><span id="__span-7-38"><a id="__codelineno-7-38" name="__codelineno-7-38"></a>    <span class="n">X_multiple_revos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+</span><span id="__span-7-39"><a id="__codelineno-7-39" name="__codelineno-7-39"></a>        <span class="p">(</span>
+</span><span id="__span-7-40"><a id="__codelineno-7-40" name="__codelineno-7-40"></a>            <span class="n">new_obs_rows</span><span class="p">,</span> 
+</span><span id="__span-7-41"><a id="__codelineno-7-41" name="__codelineno-7-41"></a>            <span class="n">PROBE_COUNT</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">extra_revolutions</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-7-42"><a id="__codelineno-7-42" name="__codelineno-7-42"></a>        <span class="p">)</span>
+</span><span id="__span-7-43"><a id="__codelineno-7-43" name="__codelineno-7-43"></a>    <span class="p">)</span>
+</span><span id="__span-7-44"><a id="__codelineno-7-44" name="__codelineno-7-44"></a>    <span class="k">for</span> <span class="n">n_revo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">extra_revolutions</span><span class="p">,</span> <span class="n">extra_revolutions</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-7-45"><a id="__codelineno-7-45" name="__codelineno-7-45"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">):</span>
+</span><span id="__span-7-46"><a id="__codelineno-7-46" name="__codelineno-7-46"></a>            <span class="n">mat_aoas_start</span> <span class="o">=</span> <span class="n">extra_revolutions</span> <span class="o">+</span> <span class="n">n_revo</span>
+</span><span id="__span-7-47"><a id="__codelineno-7-47" name="__codelineno-7-47"></a>            <span class="n">mat_aoas_end</span> <span class="o">=</span> <span class="n">mat_aoas_start</span> <span class="o">+</span> <span class="n">new_obs_rows</span>
+</span><span id="__span-7-48"><a id="__codelineno-7-48" name="__codelineno-7-48"></a>            <span class="n">i_col</span> <span class="o">=</span> <span class="n">i_probe</span> <span class="o">+</span> <span class="n">n_revo</span><span class="o">*</span><span class="n">PROBE_COUNT</span> <span class="o">+</span> <span class="n">extra_revolutions</span><span class="o">*</span><span class="n">PROBE_COUNT</span>
+</span><span id="__span-7-49"><a id="__codelineno-7-49" name="__codelineno-7-49"></a>            <span class="n">X_multiple_revos</span><span class="p">[:,</span><span class="n">i_col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-7-50"><a id="__codelineno-7-50" name="__codelineno-7-50"></a>                <span class="n">df_blade</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">mat_aoas_start</span><span class="p">:</span><span class="n">mat_aoas_end</span><span class="p">][</span><span class="n">tip_deflection_signals</span><span class="p">[</span><span class="n">i_probe</span><span class="p">]]</span>
+</span><span id="__span-7-51"><a id="__codelineno-7-51" name="__codelineno-7-51"></a>            <span class="p">)</span>
+</span><span id="__span-7-52"><a id="__codelineno-7-52" name="__codelineno-7-52"></a>    <span class="n">B</span> <span class="o">=</span> <span class="n">A_pinv</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_multiple_revos</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</span><span id="__span-7-53"><a id="__codelineno-7-53" name="__codelineno-7-53"></a>    <span class="n">B_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">df_blade</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+</span><span id="__span-7-54"><a id="__codelineno-7-54" name="__codelineno-7-54"></a>    <span class="n">B_full</span><span class="p">[</span><span class="n">extra_revolutions</span><span class="p">:</span><span class="o">-</span><span class="n">extra_revolutions</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span>
+</span><span id="__span-7-55"><a id="__codelineno-7-55" name="__codelineno-7-55"></a>    <span class="n">B_full</span><span class="p">[:</span><span class="n">extra_revolutions</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">B_full</span><span class="p">[</span><span class="n">extra_revolutions</span><span class="p">,</span> <span class="p">:]</span>
+</span><span id="__span-7-56"><a id="__codelineno-7-56" name="__codelineno-7-56"></a>    <span class="n">B_full</span><span class="p">[</span><span class="o">-</span><span class="n">extra_revolutions</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">B_full</span><span class="p">[</span><span class="o">-</span><span class="n">extra_revolutions</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+</span><span id="__span-7-57"><a id="__codelineno-7-57" name="__codelineno-7-57"></a>
+</span><span id="__span-7-58"><a id="__codelineno-7-58" name="__codelineno-7-58"></a>    <span class="n">df_cff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">B_full</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">])</span>
+</span><span id="__span-7-59"><a id="__codelineno-7-59" name="__codelineno-7-59"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-7-60"><a id="__codelineno-7-60" name="__codelineno-7-60"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;phi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">],</span> <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">])</span>
+</span><span id="__span-7-61"><a id="__codelineno-7-61" name="__codelineno-7-61"></a>    <span class="n">df_cff</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_blade</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-7-62"><a id="__codelineno-7-62" name="__codelineno-7-62"></a>    <span class="n">target_matrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B_full</span><span class="o">.</span><span class="n">T</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+</span><span id="__span-7-63"><a id="__codelineno-7-63" name="__codelineno-7-63"></a>    <span class="n">predicted_deflections</span> <span class="o">=</span> <span class="n">target_matrix</span><span class="p">[:,</span> <span class="n">extra_revolutions</span><span class="o">*</span><span class="n">PROBE_COUNT</span><span class="p">:(</span><span class="n">extra_revolutions</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">PROBE_COUNT</span><span class="p">]</span> 
+</span><span id="__span-7-64"><a id="__codelineno-7-64" name="__codelineno-7-64"></a>    <span class="n">df_predicted_targets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+</span><span id="__span-7-65"><a id="__codelineno-7-65" name="__codelineno-7-65"></a>        <span class="n">predicted_deflections</span><span class="p">,</span> 
+</span><span id="__span-7-66"><a id="__codelineno-7-66" name="__codelineno-7-66"></a>        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+</span><span id="__span-7-67"><a id="__codelineno-7-67" name="__codelineno-7-67"></a>            <span class="n">col</span> <span class="o">+</span> <span class="s2">&quot;_pred&quot;</span> 
+</span><span id="__span-7-68"><a id="__codelineno-7-68" name="__codelineno-7-68"></a>            <span class="k">for</span> <span class="n">col</span> 
+</span><span id="__span-7-69"><a id="__codelineno-7-69" name="__codelineno-7-69"></a>            <span class="ow">in</span> <span class="n">tip_deflection_signals</span>
+</span><span id="__span-7-70"><a id="__codelineno-7-70" name="__codelineno-7-70"></a>        <span class="p">]</span>
+</span><span id="__span-7-71"><a id="__codelineno-7-71" name="__codelineno-7-71"></a>    <span class="p">)</span>
+</span><span id="__span-7-72"><a id="__codelineno-7-72" name="__codelineno-7-72"></a>    <span class="n">df_cff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_cff</span><span class="p">,</span> <span class="n">df_predicted_targets</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-7-73"><a id="__codelineno-7-73" name="__codelineno-7-73"></a>    <span class="k">return</span> <span class="n">df_cff</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Usage example:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span>
+<span class="normal"><a href="#__codelineno-8-7">7</a></span>
+<span class="normal"><a href="#__codelineno-8-8">8</a></span>
+<span class="normal"><a href="#__codelineno-8-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">df_cff_params</span> <span class="o">=</span> <span class="n">cff_method_multiple_revolutions</span><span class="p">(</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a>    <span class="n">df_resonance_window</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a>    <span class="p">[</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a>        <span class="n">df_resonance_window</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a>    <span class="p">],</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a>    <span class="n">EO</span><span class="p">,</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a>    <span class="mi">2</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<h3 id="2-writing-a-function-we-can-use">2. Writing a function we can use</h3>
+<p>Were now going to write a single entrypoint, receiving the minimum amount of arguments, to fit the CFF method and estimate the EO. This will make it easier to use the CFF method in the future.</p>
+<mark class="critic block">
+<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.1 9 .9.9L5.9 19H5v-.9zm3.6-6c-.2 0-.5.1-.7.3l-1.8 1.8 3.7 3.8L20.7 7c.4-.4.4-1 0-1.4l-2.3-2.3c-.2-.2-.5-.3-.7-.3m-3.6 3.2L3 17.2V21h3.8l11-11.1zM7 2v3h3v2H7v3H5V7H2V5h3V2z"/></svg></span> Write a function, called, <code>perform_CFF_fit</code>, receiving the following three required arguments:</p>
+<ol>
+<li>The blade tip deflection DataFrame, <code>df_blade</code>.</li>
+<li>The revolution number indicating the start of the resonance, <code>n_start</code>.</li>
+<li>The revolution number indicating the end of the resonance, <code>n_end</code>.</li>
+</ol>
+<p>The function should return the following values:</p>
+<ol>
+<li>The CFF parameters for each revolution.</li>
+<li>The EO of vibration.</li>
+</ol>
+<p>You may optionally accept other parameters to make the function more flexible.</p>
+</mark>
+<details class="example">
+<summary>Reveal answer (Please try it yourself before revealing the solution)</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span>
+<span class="normal"><a href="#__codelineno-9-21">21</a></span>
+<span class="normal"><a href="#__codelineno-9-22">22</a></span>
+<span class="normal"><a href="#__codelineno-9-23">23</a></span>
+<span class="normal"><a href="#__codelineno-9-24">24</a></span>
+<span class="normal"><a href="#__codelineno-9-25">25</a></span>
+<span class="normal"><a href="#__codelineno-9-26">26</a></span>
+<span class="normal"><a href="#__codelineno-9-27">27</a></span>
+<span class="normal"><a href="#__codelineno-9-28">28</a></span>
+<span class="normal"><a href="#__codelineno-9-29">29</a></span>
+<span class="normal"><a href="#__codelineno-9-30">30</a></span>
+<span class="normal"><a href="#__codelineno-9-31">31</a></span>
+<span class="normal"><a href="#__codelineno-9-32">32</a></span>
+<span class="normal"><a href="#__codelineno-9-33">33</a></span>
+<span class="normal"><a href="#__codelineno-9-34">34</a></span>
+<span class="normal"><a href="#__codelineno-9-35">35</a></span>
+<span class="normal"><a href="#__codelineno-9-36">36</a></span>
+<span class="normal"><a href="#__codelineno-9-37">37</a></span>
+<span class="normal"><a href="#__codelineno-9-38">38</a></span>
+<span class="normal"><a href="#__codelineno-9-39">39</a></span>
+<span class="normal"><a href="#__codelineno-9-40">40</a></span>
+<span class="normal"><a href="#__codelineno-9-41">41</a></span>
+<span class="normal"><a href="#__codelineno-9-42">42</a></span>
+<span class="normal"><a href="#__codelineno-9-43">43</a></span>
+<span class="normal"><a href="#__codelineno-9-44">44</a></span>
+<span class="normal"><a href="#__codelineno-9-45">45</a></span>
+<span class="normal"><a href="#__codelineno-9-46">46</a></span>
+<span class="normal"><a href="#__codelineno-9-47">47</a></span>
+<span class="normal"><a href="#__codelineno-9-48">48</a></span>
+<span class="normal"><a href="#__codelineno-9-49">49</a></span>
+<span class="normal"><a href="#__codelineno-9-50">50</a></span>
+<span class="normal"><a href="#__codelineno-9-51">51</a></span>
+<span class="normal"><a href="#__codelineno-9-52">52</a></span>
+<span class="normal"><a href="#__codelineno-9-53">53</a></span>
+<span class="normal"><a href="#__codelineno-9-54">54</a></span>
+<span class="normal"><a href="#__codelineno-9-55">55</a></span>
+<span class="normal"><a href="#__codelineno-9-56">56</a></span>
+<span class="normal"><a href="#__codelineno-9-57">57</a></span>
+<span class="normal"><a href="#__codelineno-9-58">58</a></span>
+<span class="normal"><a href="#__codelineno-9-59">59</a></span>
+<span class="normal"><a href="#__codelineno-9-60">60</a></span>
+<span class="normal"><a href="#__codelineno-9-61">61</a></span>
+<span class="normal"><a href="#__codelineno-9-62">62</a></span>
+<span class="normal"><a href="#__codelineno-9-63">63</a></span>
+<span class="normal"><a href="#__codelineno-9-64">64</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">perform_CFF_fit</span><span class="p">(</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a>    <span class="n">df_blade</span> <span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a>    <span class="n">n_start</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a>    <span class="n">n_end</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a>    <span class="n">EOs</span> <span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6"></a>    <span class="n">extra_revolutions</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot; This function performs the CFF method fit for a resonance. The function</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="sd">    iterates over EOs and selects the EO that gives the lowest sum of squared</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="sd">    errors between the measured and predicted tip deflections.</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11"></a>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="sd">    Args:</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="sd">        df_blade (pd.DataFrame): The dataframe containing the tip deflections.</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="sd">        n_start (int): The start revolution number.</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="sd">        n_end (int): The end revolution number.</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="sd">        EOs (List[int], optional): The EOs to consider for this resonance. Defaults </span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="sd">            to np.arange(1, 20).</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="sd">        extra_revolutions (int, optional): How many extra revolutions to use for </span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="sd">            the fit. Defaults to 1.</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20"></a>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="sd">    Returns:</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22"></a><span class="sd">        Dict[str, Union[pd.DataFrame, int]]: A dictionary containing the CFF </span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="sd">            parameters and the selected EO.</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25"></a>    <span class="n">PROBE_COUNT</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26"></a>        <span class="p">[</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27"></a>            <span class="n">col</span> 
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28"></a>            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_blade</span><span class="o">.</span><span class="n">columns</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29"></a>            <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_filt&quot;</span><span class="p">)</span>
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30"></a>        <span class="p">]</span>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31"></a>    <span class="p">)</span>
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32"></a>    <span class="n">theta_sensor_set</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33"></a>        <span class="n">df_blade</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;AoA_p</span><span class="si">{</span><span class="n">i_probe</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">)</span>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35"></a>    <span class="p">]</span>
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36"></a>    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-9-37"><a id="__codelineno-9-37" name="__codelineno-9-37"></a>    <span class="n">df_resonance_window</span> <span class="o">=</span> <span class="n">df_blade</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n &gt;= </span><span class="si">{</span><span class="n">n_start</span><span class="si">}</span><span class="s2"> and n &lt;= </span><span class="si">{</span><span class="n">n_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-9-38"><a id="__codelineno-9-38" name="__codelineno-9-38"></a>    <span class="k">for</span> <span class="n">EO</span> <span class="ow">in</span> <span class="n">EOs</span><span class="p">:</span>
+</span><span id="__span-9-39"><a id="__codelineno-9-39" name="__codelineno-9-39"></a>        <span class="n">df_cff_params</span> <span class="o">=</span> <span class="n">cff_method_multiple_revolutions</span><span class="p">(</span>
+</span><span id="__span-9-40"><a id="__codelineno-9-40" name="__codelineno-9-40"></a>            <span class="n">df_resonance_window</span><span class="p">,</span>
+</span><span id="__span-9-41"><a id="__codelineno-9-41" name="__codelineno-9-41"></a>            <span class="n">theta_sensor_set</span><span class="p">,</span>
+</span><span id="__span-9-42"><a id="__codelineno-9-42" name="__codelineno-9-42"></a>            <span class="n">EO</span><span class="p">,</span>
+</span><span id="__span-9-43"><a id="__codelineno-9-43" name="__codelineno-9-43"></a>            <span class="n">extra_revolutions</span>
+</span><span id="__span-9-44"><a id="__codelineno-9-44" name="__codelineno-9-44"></a>        <span class="p">)</span>
+</span><span id="__span-9-45"><a id="__codelineno-9-45" name="__codelineno-9-45"></a>        <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-9-46"><a id="__codelineno-9-46" name="__codelineno-9-46"></a>        <span class="k">for</span> <span class="n">i_probe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">PROBE_COUNT</span><span class="p">):</span>
+</span><span id="__span-9-47"><a id="__codelineno-9-47" name="__codelineno-9-47"></a>            <span class="n">error</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+</span><span id="__span-9-48"><a id="__codelineno-9-48" name="__codelineno-9-48"></a>                <span class="p">(</span>
+</span><span id="__span-9-49"><a id="__codelineno-9-49" name="__codelineno-9-49"></a>                    <span class="n">df_cff_params</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">_filt_pred&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> 
+</span><span id="__span-9-50"><a id="__codelineno-9-50" name="__codelineno-9-50"></a>                    <span class="o">-</span> <span class="n">df_resonance_window</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;x_p</span><span class="si">{</span><span class="n">i_probe</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">_filt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-9-51"><a id="__codelineno-9-51" name="__codelineno-9-51"></a>                <span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+</span><span id="__span-9-52"><a id="__codelineno-9-52" name="__codelineno-9-52"></a>            <span class="p">)</span>
+</span><span id="__span-9-53"><a id="__codelineno-9-53" name="__codelineno-9-53"></a>        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</span><span id="__span-9-54"><a id="__codelineno-9-54" name="__codelineno-9-54"></a>    <span class="n">EO</span> <span class="o">=</span> <span class="n">EOs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
+</span><span id="__span-9-55"><a id="__codelineno-9-55" name="__codelineno-9-55"></a>    <span class="n">df_cff_params</span> <span class="o">=</span> <span class="n">cff_method_multiple_revolutions</span><span class="p">(</span>
+</span><span id="__span-9-56"><a id="__codelineno-9-56" name="__codelineno-9-56"></a>        <span class="n">df_resonance_window</span><span class="p">,</span>
+</span><span id="__span-9-57"><a id="__codelineno-9-57" name="__codelineno-9-57"></a>        <span class="n">theta_sensor_set</span><span class="p">,</span>
+</span><span id="__span-9-58"><a id="__codelineno-9-58" name="__codelineno-9-58"></a>        <span class="n">EO</span><span class="p">,</span>
+</span><span id="__span-9-59"><a id="__codelineno-9-59" name="__codelineno-9-59"></a>        <span class="n">extra_revolutions</span>
+</span><span id="__span-9-60"><a id="__codelineno-9-60" name="__codelineno-9-60"></a>    <span class="p">)</span>
+</span><span id="__span-9-61"><a id="__codelineno-9-61" name="__codelineno-9-61"></a>    <span class="k">return</span> <span class="p">{</span>
+</span><span id="__span-9-62"><a id="__codelineno-9-62" name="__codelineno-9-62"></a>        <span class="s2">&quot;df_cff_params&quot;</span> <span class="p">:</span> <span class="n">df_cff_params</span><span class="p">,</span>
+</span><span id="__span-9-63"><a id="__codelineno-9-63" name="__codelineno-9-63"></a>        <span class="s2">&quot;EO&quot;</span> <span class="p">:</span> <span class="n">EO</span>
+</span><span id="__span-9-64"><a id="__codelineno-9-64" name="__codelineno-9-64"></a>    <span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Usage example:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span>
+<span class="normal"><a href="#__codelineno-10-2">2</a></span>
+<span class="normal"><a href="#__codelineno-10-3">3</a></span>
+<span class="normal"><a href="#__codelineno-10-4">4</a></span>
+<span class="normal"><a href="#__codelineno-10-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">cff_params</span> <span class="o">=</span> <span class="n">perform_CFF_fit</span><span class="p">(</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">tip_deflection_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="mi">500</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="mi">600</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:joung2006analysis">
+<p>Joung, K.-K., Kang, S.-C., Paeng, K.-S., Park, N.-G., Choi, H.-J., You, Y.-J., Von Flotow, A., 2006. Analysis of vibration of the turbine blades using non-intrusive stress measurement system, in: Asme Power Conference. pp. 391--397.&#160;<a class="footnote-backref" href="#fnref:joung2006analysis" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../ch8/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 8. Single Degree of Freedom (SDoF) Method">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                8. Single Degree of Freedom (SDoF) Method
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../afterword/" class="md-footer__link md-footer__link--next" aria-label="Next: Afterword">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Afterword
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Bladesight
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://twitter.com/DawieDiamond" target="_blank" rel="noopener" title="Twitter" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/Bladesight" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/in/dawie-diamond-51089676/" target="_blank" rel="noopener" title="LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.researchgate.net/profile/Dawie-Diamond-2" target="_blank" rel="noopener" title="ResearchGate" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M0 32v448h448V32zm262.2 334.4c-6.6 3-33.2 6-50-14.2-9.2-10.6-25.3-33.3-42.2-63.6-8.9 0-14.7 0-21.4-.6v46.4c0 23.5 6 21.2 25.8 23.9v8.1c-6.9-.3-23.1-.8-35.6-.8-13.1 0-26.1.6-33.6.8v-8.1c15.5-2.9 22-1.3 22-23.9V225c0-22.6-6.4-21-22-23.9V193c25.8 1 53.1-.6 70.9-.6 31.7 0 55.9 14.4 55.9 45.6 0 21.1-16.7 42.2-39.2 47.5 13.6 24.2 30 45.6 42.2 58.9 7.2 7.8 17.2 14.7 27.2 14.7zm22.9-135c-23.3 0-32.2-15.7-32.2-32.2V167c0-12.2 8.8-30.4 34-30.4s30.4 17.9 30.4 17.9l-10.7 7.2s-5.5-12.5-19.7-12.5c-7.9 0-19.7 7.3-19.7 19.7v26.8c0 13.4 6.6 23.3 17.9 23.3 14.1 0 21.5-10.9 21.5-26.8h-17.9v-10.7h30.4c0 20.5 4.7 49.9-34 49.9m-116.5 44.7c-9.4 0-13.6-.3-20-.8v-69.7c6.4-.6 15-.6 22.5-.6 23.3 0 37.2 12.2 37.2 34.5 0 21.9-15 36.6-39.7 36.6"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.instant", "navigation.path", "navigation.footer", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "announce.dismiss"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="../../../javascripts/reviews.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+      
+    
+  </body>
+</html>
