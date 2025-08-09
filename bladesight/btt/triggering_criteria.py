@@ -1,7 +1,149 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 import numpy as np
 from numba import njit
+
+from bladesight.btt import verbose_print
+
+def get_constant_thresholds(
+    sensor_array: np.ndarray,
+    sensor_type: str,
+    threshold_hysteresis_dict: dict[str, float],
+    threshold_category: Optional[str] = "correct",
+    verbose: Optional[bool] = False,
+    ) -> Tuple[float, float]:
+    """
+    Determine the threshold level to use for the constant threshold trigger method.
+
+    Parameters
+    ----------
+    sensor_array : np.ndarray
+        The time signal to determine the threshold level for.
+    sensor_type : str
+        The type of sensor.
+    threshold_hysteresis_dict : dict[str, float]
+        The dictionary of threshold levels for each category. The keys must be in the format
+        "<sensor type> <"threshold" or "hysteresis" keyword> <level>". The level is a keyword
+        between "low", "correct", or "high" that can be used for different triggering threshold studies.
+        The float associated with each key is the threshold or hysteresis level expressed as a percentage value.
+        Note that if no "hysteresis" keyword is found in the dictionary, the hysteresis level is set to None.
+    threshold_category : Optional[str], optional
+        The category of threshold level to use ('low', 'correct', or 'high'), by default 'correct'.
+
+    Returns
+    -------
+    Tuple[float, float]
+        The threshold voltage level and hysteresis voltage level.
+
+    Raises
+    ------
+    ValueError
+        If threshold_category is not one of the following: "low", "correct", "high".
+    ValueError
+        If threshold_category_array contains values outside the range of 0 to 100.
+
+    Notes:
+    ------
+    This function is modified/developed by Justin Smith using existing bladesight code (see References).    
+
+    Example Usage:
+    --------------
+
+
+    tacho_threshold_hysteresis_category_dict = {
+            'tacho OPR threshold correct': 60,
+            'tacho OPR hysteresis correct': 10,
+            'tacho MPR threshold correct': 60,
+            'tacho MPR hysteresis correct': 55,
+            }
+    sensor_type = "Tacho OPR"
+    OPR_signal = np.array([0, 0, 0, 0.2, 0.4, 0.6, 0.8, 1, 1, 1, 0.7, 0.3, 0, 0, 0])
+    threshold_OPR, hysteresis_OPR = get_constant_thresholds(OPR_signal, sensor_type = sensor_type, threshold_hysteresis_dict = tacho_threshold_hysteresis_category_dict)
+
+    >>>>(0.6, 0.06)
+
+    References
+    ----------
+    This function is adapted from determine_threshold_level in Chapter 2 of the bladesight tutorial
+    (https://docs.bladesight.com/tutorials/intro_to_btt/ch2/#problem-1-automatic-range-detection).
+    [1] D. H. Diamond, “Introduction to Blade Tip Timing,” Bladesight Learn. Accessed: Feb. 12, 2024.
+    [Online]. Available: docs.bladesight.com
+    """
+    # Checking theshold_category and threshold values are appropriate
+    if threshold_category not in ["low", "correct", "high"]:
+        raise ValueError(
+            "threshold_category must be one of the following: 'low', 'correct', 'high'"
+        )
+    if (
+        any(value < 0 for value in threshold_hysteresis_dict.values()) < 0
+        or any(value < 0 for value in threshold_hysteresis_dict.values()) > 100
+    ):
+        raise ValueError("threshold_category_array must be between 0 and 100")
+    
+    sensor_threshold_keys = [
+    key for key in threshold_hysteresis_dict.keys() if key.lower().startswith(sensor_type.lower())
+    ]
+
+    if not sensor_threshold_keys:
+        avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
+        raise ValueError(f"{avail_keys}\n" + f"No keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
+
+
+    threshold_keys = [key for key in sensor_threshold_keys if "threshold" in key]
+
+    if not threshold_keys:
+        avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
+        raise ValueError(f"{avail_keys}\n" + f"No threshold keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
+
+    sensor_hysteresis_keys = [
+        key for key in threshold_hysteresis_dict.keys() if key.lower().startswith(sensor_type.lower())
+    ]
+
+
+    hysteresis_keys = [key for key in sensor_hysteresis_keys if "hysteresis" in key.lower()]
+    if not hysteresis_keys:
+        avail_keys = f"Available Keys: {threshold_hysteresis_dict.keys()}"
+        raise ValueError(f"{avail_keys}\n" + f"No hysteresis keys found in threshold_hysteresis_dict for sensor type '{sensor_type}'")
+
+    threshold_level_key = [key for key in threshold_keys if threshold_category.lower() in key.lower()]
+    if not threshold_level_key:
+        raise ValueError(f"No threshold level key found for category '{threshold_category}' in threshold_hysteresis_dict for sensor type '{sensor_type}'")
+
+
+    threshold_level_percent = threshold_hysteresis_dict[threshold_level_key[0]]
+
+    if (not hysteresis_keys) != True: #if hysteresis_keys is not empty, then dont assign a hysteresis level
+        hysteresis_level_key = [key for key in hysteresis_keys if threshold_category.lower() in key.lower()]
+        hysteresis_level_percent = threshold_hysteresis_dict[hysteresis_level_key[0]]
+
+    if (not hysteresis_keys) != False:
+        hysteresis_level_key = None
+        hysteresis_level_percent = None
+
+    min_value = np.min(sensor_array)
+    max_value = np.max(sensor_array)
+    signal_range = max_value - min_value
+
+    verbose_print(verbose, f"sensor_type: {sensor_type}")
+    verbose_print(verbose, f"Min Value: {min_value} Volts")
+    verbose_print(verbose, f"Max Value: {max_value} Volts")
+    # verbose_print(verbose, f"mean value: {np.mean(sensor_array)} Volts")
+    # verbose_print(verbose, f"10th percentile value: {np.percentile(sensor_array, 10)} Volts")
+    verbose_print(verbose, f"Signal Range: {signal_range} Volts")
+
+    threshold_level = min_value + signal_range * threshold_level_percent / 100 # Volts
+
+    if hysteresis_level_percent is None:
+        hysteresis_level = None
+        
+    if hysteresis_level_percent is not None:
+        hysteresis_level = threshold_level * hysteresis_level_percent / 100 # Volts
+
+    verbose_print(verbose, f"Sensor Type: {sensor_type}")
+    verbose_print(verbose, f"THRESHOLD_LEVEL: {threshold_level_percent}% => {threshold_level} Volts")
+    verbose_print(verbose, f"HYSTERESIS_LEVEL: {hysteresis_level_percent}% => {hysteresis_level} Volts")
+
+    return threshold_level, hysteresis_level
 
 @njit
 def threshold_crossing_interp(

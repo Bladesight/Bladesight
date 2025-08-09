@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 import pandas as pd
 import polars as pl
 
@@ -15,12 +15,31 @@ __all__ = [
     "get_blade_tip_deflections_from_AoAs"
 ]
 
+def verbose_print(verbose: bool, text: str):
+    """
+    Print the text if the verbose flag is True.
+
+    Parameters
+    ----------
+    verbose : bool
+        A flag indicating whether to print the text or not.
+    text : str
+        The f-string for the text to print.
+    Returns
+    -------
+    None, only prints the text if the verbose flag is True.
+    """
+    if verbose:
+        print(text)
+
+
 def get_rotor_blade_AoAs(
     df_encoder : pd.DataFrame,
     prox_probe_toas : List[Union[pd.DataFrame, pl.DataFrame]],
     probe_spacings : List[float],
     B : int,
-    is_mpr : bool = False
+    is_mpr : bool = False,
+    tramsform_prox_AoAs_to_blade_AoAs_kwargs : Optional[dict] = {}
 ) -> List[pd.DataFrame]:
     """This function converts the raw time stamps, both the OPR zero-crossing
     times and he proximity probe ToAs, and returns a DataFrame for each 
@@ -44,6 +63,9 @@ def get_rotor_blade_AoAs(
         B (int): The number of blades.
         is_mpr (bool, optional): A flag to indicate if the encoder is
             an MPR encoder. Defaults to False.
+        tramsform_prox_AoAs_to_blade_AoAs_kwargs (Optional[dict], optional):
+            The keyword arguments to be passed to the 
+            transform_prox_AoAs_to_blade_AoAs function. Defaults to None.
 
     Returns:
         List[pd.DataFrame]: A list of DataFrames where each DataFrame
@@ -62,8 +84,9 @@ def get_rotor_blade_AoAs(
             blade_dfs_recombined.append(
                 pivot_blade_AoAs_along_revolutions(
                     transform_prox_AoAs_to_blade_AoAs(
-                        df_prox, 
-                        B
+                        df_prox = df_prox, 
+                        B = B,
+                        **tramsform_prox_AoAs_to_blade_AoAs_kwargs,
                     )
                 )
             )
@@ -82,8 +105,9 @@ def get_rotor_blade_AoAs(
             blade_dfs_recombined.append(
                 pivot_blade_AoAs_along_revolutions(
                     transform_prox_AoAs_to_blade_AoAs(
-                        df_prox, 
-                        B
+                        df_prox = df_prox, 
+                        B = B,
+                        **tramsform_prox_AoAs_to_blade_AoAs_kwargs,
                     )
                 )
             )
