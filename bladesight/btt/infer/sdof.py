@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from scipy.optimize import differential_evolution
+
+from tqdm.auto import tqdm
 
 def get_X(
         omega : np.ndarray,
@@ -194,56 +196,92 @@ def perform_SDoF_fit(
     df_blade : pd.DataFrame,
     n_start : int,
     n_end : int,
-    EOs : List[int] = np.arange(1, 20),
-    delta_st_max : int = 10,
+    EOs : Optional[List[int]] = np.arange(1, 20),
+    omega_n_bounds : Optional[List[float]] = [None, None],
+    ln_zeta_bounds : Optional[List[float]] = [np.log(0.0001), np.log(0.3)],
+    delta_st_bounds : Optional[List[float]] = [0, 10],
+    phi_0_bounds : Optional[List[float]] = [0, 2*np.pi],
+    signal_suffix : Optional[str] = "_filt" ,
+    amplitude_scaling_factor : float = 1,
+    differential_evolution_optimiser_kwargs: Optional[dict] = {'seed': 42},
     verbose : bool = False
 ) -> Dict[str, float]:
-    """This function receives a blade tip deflection DataFrame, and returns 
-    the SDoF fit model parameters after fitting.
+    """
+    Fit an SDoF model to blade tip deflection data over a specified revolution range.
 
-    Args:
-        df_blade (pd.DataFrame): The blade tip deflection DataFrame.
-        n_start (int): The starting revolution number of the resonance 
-            you want to fit.
-        n_end (int): The ending revolution number of the resonance 
-            you want to fit.
-        EOs (List[int], optional): The list of EOs to search for. Defaults 
-            to np.arange(1, 20).
-        delta_st_max (int, optional): The maximum static deflection within our optimization 
-            bounds. Defaults to 10.
-        verbose (bool, optional): Whether to print the progress. Defaults to False.
-
+    Parameters
+    ----------
+    df_blade : pd.DataFrame
+        The blade tip deflection DataFrame.
+    n_start : int
+        The starting revolution number of the resonance to be used in the fit.
+    n_end : int
+        The ending revolution number of the resonance to be used in the fit.
+    EOs : List[int], optional
+        Range of engine orders to consider, defaults to np.arange(1, 20).
+    omega_n_bounds : List[float], optional
+        [min, max] bounds for resonant speed Ωₙ (radians/second). If None, set per EO as
+        (min(df_blade['Omega'])*EO, max(df_blade['Omega'])*EO).
+    zeta_bounds : list of float, optional
+        [min, max] bounds for damping ratio ζ, default to: [0.0001, 0.3].
+    delta_st_bounds : list of float, optional
+        [min, max] bounds for static deflection δₛₜ, , defaults to [0, 10].
+    phi_0_bounds : list of float, optional
+        [min, max] bounds for phase offset φ₀ in radians, defaults to [0, 2π].
+    signal_suffix : str, optional
+        Suffix appended to deflection column names, defaults to "_filt".
+    amplitude_scaling_factor : float, optional
+        Scaling factor for amplitude weighting, defaults to 1.
+    differential_evolution_optimiser_kwargs : dict, optional
+        Additional arguments for the differential evolution optimizer, defaults to {'seed': 42}.
+        If you want to use the default settings, pass an empty dictionary.
+    verbose : bool, optional
+        If True, print progress updates, defaults to False.
     Returns:
         Dict[str, float]: The fitted model parameters.
+    Returns
+    -------
+    Dict[str, Union[float, int]]
+        Fitted parameters, including:
+        - "omega_n": Natural frequency (in Hz).
+        - "zeta": Damping ratio.
+        - "delta_st": Static deflection.
+        - "phi_0": Phase offset in radians.
+        - "EO_best": Engine order with minimum error.
+        - "EO_errors": Dictionary of errors for each engine order.
     """
     df_resonance_window = df_blade.query(f"n >= {n_start} and n <= {n_end}")
     measured_tip_deflection_signals = [
         col 
         for col in df_resonance_window
-        if col.endswith("_filt")
+        # if col.endswith("_filt")
+        if col.startswith("x_p") and col.endswith(signal_suffix)
     ]
     PROBE_COUNT = len(measured_tip_deflection_signals)
-    eo_solutions = []
-    for EO in EOs:
+    EO_solutions = []
+    EO_errors = {}  # collect each EO's loss
+    # for EO in EOs:
+    for EO in tqdm(EOs, desc="Processing EOs"):
         if verbose:
             print("NOW SOLVING FOR EO = ", EO, " of ", EOs)
-        omega_n_min = df_resonance_window["Omega"].min() * EO
-        omega_n_max = df_resonance_window["Omega"].max() * EO
-        ln_zeta_min = np.log(0.0001)
-        ln_zeta_max = np.log(0.3)
-        delta_st_min = 0
-        phi_0_min = 0
-        phi_0_max = 2*np.pi
+        
+        if omega_n_bounds.__contains__(None):
+            omega_n_bounds[0] = df_resonance_window["Omega"].min() * EO
+            omega_n_bounds[1] = df_resonance_window["Omega"].max() * EO
+        # if omega_n_bounds.__contains__(None) == False:
+        #     omega_n_bounds[0] = omega_n_bounds[0]
+        #     omega_n_bounds[1] = omega_n_bounds[1]
+
         bounds = [
-            (omega_n_min, omega_n_max),
-            (ln_zeta_min, ln_zeta_max),
-            (delta_st_min, delta_st_max),
-            (phi_0_min, phi_0_max),
+            (omega_n_bounds[0], omega_n_bounds[1]),
+            (ln_zeta_bounds[0], ln_zeta_bounds[1]),
+            (delta_st_bounds[0], delta_st_bounds[1]),
+            (phi_0_bounds[0], phi_0_bounds[1]),
         ]
         tip_deflections_set = []
         theta_sensor_set = []
         for i_probe in range(PROBE_COUNT):
-            z_max = df_resonance_window[f"x_p{i_probe+1}_filt"].abs().max()
+            z_max = df_resonance_window[f"x_p{i_probe+1}"+signal_suffix].abs().max()
             z_min = -z_max
             bounds.extend(
                 [
@@ -252,7 +290,7 @@ def perform_SDoF_fit(
                 ]
             )
             tip_deflections_set.append(
-                df_resonance_window[f"x_p{i_probe+1}_filt"].values
+                df_resonance_window[f"x_p{i_probe+1}"+signal_suffix].values
             )
             theta_sensor_set.append(
                 df_resonance_window[f"AoA_p{i_probe+1}"].median()
@@ -265,18 +303,22 @@ def perform_SDoF_fit(
                 df_resonance_window['Omega'].values,
                 EO,
                 theta_sensor_set,
-                2
+                amplitude_scaling_factor,
             ),
-            seed=42
+            **differential_evolution_optimiser_kwargs
         )
-        eo_solutions.append(multiple_probes_solution)
-    best_EO_arg = np.argmin([solution.fun for solution in eo_solutions])
+        EO_solutions.append(multiple_probes_solution)
+        EO_errors[f"EO{EO}"] = multiple_probes_solution.fun
+    
+    # Select the best EO
+    best_EO_arg = np.argmin([solution.fun for solution in EO_solutions])
     best_EO = EOs[best_EO_arg]
-    best_solution = eo_solutions[best_EO_arg]
+    best_solution = EO_solutions[best_EO_arg]
     return {
         "omega_n" : best_solution.x[0] / (2*np.pi),
         "zeta" : np.exp(best_solution.x[1]),
         "delta_st" : best_solution.x[2],
         "phi_0" : best_solution.x[3],
-        "EO" : best_EO,
+        "EO_best" : best_EO,
+        "EO_errors" : EO_errors,
     }
